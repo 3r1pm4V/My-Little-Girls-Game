@@ -70,6 +70,18 @@ h2{font-size:clamp(24px,5vw,38px);margin:8px 0;cursor:pointer;line-height:1.1}
 @keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
 @keyframes bounce{50%{transform:translateY(-22px)}}
 @keyframes fade{70%{opacity:1}to{opacity:0}}
+.card{width:clamp(140px,22vw,220px)}
+@media(max-width:600px){.card{width:calc(50% - 8px);font-size:22px}.cards{gap:12px}}
+.vis{height:clamp(64px,16vw,110px);overflow:hidden}
+.vis img{height:clamp(52px,13vw,100px)}
+.vis b{font-size:clamp(28px,6vw,50px);letter-spacing:2px;white-space:nowrap}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:min(120px,26vw)}
+.opt img{height:clamp(64px,20vw,100px)}
+.opts.cmp{flex-wrap:nowrap;gap:8px}.cmp .opt{flex:1;min-width:0;width:auto;max-width:260px;padding:6px}
+.mem .opt{width:calc((100% - 28px)/3);min-width:0;min-height:0;aspect-ratio:1;padding:6px}.mem .opt img{height:auto;width:78%}
+.n{display:block;font-size:34px;font-weight:800;color:var(--acc);line-height:1}
+#cat{width:clamp(70px,13vw,140px)}
+.opt .grp img{height:auto;width:clamp(26px,5.5vw,44px)}
 </style></head><body>
 <div id="app"><header><button class="hb" id="hb" aria-label="Home"></button><span class="sp"></span><span class="stars" id="stars"></span><button class="lg" id="lg"></button><button class="lg" id="sp"></button></header><main id="m"></main></div>
 <img id="cat" alt="">
@@ -103,7 +115,7 @@ document.getElementById("lg").onclick=()=>{lang={vi:"en",en:"both",both:"vi"}[la
 function fx(){const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
 const ER=[["Thử lại nhé","Try again"],["Gần đúng rồi, bé thử lại nào","Almost! Try again"],["Không sao, bé thử lại nhé","It's okay, try again"]];
-function go(s,a){cur=s;tok++;A.pause();if(window.speechSynthesis)speechSynthesis.cancel();if(GM.test(s))rd={n:0,f:0,st:0};V[s](a);if(!GM.test(s))catSet("idle");head();m.scrollTop=0}
+function go(s,a){cur=s;tok++;A.pause();if(window.speechSynthesis)speechSynthesis.cancel();if(GM.test(s))rd={n:0,f:0,st:0};V[s](a);if(!GM.test(s))catSet("idle");cat.style.display=s==="parent"||s==="rec"?"none":"";head();m.scrollTop=0}
 function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
 function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("letL",im("A")+im("B"),"Chữ cái","Letters")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
 const sayN=n=>say(NV[n],NE[n]);
@@ -126,7 +138,7 @@ function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))
   const w=right=="a"?a:b,l=right=="a"?b:a;
   return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
 function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){done=false;let wr=0;catSet("thinking");const back={numP:"numL",letP:"letL",mis:"games",cmpS:"games"}[cur]||"home";
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('${back}')">← ${back=="home"?T("Menu","Menu"):back=="games"?T("Trò chơi","Games"):T("Học","Learn")}</button></div><h2 id="q">${qh} 🔊</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
+ m.innerHTML=`<div class="row"><button class="pill" onclick="go('${back}')">← ${back=="home"?T("Menu","Menu"):back=="games"?T("Trò chơi","Games"):T("Học","Learn")}</button></div><h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
  document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
   if(b.dataset.k==String(right)){done=true;b.classList.add("good");sfxOk();fx();if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");stars++;ls.set("stars",stars);head();
@@ -151,14 +163,14 @@ function match(){const Ls=shuf(LET).slice(0,3),ks=Ls.map(L=>pick(byL(L)));let se
  m.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{if(b.disabled)return;m.querySelectorAll("[data-p]").forEach(x=>x.style.borderColor="");sel=b;b.style.borderColor="var(--acc)";const k=b.dataset.p;say(OBJ[k].vi,OBJ[k].en)});
  m.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(!sel||b.disabled)return;if(OBJ[sel.dataset.p].L===b.dataset.l){[sel,b].forEach(x=>{x.disabled=true;x.style.borderColor="";x.classList.add("good")});sfxOk();sel=null;if(!--left)win(wr,match,"","")}else{wr++;sfxNo();catSet("sad");say("Thử lại nhé","Try again");setTimeout(()=>catSet("thinking"),900)}})}
 function mem(){const ks=shuf(Object.keys(OBJ)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
- m.innerHTML=bk()+`<h2>${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}" style="width:30%;min-width:96px;min-height:110px">${im("gstar")}</button>`).join("")}</div>`;
+ m.innerHTML=bk()+`<h2>${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
  say("Tìm hai hình giống nhau","Find two that are the same");catSet("thinking");
  m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(k);say(OBJ[k].vi,OBJ[k].en);
   if(!a){a=b;return}
   if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
   else{miss++;lock=true;sfxNo();const p=a;a=null;setTimeout(()=>{p.innerHTML=b.innerHTML=im("gstar");lock=false},1200)}})}
 function trace(){const L=pick(LET);let col="#ff5d8f",dn=false;
- m.innerHTML=bk()+`<h2>${T(`Tô chữ ${L}`,`Color the letter ${L}`)}</h2><div style="position:relative;width:min(75vw,300px);aspect-ratio:415/512;margin:8px auto;background:var(--card);border-radius:30px;touch-action:none"><canvas style="position:absolute;inset:0;width:100%;height:100%;border-radius:30px"></canvas><img src="${I["o_"+L]}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none" alt=""></div><div class="chips">${["#ff5d8f","#ffb347","#4cc36b","#4aa3ff","#a66bff"].map(c=>`<button class="chip" style="background:${c}" data-col="${c}"></button>`).join("")}<button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div>`;
+ m.innerHTML=bk()+`<h2>${T(`Tô chữ ${L}`,`Color the letter ${L}`)}</h2><div style="position:relative;width:min(75vw,300px);aspect-ratio:415/512;margin:8px auto;background:#bfe3ff;border-radius:30px;touch-action:none"><canvas style="position:absolute;inset:0;width:100%;height:100%;border-radius:30px"></canvas><img src="${I["o_"+L]}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none" alt=""></div><div class="chips">${["#ff5d8f","#ffb347","#4cc36b","#4aa3ff","#a66bff"].map(c=>`<button class="chip" style="background:${c}" data-col="${c}"></button>`).join("")}<button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div>`;
  const cv=m.querySelector("canvas"),W=cv.width=300,H=cv.height=370,x=cv.getContext("2d");x.lineCap=x.lineJoin="round";x.lineWidth=34;
  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
  cv.onpointerdown=e=>{dn=true;const[p,q]=pt(e);x.strokeStyle=col;x.beginPath();x.moveTo(p,q);x.lineTo(p+.1,q);x.stroke();cv.setPointerCapture(e.pointerId)};
@@ -177,7 +189,7 @@ const togAuto=()=>{ls.set("auto",ls.get("auto","1")=="1"?"0":"1");parent()};
 function gate(){const a=R(4,9),b=R(4,9),c=new Set([a+b]);while(c.size<3)c.add(R(8,18));
  m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div><h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","For parents")}</h2><h2>${a} + ${b} = ?</h2><div class="opts">${shuf([...c]).map(v=>`<button class="opt" onclick="go('${v==a+b?"parent":"home"}')"><span class="ans">${v}</span></button>`).join("")}</div>`}
 function parent(){const top=Object.entries(ST.w).sort((a,b)=>b[1]-a[1]).slice(0,8),au=ls.get("auto","1")=="1";
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div><h2>👨‍👩‍👧 ${T("Phụ huynh","Parents")}</h2><div class="pair"><button>⭐ ${stars}${T("Tổng sao","Stars")}</button><button>${ST.n}${T("Câu đã làm","Questions")}</button><button>${ST.n?Math.round(ST.f/ST.n*100):0}%${T("Đúng ngay lần đầu","First try")}</button></div><h2>${T("Cần luyện thêm","Needs practice")}</h2><div class="chips">${top.length?top.map(([k,v])=>`<span class="pill">${k} ×${v}</span>`).join(""):"—"}</div><h2>${T("Cài đặt","Settings")}</h2><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="lvl=${v};ls.set('lvl',${v});parent()">${T("Mức "+v,"Level "+v)}</button>`).join("")}<button class="pill${au?" on":""}" onclick="togAuto()">${T("Tự chỉnh mức: "+(au?"BẬT":"TẮT"),"Auto level: "+(au?"ON":"OFF"))}</button></div><div class="chips"><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record your voice")}</button><button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">🗑 ${T("Xóa thống kê","Reset stats")}</button></div>`}
+ m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div><h2>👨‍👩‍👧 ${T("Phụ huynh","Parents")}</h2><div class="pair"><button><b class="n">⭐ ${stars}</b>${T("Tổng sao","Stars")}</button><button><b class="n">${ST.n}</b>${T("Câu đã làm","Questions")}</button><button><b class="n">${ST.n?Math.round(ST.f/ST.n*100):0}%</b>${T("Đúng ngay lần đầu","First try")}</button></div><h2>${T("Cần luyện thêm","Needs practice")}</h2><div class="chips">${top.length?top.map(([k,v])=>`<span class="pill">${k} ×${v}</span>`).join(""):"—"}</div><h2>${T("Cài đặt","Settings")}</h2><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="lvl=${v};ls.set('lvl',${v});parent()">${T("Mức "+v,"Level "+v)}</button>`).join("")}<button class="pill${au?" on":""}" onclick="togAuto()">${T("Tự chỉnh mức: "+(au?"BẬT":"TẮT"),"Auto level: "+(au?"ON":"OFF"))}</button></div><div class="chips"><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record your voice")}</button><button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">🗑 ${T("Xóa thống kê","Reset stats")}</button></div>`}
 function idb(mode,fn){return new Promise((res,rej)=>{try{const r=indexedDB.open("bhv",1);r.onupgradeneeded=()=>r.result.createObjectStore("rec");r.onerror=()=>rej(r.error);r.onsuccess=()=>{const tx=r.result.transaction("rec",mode),q=fn(tx.objectStore("rec"));tx.oncomplete=()=>res(q&&q.result);tx.onerror=()=>rej(tx.error)}}catch(e){rej(e)}})}
 let rt="num",rl="vi",mr=null;
 function recS(){const it=rt=="num"?[...Array(21).keys()].map(i=>rl=="vi"?NV[i]:NE[i]):rt=="let"?LET.map((L,i)=>rl=="vi"?LV[i]:L):Object.keys(OBJ).map(k=>OBJ[k][rl]);
