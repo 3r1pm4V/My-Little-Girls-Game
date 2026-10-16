@@ -83,7 +83,10 @@ function say(vi,en){
     u.onend=u.onerror=nt;SS.speak(u);
   })(0);
 }
-let AC;function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type="triangle";o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(.25,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+let AC;function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="triangle";o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(.25,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+function sfxTap(){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="sine";const s=AC.currentTime;o.frequency.setValueAtTime(640,s);o.frequency.exponentialRampToValueAtTime(260,s+.05);g.gain.setValueAtTime(.2,s);g.gain.exponentialRampToValueAtTime(.001,s+.05);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.05)}catch(e){}}
+document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.story-page-btn");if(b&&!b.disabled)sfxTap()},{passive:true});
+function kbc(crumbs,actionHtml=""){const items=crumbs.map((c,idx)=>{if(idx===crumbs.length-1)return`<span class="k-bc-cur">${c.i?c.i+" ":""}${c.t}</span>`;const fn=c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`;return`<button class="k-bc-btn" onclick="${fn}">${c.i?c.i+" ":""}${c.t}</button><span class="k-bc-sep">›</span>`}).join("");return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`}
 const sfxOk=()=>[523,659,784,1047].forEach((f,i)=>tone(f,.25,i*.1)),sfxNo=()=>{tone(220,.3);tone(180,.35,.15)};
 const cat=document.getElementById("cat");
 function catSet(s){cat.src=I["cat_"+s];cat.className=(s==="happy"||s==="celebrate")?"happy":""}
@@ -103,17 +106,69 @@ function go(s,a){const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{histo
  if(top.s==="gate"){rep();return}
  stk.push({s,a});try{history.pushState({i:n+1,s,a},"")}catch(e){}show(s,a)}
 addEventListener("popstate",e=>{if(pend){clearTimeout(pend);pend=0}const st=e.state||{i:0,s:"home"};while(stk.length<=st.i)stk.push({s:"home"});stk.length=st.i+1;stk[st.i]={s:st.s,a:st.a};show(st.s,st.a)});
+let defPrompt = null;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  defPrompt = e;
+  const b = document.getElementById("pwa-btn");
+  if(b) b.style.display = "inline-flex";
+});
+window.addEventListener("appinstalled", () => {
+  defPrompt = null;
+  const b = document.getElementById("pwa-btn");
+  if(b) b.style.display = "none";
+});
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true || window.location.search.includes("pwa=1");
+}
+function triggerPWAInstall(){
+  if(defPrompt){
+    defPrompt.prompt();
+    defPrompt.userChoice.then(r => {
+      if(r.outcome === "accepted") defPrompt = null;
+    });
+  } else {
+    go("pwaGuide");
+  }
+}
+function pwaGuide(){
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let guideHtml = "";
+  if(isIOS){
+    guideHtml = `<p><b>Cách thêm ứng dụng trên iPad / iPhone:</b></p>
+    <ol style="text-align:left;padding-left:20px;line-height:1.7;margin:8px 0">
+      <li>Bấm nút <b>Chia sẻ (Share)</b> ⬆ trên thanh công cụ Safari.</li>
+      <li>Cuộn xuống chọn <b>"Thêm vào MH chính" (Add to Home Screen)</b> ➕.</li>
+      <li>Bấm <b>Thêm (Add)</b> ở góc trên bên phải.</li>
+    </ol>`;
+  } else {
+    guideHtml = `<p><b>Cách cài đặt trên Máy tính bảng Huawei / Android:</b></p>
+    <ol style="text-align:left;padding-left:20px;line-height:1.7;margin:8px 0">
+      <li>Mở trang web bằng <b>Trình duyệt Huawei (Huawei Browser)</b> hoặc <b>Chrome / Edge</b>.</li>
+      <li>Bấm vào biểu tượng <b>Menu 3 chấm (⋮) hoặc (≡)</b> của trình duyệt.</li>
+      <li>Chọn <b>"Cài đặt ứng dụng" (Install app)</b> hoặc <b>"Thêm vào màn hình chính" (Add to desktop)</b>.</li>
+      <li>Sau khi cài đặt, mở biểu tượng <b>Bé học vui</b> từ màn hình chính: ứng dụng sẽ tự động chạy <b>toàn màn hình (Standalone)</b>, biến mất thanh web, mượt mà như app thật!</li>
+    </ol>
+    <div class="note warn" style="margin-top:10px;text-align:left">
+      💡 <b>Lưu ý riêng cho máy Huawei:</b> Nếu dùng Google Chrome trên máy Huawei không có Google Play Services (GMS), Chrome sẽ chỉ tạo shortcut. Khuyên dùng <b>Trình duyệt Huawei (Huawei Browser)</b> mặc định để cài đặt ứng dụng chuẩn PWA không bị gán logo trình duyệt.
+    </div>`;
+  }
+  m.innerHTML = `${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Cài đặt ứng dụng","Install App"),i:"📲"}])}
+    <h2>📲 ${T("Cài đặt ứng dụng","Install App")}</h2>
+    <div class="note ok" style="max-width:540px;margin:12px auto;text-align:left">${guideHtml}</div>
+    <div class="row" style="justify-content:center;margin-top:14px"><button class="pill" onclick="go('home')">✔ ${T("Đã hiểu","Got it")}</button></div>`;
+}
 function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
-function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
+function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}</p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button></div><div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" onclick="numL(${i})">${i}</button>`).join("")}</div>`;sayN(n)}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" onclick="numL(${i})">${i}</button>`).join("")}</div>`;sayN(n)}
 function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new Set([n]);while(c.size<3)c.add(R(1,MX()));
  quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
-function letL(){const arr=LET_ALL();m.innerHTML=`<div class="row"><button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button></div><h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
+function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('letL')">← ${T("Chữ cái","Letters")}</button></div><div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
 function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
  say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
@@ -126,8 +181,10 @@ function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))
   if(a==b)return[`<div class="eq">${a} = ${b}</div>`,`${NV[a]} bằng ${NV[b]}. Hai bên bằng nhau!`,`${NE[a]} equals ${NE[b]}. They are the same!`];
   const w=right=="a"?a:b,l=right=="a"?b:a;
   return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
-function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");const back={numP:"numL",letP:"letL",mis:"games",cmpS:"games",math10:"home"}[cur]||"home";
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('${back}')">← ${back=="home"?T("Menu","Menu"):back=="games"?T("Trò chơi","Games"):T("Học","Learn")}</button></div><h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
+function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");
+ const QBC={numP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"numL",t:T("Học số","Numbers"),i:"🔢"},{t:T("Đố đếm số","Quiz"),i:"❓"}],letP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Đố chữ cái","Quiz"),i:"❓"}],mis:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Số còn thiếu","Missing"),i:"🔢"}],cmpS:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Dấu so sánh","Signs"),i:"⚖️"}],math10:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Toán 10","Math 10"),i:"➕"}],cmp:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("So sánh","Compare"),i:"⚖️"}]};
+ const bcHtml=kbc(QBC[cur]||[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Câu đố","Quiz"),i:"❓"}]);
+ m.innerHTML=`${bcHtml}<h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
  document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
   if(b.dataset.k==String(right)){done=true;b.classList.add("good");sfxOk();fx();if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");stars++;ls.set("stars",stars);head();
@@ -141,19 +198,19 @@ function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k])
 function result(){const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);m.innerHTML=`<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:N},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<f?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;ql=null;catSet("celebrate");fx();sfxOk();say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}. Great job!`)}
 function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
 function win(wr,next,vi,en){if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);adv(rd.n>=(RL[cur]||ROUND)?result:next)}
-const bk=()=>`<div class="row"><button class="pill" onclick="go('games')">← ${T("Trò chơi","Games")}</button></div>`;
-function games(){m.innerHTML=`<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game")}
+const bk=(curT,parentS="games",parentT=T("Trò chơi","Games"),action="")=>kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:parentS,t:parentT,i:parentS==="games"?"🎮":"📚"},...(curT?[{t:curT,i:"✨"}]:[])],action);
+function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game")}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
  quiz(T("Chọn dấu đúng","Pick the right sign"),"Chọn dấu đúng","Pick the right sign",`<div class="stage" style="gap:6px">${g(a,o1)}<span style="font-size:70px;font-weight:800;color:var(--acc)">?</span>${g(b,o2)}</div>`,[">","=","<"].map(v=>({k:v,h:`<span class="ans">${v==">"?"&gt;":v=="<"?"&lt;":"="}</span>`})),s,cmpS,()=>[`<div class="eq">${a} ${s} ${b}</div>`,...(a==b?[`${NV[a]} bằng ${NV[b]}`,`${NE[a]} equals ${NE[b]}`]:[`${NV[a]} ${a>b?"nhiều":"ít"} hơn ${NV[b]}`,`${NE[a]} is ${a>b?"more":"fewer"} than ${NE[b]}`])])}
 function match(){const l=ql=qL(),Ls=shuf(exPL(l)).slice(0,3),ks=Ls.map(L=>pick(exPK(l,L)));let sel=null,left=3,wr=0;
- m.innerHTML=bk()+`<h2>${T("Ghép chữ với hình","Match the letter and picture")}</h2><div class="opts">${shuf(ks).map(k=>`<button class="opt" data-p="${k}">${im(EXA[k].img)}</button>`).join("")}</div><div class="opts">${shuf(Ls).map(L=>`<button class="opt" data-l="${L}">${imL(L)}</button>`).join("")}</div>`;
+ m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Ghép chữ & hình","Match"),i:"🧩"}])+`<h2>${T("Ghép chữ với hình","Match the letter and picture")}</h2><div class="opts">${shuf(ks).map(k=>`<button class="opt" data-p="${k}">${im(EXA[k].img)}</button>`).join("")}</div><div class="opts">${shuf(Ls).map(L=>`<button class="opt" data-l="${L}">${imL(L)}</button>`).join("")}</div>`;
  say("Ghép chữ với hình nhé","Match the letter and picture");catSet("thinking");
  m.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{if(b.disabled)return;m.querySelectorAll("[data-p]").forEach(x=>x.style.borderColor="");sel=b;b.style.borderColor="var(--acc)";const k=b.dataset.p;say(EXA[k].t,EXA[k].t)});
  m.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(!sel||b.disabled)return;if(EXA[sel.dataset.p].L===b.dataset.l){[sel,b].forEach(x=>{x.disabled=true;x.style.borderColor="";x.classList.add("good")});sfxOk();sel=null;if(!--left)win(wr,match,"","")}else{wr++;sfxNo();catSet("sad");say("Thử lại nhé","Try again");setTimeout(()=>catSet("thinking"),900)}})}
 function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
- m.innerHTML=bk()+`<h2>${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
+ m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Lật thẻ trí nhớ","Memory"),i:"🃏"}])+`<h2>${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
  say("Tìm hai hình giống nhau","Find two that are the same");catSet("thinking");
  m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(EXA[k].img);say(EXA[k].t,EXA[k].t);
   if(!a){a=b;return}
@@ -172,7 +229,7 @@ function trace(selItem){const md=TR[trm]||TR.up;
  const sampleCard=isNet
   ?`<div class="trace-sample-card" onclick="TR.net.say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU NÉT 🔊</span><span style="font-size:16px;font-weight:800;color:#184a86;margin-top:2px">${VN_STROKES.find(s=>s.id===it).name.replace("Nét ","")}</span></div>`
   :`<div class="trace-sample-card" onclick="TR['${trm}'].say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU CHỮ 🔊</span><span class="trace-sample-letter">${it}</span></div>`;
- m.innerHTML=bk()+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:44px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
+ m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}])+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
  const cv=m.querySelector("#cv"),gcv=m.querySelector("#guideCv"),bcv=m.querySelector("#bgCv");
  const W=cv.width=gcv.width=bcv.width=320,H=cv.height=gcv.height=bcv.height=390;
  const x=cv.getContext("2d"),gx=gcv.getContext("2d"),bx=bcv.getContext("2d");
@@ -211,13 +268,13 @@ function stw(r){const l=cur==="letP"?"Chữ "+(OBJ[r]?OBJ[r].L:r):(cur==="numP"|
 function adapt(r){if(cur==="trace"||ls.get("auto","1")!="1")return"";let[g,b]=ls.get("ad","0,0").split(",").map(Number);if(r>=.8){g++;b=0}else if(r<=.4){b++;g=0}else g=b=0;let s="";if(g>=2&&lvl<3){lvl++;g=0;s=`⬆ Mức ${lvl} · Level ${lvl}`}else if(b>=2&&lvl>1){lvl--;b=0;s=`⬇ Mức ${lvl} · Level ${lvl}`}ls.set("ad",g+","+b);ls.set("lvl",lvl);return s}
 const togAuto=()=>{ls.set("auto",ls.get("auto","1")=="1"?"0":"1");parent()};
 function gate(){const a=R(4,9),b=R(4,9),c=new Set([a+b]);while(c.size<3)c.add(R(8,18));
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div><h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","For parents")}</h2><h2>${a} + ${b} = ?</h2><div class="opts">${shuf([...c]).map(v=>`<button class="opt" onclick="go('${v==a+b?"parent":"home"}')"><span class="ans">${v}</span></button>`).join("")}</div>`}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Khóa phụ huynh","Parent Gate"),i:"🔒"}])}<h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","For parents")}</h2><h2>${a} + ${b} = ?</h2><div class="opts">${shuf([...c]).map(v=>`<button class="opt" onclick="go('${v==a+b?"parent":"home"}')"><span class="ans">${v}</span></button>`).join("")}</div>`}
 function parent(){const top=Object.entries(ST.w).sort((a,b)=>b[1]-a[1]).slice(0,8),au=ls.get("auto","1")=="1",sf=SFX(),rp=ls.get("rm","auto"),vs=vState(),nrec=Object.keys(REC).length;
  if(vs.k==="wait")setTimeout(()=>{vWait=true;if(cur==="parent")parent()},2000);
  const vh=vs.k==="ok"?`<div class="note ok">✅ ${T("Máy có giọng đọc tiếng Việt","This device has a Vietnamese voice")}<small>${esc(vs.n)}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button></div>`
   :vs.k==="wait"?`<div class="note">⏳ ${T("Đang kiểm tra giọng đọc…","Checking voices…")}</div>`
   :`<div class="note warn">⚠ ${T(vs.k==="no"?"Máy chưa có giọng đọc tiếng Việt":"Không tìm thấy giọng đọc của máy","No Vietnamese voice found")}<small>${VIHELP}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record your voice")}</button></div>`;
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div><h2>👨‍👩‍👧 ${T("Phụ huynh","Parents")}</h2><div class="pair"><button><b class="n">⭐ ${stars}</b>${T("Tổng sao","Stars")}</button><button><b class="n">${ST.n}</b>${T("Câu đã làm","Questions")}</button><button><b class="n">${ST.n?Math.round(ST.f/ST.n*100):0}%</b>${T("Đúng ngay lần đầu","First try")}</button></div><h2>${T("Cần luyện thêm","Needs practice")}</h2><div class="chips">${top.length?top.map(([k,v])=>`<span class="pill">${k} ×${v}</span>`).join(""):"—"}</div><h2>${T("Giọng đọc","Voice")}</h2>${vh}<h2>${T("Cài đặt","Settings")}</h2><div class="chips">${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 Tiếng Anh"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}')">${t}</button>`).join("")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="lvl=${v};ls.set('lvl',${v});parent()">${T("Mức "+v,"Level "+v)}</button>`).join("")}<button class="pill${au?" on":""}" onclick="togAuto()">${T("Tự chỉnh mức: "+(au?"BẬT":"TẮT"),"Auto level: "+(au?"ON":"OFF"))}</button></div><div class="chips"><button class="pill${sf?" on":""}" onclick="togSfx()">🔊 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button><button class="pill${rmOn()?" on":""}" onclick="togRM()">🎞 ${T("Giảm chuyển động: "+(rp==="auto"?"THEO MÁY":rp==="1"?"BẬT":"TẮT"),"Reduce motion: "+(rp==="auto"?"AUTO":rp==="1"?"ON":"OFF"))}</button></div><div class="chips"><button class="pill" onclick="go('rec')">🎙 ${T("Giọng bố mẹ · nhập file âm thanh","Your voice · import audio")}</button><button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">🗑 ${T("Xóa thống kê","Reset stats")}</button></div><h2>${T("Sao lưu","Backup")}</h2><div class="note">${T("Lưu sao, thống kê và cài đặt ra một file để chuyển sang máy khác.","Save stars, stats and settings to a file to move to another device.")}<small>Chọn “kèm giọng thu” nếu muốn mang cả bản thu và file âm thanh đã nhập (file sẽ nặng hơn).</small></div><div class="chips"><button class="pill" onclick="exportData(0)">💾 ${T("Tiến độ","Progress")}</button><button class="pill" onclick="exportData(1)">💾 ${T("Kèm giọng thu"+(nrec?" ("+nrec+")":""),"With voices")}</button><button class="pill" onclick="document.getElementById('bf').click()">📂 ${T("Khôi phục","Restore")}</button></div><input type="file" id="bf" accept=".json,application/json" hidden onchange="importData(this.files[0]);this.value=''"><div class="note" id="bmsg" hidden></div>`}
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Phụ huynh","Parents"),i:"👨‍👩‍👧"}])}<h2>👨‍👩‍👧 ${T("Phụ huynh","Parents")}</h2><div class="pair"><button><b class="n">⭐ ${stars}</b>${T("Tổng sao","Stars")}</button><button><b class="n">${ST.n}</b>${T("Câu đã làm","Questions")}</button><button><b class="n">${ST.n?Math.round(ST.f/ST.n*100):0}%</b>${T("Đúng ngay lần đầu","First try")}</button></div><h2>${T("Cần luyện thêm","Needs practice")}</h2><div class="chips">${top.length?top.map(([k,v])=>`<span class="pill">${k} ×${v}</span>`).join(""):"—"}</div><h2>💡 ${T("Cẩm nang đồng hành cùng bé","Parenting Guide")}</h2><div class="note" style="text-align:left"><b>⏰ ${T("Thời lượng sử dụng màn hình hợp lý","Healthy Screen Time")}</b><small style="line-height:1.4;margin:4px 0">${T("Với trẻ 3–6 tuổi, khuyến nghị mỗi phiên học kéo dài từ 15–20 phút và không quá 1 giờ mỗi ngày. Hãy cùng bé nghỉ mắt, vươn vai sau mỗi buổi học nhỏ.","For 3–6 year olds, 15–20 minutes per session is ideal. Take regular eye breaks and stretch together.")}</small></div><div class="note" style="text-align:left"><b>🗣 ${T("Khen ngợi nỗ lực (Tư duy phát triển)","Praise the Process")}</b><small style="line-height:1.4;margin:4px 0">${T("Thay vì chỉ khen 'Con thông minh quá!', hãy khen sự kiên trì: 'Bố mẹ thấy con rất kiên nhẫn tìm chữ cái này!' hoặc 'Con đã lắng nghe và thử lại rất tuyệt vời!'.","Praise persistence rather than just outcome: 'I love how patiently you kept trying!' to build confidence.")}</small></div><div class="note" style="text-align:left"><b>🤝 ${T("Đồng hành tương tác cùng bé","Interactive Co-playing")}</b><small style="line-height:1.4;margin:4px 0">${T("Đặt câu hỏi gợi mở cho bé: 'Chữ O tròn giống quả gì trong nhà mình nhỉ?', 'Con thử tìm 3 đồ vật màu đỏ trong phòng xem nào!'. Biến bài học thành trò chơi khám phá thực tế.","Ask open questions: 'What round fruits do we have at home?', 'Can you find 3 red objects in the living room?'.")}</small></div><h2>${T("Giọng đọc","Voice")}</h2>${vh}<h2>${T("Cài đặt","Settings")}</h2><div class="chips">${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 Tiếng Anh"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}')">${t}</button>`).join("")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="lvl=${v};ls.set('lvl',${v});parent()">${T("Mức "+v,"Level "+v)}</button>`).join("")}<button class="pill${au?" on":""}" onclick="togAuto()">${T("Tự chỉnh mức: "+(au?"BẬT":"TẮT"),"Auto level: "+(au?"ON":"OFF"))}</button></div><div class="chips"><button class="pill${sf?" on":""}" onclick="togSfx()">🔊 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button><button class="pill${rmOn()?" on":""}" onclick="togRM()">🎞 ${T("Giảm chuyển động: "+(rp==="auto"?"THEO MÁY":rp==="1"?"BẬT":"TẮT"),"Reduce motion: "+(rp==="auto"?"AUTO":rp==="1"?"ON":"OFF"))}</button></div><div class="chips"><button class="pill" onclick="go('rec')">🎙 ${T("Giọng bố mẹ · nhập file âm thanh","Your voice · import audio")}</button><button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">🗑 ${T("Xóa thống kê","Reset stats")}</button></div><h2>📲 ${T("Cài đặt ứng dụng PWA","App Installation")}</h2><div class="note ok" style="text-align:left"><b>${isStandalone()?T("✅ Ứng dụng đang chạy toàn màn hình (Standalone)","✅ App is running in standalone mode"):T("📲 Cài đặt vào màn hình chính","📲 Install to Home Screen")}</b><small style="margin:4px 0 6px;line-height:1.4">${isStandalone()?T("Ứng dụng đã được cài đặt, mở toàn màn hình không có thanh địa chỉ web, hoạt động mượt mà offline.","App is installed, runs full-screen without web bar, works offline."):T("Cài đặt để chơi toàn màn hình như ứng dụng xịn, không còn thanh web, lưu trữ bài học và chạy mượt offline.","Install to play full-screen without browser bar, save lessons and run offline.")}</small><button class="pill" onclick="triggerPWAInstall()" style="margin-top:4px;background:var(--ok);color:#fff;font-weight:800;padding:6px 14px">📲 ${isStandalone()?T("Xem hướng dẫn","View guide"):T("Cài đặt ngay / Hướng dẫn","Install now / Guide")}</button></div><h2>${T("Sao lưu","Backup")}</h2><div class="note">${T("Lưu sao, thống kê và cài đặt ra một file để chuyển sang máy khác.","Save stars, stats and settings to a file to move to another device.")}<small>Chọn “kèm giọng thu” nếu muốn mang cả bản thu và file âm thanh đã nhập (file sẽ nặng hơn).</small></div><div class="chips"><button class="pill" onclick="exportData(0)">💾 ${T("Tiến độ","Progress")}</button><button class="pill" onclick="exportData(1)">💾 ${T("Kèm giọng thu"+(nrec?" ("+nrec+")":""),"With voices")}</button><button class="pill" onclick="document.getElementById('bf').click()">📂 ${T("Khôi phục","Restore")}</button></div><input type="file" id="bf" accept=".json,application/json" hidden onchange="importData(this.files[0]);this.value=''"><div class="note" id="bmsg" hidden></div>`}
 function idb(mode,fn){return new Promise((res,rej)=>{try{const r=indexedDB.open("bhv",1);r.onupgradeneeded=()=>r.result.createObjectStore("rec");r.onerror=()=>rej(r.error);r.onsuccess=()=>{const tx=r.result.transaction("rec",mode),q=fn(tx.objectStore("rec"));tx.oncomplete=()=>res(q&&q.result);tx.onerror=()=>rej(tx.error)}}catch(e){rej(e)}})}
 let rt="num",rl="vi",mr=null;
 const RMAX=2*1024*1024,RTOT=40*1024*1024,recTotal=()=>Object.values(RECSZ).reduce((a,b)=>a+b,0);
@@ -226,7 +283,7 @@ const MSGS=l=>[...new Set([...PR,...ER].flatMap(p=>chunks(p[l==="vi"?0:1])))];
 const recItems=()=>rt=="num"?[...Array(21).keys()].map(i=>rl=="vi"?NV[i]:NE[i]):rt=="let"?LET.map((L,i)=>rl=="vi"?LV[i]:L):rt=="msg"?MSGS(rl):rl=="vi"?[...new Set([...Object.keys(OBJ).map(k=>OBJ[k].vi),...VT.map(s=>s.split("|")[2])])]:Object.keys(OBJ).map(k=>OBJ[k].en);
 async function putRec(k,bl){await idb("readwrite",s=>s.put({k,b:bl},k));if(REC[k])URL.revokeObjectURL(REC[k]);REC[k]=URL.createObjectURL(bl);RECSZ[k]=bl.size}
 function recS(){const it=recItems();
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('parent')">← ${T("Phụ huynh","Parents")}</button></div><h2>🎙 ${T("Giọng bố mẹ","Your voice")}</h2><p id="rmsg">${T("Chạm 🎙 để thu, ⏹ để dừng, 📁 để chọn file âm thanh","Tap 🎙 to record, ⏹ to stop, 📁 to pick an audio file")}</p><div class="chips">${[["num","Số"],["let","Chữ"],["obj","Hình"],["msg","Lời khen"]].map(([k,x])=>`<button class="pill${rt==k?" on":""}" onclick="rt='${k}';recS()">${x}</button>`).join("")}${["vi","en"].map(l=>`<button class="pill${rl==l?" on":""}" onclick="rl='${l}';recS()">${l.toUpperCase()}</button>`).join("")}</div><div class="note"><b>📁 Nhập nhiều file âm thanh</b> (MP3, M4A, WAV, OGG; tối đa 2 MB mỗi file, tổng 40 MB). Đặt tên file theo mẫu <b>vi_từ.mp3</b> hoặc <b>en_từ.mp3</b>, ví dụ <b>vi_hai.mp3</b>, <b>vi_quả táo.mp3</b>, <b>en_apple.mp3</b>. Từ không khớp sẽ được báo lại.<small>Đã dùng ${(recTotal()/1048576).toFixed(1)} / 40 MB</small><button class="pill" onclick="document.getElementById('rbulk').click()">📁 ${T("Chọn nhiều file","Choose files")}</button></div><input type="file" id="rbulk" multiple accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.oga,.opus,.webm" hidden onchange="bulkAudio(this.files);this.value=''">${it.map(x=>{const k=rl+"|"+x;return`<div class="rr"><b>${esc(x)}</b><span><button class="pill" data-k="${esc(k)}" data-a="r">🎙</button><button class="pill" data-k="${esc(k)}" data-a="f">📁</button>${REC[k]?`<button class="pill" data-k="${esc(k)}" data-a="p">▶</button><button class="pill" data-k="${esc(k)}" data-a="d">✖</button>`:""}</span></div>`}).join("")}`;
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"parent",t:T("Phụ huynh","Parents"),i:"👨‍👩‍👧"},{t:T("Giọng bố mẹ","Your voice"),i:"🎙️"}])}<h2>🎙 ${T("Giọng bố mẹ","Your voice")}</h2><p id="rmsg">${T("Chạm 🎙 để thu, ⏹ để dừng, 📁 để chọn file âm thanh","Tap 🎙 to record, ⏹ to stop, 📁 to pick an audio file")}</p><div class="chips">${[["num","Số"],["let","Chữ"],["obj","Hình"],["msg","Lời khen"]].map(([k,x])=>`<button class="pill${rt==k?" on":""}" onclick="rt='${k}';recS()">${x}</button>`).join("")}${["vi","en"].map(l=>`<button class="pill${rl==l?" on":""}" onclick="rl='${l}';recS()">${l.toUpperCase()}</button>`).join("")}</div><div class="note"><b>📁 Nhập nhiều file âm thanh</b> (MP3, M4A, WAV, OGG; tối đa 2 MB mỗi file, tổng 40 MB). Đặt tên file theo mẫu <b>vi_từ.mp3</b> hoặc <b>en_từ.mp3</b>, ví dụ <b>vi_hai.mp3</b>, <b>vi_quả táo.mp3</b>, <b>en_apple.mp3</b>. Từ không khớp sẽ được báo lại.<small>Đã dùng ${(recTotal()/1048576).toFixed(1)} / 40 MB</small><button class="pill" onclick="document.getElementById('rbulk').click()">📁 ${T("Chọn nhiều file","Choose files")}</button></div><input type="file" id="rbulk" multiple accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.oga,.opus,.webm" hidden onchange="bulkAudio(this.files);this.value=''">${it.map(x=>{const k=rl+"|"+x;return`<div class="rr"><b>${esc(x)}</b><span><button class="pill" data-k="${esc(k)}" data-a="r">🎙</button><button class="pill" data-k="${esc(k)}" data-a="f">📁</button>${REC[k]?`<button class="pill" data-k="${esc(k)}" data-a="p">▶</button><button class="pill" data-k="${esc(k)}" data-a="d">✖</button>`:""}</span></div>`}).join("")}`;
  m.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>recAct(b.dataset.a,b.dataset.k,b))}
 async function recAct(a,k,b){const msg=document.getElementById("rmsg");
  if(a=="p"){A.pause();A.onended=A.onerror=null;A.src=REC[k];A.play().catch(()=>{});return}
@@ -304,58 +361,65 @@ function playSyllable(text, c, v, toneIdx, spellText){
   }
 }
 function playSpell(c, v, toneIdx, finalWord, spellText){
-  A.pause();A.onended=null;A.onerror=null;
-  if(SS){try{SS.cancel()}catch(e){}}
+  A.pause(); A.onended = null; A.onerror = null;
+  if(SS){ try{ SS.cancel(); } catch(e){} }
   const my = ++tok;
   busy = true;
 
-  const cObj = VN_SPELL.C.find(x=>x.c===c)||VN_SPELL.C[0];
-  const cAudio = getAudio("vi|" + cObj.r) || getAudio(cObj.r);
-  const vAudio = getAudio("vi|" + v) || getAudio(v);
-  const baseSyl = VN_SPELL.syl(cObj, VN_SPELL.V.find(x=>x.v===v)||VN_SPELL.V[0], 0).text;
-  const baseAudio = getAudio("vi|" + baseSyl) || getAudio(baseSyl);
-
-  const toneNames = ["khong_dau", "huyen", "sac", "hoi", "nga", "nang"];
-  const tAudio = `audio/tone_${toneNames[toneIdx]||"khong_dau"}.mp3`;
-  const wAudio = getAudio("vi|" + finalWord) || getAudio(finalWord);
-
-  const seq = [];
-  if(toneIdx === 0){
-    if(cAudio) seq.push({ url: cAudio, label: cObj.r });
-    if(vAudio) seq.push({ url: vAudio, label: v });
-    if(wAudio) seq.push({ url: wAudio, label: finalWord });
-  } else {
-    if(baseAudio) seq.push({ url: baseAudio, label: baseSyl });
-    else {
-      if(cAudio) seq.push({ url: cAudio, label: cObj.r });
-      if(vAudio) seq.push({ url: vAudio, label: v });
-    }
-    if(tAudio) seq.push({ url: tAudio, label: VN_SPELL.TONES[toneIdx]?.n || "" });
-    if(wAudio) seq.push({ url: wAudio, label: finalWord });
-  }
-
+  // Đọc trọn câu đánh vần tự nhiên như hiển thị: ví dụ "bờ a ba huyền bà" hoặc "bờ a ba"
+  const spoken = spellText.replace(/\s*-\s*/g, " ").trim();
   const subEl = document.querySelector(".spell-sub");
-  let idx = 0;
-  const playNext = () => {
-    if(my !== tok) return;
-    if(idx >= seq.length){
+  if(subEl){
+    subEl.innerHTML = `🔊 Đánh vần: <b style="color:var(--ok);font-size:1.15em">▶ ${spellText}</b>`;
+  }
+  const fin = () => {
+    if(my === tok){
       busy = false;
       busyEnd = Date.now();
       if(subEl) subEl.innerHTML = `🔊 Đánh vần: <b>${spellText}</b>`;
+    }
+  };
+
+  // 1. Kiểm tra file âm thanh chất lượng cao VieNeu Tưởng Vy trong AUDIO_MAP hoặc REC
+  const spellAudio = getAudio("vi|" + spoken) || 
+                     getAudio("vi|spell_" + c + "_" + v + "_" + toneIdx) || 
+                     getAudio(spoken);
+
+  if(spellAudio){
+    A.src = spellAudio;
+    A.onended = fin;
+    A.onerror = fin;
+    A.play().catch(e => {
+      if(my === tok && e && e.name !== "AbortError") fin();
+    });
+    return;
+  }
+
+  // 2. Thử gọi Local Server TTS nếu đang chạy (hỗ trợ sinh audio Vieneu động)
+  fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: spoken, voice: 'Tưởng Vy' })
+  })
+  .then(res => res.ok ? res.json() : null)
+  .then(data => {
+    if(my !== tok) return;
+    if(data && data.url){
+      A.src = data.url;
+      A.onended = fin;
+      A.onerror = fin;
+      A.play().catch(fin);
       return;
     }
-    const item = seq[idx++];
-    if(subEl){
-      subEl.innerHTML = `🔊 Đánh vần: <b style="color:var(--ok);font-size:1.15em">▶ ${item.label}</b>`;
-    }
-    A.src = item.url;
-    A.onended = () => { if(my === tok) setTimeout(playNext, 75); };
-    A.onerror = () => { if(my === tok) setTimeout(playNext, 75); };
-    A.play().catch(e => {
-      if(my === tok && e && e.name !== "AbortError") setTimeout(playNext, 75);
-    });
-  };
-  playNext();
+    // 3. Fallback: Phát âm mượt mà bằng giọng đọc tiếng Việt Web Speech API
+    say(spoken, spoken);
+    setTimeout(fin, spoken.length * 120 + 800);
+  })
+  .catch(() => {
+    if(my !== tok) return;
+    say(spoken, spoken);
+    setTimeout(fin, spoken.length * 120 + 800);
+  });
 }
 function pickConsonant(c, r){
   curC = c;
@@ -366,6 +430,43 @@ function pickConsonant(c, r){
   }
   readL();
   playConsonant(c, r);
+}
+const CO_LAN_ANH_CONSONANTS = {
+  "b": "bicX1RNzHos", "c": "uP9Ri14I28o", "d": "SqjCwJRONfU", "đ": "4c7ApUvxNKk",
+  "g": "5AIIGSfthV8", "k": "kdrjFqjp9NY", "kh": "Pq6pxF1l2vg", "m": "UqfYtYRHmpY",
+  "n": "477qRox5TWA", "ng": "82YileKSdiI", "nh": "6tHKEPP-sYU", "x": "4bq-lpEQI7U"
+};
+const CO_LAN_ANH_LESSONS = {
+  1: "YLM9IUypgqQ", 2: "ww5wazKT7Ck", 3: "iEPpruHON1w", 4: "-O8EgkNBARE",
+  5: "aqsjf0zKbXQ", 6: "2P0sVhYOvCw", 7: "kXk2vyXFXFY", 8: "czZBOWlGlaE",
+  9: "6zfx2E3jizM", 10: "zJPfge__mUE", 11: "dojtsCRfbfU", 12: "FohTBERmiZc",
+  13: "8560ssT_ing", 14: "Ag0Lt6Yvpkc", 15: "SHA2WEoc1js", 16: "JNhEKiIESlU",
+  17: "hWy3TdFUAYA", 18: "d1TePylBOLQ", 19: "85TMOE5Npzo", 20: "U9FTdd6eBwA",
+  21: "cIinEyjGUQ8", 22: "-15lFJeyxMc", 23: "jsDx9X1nwS0", 24: "D3KgV4yfagM",
+  25: "04w8wNfFliw", 26: "YJ8Ms45Ttio", 27: "_9mHo5uIlvA", 28: "y2bFgBHTxUk"
+};
+function playLessonAudio(audioUrl, fallbackText){
+  A.pause(); A.onended = null; A.onerror = null;
+  if(SS){ try{ SS.cancel(); } catch(e){} }
+  const my = ++tok;
+  busy = true;
+  const fin = () => { if(my === tok){ busy = false; busyEnd = Date.now(); } };
+
+  const target = audioUrl ? (getAudio(audioUrl) || audioUrl) : null;
+  if(target){
+    A.src = target;
+    A.onended = fin;
+    A.onerror = () => {
+      if(my === tok) say(fallbackText, fallbackText);
+    };
+    A.play().catch(e => {
+      if(my === tok && e && e.name !== "AbortError"){
+        say(fallbackText, fallbackText);
+      }
+    });
+  } else {
+    say(fallbackText, fallbackText);
+  }
 }
 let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
 function readL(tab){
@@ -382,12 +483,17 @@ function readL(tab){
     const syls=[0,1,2,3,4,5].map(t=>VN_SPELL.syl(cObj,vObj,t));
     if(curTone >= syls.length) curTone = 0;
     const curSyl=syls[curTone];
+    const ytClip=CO_LAN_ANH_CONSONANTS[cObj.c];
+    const ytBadge=ytClip
+      ?`<div style="margin:4px auto"><a href="https://www.youtube.com/watch?v=${ytClip}" target="_blank" rel="noopener" class="pill" style="font-size:13px;padding:3px 12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;background:#e74c3c;color:#fff;font-weight:700;box-shadow:0 3px 0 #922b21">▶ Video Cô Lan Anh dạy chữ ${cObj.c.toUpperCase()}</a></div>`
+      :"";
     const meanBadge=curSyl.hasMeaning
       ?`<div style="background:#eafaf1;border:2px solid var(--ok);color:#196f3d;border-radius:18px;display:inline-block;padding:3px 14px;font-size:15px;font-weight:700;margin:4px auto">💡 Từ ví dụ: <b>${curSyl.ex}</b></div>`
       :`<div style="background:#fff3cd;border:2px solid #f39c12;color:#856404;border-radius:18px;display:inline-block;padding:3px 14px;font-size:13px;font-weight:600;margin:4px auto">⚠ Tiếng này ít dùng trong tiếng Việt</div>`;
     body=`<div class="spell-board">
       <div class="spell-head"><span>${cObj.c}</span><span style="color:var(--acc2)">+</span><span>${vObj.v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline;color:var(--acc)">${curSyl.text}</span></div>
       ${meanBadge}
+      ${ytBadge}
       <div class="spell-sub" style="cursor:pointer" onclick="playSpell('${cObj.c}','${vObj.v}',${curTone},'${curSyl.text}','${curSyl.spell}')">🔊 Đánh vần: <b>${curSyl.spell}</b></div>
       <div class="syl-grid">
         ${syls.map((s,idx)=>{
@@ -408,6 +514,10 @@ function readL(tab){
     }).join("")}</div>`;
   }else if(readTab==="lessons"){
     const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
+    const ytLes=CO_LAN_ANH_LESSONS[L.id];
+    const ytLesBtn=ytLes
+      ?`<a href="https://www.youtube.com/watch?v=${ytLes}" target="_blank" rel="noopener" class="pill" style="font-size:13px;padding:3px 10px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;background:#e74c3c;color:#fff;font-weight:700;box-shadow:0 3px 0 #922b21">▶ Video Cô Lan Anh</a>`
+      :"";
     const rhymeList=(L.rhymes||[]).map(r=>typeof r==="string"?r:(r.rhyme||""));
     const highlightRhymes=(text)=>{
       let res=esc(text);
@@ -429,7 +539,10 @@ function readL(tab){
     <div class="lesson-card">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
         <h3 style="margin:0;font-size:24px;color:var(--acc)">${L.title}</h3>
-        <button class="pill on" style="font-size:15px;padding:4px 12px" onclick="say('${L.sentence.replace(/'/g,"\\'")}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">🔊 Nghe câu mẫu</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          ${ytLesBtn}
+          <button class="pill on" style="font-size:14px;padding:4px 12px" onclick="playLessonAudio('${L.sentenceAudio||""}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">🔊 Nghe cô đọc câu mẫu</button>
+        </div>
       </div>
 
       <div style="font-weight:800;margin:6px 0 4px;color:var(--ink)">1. Đánh vần Vần (Cô Lan Anh):</div>
@@ -437,23 +550,29 @@ function readL(tab){
         ${(L.rhymes||[]).map(r=>{
           const rName=typeof r==="string"?r:r.rhyme;
           const rFormula=typeof r==="string"?`Vần ${r}`:(r.formula||rName);
+          const rAudioSpell=typeof r==="object"?r.audioSpell:"";
+          const rAudioRhyme=typeof r==="object"?r.audioRhyme:"";
           return `
-            <div class="rhyme-box" onclick="say('${rFormula}','${rName}');rp(this)">
+            <div class="rhyme-box" onclick="playLessonAudio('${rAudioSpell}','${rFormula}');rp(this)">
               <div class="rhyme-big">${rName}</div>
               <div class="rhyme-formula">👉 ${rFormula}</div>
-              <button class="pill" style="font-size:14px;padding:3px 10px;margin-top:2px">🔊 Đánh vần vần</button>
+              <div style="display:flex;gap:4px;margin-top:6px;justify-content:center;flex-wrap:wrap">
+                <button class="pill" style="font-size:13px;padding:2px 8px" onclick="event.stopPropagation();playLessonAudio('${rAudioRhyme}','${rName}');rp(this)">🔊 Đọc: ${rName}</button>
+                <button class="pill on" style="font-size:13px;padding:2px 8px" onclick="event.stopPropagation();playLessonAudio('${rAudioSpell}','${rFormula}');rp(this)">🔤 Đánh vần</button>
+              </div>
             </div>
           `;
         }).join("")}
       </div>
 
-      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">2. Đánh vần tiếng & Từ mẫu:</div>
+      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">2. Đánh vần tiếng & Từ mẫu (Cô Lan Anh):</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:12px">
         ${(L.words||[]).map(w=>{
           const wText=typeof w==="string"?w:w.word;
           const wSpell=typeof w==="string"?w:w.spell;
+          const wAudio=typeof w==="object"?w.audio:"";
           return `
-            <div class="spell-sample" onclick="say('${wSpell.replace(/'/g,"\\'")}','${wText.replace(/'/g,"\\'")}');rp(this)">
+            <div class="spell-sample" onclick="playLessonAudio('${wAudio}','${wSpell.replace(/'/g,"\\'")}');rp(this)">
               <div>
                 <b>${wText}</b>
                 <div style="font-size:14px;color:var(--ink);opacity:.85;margin-top:2px">Đánh vần: ${wSpell}</div>
@@ -464,8 +583,8 @@ function readL(tab){
         }).join("")}
       </div>
 
-      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">3. Câu luyện đọc ứng dụng:</div>
-      <div class="story-box" style="margin:4px 0;font-size:21px;cursor:pointer;background:var(--card);border:3px solid var(--ok);line-height:1.6" onclick="say('${L.sentence.replace(/'/g,"\\'")}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">
+      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">3. Câu luyện đọc ứng dụng (Cô Lan Anh):</div>
+      <div class="story-box" style="margin:4px 0;font-size:21px;cursor:pointer;background:var(--card);border:3px solid var(--ok);line-height:1.6" onclick="playLessonAudio('${L.sentenceAudio||""}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">
         <div style="display:flex;align-items:flex-start;gap:10px">
           <span style="font-size:28px">📖</span>
           <div>
@@ -475,7 +594,7 @@ function readL(tab){
         </div>
       </div>
     </div>`;
-    say(L.title, L.title);
+    playLessonAudio(L.sentenceAudio || "", L.title);
   }else{
     const S=VN_STORIES[curStory]||VN_STORIES[0];
     body=`<div class="chips">${VN_STORIES.map((s,idx)=>`<button class="pill ${idx===curStory?"on":""}" onclick="curStory=${idx};readL()">${s.title}</button>`).join("")}</div>
@@ -486,7 +605,7 @@ function readL(tab){
     </div>`;
     say(S.title, S.title);
   }
-  m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div>
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Đánh vần & Luyện đọc","Reading & Phonics"),i:"📚"}])}
   <h2>${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
   <div class="chips" style="margin-bottom:10px">${tabs.map(([k,vi,en])=>`<button class="pill${readTab===k?" on":""}" onclick="readL('${k}')">${T(vi,en)}</button>`).join("")}</div>
   ${body}`;
@@ -550,7 +669,7 @@ function storyL(catId, page, search){
     storyL(curCat,p,curStorySearch);
   };
 
-  m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div>
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Truyện cổ tích","Fairy Tales"),i:"📖"}])}
   <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
 
   <div class="story-search-wrap">
@@ -622,9 +741,7 @@ function storyDetail(id){
   if(curated){storyRead(curated.id);return;}
 
   const cat=FAIRY_CATEGORIES.find(c=>c.id===s.cat)||FAIRY_CATEGORIES[0];
-  m.innerHTML=`<div class="row">
-    <button class="pill" onclick="go('storyL','${s.cat}')">← ${T("Danh sách truyện","Story list")}</button>
-  </div>
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"storyL",a:s.cat,t:T(cat.name,cat.en),i:"📖"},{t:esc(s.title.length>18?s.title.slice(0,18)+"…":s.title),i:"✨"}])}
   <div class="story-view">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
       <span style="font-size:48px">${cat.icon}</span>
@@ -683,7 +800,7 @@ function storyRead(id){
     })(0);
   };
   const tctMatch=typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.find(sc=>sc.audio&&(sc.id===s.id||sc.title.toLowerCase().includes(s.title.toLowerCase())||s.title.toLowerCase().includes(sc.title.toLowerCase())));
-  m.innerHTML=`<div class="row"><button class="pill" onclick="window.__stopStory();go('storyL','${s.cat}')">← ${T("Danh sách truyện","Story list")}</button></div>
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"storyL",a:s.cat,t:T("Truyện cổ tích","Stories"),i:"📖"},{t:esc(s.title.length>18?s.title.slice(0,18)+"…":s.title),i:"🎙️"}])}
   <div class="story-view">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
       <span style="font-size:48px">${s.icon}</span>
@@ -713,7 +830,7 @@ function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail};
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide};
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
  return LP[k]=new Promise(res=>{const s=document.createElement("script");s.src=LAZY[k];s.onload=()=>res(true);s.onerror=()=>{delete LP[k];s.remove();res(false)};document.head.appendChild(s)})}

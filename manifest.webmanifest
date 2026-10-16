@@ -1,28 +1,42 @@
 {
- "name": "Bé học vui · Fun Learning",
- "short_name": "Bé học vui",
- "start_url": "./index.html",
- "scope": "./",
- "display": "standalone",
- "background_color": "#d9f1ff",
- "theme_color": "#ff7aa8",
- "lang": "vi",
- "icons": [
-  {
-   "src": "icon-192.png",
-   "sizes": "192x192",
-   "type": "image/png"
-  },
-  {
-   "src": "icon-512.png",
-   "sizes": "512x512",
-   "type": "image/png"
-  },
-  {
-   "src": "icon-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "maskable"
-  }
- ]
+  "id": "./",
+  "name": "Bé học vui · Fun Learning",
+  "short_name": "Bé học vui",
+  "description": "Ứng dụng học chữ cái, số đếm, ghép vần, tập viết và đọc truyện cổ tích cho bé",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#d9f1ff",
+  "theme_color": "#ff7aa8",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["education", "kids", "games"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
