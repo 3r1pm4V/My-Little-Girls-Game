@@ -36,9 +36,10 @@ function say(vi,en){A.pause();const my=++tok;busy=true;if(SS)SS.cancel();
  const sp=(t,l)=>t.split(/[.!?]+\s*/).map(s=>s.trim()).filter(Boolean).map(s=>[s,l]);
  const LG=ql||lang,q=LG==="vi"?sp(vi,"vi-VN"):LG==="en"?sp(en,"en-US"):[...sp(en,"en-US"),...sp(vi,"vi-VN")];
  const fin=()=>{if(my===tok){busy=false;busyEnd=Date.now()}};
- setTimeout(fin,3000+q.reduce((s,c)=>s+(REC[c[1].slice(0,2)+"|"+c[0]]?8000:c[0].length*130/RATE)+900/RATE,0));
+ setTimeout(fin,3000+q.reduce((s,c)=>s+((REC[c[1].slice(0,2)+"|"+c[0]]||(window.AUDIO_MAP&&window.AUDIO_MAP[c[1].slice(0,2)+"|"+c[0]]))?8000:c[0].length*130/RATE)+900/RATE,0));
  (function nx(i){if(my!==tok)return;if(i>=q.length){fin();return}let d=0;
-  const nt=()=>{if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>nx(i+1),900/RATE)},rk=REC[q[i][1].slice(0,2)+"|"+q[i][0]];
+  const nt=()=>{if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>nx(i+1),900/RATE)};
+  const ak=q[i][1].slice(0,2)+"|"+q[i][0],rk=REC[ak]||(window.AUDIO_MAP&&window.AUDIO_MAP[ak]);
   if(rk){A.onended=A.onerror=nt;A.src=rk;A.play().catch(nt);return}
   if(!SS){nt();return}
   const u=new SpeechSynthesisUtterance(q[i][0]);u.lang=q[i][1];u.rate=RATE;u.pitch=1.2;u.onend=nt;u.onerror=nt;SS.speak(u)})(0)}
