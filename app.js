@@ -262,28 +262,141 @@ function math10(){
   const visual=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto">${grp(a)}<b style="font-size:44px;color:var(--acc)">${op}</b>${grp(b)}<b style="font-size:44px;color:var(--acc)">= ?</b></div>`;
   quiz(T(`${a} ${op} ${b} = ?`,`${a} ${op} ${b} = ?`),qVi,qEn,visual,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),res,math10,()=>[`<div class="eq">${a} ${op} ${b} = ${res}</div>`,`${qVi.replace("bằng mấy?","bằng")} ${NV[res]}!`,`${qEn.replace("What is ","").replace("?"," equals")} ${NE[res]}!`]);
 }
-let curCat="vn",readingStory=null,storyPlay=false;
-function storyL(catId){
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
+let curCat="vn",curStoryPage=1,curStorySearch="",readingStory=null,storyPlay=false;
+
+function storyL(catId, page, search){
   if(catId)curCat=catId;
+  if(page!==undefined)curStoryPage=page;
+  if(search!==undefined)curStorySearch=search;
   storyPlay=false;A.pause();if(SS)SS.cancel();
+
+  const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
   const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
-  const list=FAIRY_STORIES.filter(s=>s.cat===curCat);
+
+  let list=[];
+  const q=(curStorySearch||"").trim();
+  if(q){
+    const nq=normStr(q);
+    list=catalog.filter(s=>normStr(s.title).includes(nq)||normStr(s.summary).includes(nq));
+  } else {
+    list=catalog.filter(s=>s.cat===curCat);
+  }
+
+  const pageSize=12;
+  const totalPages=Math.max(1,Math.ceil(list.length/pageSize));
+  if(curStoryPage>totalPages)curStoryPage=totalPages;
+  if(curStoryPage<1)curStoryPage=1;
+
+  const startIdx=(curStoryPage-1)*pageSize;
+  const pageItems=list.slice(startIdx,startIdx+pageSize);
+  const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
+
+  window.onStorySearch=function(val){
+    curStorySearch=val;
+    curStoryPage=1;
+    storyL(curCat,1,val);
+  };
+  window.storyGoPage=function(p){
+    storyL(curCat,p,curStorySearch);
+  };
+
   m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div>
   <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
-  <div class="chips" style="margin-bottom:12px">${FAIRY_CATEGORIES.map(c=>`<button class="pill${c.id===curCat?" on":""}" onclick="storyL('${c.id}')">${c.icon} ${T(c.name,c.en)}</button>`).join("")}</div>
-  <div style="font-size:16px;opacity:.85;margin-bottom:10px">${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span></div>
-  <div style="display:flex;flex-direction:column;gap:10px">${list.map(s=>`
-    <div class="story-item" onclick="go('storyRead','${s.id}')">
-      <div class="story-icon">${s.icon}</div>
-      <div class="story-info">
-        <div class="story-title">${s.title}</div>
-        <div class="story-desc">${s.summary}</div>
-      </div>
-      <button class="pill" style="font-size:16px;padding:6px 12px;margin:0">Đọc & Nghe ❯</button>
+
+  <div class="story-search-wrap">
+    <input type="search" class="story-search" id="stSearchInput" placeholder="🔍 Tìm kiếm trong 1.603 truyện..." value="${esc(curStorySearch)}" oninput="clearTimeout(window.__stTimer);window.__stTimer=setTimeout(()=>window.onStorySearch(this.value),200)">
+    ${curStorySearch?`<button class="pill" onclick="window.onStorySearch('')" style="padding:4px 12px">✖</button>`:""}
+  </div>
+
+  <div class="chips" style="margin-bottom:10px">
+    ${FAIRY_CATEGORIES.map(c=>`
+      <button class="pill${c.id===curCat&&!curStorySearch?" on":""}" onclick="curStorySearch='';storyL('${c.id}',1,'')">
+        ${c.icon} ${T(c.name,c.en)} (${getCatCount(c.id)})
+      </button>
+    `).join("")}
+  </div>
+
+  <div style="font-size:15px;opacity:.85;margin-bottom:8px">
+    ${curStorySearch?`🔍 Tìm thấy <b>${list.length}</b> truyện cho "<em>${esc(curStorySearch)}</em>"`:`${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span>`}
+  </div>
+
+  ${list.length===0?`<div style="padding:30px;opacity:.7;font-size:20px">Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!</div>`:""}
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    ${pageItems.map(s=>{
+      const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+      const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
+      const isAudio=!!curated;
+      const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
+      return `
+        <div class="story-item" onclick="${clickFn}">
+          <div class="story-icon">${icon}</div>
+          <div class="story-info">
+            <div class="story-title">${esc(s.title)}</div>
+            <div class="story-desc">${esc(s.summary)}</div>
+            <div style="margin-top:4px">
+              ${isAudio?`<span class="story-badge audio">🎙️ Có kể truyện audio & bài học</span>`:`<span class="story-badge cat">📖 Tóm tắt & Đọc thêm</span>`}
+            </div>
+          </div>
+          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể chuyện ❯":"Xem truyện ❯"}</button>
+        </div>
+      `;
+    }).join("")}
+  </div>
+
+  ${totalPages>1?`
+    <div class="story-page-ctrl">
+      <button class="story-page-btn" onclick="storyGoPage(1)" ${curStoryPage<=1?"disabled":""}>⏮ Đầu</button>
+      <button class="story-page-btn" onclick="storyGoPage(${curStoryPage-1})" ${curStoryPage<=1?"disabled":""}>◀ Trước</button>
+      <span style="font-size:16px;font-weight:700">Trang 
+        <select class="story-page-select" onchange="storyGoPage(+this.value)">
+          ${Array.from({length:totalPages},(_,i)=>`<option value="${i+1}" ${i+1===curStoryPage?"selected":""}>${i+1} / ${totalPages}</option>`).join("")}
+        </select>
+      </span>
+      <button class="story-page-btn" onclick="storyGoPage(${curStoryPage+1})" ${curStoryPage>=totalPages?"disabled":""}>Sau ▶</button>
+      <button class="story-page-btn" onclick="storyGoPage(${totalPages})" ${curStoryPage>=totalPages?"disabled":""}>Cuối (${totalPages}) ⏭</button>
     </div>
-  `).join("")}</div>`;
-  say(cat.name, cat.en);
+  `:""}`;
+
+  if(!curStorySearch)say(cat.name,cat.en);
 }
+
+function storyDetail(id){
+  storyPlay=false;A.pause();if(SS)SS.cancel();
+  const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
+  const s=catalog.find(x=>x.id===id);
+  if(!s){storyL();return;}
+
+  const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+  if(curated){storyRead(curated.id);return;}
+
+  const cat=FAIRY_CATEGORIES.find(c=>c.id===s.cat)||FAIRY_CATEGORIES[0];
+  m.innerHTML=`<div class="row">
+    <button class="pill" onclick="go('storyL','${s.cat}')">← ${T("Danh sách truyện","Story list")}</button>
+  </div>
+  <div class="story-view">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <span style="font-size:48px">${cat.icon}</span>
+      <div>
+        <h2 style="margin:0;cursor:default;color:var(--acc)">${esc(s.title)}</h2>
+        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${T(cat.name,cat.en)}</small>
+      </div>
+    </div>
+    <div style="background:var(--bg);padding:14px 18px;border-radius:20px;font-size:20px;line-height:1.6;margin:12px 0;text-align:left">
+      <b>📝 Tóm tắt truyện:</b><br>
+      <span style="display:inline-block;margin-top:6px">${esc(s.summary)}</span>
+    </div>
+    <div class="story-ctrls" style="margin-top:16px">
+      <button class="pill on" onclick="say('${s.summary.replace(/'/g,"\\'")}','${s.summary.replace(/'/g,"\\'")}')">🔊 Nghe tóm tắt</button>
+      <button class="pill" onclick="A.pause();if(SS)SS.cancel();">⏹ Dừng</button>
+      <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="pill" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;background:var(--acc);color:#fff;font-weight:700">📖 Đọc trên truyencotich.top ↗</a>
+    </div>
+  </div>`;
+  say(s.title,s.title);
+}
+
 function storyRead(id){
   const s=FAIRY_STORIES.find(x=>x.id===id)||FAIRY_STORIES[0];
   storyPlay=false;A.pause();if(SS)SS.cancel();
@@ -334,8 +447,7 @@ function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead};
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail};
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
  return LP[k]=new Promise(res=>{const s=document.createElement("script");s.src=LAZY[k];s.onload=()=>res(true);s.onerror=()=>{delete LP[k];s.remove();res(false)};document.head.appendChild(s)})}
