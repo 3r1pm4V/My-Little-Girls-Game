@@ -62,7 +62,7 @@ function go(s,a){const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{histo
  stk.push({s,a});try{history.pushState({i:n+1,s,a},"")}catch(e){}show(s,a)}
 addEventListener("popstate",e=>{if(pend){clearTimeout(pend);pend=0}const st=e.state||{i:0,s:"home"};while(stk.length<=st.i)stk.push({s:"home"});stk.length=st.i+1;stk[st.i]={s:st.s,a:st.a};show(st.s,st.a)});
 function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
-function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
+function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
@@ -262,7 +262,79 @@ function math10(){
   const visual=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto">${grp(a)}<b style="font-size:44px;color:var(--acc)">${op}</b>${grp(b)}<b style="font-size:44px;color:var(--acc)">= ?</b></div>`;
   quiz(T(`${a} ${op} ${b} = ?`,`${a} ${op} ${b} = ?`),qVi,qEn,visual,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),res,math10,()=>[`<div class="eq">${a} ${op} ${b} = ${res}</div>`,`${qVi.replace("bằng mấy?","bằng")} ${NV[res]}!`,`${qEn.replace("What is ","").replace("?"," equals")} ${NE[res]}!`]);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10};
+let curCat="vn",readingStory=null,storyPlay=false;
+function storyL(catId){
+  if(catId)curCat=catId;
+  storyPlay=false;A.pause();if(SS)SS.cancel();
+  const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
+  const list=FAIRY_STORIES.filter(s=>s.cat===curCat);
+  m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div>
+  <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
+  <div class="chips" style="margin-bottom:12px">${FAIRY_CATEGORIES.map(c=>`<button class="pill${c.id===curCat?" on":""}" onclick="storyL('${c.id}')">${c.icon} ${T(c.name,c.en)}</button>`).join("")}</div>
+  <div style="font-size:16px;opacity:.85;margin-bottom:10px">${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span></div>
+  <div style="display:flex;flex-direction:column;gap:10px">${list.map(s=>`
+    <div class="story-item" onclick="go('storyRead','${s.id}')">
+      <div class="story-icon">${s.icon}</div>
+      <div class="story-info">
+        <div class="story-title">${s.title}</div>
+        <div class="story-desc">${s.summary}</div>
+      </div>
+      <button class="pill" style="font-size:16px;padding:6px 12px;margin:0">Đọc & Nghe ❯</button>
+    </div>
+  `).join("")}</div>`;
+  say(cat.name, cat.en);
+}
+function storyRead(id){
+  const s=FAIRY_STORIES.find(x=>x.id===id)||FAIRY_STORIES[0];
+  storyPlay=false;A.pause();if(SS)SS.cancel();
+  let readingIdx=-1;
+  const updateHl=()=>{
+    m.querySelectorAll(".story-p").forEach((el,i)=>{
+      el.classList.toggle("reading",i===readingIdx);
+      if(i===readingIdx)el.scrollIntoView({behavior:"smooth",block:"center"});
+    });
+  };
+  window.__stopStory=()=>{storyPlay=false;A.pause();if(SS)SS.cancel();readingIdx=-1;updateHl();const btn=document.getElementById("stPlayBtn");if(btn)btn.innerHTML="🔊 Kể truyện (Nghe đọc)";};
+  window.__playStory=()=>{
+    if(storyPlay){window.__stopStory();return;}
+    storyPlay=true;const btn=document.getElementById("stPlayBtn");if(btn)btn.innerHTML="⏹ Dừng kể truyện";
+    (function nextP(i){
+      if(!storyPlay)return;
+      if(i>=s.content.length){
+        window.__stopStory();
+        say("Câu chuyện đến đây là hết rồi. Bé ngoan nhé!","The end. Sweet dreams!");
+        return;
+      }
+      readingIdx=i;updateHl();
+      const text=s.content[i];
+      say(text,text);
+      const waitMs=Math.max(3000, text.length*130/RATE + 800);
+      setTimeout(()=>{if(storyPlay&&readingIdx===i)nextP(i+1);},waitMs);
+    })(0);
+  };
+  m.innerHTML=`<div class="row"><button class="pill" onclick="window.__stopStory();go('storyL','${s.cat}')">← ${T("Danh sách truyện","Story list")}</button></div>
+  <div class="story-view">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+      <span style="font-size:48px">${s.icon}</span>
+      <div>
+        <h2 style="margin:0;cursor:default;color:var(--acc)">${s.title}</h2>
+        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${T(FAIRY_CATEGORIES.find(c=>c.id===s.cat).name,FAIRY_CATEGORIES.find(c=>c.id===s.cat).en)}</small>
+      </div>
+    </div>
+    <div class="story-ctrls">
+      <button class="pill on" id="stPlayBtn" onclick="window.__playStory()">🔊 Kể truyện (Nghe đọc)</button>
+      <button class="pill" onclick="window.__stopStory()">⏹ Dừng</button>
+    </div>
+    <div style="margin-top:14px">
+      ${s.content.map((p,i)=>`<div class="story-p" data-i="${i}" onclick="window.__stopStory();say('${p.replace(/'/g,"\\'")}','${p.replace(/'/g,"\\'")}');this.classList.add('reading');setTimeout(()=>this.classList.remove('reading'),4000);">${p}</div>`).join("")}
+    </div>
+    <div class="story-moral">
+      <b>💡 Bài học ý nghĩa cho bé:</b><br>${s.moral}
+    </div>
+  </div>`;
+  say(s.title, s.title);
+}
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
