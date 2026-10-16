@@ -22,7 +22,7 @@ let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
 const sayAs=(l,vi,en)=>{const o=ql;ql=l;say(vi,en);ql=o};
 const exLD=L=>{const v=exL(L,"vi"),e=exL(L,"en");return lang==="vi"?(v.length?v.slice(0,3):e.slice(0,2)):lang==="en"?e.slice(0,3):[...v.slice(0,2),...e.slice(0,2)]};
 const COUNT="apple,ball,star,flower,cat,dog,donut,egg,grape,orange,mango,frog,gift,sun,moon,tree".split(",");
-let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
+let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
 function setLang(l){lang=l;ls.set("lang",l);ql=null;parent()}window.setLang=setLang;
 const A=new Audio(),REC={},RECSZ={};let tok=0,sc=0,busy=false,busyEnd=0,lastSig="",dupN=0,vWait=false;
 const SS=window.speechSynthesis;
@@ -61,7 +61,7 @@ function go(s,a){const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{histo
  stk.push({s,a});try{history.pushState({i:n+1,s,a},"")}catch(e){}show(s,a)}
 addEventListener("popstate",e=>{if(pend){clearTimeout(pend);pend=0}const st=e.state||{i:0,s:"home"};while(stk.length<=st.i)stk.push({s:"home"});stk.length=st.i+1;stk[st.i]={s:st.s,a:st.a};show(st.s,st.a)});
 function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
-function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
+function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button></p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
@@ -83,7 +83,7 @@ function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))
   if(a==b)return[`<div class="eq">${a} = ${b}</div>`,`${NV[a]} bằng ${NV[b]}. Hai bên bằng nhau!`,`${NE[a]} equals ${NE[b]}. They are the same!`];
   const w=right=="a"?a:b,l=right=="a"?b:a;
   return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
-function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");const back={numP:"numL",letP:"letL",mis:"games",cmpS:"games"}[cur]||"home";
+function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");const back={numP:"numL",letP:"letL",mis:"games",cmpS:"games",math10:"home"}[cur]||"home";
  m.innerHTML=`<div class="row"><button class="pill" onclick="go('${back}')">← ${back=="home"?T("Menu","Menu"):back=="games"?T("Trò chơi","Games"):T("Học","Learn")}</button></div><h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
  document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
@@ -99,7 +99,7 @@ function result(){const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);m.innerHTML=
 function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
 function win(wr,next,vi,en){if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);adv(rd.n>=(RL[cur]||ROUND)?result:next)}
 const bk=()=>`<div class="row"><button class="pill" onclick="go('games')">← ${T("Trò chơi","Games")}</button></div>`;
-function games(){m.innerHTML=`<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tô chữ và số","Trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game");need("o")}
+function games(){m.innerHTML=`<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tô chữ & nét viết","Trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game");need("o")}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
@@ -119,12 +119,14 @@ function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks])
 let trm=ls.get("trm","up"),lastTr="";
 const TR={up:{items:()=>LET_ALL(),key:x=>"o_"+x,vi:x=>`Tô chữ ${x}`,en:x=>`Color the letter ${x}`,say:x=>sayL(x)},
  lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),key:x=>"l_"+x,vi:x=>`Tô chữ ${x}`,en:x=>`Color the letter ${x}`,say:x=>sayL(x.toUpperCase())},
- nu:{items:()=>[...Array(10).keys()].map(String),key:x=>"n_"+x,vi:x=>`Tô số ${x}`,en:x=>`Color the number ${x}`,say:x=>sayN(+x)}};
+ nu:{items:()=>[...Array(10).keys()].map(String),key:x=>"n_"+x,vi:x=>`Tô số ${x}`,en:x=>`Color the number ${x}`,say:x=>sayN(+x)},
+ net:{items:()=>VN_STROKES.map(s=>s.id),key:x=>x,vi:x=>`Tô ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>{const s=VN_STROKES.find(k=>k.id===x);say(s.name,s.en)}}};
 function trace(){const md=TR[trm]||TR.up;
- if(!window.__o){m.innerHTML=bk()+`<h2>${T("Đang tải…","Loading…")}</h2>`;catSet("thinking");
+ if(trm!=="net"&&!window.__o){m.innerHTML=bk()+`<h2>${T("Đang tải…","Loading…")}</h2>`;catSet("thinking");
   need("o").then(ok=>{if(cur!=="trace")return;if(ok)trace();else m.innerHTML=bk()+`<h2>${T("Chưa tải được hình. Kiểm tra mạng nhé","Could not load. Check the connection")}</h2><p><button class="pill" onclick="trace()">↻ ${T("Thử lại","Retry")}</button></p>`});return}
  const pool=md.items();let it;do{it=pick(pool)}while(it===lastTr&&pool.length>1);lastTr=it;let col="#ff5d8f",dn=false;
- m.innerHTML=bk()+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(75vw,300px);aspect-ratio:415/512;margin:8px auto;background:#bfe3ff;border-radius:30px;touch-action:none"><canvas style="position:absolute;inset:0;width:100%;height:100%;border-radius:30px"></canvas><img src="${I[md.key(it)]}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none" alt=""></div><div class="chips">${["#ff5d8f","#ffb347","#4cc36b","#4aa3ff","#a66bff"].map(c=>`<button class="chip" style="background:${c}" data-col="${c}"></button>`).join("")}<button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div>`;
+ const guide=trm==="net"?`<div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${VN_STROKES.find(s=>s.id===it).svg}</div>`:`<img src="${I[md.key(it)]}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none" alt="">`;
+ m.innerHTML=bk()+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(75vw,300px);aspect-ratio:415/512;margin:8px auto;background:#bfe3ff;border-radius:30px;touch-action:none"><canvas style="position:absolute;inset:0;width:100%;height:100%;border-radius:30px"></canvas>${guide}</div><div class="chips">${["#ff5d8f","#ffb347","#4cc36b","#4aa3ff","#a66bff"].map(c=>`<button class="chip" style="background:${c}" data-col="${c}"></button>`).join("")}<button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div>`;
  const cv=m.querySelector("canvas"),W=cv.width=300,H=cv.height=370,x=cv.getContext("2d");x.lineCap=x.lineJoin="round";x.lineWidth=34;
  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
  cv.onpointerdown=e=>{dn=true;const[p,q]=pt(e);x.strokeStyle=col;x.beginPath();x.moveTo(p,q);x.lineTo(p+.1,q);x.stroke();cv.setPointerCapture(e.pointerId)};
@@ -188,7 +190,78 @@ async function importAudio(list){let ok=0;const bad=[];
   try{await putRec(k,bl);ok++}catch(e){bad.push(f.name+" (lỗi lưu)")}}
  recS();const r=document.getElementById("rmsg");
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS};
+let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
+function readL(tab){
+  if(tab)readTab=tab;
+  const tabs=[["spell","🔤 Ghép tiếng","Spelling"],["lessons","📚 28 Bài Vần","Phonics"],["stories","📖 Tập đọc trơn","Stories"]];
+  let body="";
+  if(readTab==="spell"){
+    const cObj=VN_SPELL.C.find(x=>x.c===curC)||VN_SPELL.C[0];
+    const vObj=VN_SPELL.V.find(x=>x.v===curV)||VN_SPELL.V[0];
+    const syls=[0,1,2,3,4,5].map(t=>VN_SPELL.syl(cObj,vObj,t));
+    const curSyl=syls[0];
+    body=`<div class="spell-board">
+      <div class="spell-head"><span>${cObj.c}</span><span style="color:var(--acc2)">+</span><span>${vObj.v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline">${curSyl.text}</span></div>
+      <div class="spell-sub">🔊 Đánh vần: <b>${curSyl.spell}</b></div>
+      <div class="syl-grid">
+        ${syls.map((s,idx)=>`<button class="syl-btn" onclick="say('${s.spell}','${s.text}');rp(this)"><b class="n" style="font-size:30px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small></button>`).join("")}
+      </div>
+    </div>
+    <div style="margin:8px 0 2px"><b>1. Chọn Phụ âm:</b></div>
+    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="curC='${x.c}';readL()">${x.c}</button>`).join("")}</div>
+    <div style="margin:8px 0 2px"><b>2. Chọn Nguyên âm:</b></div>
+    <div class="chips">${VN_SPELL.V.map(x=>`<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px" onclick="curV='${x.v}';readL()">${x.v}</button>`).join("")}</div>`;
+    say(`Ghép chữ ${cObj.c} và ${vObj.v}`,`Spell ${cObj.c} and ${vObj.v}`);
+  }else if(readTab==="lessons"){
+    const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
+    body=`<div class="chips" style="max-height:85px;overflow-y:auto;padding:2px">${VN_LESSONS.map(l=>`<button class="pill ${l.id===curLes?"on":""}" style="font-size:16px;padding:2px 8px" onclick="curLes=${l.id};readL()">${l.id<=10?"Âm "+l.id:l.id===11?"Ôn tập":"Bài "+l.id}</button>`).join("")}</div>
+    <div class="lesson-card">
+      <h3 style="margin:4px 0 8px;font-size:22px;color:var(--acc)">${L.title}</h3>
+      <div style="font-weight:800;margin-bottom:4px">Vần / Âm đọc:</div>
+      <div class="rhyme-chips">${L.rhymes.map(r=>`<button class="rhyme-chip" onclick="say('Vần ${r}. ${r}','${r}');rp(this)">${r}</button>`).join("")}</div>
+      <div style="font-weight:800;margin:8px 0 4px">Từ ngữ ứng dụng:</div>
+      <div class="words-grid">${L.words.map(w=>`<button class="word-btn" onclick="say('${w}','${w}');rp(this)">${w}</button>`).join("")}</div>
+      <div style="font-weight:800;margin:8px 0 4px">Câu luyện đọc:</div>
+      <div class="story-box" style="margin:4px 0;font-size:20px;cursor:pointer" onclick="say('${L.sentence}','${L.sentence}')">
+        🔊 “${L.sentence}”
+      </div>
+    </div>`;
+    say(L.title, L.title);
+  }else{
+    const S=VN_STORIES[curStory]||VN_STORIES[0];
+    body=`<div class="chips">${VN_STORIES.map((s,idx)=>`<button class="pill ${idx===curStory?"on":""}" onclick="curStory=${idx};readL()">${s.title}</button>`).join("")}</div>
+    <div class="story-box">
+      <h3 style="margin:0 0 10px;color:var(--acc);text-align:center">${S.title}</h3>
+      ${S.sentences.map(st=>`<div class="story-line" onclick="say('${st}','${st}')"><span>🔊</span><span>${st}</span></div>`).join("")}
+      <div style="text-align:center;margin-top:12px"><button class="pill on" onclick="say('${S.sentences.join(". ")}','${S.sentences.join(". ")}')">🔊 Nghe đọc toàn bài</button></div>
+    </div>`;
+    say(S.title, S.title);
+  }
+  m.innerHTML=`<div class="row"><button class="pill" onclick="go('home')">← Menu</button></div>
+  <h2>${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
+  <div class="chips" style="margin-bottom:10px">${tabs.map(([k,vi,en])=>`<button class="pill${readTab===k?" on":""}" onclick="readL('${k}')">${T(vi,en)}</button>`).join("")}</div>
+  ${body}`;
+}
+function math10(){
+  const isAdd=lvl===1?true:R(0,1)===0;
+  let a,b,res;
+  if(isAdd){
+    const max=lvl===1?5:10;
+    a=R(1,max-1);b=R(1,max-a);res=a+b;
+  }else{
+    const max=lvl===1?5:10;
+    a=R(2,max);b=R(1,a-1);res=a-b;
+  }
+  const op=isAdd?"+":"-",o=pick(COUNT);
+  const c=new Set([res]);
+  while(c.size<3){c.add(R(1,10))}
+  const qVi=isAdd?`${NV[a]} cộng ${NV[b]} bằng mấy?`:`${NV[a]} trừ ${NV[b]} bằng mấy?`;
+  const qEn=isAdd?`What is ${NE[a]} plus ${NE[b]}?`:`What is ${NE[a]} minus ${NE[b]}?`;
+  const grp=(n)=>`<span style="display:inline-flex;flex-wrap:wrap;gap:2px;max-width:130px;justify-content:center">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:34px"')}</span>`;
+  const visual=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto">${grp(a)}<b style="font-size:44px;color:var(--acc)">${op}</b>${grp(b)}<b style="font-size:44px;color:var(--acc)">= ?</b></div>`;
+  quiz(T(`${a} ${op} ${b} = ?`,`${a} ${op} ${b} = ?`),qVi,qEn,visual,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),res,math10,()=>[`<div class="eq">${a} ${op} ${b} = ${res}</div>`,`${qVi.replace("bằng mấy?","bằng")} ${NV[res]}!`,`${qEn.replace("What is ","").replace("?"," equals")} ${NE[res]}!`]);
+}
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
