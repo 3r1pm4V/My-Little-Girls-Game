@@ -83,17 +83,226 @@ function say(vi,en){
     u.onend=u.onerror=nt;SS.speak(u);
   })(0);
 }
-let AC;function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="triangle";o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(.25,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
-function sfxTap(){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="sine";const s=AC.currentTime;o.frequency.setValueAtTime(640,s);o.frequency.exponentialRampToValueAtTime(260,s+.05);g.gain.setValueAtTime(.2,s);g.gain.exponentialRampToValueAtTime(.001,s+.05);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.05)}catch(e){}}
-document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.story-page-btn");if(b&&!b.disabled)sfxTap()},{passive:true});
-function kbc(crumbs,actionHtml=""){const items=crumbs.map((c,idx)=>{if(idx===crumbs.length-1)return`<span class="k-bc-cur">${c.i?c.i+" ":""}${c.t}</span>`;const fn=c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`;return`<button class="k-bc-btn" onclick="${fn}">${c.i?c.i+" ":""}${c.t}</button><span class="k-bc-sep">›</span>`}).join("");return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`}
-const sfxOk=()=>[523,659,784,1047].forEach((f,i)=>tone(f,.25,i*.1)),sfxNo=()=>{tone(220,.3);tone(180,.35,.15)};
+let AC;
+function haptic(ms=25){if(navigator.vibrate){try{navigator.vibrate(ms)}catch(e){}}}
+function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="triangle";o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(.25,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+function sfxTap(){haptic(15);if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="sine";const s=AC.currentTime;o.frequency.setValueAtTime(540,s);o.frequency.exponentialRampToValueAtTime(240,s+.06);g.gain.setValueAtTime(.22,s);g.gain.exponentialRampToValueAtTime(.001,s+.06);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.06)}catch(e){}}
+function sfxOk(){haptic([25,30,40]);if(!SFX())return;[523.25,659.25,783.99,1046.50,1318.51].forEach((f,i)=>tone(f,.22,i*.07))}
+function sfxNo(){haptic(35);if(!SFX())return;tone(280,.2);tone(220,.25,.12)}
+function sfxFanfare(){haptic([40,50,80]);if(!SFX())return;[[523.25,.12,0],[659.25,.12,.1],[783.99,.12,.2],[1046.50,.35,.3],[880.00,.15,.55],[1046.50,.5,.7]].forEach(([f,d,t])=>tone(f,d,t))}
+document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.k-bc-back,.badge-btn,.story-page-btn,.ob");if(b&&!b.disabled)sfxTap()},{passive:true});
+
+function goBack(){
+  if(stk.length>1){
+    stk.pop();
+    const prev=stk[stk.length-1];
+    show(prev.s,prev.a);
+  } else {
+    go("home");
+  }
+}
+window.goBack=goBack;
+
+function kbc(crumbs,actionHtml=""){
+  const backHtml=(crumbs.length>1)?`<button class="k-bc-back" onclick="goBack()" aria-label="${T("Quay lại","Back")}">🔙 ${T("Quay lại","Back")}</button>`:"";
+  const items=crumbs.map((c,idx)=>{
+    if(idx===crumbs.length-1)return`<span class="k-bc-cur">${c.i?c.i+" ":""}${c.t}</span>`;
+    const fn=c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`;
+    return`<button class="k-bc-btn" onclick="${fn}">${c.i?c.i+" ":""}${c.t}</button><span class="k-bc-sep">›</span>`;
+  }).join("");
+  return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${backHtml}${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
+}
+
+const BADGES=[
+  {id:"star5",name:"Bé Chăm Chỉ",en:"Diligent Star",icon:"⭐",desc:"Đạt 5 ngôi sao đầu tiên",enDesc:"Earn 5 stars",test:()=>stars>=5},
+  {id:"star20",name:"Ngôi Sao Sáng",en:"Bright Star",icon:"🌟",desc:"Đạt 20 ngôi sao học tập",enDesc:"Earn 20 stars",test:()=>stars>=20},
+  {id:"star50",name:"Vua Học Vui",en:"Learning King",icon:"👑",desc:"Chinh phục 50 ngôi sao",enDesc:"Earn 50 stars",test:()=>stars>=50},
+  {id:"let5",name:"Bác Học Chữ Cái",en:"Alphabet Master",icon:"🔤",desc:"Khám phá ít nhất 5 chữ cái",enDesc:"Explore 5 letters",test:()=>(ST.letCount||0)>=5},
+  {id:"num5",name:"Siêu Sao Đếm Số",en:"Counting Champ",icon:"🔢",desc:"Khám phá các con số đến 10",enDesc:"Explore numbers",test:()=>(ST.numCount||0)>=5},
+  {id:"trace3",name:"Bút Chì Vàng",en:"Golden Pencil",icon:"✍️",desc:"Tập viết chữ hoặc nét vẽ",enDesc:"Trace 3 letters/strokes",test:()=>(ST.traceCount||0)>=3},
+  {id:"story2",name:"Mọt Sách Nhí",en:"Story Lover",icon:"📖",desc:"Nghe đọc truyện cổ tích",enDesc:"Listen to fairy tales",test:()=>(ST.storyCount||0)>=2},
+  {id:"streak3",name:"Tay Đua Bất Bại",en:"Winning Streak",icon:"🚀",desc:"Đúng liên tiếp 3 câu hỏi",enDesc:"3 correct answers in a row",test:()=>(ST.maxStreak||0)>=3},
+  {id:"math5",name:"Thần Đồng Toán",en:"Math Prodigy",icon:"➕",desc:"Hoàn thành 5 phép tính",enDesc:"Solve 5 math problems",test:()=>(ST.mathCount||0)>=5}
+];
+
+function getUnlockedBadges(){
+  try{return JSON.parse(ls.get("badges","[]"))||[];}catch(e){return[];}
+}
+
+function checkBadges(){
+  const unlocked=new Set(getUnlockedBadges());
+  let newBadge=null;
+  BADGES.forEach(b=>{
+    if(!unlocked.has(b.id)&&b.test()){
+      unlocked.add(b.id);
+      if(!newBadge)newBadge=b;
+    }
+  });
+  ls.set("badges",JSON.stringify([...unlocked]));
+  head();
+  if(newBadge){
+    setTimeout(()=>{
+      triggerCelebration(
+        lang==="vi"?"Mở khóa huy hiệu mới!":"Badge Unlocked!",
+        lang==="vi"?`Bé nhận được huy hiệu: ${newBadge.name}!`:`You unlocked: ${newBadge.en}!`,
+        newBadge.icon,
+        "⭐⭐⭐"
+      );
+      say(`Hoan hô! Bé mở khóa huy hiệu ${newBadge.name}!`,`Hooray! You unlocked ${newBadge.en}!`);
+    },600);
+  }
+}
+
+const LEVELS=[
+  {lv:1,title:"🐣 Bé Mầm Non",en:"Toddler",min:0,max:15},
+  {lv:2,title:"🐥 Bé Khám Phá",en:"Explorer",min:15,max:35},
+  {lv:3,title:"🚀 Bé Thông Thái",en:"Scholar",min:35,max:70},
+  {lv:4,title:"🦸 Bé Siêu Đẳng",en:"Super Kid",min:70,max:120},
+  {lv:5,title:"🏆 Vô Địch Học Vui",en:"Champion",min:120,max:250}
+];
+
+function getCurrentLevel(){
+  for(let i=LEVELS.length-1;i>=0;i--){
+    if(stars>=LEVELS[i].min)return LEVELS[i];
+  }
+  return LEVELS[0];
+}
+
+function showBadges(){
+  const curLv=getCurrentLevel();
+  const nextLv=LEVELS.find(l=>l.lv===curLv.lv+1);
+  const curMin=curLv.min;
+  const nextMin=nextLv?nextLv.min:curLv.max;
+  const span=Math.max(1,nextMin-curMin);
+  const progress=nextLv?Math.min(100,Math.round(((stars-curMin)/span)*100)):100;
+  const unlocked=new Set(getUnlockedBadges());
+
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Huy hiệu & Thành tích","Badges & Progress"),i:"🏆"}])}
+  <h2>🏆 ${T("Huy hiệu & Cấp độ của bé","Badges & Progress")}</h2>
+  <div class="star-progress-wrap">
+    <div class="star-progress-head">
+      <span>${lang==="vi"?curLv.title:curLv.en}</span>
+      <span style="color:var(--acc)">⭐ ${stars} / ${nextLv?nextMin:"Max"}</span>
+    </div>
+    <div class="star-progress-bar">
+      <div class="star-progress-fill" style="width:${progress}%"></div>
+    </div>
+    <small style="font-size:15px;opacity:.85;margin-top:4px">
+      ${nextLv?(lang==="vi"?`Bé cần thêm ${nextMin-stars} ⭐ để đạt ${nextLv.title}`:`Need ${nextMin-stars} more ⭐ to reach ${nextLv.en}`):(lang==="vi"?"Bé đã đạt cấp độ cao nhất! Tuyệt vời!":"Maximum level reached! Fantastic!")}
+    </small>
+  </div>
+  <div class="badge-grid">
+    ${BADGES.map(b=>{
+      const isUn=unlocked.has(b.id);
+      return `<div class="badge-card ${isUn?"unlocked":"locked"}">
+        <div class="badge-card-icon">${b.icon}</div>
+        <div class="badge-card-title">${lang==="vi"?b.name:b.en}</div>
+        <div class="badge-card-desc">${lang==="vi"?b.desc:b.enDesc}</div>
+        <div class="badge-card-status ${isUn?"unlocked":"locked"}">${isUn?"✔ "+T("Đã đạt","Earned"):"🔒 "+T("Đang khóa","Locked")}</div>
+      </div>`;
+    }).join("")}
+  </div>
+  <div class="row" style="justify-content:center;margin:16px 0">
+    <button class="pill on" onclick="goBack()" style="font-size:18px;padding:8px 26px">✔ ${T("Quay lại","Back")}</button>
+  </div>`;
+  say("Đây là các huy hiệu và thành tích của bé","Here are your badges and progress");
+}
+window.showBadges=showBadges;
+
+function runConfetti(){
+  const cv=document.getElementById("confettiCv");
+  if(!cv)return;
+  const ctx=cv.getContext("2d");
+  const W=cv.width=window.innerWidth;
+  const H=cv.height=window.innerHeight;
+  const colors=["#ff7aa8","#ffb347","#4cc36b","#38bdf8","#a855f7","#facc15"];
+  const pieces=Array.from({length:55},()=>({
+    x:Math.random()*W,
+    y:Math.random()*(H*0.4)-20,
+    w:8+Math.random()*8,
+    h:6+Math.random()*6,
+    c:colors[Math.floor(Math.random()*colors.length)],
+    vy:2+Math.random()*4,
+    vx:(Math.random()-0.5)*3,
+    rot:Math.random()*360,
+    vrot:(Math.random()-0.5)*10
+  }));
+  let frames=0;
+  function draw(){
+    const ov=document.getElementById("celebOverlay");
+    if(!ov||ov.style.display==="none")return;
+    ctx.clearRect(0,0,W,H);
+    pieces.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.c;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+      p.y+=p.vy;
+      p.x+=p.vx;
+      p.rot+=p.vrot;
+      if(p.y>H+20)p.y=-20;
+    });
+    frames++;
+    if(frames<200)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+let celebCallback=null;
+function triggerCelebration(title,desc,icon="🎉",starsCount="⭐⭐⭐",cb=null){
+  const el=document.getElementById("celebOverlay");
+  if(!el)return;
+  celebCallback=cb;
+  document.getElementById("celebTitle").textContent=title;
+  document.getElementById("celebDesc").textContent=desc;
+  document.getElementById("celebIcon").textContent=icon;
+  document.getElementById("celebStars").textContent=starsCount;
+  el.style.display="flex";
+  sfxFanfare();
+  catSet("celebrate");
+  runConfetti();
+}
+window.triggerCelebration=triggerCelebration;
+
+function closeCeleb(){
+  const el=document.getElementById("celebOverlay");
+  if(el)el.style.display="none";
+  if(typeof celebCallback==="function"){
+    const fn=celebCallback;
+    celebCallback=null;
+    fn();
+  }
+}
+window.closeCeleb=closeCeleb;
+
 const cat=document.getElementById("cat");
 function catSet(s){cat.src=I["cat_"+s];cat.className=(s==="happy"||s==="celebrate")?"happy":""}
-function head(){const lb=document.getElementById("langBtn");if(lb)lb.innerHTML=lang==="vi"?"🇻🇳 Tiếng Việt":"🇬🇧 English";document.getElementById("sp").textContent=RATE<.5?"🐢🐢":RATE<.7?"🐢":"🐇";document.getElementById("stars").innerHTML=im("gstar")+stars;}
+function head(){
+  const lb=document.getElementById("langBtn");
+  if(lb)lb.innerHTML=lang==="vi"?"🇻🇳 Tiếng Việt":"🇬🇧 English";
+  const spBtn=document.getElementById("sp");
+  if(spBtn)spBtn.textContent=RATE<.5?"🐢🐢":RATE<.7?"🐢":"🐇";
+  const stEl=document.getElementById("stars");
+  if(stEl)stEl.innerHTML=im("gstar")+" "+stars;
+  const bb=document.getElementById("backBtn");
+  if(bb){
+    bb.style.display=(cur&&cur!=="home")?"inline-flex":"none";
+    const lbl=bb.querySelector(".bk-lbl");
+    if(lbl)lbl.textContent=lang==="vi"?"Quay lại":"Back";
+  }
+  const bc=document.getElementById("badgeCount");
+  if(bc){
+    const unlocked=getUnlockedBadges();
+    bc.textContent=unlocked.length;
+  }
+}
 function toggleLang(){const next=lang==="vi"?"en":"vi";setLang(next);if(typeof cur!=="undefined"&&cur)go(cur);}
 window.toggleLang=toggleLang;
-document.getElementById("hb").innerHTML=im("btn_home");document.getElementById("hb").onclick=()=>go("home");document.getElementById("sp").onclick=()=>{RATE=RATE<.5?.6:RATE<.7?.85:.4;ls.set("rate2",RATE);head();say("Bé nghe nhé","Listen")};
+document.getElementById("hb").innerHTML=im("btn_home");
+document.getElementById("hb").onclick=()=>go("home");
+document.getElementById("sp").onclick=()=>{RATE=RATE<.5?.6:RATE<.7?.85:.4;ls.set("rate2",RATE);head();say("Bé nghe nhé","Listen")};
 function fx(){if(rmOn())return;const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
 const ER=[["Thử lại nhé","Try again"],["Gần đúng rồi, bé thử lại nào","Almost! Try again"],["Không sao, bé thử lại nhé","It's okay, try again"]];
@@ -163,11 +372,13 @@ function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vu
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" onclick="numL(${i})">${i}</button>`).join("")}</div>`;sayN(n)}
+ ST.numCount=(ST.numCount||0)+1;svS();checkBadges();
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;sayN(n)}
 function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new Set([n]);while(c.size<3)c.add(R(1,MX()));
  quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
 function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
+ ST.letCount=(ST.letCount||0)+1;svS();checkBadges();
  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
 function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
  say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
@@ -187,17 +398,39 @@ function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(
  m.innerHTML=`${bcHtml}<h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
  document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
-  if(b.dataset.k==String(right)){done=true;b.classList.add("good");sfxOk();fx();if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");stars++;ls.set("stars",stars);head();
-   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next)}
+  if(b.dataset.k==String(right)){
+   done=true;b.classList.add("good");sfxOk();fx();
+   if(wr){rd.st=0}else{rd.st++;rd.f++}
+   if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
+   if(cur==="numP"||cur==="mis")ST.numCount=(ST.numCount||0)+1;
+   if(cur==="letP")ST.letCount=(ST.letCount||0)+1;
+   if(cur==="math10")ST.mathCount=(ST.mathCount||0)+1;
+   rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");
+   stars++;ls.set("stars",stars);head();checkBadges();
+   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next);
+  }
   else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn chỗ này nè","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
 function numF(){const n=R(0,MX()),c=new Set([n]);while(c.size<3)c.add(R(0,MX()));
  quiz(T(`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`),`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`,"",shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
 function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k]);while(c.size<3){const o=pick(exP(l));if(EXA[o].L!==L)c.add(o)}
  quiz(T(`Hình nào bắt đầu bằng chữ ${L}?`,`Which starts with ${L}?`),`Hình nào bắt đầu bằng chữ ${LV[LET.indexOf(L)]}?`,`Which one starts with ${L}?`,imL(L,"big"),shuf([...c]).map(v=>({k:v,h:im(EXA[v].img)})),k,letP,()=>["",l==="vi"?`${LV[LET.indexOf(L)]}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
 
-function result(){const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);m.innerHTML=`<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:N},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<f?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;ql=null;catSet("celebrate");fx();sfxOk();say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}. Great job!`)}
+function result(){
+  const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kết quả","Results"),i:"🏆"}])}<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:N},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<f?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;
+  ql=null;catSet("celebrate");fx();checkBadges();
+  triggerCelebration(T("Hoàn thành xuất sắc!","All Done!"),T(`Bé làm đúng ${f} trên ${N} câu! Giỏi quá!`,`You got ${f} out of ${N} right!`),"🏆",Array(Math.min(5,Math.max(1,f))).fill("⭐").join(""));
+  say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}. Great job!`);
+}
 function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
-function win(wr,next,vi,en){if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);adv(rd.n>=(RL[cur]||ROUND)?result:next)}
+function win(wr,next,vi,en){
+  if(wr){rd.st=0}else{rd.st++;rd.f++}
+  if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
+  rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();checkBadges();
+  sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");
+  const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);
+  adv(rd.n>=(RL[cur]||ROUND)?result:next);
+}
 const bk=(curT,parentS="games",parentT=T("Trò chơi","Games"),action="")=>kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:parentS,t:parentT,i:parentS==="games"?"🎮":"📚"},...(curT?[{t:curT,i:"✨"}]:[])],action);
 function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game")}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
@@ -258,7 +491,11 @@ function trace(selItem){const md=TR[trm]||TR.up;
  cv.onpointerup=()=>dn=false;
  m.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>{col=b.dataset.col;m.querySelectorAll("[data-col]").forEach(k=>k.style.borderColor=k.dataset.col===col?"#fff":"transparent")});
  const btnClear=m.querySelector("#btn-clear");if(btnClear)btnClear.onclick=()=>x.clearRect(0,0,W,H);
- m.querySelector("#ok").onclick=e=>{e.currentTarget.disabled=true;win(0,trace,"","")};
+  m.querySelector("#ok").onclick=e=>{
+   e.currentTarget.disabled=true;
+   ST.traceCount=(ST.traceCount||0)+1;svS();checkBadges();
+   triggerCelebration(T("Bé viết đẹp quá!","Great Writing!"),T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!","Wonderful tracing, +1 ⭐!"),"✍️","⭐",()=>win(0,trace,"",""));
+  };
  md.say(it);catSet("pointing")}
 const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="">`};
 function rp(b){const s=b.querySelector(".spr");if(s){s.style.animation="none";void s.offsetWidth;s.style.animation=""}}
@@ -504,13 +741,13 @@ function readL(tab){
         }).join("")}
       </div>
     </div>
-    <div style="margin:8px 0 2px"><b>1. Chọn Phụ âm:</b></div>
-    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="pickConsonant('${x.c}','${x.r}')">${x.c}</button>`).join("")}</div>
-    <div style="margin:8px 0 2px"><b>2. Chọn Nguyên âm:</b></div>
-    <div class="chips">${VN_SPELL.V.map(x=>{
+    <div style="margin:10px 0 4px"><b>1. Chọn Phụ âm:</b></div>
+    <div class="chips" style="gap:10px">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:48px;min-height:48px;border-radius:18px;padding:4px 12px;font-size:22px;margin:2px" onclick="pickConsonant('${x.c}','${x.r}')">${x.c}</button>`).join("")}</div>
+    <div style="margin:12px 0 4px"><b>2. Chọn Nguyên âm:</b></div>
+    <div class="chips" style="gap:10px">${VN_SPELL.V.map(x=>{
       const ok=VN_SPELL.valid(curC,x.v);
       const dis=ok?"":"opacity:0.22;pointer-events:none;filter:grayscale(1);";
-      return `<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px;${dis}" ${ok?`onclick="curV='${x.v}';curTone=0;readL();playVowel('${x.v}')"`:"disabled"}>${x.v}</button>`;
+      return `<button class="chip ${x.v===curV?"on":""}" style="width:50px;height:50px;min-width:48px;min-height:48px;font-size:22px;margin:2px;${dis}" ${ok?`onclick="curV='${x.v}';curTone=0;readL();playVowel('${x.v}')"`:"disabled"}>${x.v}</button>`;
     }).join("")}</div>`;
   }else if(readTab==="lessons"){
     const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
@@ -773,6 +1010,7 @@ function storyDetail(id){
 
 function storyRead(id){
   const s=FAIRY_STORIES.find(x=>x.id===id)||FAIRY_STORIES[0];
+  ST.storyCount=(ST.storyCount||0)+1;svS();checkBadges();
   storyPlay=false;A.pause();if(SS)SS.cancel();
   let readingIdx=-1;
   const updateHl=()=>{
@@ -789,6 +1027,7 @@ function storyRead(id){
       if(!storyPlay)return;
       if(i>=s.content.length){
         window.__stopStory();
+        triggerCelebration(T("Bé nghe xong truyện rồi!","Story Complete!"),T(`Bé nghe xong truyện "${s.title}", thật tuyệt vời!`,"You finished reading!"),s.icon||"📖","⭐⭐⭐");
         say("Câu chuyện đến đây là hết rồi. Bé ngoan nhé!","The end. Sweet dreams!");
         return;
       }
@@ -830,7 +1069,7 @@ function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide};
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges};
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
  return LP[k]=new Promise(res=>{const s=document.createElement("script");s.src=LAZY[k];s.onload=()=>res(true);s.onerror=()=>{delete LP[k];s.remove();res(false)};document.head.appendChild(s)})}
