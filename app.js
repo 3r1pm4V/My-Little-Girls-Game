@@ -113,8 +113,8 @@ function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new S
  quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
 function letL(){const arr=LET_ALL();m.innerHTML=`<div class="row"><button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button></div><h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
- m.innerHTML=`<div class="row"><button class="pill" onclick="go('letL')">← ${T("Chữ cái","Letters")}</button></div><div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('vi','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs("vi",L,L);need("s").then(upSpr)}
-function sayL(L){const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
+ m.innerHTML=`<div class="row"><button class="pill" onclick="go('letL')">← ${T("Chữ cái","Letters")}</button></div><div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
+function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
  say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
  quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
@@ -142,7 +142,7 @@ function result(){const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);m.innerHTML=
 function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
 function win(wr,next,vi,en){if(wr){rd.st=0}else{rd.st++;rd.f++}rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);adv(rd.n>=(RL[cur]||ROUND)?result:next)}
 const bk=()=>`<div class="row"><button class="pill" onclick="go('games')">← ${T("Trò chơi","Games")}</button></div>`;
-function games(){m.innerHTML=`<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tô chữ & nét viết","Trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game");need("o")}
+function games(){m.innerHTML=`<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game")}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
@@ -160,22 +160,47 @@ function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks])
   if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
   else{miss++;lock=true;sfxNo();const p=a;a=null;setTimeout(()=>{p.innerHTML=b.innerHTML=im("gstar");lock=false},1200)}})}
 let trm=ls.get("trm","up"),lastTr="";
-const TR={up:{items:()=>LET_ALL(),key:x=>"o_"+x,vi:x=>`Tô chữ ${x}`,en:x=>`Color the letter ${x}`,say:x=>sayL(x)},
- lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),key:x=>"l_"+x,vi:x=>`Tô chữ ${x}`,en:x=>`Color the letter ${x}`,say:x=>sayL(x.toUpperCase())},
- nu:{items:()=>[...Array(10).keys()].map(String),key:x=>"n_"+x,vi:x=>`Tô số ${x}`,en:x=>`Color the number ${x}`,say:x=>sayN(+x)},
- net:{items:()=>VN_STROKES.map(s=>s.id),key:x=>x,vi:x=>`Tô ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>{const s=VN_STROKES.find(k=>k.id===x);say(s.name,s.en)}}};
-function trace(){const md=TR[trm]||TR.up;
- if(trm!=="net"&&!window.__o){m.innerHTML=bk()+`<h2>${T("Đang tải…","Loading…")}</h2>`;catSet("thinking");
-  need("o").then(ok=>{if(cur!=="trace")return;if(ok)trace();else m.innerHTML=bk()+`<h2>${T("Chưa tải được hình. Kiểm tra mạng nhé","Could not load. Check the connection")}</h2><p><button class="pill" onclick="trace()">↻ ${T("Thử lại","Retry")}</button></p>`});return}
- const pool=md.items();let it;do{it=pick(pool)}while(it===lastTr&&pool.length>1);lastTr=it;let col="#ff5d8f",dn=false;
- const guide=trm==="net"?`<div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${VN_STROKES.find(s=>s.id===it).svg}</div>`:`<img src="${I[md.key(it)]}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none" alt="">`;
- m.innerHTML=bk()+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(75vw,300px);aspect-ratio:415/512;margin:8px auto;background:#bfe3ff;border-radius:30px;touch-action:none"><canvas style="position:absolute;inset:0;width:100%;height:100%;border-radius:30px"></canvas>${guide}</div><div class="chips">${["#ff5d8f","#ffb347","#4cc36b","#4aa3ff","#a66bff"].map(c=>`<button class="chip" style="background:${c}" data-col="${c}"></button>`).join("")}<button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div>`;
- const cv=m.querySelector("canvas"),W=cv.width=300,H=cv.height=370,x=cv.getContext("2d");x.lineCap=x.lineJoin="round";x.lineWidth=34;
+const TR={up:{items:()=>LET_ALL(),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayL(x)},
+ lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayL(x.toUpperCase())},
+ nu:{items:()=>[...Array(10).keys()].map(String),vi:x=>`Tập viết số ${x}`,en:x=>`Trace number ${x}`,say:x=>sayN(+x)},
+ net:{items:()=>VN_STROKES.map(s=>s.id),vi:x=>`Tập viết ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>{const s=VN_STROKES.find(k=>k.id===x);say(s.name,s.en)}}};
+function trace(selItem){const md=TR[trm]||TR.up;
+ const pool=md.items();let it=(selItem&&pool.includes(selItem))?selItem:null;
+ if(!it){do{it=pick(pool)}while(it===lastTr&&pool.length>1)}lastTr=it;let col="#6b21a8",dn=false;
+ const isNet=trm==="net";
+ const guide=isNet?`<div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${VN_STROKES.find(s=>s.id===it).svg}</div>`:"";
+ const sampleCard=isNet
+  ?`<div class="trace-sample-card" onclick="TR.net.say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU NÉT 🔊</span><span style="font-size:16px;font-weight:800;color:#184a86;margin-top:2px">${VN_STROKES.find(s=>s.id===it).name.replace("Nét ","")}</span></div>`
+  :`<div class="trace-sample-card" onclick="TR['${trm}'].say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU CHỮ 🔊</span><span class="trace-sample-letter">${it}</span></div>`;
+ m.innerHTML=bk()+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2>${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:44px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
+ const cv=m.querySelector("#cv"),gcv=m.querySelector("#guideCv"),bcv=m.querySelector("#bgCv");
+ const W=cv.width=gcv.width=bcv.width=320,H=cv.height=gcv.height=bcv.height=390;
+ const x=cv.getContext("2d"),gx=gcv.getContext("2d"),bx=bcv.getContext("2d");
+ x.lineCap=x.lineJoin="round";x.lineWidth=12;
+ bx.fillStyle="#fdfdf9";bx.fillRect(0,0,W,H);
+ const base_y=265,sp=36;
+ bx.strokeStyle="#ebf3fb";bx.lineWidth=1;bx.beginPath();
+ for(let px=16;px<=W-16;px+=sp){bx.moveTo(px,base_y-4*sp);bx.lineTo(px,base_y+sp)}
+ bx.stroke();
+ for(let i=-4;i<=1;i++){const y=base_y+i*sp;bx.beginPath();if(i===0){bx.strokeStyle="#8cb4e8";bx.lineWidth=2.5}else{bx.strokeStyle="#c4dbf6";bx.lineWidth=1}bx.moveTo(14,y);bx.lineTo(W-14,y);bx.stroke()}
+ if(!isNet){
+  const drawGuide=()=>{
+   if(cur!=="trace"||lastTr!==it)return;
+   gx.clearRect(0,0,W,H);gx.save();
+   gx.font="175px 'HPCham', 'HPTapViet', sans-serif";
+   gx.textAlign="center";gx.textBaseline="alphabetic";
+   gx.fillStyle="#6582a6";gx.fillText(it,W/2,base_y);gx.restore();
+  };
+  if(document.fonts&&document.fonts.load){
+   Promise.all([document.fonts.load("175px HPCham"),document.fonts.load("42px HPTapViet")]).then(drawGuide).catch(drawGuide);
+  }else{drawGuide()}
+ }else{gx.clearRect(0,0,W,H)}
  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
  cv.onpointerdown=e=>{dn=true;const[p,q]=pt(e);x.strokeStyle=col;x.beginPath();x.moveTo(p,q);x.lineTo(p+.1,q);x.stroke();cv.setPointerCapture(e.pointerId)};
  cv.onpointermove=e=>{if(!dn)return;const[p,q]=pt(e);x.lineTo(p,q);x.stroke();x.beginPath();x.moveTo(p,q)};
  cv.onpointerup=()=>dn=false;
- m.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>col=b.dataset.col);
+ m.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>{col=b.dataset.col;m.querySelectorAll("[data-col]").forEach(k=>k.style.borderColor=k.dataset.col===col?"#fff":"transparent")});
+ const btnClear=m.querySelector("#btn-clear");if(btnClear)btnClear.onclick=()=>x.clearRect(0,0,W,H);
  m.querySelector("#ok").onclick=e=>{e.currentTarget.disabled=true;win(0,trace,"","")};
  md.say(it);catSet("pointing")}
 const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="">`};
@@ -234,6 +259,26 @@ async function importAudio(list){let ok=0;const bad=[];
  recS();const r=document.getElementById("rmsg");
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
 let curTone = 0;
+function playConsonant(c, r){
+  const cAudio = getAudio("vi|" + r) || getAudio(r);
+  if(cAudio){
+    A.pause(); if(SS) SS.cancel();
+    A.src = cAudio;
+    A.play().catch(()=>{});
+  } else {
+    say(r, c);
+  }
+}
+function playVowel(v){
+  const vAudio = getAudio("vi|" + v) || getAudio(v);
+  if(vAudio){
+    A.pause(); if(SS) SS.cancel();
+    A.src = vAudio;
+    A.play().catch(()=>{});
+  } else {
+    say(v, v);
+  }
+}
 function playSyllable(text, c, v, toneIdx, spellText){
   curTone = toneIdx;
   const headEl = document.querySelector(".spell-head");
@@ -249,7 +294,14 @@ function playSyllable(text, c, v, toneIdx, spellText){
     btn.classList.toggle("active", i === toneIdx);
     btn.classList.toggle("on", i === toneIdx);
   });
-  say(text, text);
+  const sylAudio = getAudio("vi|" + text) || getAudio(text);
+  if(sylAudio){
+    A.pause(); if(SS) SS.cancel();
+    A.src = sylAudio;
+    A.play().catch(()=>{});
+  } else {
+    say(text, text);
+  }
 }
 function playSpell(c, v, toneIdx, finalWord, spellText){
   A.pause();A.onended=null;A.onerror=null;
@@ -257,56 +309,63 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
   const my = ++tok;
   busy = true;
 
-  const cKey = "vi|" + c.toLowerCase();
-  const vKey = "vi|" + v.toLowerCase();
-  const wKey = "vi|" + finalWord;
-  const baseKey = "vi|" + (c + v).toLowerCase();
-  const tName = VN_SPELL.TONES[toneIdx]?.k;
-  const tKey = tName ? "vi|" + tName : null;
+  const cObj = VN_SPELL.C.find(x=>x.c===c)||VN_SPELL.C[0];
+  const cAudio = getAudio("vi|" + cObj.r) || getAudio(cObj.r);
+  const vAudio = getAudio("vi|" + v) || getAudio(v);
+  const baseSyl = VN_SPELL.syl(cObj, VN_SPELL.V.find(x=>x.v===v)||VN_SPELL.V[0], 0).text;
+  const baseAudio = getAudio("vi|" + baseSyl) || getAudio(baseSyl);
 
-  const cAudio = getAudio(cKey);
-  const vAudio = getAudio(vKey);
-  const baseAudio = getAudio(baseKey);
-  const tAudio = tKey ? getAudio(tKey) : null;
-  const wAudio = getAudio(wKey);
+  const toneNames = ["khong_dau", "huyen", "sac", "hoi", "nga", "nang"];
+  const tAudio = `audio/tone_${toneNames[toneIdx]||"khong_dau"}.mp3`;
+  const wAudio = getAudio("vi|" + finalWord) || getAudio(finalWord);
 
   const seq = [];
   if(toneIdx === 0){
-    // Ghép không dấu: c + v = word (ví dụ: "t - a - ta")
-    if(cAudio) seq.push(cAudio);
-    if(vAudio) seq.push(vAudio);
-    if(wAudio) seq.push(wAudio);
+    if(cAudio) seq.push({ url: cAudio, label: cObj.r });
+    if(vAudio) seq.push({ url: vAudio, label: v });
+    if(wAudio) seq.push({ url: wAudio, label: finalWord });
   } else {
-    // Ghép có dấu: base + tone = word (ví dụ: "ta - sắc - tá")
-    if(baseAudio) seq.push(baseAudio);
+    if(baseAudio) seq.push({ url: baseAudio, label: baseSyl });
     else {
-      if(cAudio) seq.push(cAudio);
-      if(vAudio) seq.push(vAudio);
+      if(cAudio) seq.push({ url: cAudio, label: cObj.r });
+      if(vAudio) seq.push({ url: vAudio, label: v });
     }
-    if(tAudio) seq.push(tAudio);
-    if(wAudio) seq.push(wAudio);
+    if(tAudio) seq.push({ url: tAudio, label: VN_SPELL.TONES[toneIdx]?.n || "" });
+    if(wAudio) seq.push({ url: wAudio, label: finalWord });
   }
 
-  if(seq.length > 0){
-    let idx = 0;
-    const playNext = () => {
-      if(my !== tok) return;
-      if(idx >= seq.length){
-        busy = false;
-        busyEnd = Date.now();
-        return;
-      }
-      A.src = seq[idx++];
-      A.onended = () => { if(my === tok) setTimeout(playNext, 180); };
-      A.onerror = () => { if(my === tok) setTimeout(playNext, 180); };
-      A.play().catch(e => {
-        if(my === tok && e && e.name !== "AbortError") playNext();
-      });
-    };
-    playNext();
-  } else {
-    say(finalWord, finalWord);
+  const subEl = document.querySelector(".spell-sub");
+  let idx = 0;
+  const playNext = () => {
+    if(my !== tok) return;
+    if(idx >= seq.length){
+      busy = false;
+      busyEnd = Date.now();
+      if(subEl) subEl.innerHTML = `🔊 Đánh vần: <b>${spellText}</b>`;
+      return;
+    }
+    const item = seq[idx++];
+    if(subEl){
+      subEl.innerHTML = `🔊 Đánh vần: <b style="color:var(--ok);font-size:1.15em">▶ ${item.label}</b>`;
+    }
+    A.src = item.url;
+    A.onended = () => { if(my === tok) setTimeout(playNext, 75); };
+    A.onerror = () => { if(my === tok) setTimeout(playNext, 75); };
+    A.play().catch(e => {
+      if(my === tok && e && e.name !== "AbortError") setTimeout(playNext, 75);
+    });
+  };
+  playNext();
+}
+function pickConsonant(c, r){
+  curC = c;
+  curTone = 0;
+  if(typeof VN_SPELL !== "undefined" && VN_SPELL.valid && !VN_SPELL.valid(curC, curV)){
+    const firstValid = VN_SPELL.V.find(v => VN_SPELL.valid(curC, v.v));
+    if(firstValid) curV = firstValid.v;
   }
+  readL();
+  playConsonant(c, r);
 }
 let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
 function readL(tab){
@@ -314,22 +373,39 @@ function readL(tab){
   const tabs=[["spell","🔤 Ghép tiếng","Spelling"],["lessons","📚 28 Bài Vần","Phonics"],["stories","📖 Tập đọc trơn","Stories"]];
   let body="";
   if(readTab==="spell"){
+    if(typeof VN_SPELL !== "undefined" && VN_SPELL.valid && !VN_SPELL.valid(curC, curV)){
+      const firstValid = VN_SPELL.V.find(v => VN_SPELL.valid(curC, v.v));
+      if(firstValid) curV = firstValid.v;
+    }
     const cObj=VN_SPELL.C.find(x=>x.c===curC)||VN_SPELL.C[0];
     const vObj=VN_SPELL.V.find(x=>x.v===curV)||VN_SPELL.V[0];
     const syls=[0,1,2,3,4,5].map(t=>VN_SPELL.syl(cObj,vObj,t));
     if(curTone >= syls.length) curTone = 0;
     const curSyl=syls[curTone];
+    const meanBadge=curSyl.hasMeaning
+      ?`<div style="background:#eafaf1;border:2px solid var(--ok);color:#196f3d;border-radius:18px;display:inline-block;padding:3px 14px;font-size:15px;font-weight:700;margin:4px auto">💡 Từ ví dụ: <b>${curSyl.ex}</b></div>`
+      :`<div style="background:#fff3cd;border:2px solid #f39c12;color:#856404;border-radius:18px;display:inline-block;padding:3px 14px;font-size:13px;font-weight:600;margin:4px auto">⚠ Tiếng này ít dùng trong tiếng Việt</div>`;
     body=`<div class="spell-board">
       <div class="spell-head"><span>${cObj.c}</span><span style="color:var(--acc2)">+</span><span>${vObj.v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline;color:var(--acc)">${curSyl.text}</span></div>
+      ${meanBadge}
       <div class="spell-sub" style="cursor:pointer" onclick="playSpell('${cObj.c}','${vObj.v}',${curTone},'${curSyl.text}','${curSyl.spell}')">🔊 Đánh vần: <b>${curSyl.spell}</b></div>
       <div class="syl-grid">
-        ${syls.map((s,idx)=>`<button class="syl-btn${idx===curTone?" active on":""}" onclick="playSyllable('${s.text}','${cObj.c}','${vObj.v}',${idx},'${s.spell}');rp(this)"><b class="n" style="font-size:30px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small></button>`).join("")}
+        ${syls.map((s,idx)=>{
+          const isAct=idx===curTone;
+          const opStyle=s.hasMeaning?"":"opacity:0.4;";
+          const exText=s.hasMeaning?`<span class="syl-ex" style="display:block;font-size:11px;color:var(--ok);font-weight:700;line-height:1.1;margin-top:2px">${s.ex}</span>`:`<span class="syl-ex" style="display:block;font-size:10px;color:#888;font-style:italic;line-height:1.1;margin-top:2px">ít dùng</span>`;
+          return `<button class="syl-btn${isAct?" active on":""}" style="${opStyle}" onclick="playSyllable('${s.text}','${cObj.c}','${vObj.v}',${idx},'${s.spell}');rp(this)"><b class="n" style="font-size:28px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small>${exText}</button>`;
+        }).join("")}
       </div>
     </div>
     <div style="margin:8px 0 2px"><b>1. Chọn Phụ âm:</b></div>
-    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="curC='${x.c}';curTone=0;readL();say('${x.c}','${x.c}')">${x.c}</button>`).join("")}</div>
+    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="pickConsonant('${x.c}','${x.r}')">${x.c}</button>`).join("")}</div>
     <div style="margin:8px 0 2px"><b>2. Chọn Nguyên âm:</b></div>
-    <div class="chips">${VN_SPELL.V.map(x=>`<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px" onclick="curV='${x.v}';curTone=0;readL();say('${x.v}','${x.v}')">${x.v}</button>`).join("")}</div>`;
+    <div class="chips">${VN_SPELL.V.map(x=>{
+      const ok=VN_SPELL.valid(curC,x.v);
+      const dis=ok?"":"opacity:0.22;pointer-events:none;filter:grayscale(1);";
+      return `<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px;${dis}" ${ok?`onclick="curV='${x.v}';curTone=0;readL();playVowel('${x.v}')"`:"disabled"}>${x.v}</button>`;
+    }).join("")}</div>`;
   }else if(readTab==="lessons"){
     const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
     const rhymeList=(L.rhymes||[]).map(r=>typeof r==="string"?r:(r.rhyme||""));
