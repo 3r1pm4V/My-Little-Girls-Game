@@ -1,6 +1,6 @@
 const I=IMG,m=document.getElementById("m");
 const im=(n,c="")=>`<img class="${c}" src="${I[n]}" alt="">`;
-const imL=(L,c="")=>{const k=lang==="en"?L:(I["vi_"+L]?"vi_"+L:L);return im(k,c)};
+const imL=(L,c="")=>{if(lang==="vi"&&LET_VI.includes(L))return`<span class="let-vn ${c}">${L}</span>`;const k=lang==="en"?L:(I["vi_"+L]?"vi_"+L:L);return im(k,c)};
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
@@ -23,7 +23,7 @@ const sayAs=(l,vi,en)=>{const o=ql;ql=l;say(vi,en);ql=o};
 const exLD=L=>{const v=exL(L,"vi"),e=exL(L,"en");return lang==="vi"?(v.length?v.slice(0,3):e.slice(0,2)):lang==="en"?e.slice(0,3):[...v.slice(0,2),...e.slice(0,2)]};
 const COUNT="apple,ball,star,flower,cat,dog,donut,egg,grape,orange,mango,frog,gift,sun,moon,tree".split(",");
 let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
-function setLang(l){lang=l;ls.set("lang",l);ql=null;parent()}window.setLang=setLang;
+function setLang(l){lang=l;ls.set("lang",l);ql=null;head();if(cur==="parent")parent();}window.setLang=setLang;
 const A=new Audio(),REC={},RECSZ={};let tok=0,sc=0,busy=false,busyEnd=0,lastSig="",dupN=0,vWait=false;
 const SS=window.speechSynthesis;
 let VOICES=[];
@@ -32,15 +32,19 @@ loadVoices();
 if(SS){const vc=()=>{loadVoices();if(cur==="parent")parent()};try{SS.addEventListener("voiceschanged",vc)}catch(e){SS.onvoiceschanged=vc}}
 const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
 const vState=()=>{if(!SS)return{k:"none"};loadVoices();if(!VOICES.length)return vWait?{k:"none"}:{k:"wait"};const v=viV();return v?{k:"ok",n:v.name}:{k:"no"}};
-const getAudio=ak=>REC[ak]||(window.AUDIO_MAP&&(
-  window.AUDIO_MAP[ak] ||
-  window.AUDIO_MAP[ak+"."] ||
-  window.AUDIO_MAP[ak+"!"] ||
-  window.AUDIO_MAP[ak+"?"] ||
-  window.AUDIO_MAP[ak.replace(/[.!?]+$/,"")] ||
-  window.AUDIO_MAP[ak.toLowerCase()] ||
-  window.AUDIO_MAP[ak.toLowerCase()+"."]
-));
+const getAudio=ak=>{
+  if(!REC&&!window.AUDIO_MAP)return null;
+  const raw=ak.replace(/^(vi|en)\|/i,"");
+  return REC[ak]||REC[raw]||(window.AUDIO_MAP&&(
+    window.AUDIO_MAP[ak] ||
+    window.AUDIO_MAP[raw] ||
+    window.AUDIO_MAP[raw.toLowerCase()] ||
+    window.AUDIO_MAP[ak.toLowerCase()] ||
+    window.AUDIO_MAP[raw+"."] ||
+    window.AUDIO_MAP[raw.replace(/[.!?]+$/,"")] ||
+    window.AUDIO_MAP[raw.toLowerCase().replace(/[.!?]+$/,"")]
+  ));
+};
 function say(vi,en){
   const my=++tok;busy=true;
   A.pause();A.onended=null;A.onerror=null;
@@ -83,7 +87,9 @@ let AC;function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContex
 const sfxOk=()=>[523,659,784,1047].forEach((f,i)=>tone(f,.25,i*.1)),sfxNo=()=>{tone(220,.3);tone(180,.35,.15)};
 const cat=document.getElementById("cat");
 function catSet(s){cat.src=I["cat_"+s];cat.className=(s==="happy"||s==="celebrate")?"happy":""}
-function head(){document.getElementById("sp").textContent=RATE<.5?"🐢🐢":RATE<.7?"🐢":"🐇";document.getElementById("stars").innerHTML=im("gstar")+stars}
+function head(){const lb=document.getElementById("langBtn");if(lb)lb.innerHTML=lang==="vi"?"🇻🇳 Tiếng Việt":"🇬🇧 English";document.getElementById("sp").textContent=RATE<.5?"🐢🐢":RATE<.7?"🐢":"🐇";document.getElementById("stars").innerHTML=im("gstar")+stars;}
+function toggleLang(){const next=lang==="vi"?"en":"vi";setLang(next);if(typeof cur!=="undefined"&&cur)go(cur);}
+window.toggleLang=toggleLang;
 document.getElementById("hb").innerHTML=im("btn_home");document.getElementById("hb").onclick=()=>go("home");document.getElementById("sp").onclick=()=>{RATE=RATE<.5?.6:RATE<.7?.85:.4;ls.set("rate2",RATE);head();say("Bé nghe nhé","Listen")};
 function fx(){if(rmOn())return;const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
@@ -172,7 +178,7 @@ function trace(){const md=TR[trm]||TR.up;
  m.querySelectorAll("[data-col]").forEach(b=>b.onclick=()=>col=b.dataset.col);
  m.querySelector("#ok").onclick=e=>{e.currentTarget.disabled=true;win(0,trace,"","")};
  md.say(it);catSet("pointing")}
-const spr=(k,z)=>{const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="">`};
+const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="">`};
 function rp(b){const s=b.querySelector(".spr");if(s){s.style.animation="none";void s.offsetWidth;s.style.animation=""}}
 let ST;try{ST=JSON.parse(ls.get("st",""))||{}}catch(e){ST={}}ST.n=ST.n||0;ST.f=ST.f||0;ST.w=ST.w||{};
 const svS=()=>ls.set("st",JSON.stringify(ST)),sta=ok=>{ST.n++;if(ok)ST.f++;svS()};
@@ -326,16 +332,71 @@ function readL(tab){
     <div class="chips">${VN_SPELL.V.map(x=>`<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px" onclick="curV='${x.v}';curTone=0;readL();say('${x.v}','${x.v}')">${x.v}</button>`).join("")}</div>`;
   }else if(readTab==="lessons"){
     const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
-    body=`<div class="chips" style="max-height:85px;overflow-y:auto;padding:2px">${VN_LESSONS.map(l=>`<button class="pill ${l.id===curLes?"on":""}" style="font-size:16px;padding:2px 8px" onclick="curLes=${l.id};readL()">${l.id<=10?"Âm "+l.id:l.id===11?"Ôn tập":"Bài "+l.id}</button>`).join("")}</div>
+    const rhymeList=(L.rhymes||[]).map(r=>typeof r==="string"?r:(r.rhyme||""));
+    const highlightRhymes=(text)=>{
+      let res=esc(text);
+      rhymeList.forEach(rh=>{
+        if(!rh)return;
+        const re=new RegExp("("+rh+")","gi");
+        res=res.replace(re,'<b style="color:var(--acc);text-decoration:underline">$1</b>');
+      });
+      return res;
+    };
+    body=`<div class="chips" style="max-height:85px;overflow-y:auto;padding:2px">
+      ${VN_LESSONS.map(l=>{
+        const shortRhymes=(l.rhymes||[]).map(r=>typeof r==="string"?r:r.rhyme).join("-");
+        return `<button class="pill ${l.id===curLes?"on":""}" style="font-size:15px;padding:3px 8px;margin:2px" onclick="curLes=${l.id};readL()">
+          ${l.id<=28?"Bài "+l.id+" ("+shortRhymes+")":l.title}
+        </button>`;
+      }).join("")}
+    </div>
     <div class="lesson-card">
-      <h3 style="margin:4px 0 8px;font-size:22px;color:var(--acc)">${L.title}</h3>
-      <div style="font-weight:800;margin-bottom:4px">Vần / Âm đọc:</div>
-      <div class="rhyme-chips">${L.rhymes.map(r=>`<button class="rhyme-chip" onclick="say('Vần ${r}. ${r}','${r}');rp(this)">${r}</button>`).join("")}</div>
-      <div style="font-weight:800;margin:8px 0 4px">Từ ngữ ứng dụng:</div>
-      <div class="words-grid">${L.words.map(w=>`<button class="word-btn" onclick="say('${w}','${w}');rp(this)">${w}</button>`).join("")}</div>
-      <div style="font-weight:800;margin:8px 0 4px">Câu luyện đọc:</div>
-      <div class="story-box" style="margin:4px 0;font-size:20px;cursor:pointer" onclick="say('${L.sentence}','${L.sentence}')">
-        🔊 “${L.sentence}”
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        <h3 style="margin:0;font-size:24px;color:var(--acc)">${L.title}</h3>
+        <button class="pill on" style="font-size:15px;padding:4px 12px" onclick="say('${L.sentence.replace(/'/g,"\\'")}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">🔊 Nghe câu mẫu</button>
+      </div>
+
+      <div style="font-weight:800;margin:6px 0 4px;color:var(--ink)">1. Đánh vần Vần (Cô Lan Anh):</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        ${(L.rhymes||[]).map(r=>{
+          const rName=typeof r==="string"?r:r.rhyme;
+          const rFormula=typeof r==="string"?`Vần ${r}`:(r.formula||rName);
+          return `
+            <div class="rhyme-box" onclick="say('${rFormula}','${rName}');rp(this)">
+              <div class="rhyme-big">${rName}</div>
+              <div class="rhyme-formula">👉 ${rFormula}</div>
+              <button class="pill" style="font-size:14px;padding:3px 10px;margin-top:2px">🔊 Đánh vần vần</button>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">2. Đánh vần tiếng & Từ mẫu:</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:12px">
+        ${(L.words||[]).map(w=>{
+          const wText=typeof w==="string"?w:w.word;
+          const wSpell=typeof w==="string"?w:w.spell;
+          return `
+            <div class="spell-sample" onclick="say('${wSpell.replace(/'/g,"\\'")}','${wText.replace(/'/g,"\\'")}');rp(this)">
+              <div>
+                <b>${wText}</b>
+                <div style="font-size:14px;color:var(--ink);opacity:.85;margin-top:2px">Đánh vần: ${wSpell}</div>
+              </div>
+              <span style="font-size:24px">🔊</span>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">3. Câu luyện đọc ứng dụng:</div>
+      <div class="story-box" style="margin:4px 0;font-size:21px;cursor:pointer;background:var(--card);border:3px solid var(--ok);line-height:1.6" onclick="say('${L.sentence.replace(/'/g,"\\'")}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <span style="font-size:28px">📖</span>
+          <div>
+            <div>${highlightRhymes(L.sentence)}</div>
+            <div style="font-size:14px;color:var(--ok);font-weight:700;margin-top:6px">▶ Bấm vào đây để nghe cô đọc câu mẫu</div>
+          </div>
+        </div>
       </div>
     </div>`;
     say(L.title, L.title);
@@ -417,7 +478,7 @@ function storyL(catId, page, search){
   <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
 
   <div class="story-search-wrap">
-    <input type="search" class="story-search" id="stSearchInput" placeholder="🔍 Tìm kiếm trong 1.603 truyện..." value="${esc(curStorySearch)}" oninput="clearTimeout(window.__stTimer);window.__stTimer=setTimeout(()=>window.onStorySearch(this.value),200)">
+    <input type="search" class="story-search" id="stSearchInput" placeholder="🔍 Tìm kiếm trong ${catalog.length} truyện có audio gốc..." value="${esc(curStorySearch)}" oninput="clearTimeout(window.__stTimer);window.__stTimer=setTimeout(()=>window.onStorySearch(this.value),200)">
     ${curStorySearch?`<button class="pill" onclick="window.onStorySearch('')" style="padding:4px 12px">✖</button>`:""}
   </div>
 
@@ -449,10 +510,10 @@ function storyL(catId, page, search){
             <div class="story-title">${esc(s.title)}</div>
             <div class="story-desc">${esc(s.summary)}</div>
             <div style="margin-top:4px">
-              ${isAudio?`<span class="story-badge audio">🎙️ Có kể truyện audio & bài học</span>`:(hasTctAudio?`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`:`<span class="story-badge cat">📖 Tóm tắt & Đọc thêm</span>`)}
+              ${isAudio?`<span class="story-badge audio">🎙️ Kể truyện audio & bài học</span>`:`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`}
             </div>
           </div>
-          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể chuyện ❯":(hasTctAudio?"Nghe & Đọc ❯":"Xem truyện ❯")}</button>
+          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể truyện ❯":"Nghe & Đọc ❯"}</button>
         </div>
       `;
     }).join("")}
@@ -497,11 +558,11 @@ function storyDetail(id){
       </div>
     </div>
     ${s.audio?`
-      <div style="background:#eaf5ff;border:3px solid var(--acc);border-radius:22px;padding:12px 14px;margin:12px 0;text-align:center">
+      <div class="story-audio-box">
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:var(--ink);font-size:17px;margin-bottom:8px">
           <span>🎧</span><span>Giọng đọc audio gốc từ truyencotich.top:</span>
         </div>
-        <audio controls preload="metadata" src="${s.audio}" style="width:100%;max-width:540px;height:44px;outline:none"></audio>
+        <audio controls autoplay preload="metadata" src="${s.audio}" style="width:100%;max-width:540px;height:44px;outline:none"></audio>
       </div>
     `:""}
     <div style="background:var(--bg);padding:14px 18px;border-radius:20px;font-size:20px;line-height:1.6;margin:12px 0;text-align:left">

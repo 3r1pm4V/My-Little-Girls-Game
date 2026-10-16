@@ -62,204 +62,1232 @@ const VN_SPELL = {
 // 28 Bài học vần và đọc trơn chuẩn Lớp 1 (Trích từ tài liệu 28 Bài Đọc & Sách Luyện Đọc)
 const VN_LESSONS = [
   {
-    id: 1,
-    title: "Bài 1: Nguyên âm cơ bản",
-    rhymes: ["a", "ă", "â", "o", "ô", "ơ", "e", "ê", "i", "u", "ư", "y"],
-    words: ["quả na", "con gà", "cái ô", "con cá", "cờ đỏ", "con bê", "cái nơ", "con cú", "lá thư", "em bé"],
-    sentence: "Bé có cờ đỏ. Bé yêu bố mẹ."
+    "id": 1,
+    "title": "Bài 1: Vần OI - AI",
+    "rhymes": [
+      {
+        "rhyme": "oi",
+        "slug": "oi",
+        "formula": "o - i - oi",
+        "audioRhyme": "audio/rhyme_oi.mp3",
+        "audioSpell": "audio/rhyme_spell_oi.mp3"
+      },
+      {
+        "rhyme": "ai",
+        "slug": "ai",
+        "formula": "a - i - ai",
+        "audioRhyme": "audio/rhyme_ai.mp3",
+        "audioSpell": "audio/rhyme_spell_ai.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "gói quà",
+        "spell": "g - oi - goi - sắc - gói",
+        "audio": "audio/spell_w_goi_qua.mp3"
+      },
+      {
+        "word": "xe tải",
+        "spell": "t - ai - tai - hỏi - tải",
+        "audio": "audio/spell_w_xe_tai.mp3"
+      },
+      {
+        "word": "cái còi",
+        "spell": "c - oi - coi - huyền - còi",
+        "audio": "audio/spell_w_cai_coi.mp3"
+      },
+      {
+        "word": "hoa mai",
+        "spell": "m - ai - mai",
+        "audio": "audio/spell_w_hoa_mai.mp3"
+      }
+    ],
+    "sentence": "Bé gói quà tặng cô. Bố lái xe tải về nhà.",
+    "sentenceAudio": "audio/les_sen_1.mp3"
   },
   {
-    id: 2,
-    title: "Bài 2: Phụ âm B, D, Đ",
-    rhymes: ["ba", "bo", "bô", "bơ", "be", "bê", "da", "do", "dô", "đa", "đo", "đô"],
-    words: ["bà ba", "bè bè", "bò bê", "bế bé", "bi bô", "da dẻ", "dỗ bé", "đá đỏ", "đi đò", "đu đủ"],
-    sentence: "Bố bế bé Bi đi bộ ở bờ đê."
+    "id": 2,
+    "title": "Bài 2: Vần ON - AN",
+    "rhymes": [
+      {
+        "rhyme": "on",
+        "slug": "on",
+        "formula": "o - n - on",
+        "audioRhyme": "audio/rhyme_on.mp3",
+        "audioSpell": "audio/rhyme_spell_on.mp3"
+      },
+      {
+        "rhyme": "an",
+        "slug": "an",
+        "formula": "a - n - an",
+        "audioRhyme": "audio/rhyme_an.mp3",
+        "audioSpell": "audio/rhyme_spell_an.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con cá",
+        "spell": "c - on - con",
+        "audio": "audio/spell_w_con_ca.mp3"
+      },
+      {
+        "word": "cái bàn",
+        "spell": "b - an - ban - huyền - bàn",
+        "audio": "audio/spell_w_cai_ban.mp3"
+      },
+      {
+        "word": "lon ton",
+        "spell": "t - on - ton",
+        "audio": "audio/spell_w_lon_ton.mp3"
+      },
+      {
+        "word": "đan len",
+        "spell": "đ - an - đan",
+        "audio": "audio/spell_w_dan_len.mp3"
+      }
+    ],
+    "sentence": "Bé ngồi học bên bàn nhỏ. Đàn gà lon ton theo mẹ.",
+    "sentenceAudio": "audio/les_sen_2.mp3"
   },
   {
-    id: 3,
-    title: "Bài 3: Phụ âm H, L, K",
-    rhymes: ["ha", "ho", "hô", "hơ", "he", "hê", "la", "lo", "lô", "lơ", "le", "lê", "ke", "kê", "ki"],
-    words: ["ha ha", "hồ cá", "hổ dữ", "lá đa", "lá cờ", "quả lê", "kệ gỗ", "kì cọ", "ê ke"],
-    sentence: "Bố bế bé đi bộ ở bờ hồ. Hồ có cá cờ."
+    "id": 3,
+    "title": "Bài 3: Vần ÔN - ƠN",
+    "rhymes": [
+      {
+        "rhyme": "ôn",
+        "slug": "oon",
+        "formula": "ô - n - ôn",
+        "audioRhyme": "audio/rhyme_oon.mp3",
+        "audioSpell": "audio/rhyme_spell_oon.mp3"
+      },
+      {
+        "rhyme": "ơn",
+        "slug": "own",
+        "formula": "ơ - n - ơn",
+        "audioRhyme": "audio/rhyme_own.mp3",
+        "audioSpell": "audio/rhyme_spell_own.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chồn nâu",
+        "spell": "ch - ôn - chôn - huyền - chồn",
+        "audio": "audio/spell_w_chon_nau.mp3"
+      },
+      {
+        "word": "cơn mưa",
+        "spell": "c - ơn - cơn",
+        "audio": "audio/spell_w_con_mua.mp3"
+      },
+      {
+        "word": "mái tôn",
+        "spell": "t - ôn - tôn",
+        "audio": "audio/spell_w_mai_ton.mp3"
+      },
+      {
+        "word": "cảm ơn",
+        "spell": "ơ - n - ơn",
+        "audio": "audio/spell_w_cam_on.mp3"
+      }
+    ],
+    "sentence": "Bé lễ phép nói cảm ơn. Chú chồn nâu tinh nghịch dưới cơn mưa.",
+    "sentenceAudio": "audio/les_sen_3.mp3"
   },
   {
-    id: 4,
-    title: "Bài 4: Phụ âm T, N, M",
-    rhymes: ["ta", "to", "tô", "tơ", "te", "tê", "na", "no", "nô", "nơ", "ma", "mo", "mô", "mơ", "me", "mê"],
-    words: ["củ từ", "sư tử", "tô mì", "nơ đỏ", "mũ nỉ", "ba má", "bố mẹ", "lá me", "quả mơ"],
-    sentence: "Bé có nơ đỏ và mũ nỉ. Mẹ cho bé tô mì gà to."
+    "id": 4,
+    "title": "Bài 4: Vần UA - ƯA",
+    "rhymes": [
+      {
+        "rhyme": "ua",
+        "slug": "ua",
+        "formula": "u - a - ua",
+        "audioRhyme": "audio/rhyme_ua.mp3",
+        "audioSpell": "audio/rhyme_spell_ua.mp3"
+      },
+      {
+        "rhyme": "ưa",
+        "slug": "uwa",
+        "formula": "ư - a - ưa",
+        "audioRhyme": "audio/rhyme_uwa.mp3",
+        "audioSpell": "audio/rhyme_spell_uwa.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con cua",
+        "spell": "c - ua - cua",
+        "audio": "audio/spell_w_con_cua.mp3"
+      },
+      {
+        "word": "cơn mưa",
+        "spell": "m - ưa - mưa",
+        "audio": "audio/spell_w_con_mua2.mp3"
+      },
+      {
+        "word": "chú rùa",
+        "spell": "r - ua - rua - huyền - rùa",
+        "audio": "audio/spell_w_chu_rua.mp3"
+      },
+      {
+        "word": "quả dưa",
+        "spell": "d - ưa - dưa",
+        "audio": "audio/spell_w_qua_dua.mp3"
+      }
+    ],
+    "sentence": "Trời đổ mưa rào, chú rùa bò chậm chạp bên bờ suối.",
+    "sentenceAudio": "audio/les_sen_4.mp3"
   },
   {
-    id: 5,
-    title: "Bài 5: Phụ âm V, R, S, X",
-    rhymes: ["va", "vo", "vô", "vơ", "ve", "vê", "ra", "ro", "rô", "rơ", "sa", "so", "sô", "xa", "xo", "xê"],
-    words: ["võ sĩ", "vỏ sò", "vé số", "vở vẽ", "cá rô", "rổ rá", "củ sả", "sổ đỏ", "ca sĩ", "xe lu", "lò xo"],
-    sentence: "Bố rủ bé ra bờ đê. Bố có xe ô tô màu đỏ."
+    "id": 5,
+    "title": "Bài 5: Vần ÔI - ƠI",
+    "rhymes": [
+      {
+        "rhyme": "ôi",
+        "slug": "ooi",
+        "formula": "ô - i - ôi",
+        "audioRhyme": "audio/rhyme_ooi.mp3",
+        "audioSpell": "audio/rhyme_spell_ooi.mp3"
+      },
+      {
+        "rhyme": "ơi",
+        "slug": "owi",
+        "formula": "ơ - i - ơi",
+        "audioRhyme": "audio/rhyme_owi.mp3",
+        "audioSpell": "audio/rhyme_spell_owi.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "xe nôi",
+        "spell": "n - ôi - nôi",
+        "audio": "audio/spell_w_xe_noi.mp3"
+      },
+      {
+        "word": "bơi lội",
+        "spell": "b - ơi - bơi",
+        "audio": "audio/spell_w_boi_loi.mp3"
+      },
+      {
+        "word": "đôi đũa",
+        "spell": "đ - ôi - đôi",
+        "audio": "audio/spell_w_doi_dua.mp3"
+      },
+      {
+        "word": "vui chơi",
+        "spell": "ch - ơi - chơi",
+        "audio": "audio/spell_w_vui_choi.mp3"
+      }
+    ],
+    "sentence": "Bé ngồi trong xe nôi chơi đùa. Đàn cá bơi lội tung tăng.",
+    "sentenceAudio": "audio/les_sen_5.mp3"
   },
   {
-    id: 6,
-    title: "Bài 6: Phụ âm P, PH, Q, QU",
-    rhymes: ["pa", "po", "pô", "pe", "pha", "pho", "phô", "phê", "qua", "que", "qui", "quơ"],
-    words: ["pha lê", "phố cổ", "phở bò", "cà phê", "phi cơ", "quả na", "quả mơ", "quả nho", "quà quê", "chả quế"],
-    sentence: "Nhà bé ở phố cổ. Bà ở quê ra có quà cho bé."
+    "id": 6,
+    "title": "Bài 6: Vần EN - ÊN",
+    "rhymes": [
+      {
+        "rhyme": "en",
+        "slug": "en",
+        "formula": "e - n - en",
+        "audioRhyme": "audio/rhyme_en.mp3",
+        "audioSpell": "audio/rhyme_spell_en.mp3"
+      },
+      {
+        "rhyme": "ên",
+        "slug": "een",
+        "formula": "ê - n - ên",
+        "audioRhyme": "audio/rhyme_een.mp3",
+        "audioSpell": "audio/rhyme_spell_een.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "hoa sen",
+        "spell": "s - en - sen",
+        "audio": "audio/spell_w_hoa_sen.mp3"
+      },
+      {
+        "word": "ngọn nến",
+        "spell": "n - ên - nên - sắc - nến",
+        "audio": "audio/spell_w_ngon_nen.mp3"
+      },
+      {
+        "word": "màu đen",
+        "spell": "đ - en - đen",
+        "audio": "audio/spell_w_mau_den.mp3"
+      },
+      {
+        "word": "mũi tên",
+        "spell": "t - ên - tên",
+        "audio": "audio/spell_w_mui_ten.mp3"
+      }
+    ],
+    "sentence": "Hồ sen ngát hương thơm. Ngọn nến lung linh tỏa sáng.",
+    "sentenceAudio": "audio/les_sen_6.mp3"
   },
   {
-    id: 7,
-    title: "Bài 7: Phụ âm G, GH, NG, NGH",
-    rhymes: ["ga", "go", "gô", "gơ", "gu", "ghe", "ghê", "ghi", "nga", "ngo", "ngô", "nghe", "nghê", "nghi"],
-    words: ["ổ gà", "gà gô", "ghế gỗ", "ghẹ đỏ", "bí ngô", "cá ngừ", "ru ngủ", "nghé tơ", "củ nghệ", "nghỉ hè"],
-    sentence: "Mẹ ru bé ngủ. Ở bờ đê có chú nghé tơ gặm cỏ."
+    "id": 7,
+    "title": "Bài 7: Vần AY - ÂY",
+    "rhymes": [
+      {
+        "rhyme": "ay",
+        "slug": "ay",
+        "formula": "a - y - ay",
+        "audioRhyme": "audio/rhyme_ay.mp3",
+        "audioSpell": "audio/rhyme_spell_ay.mp3"
+      },
+      {
+        "rhyme": "ây",
+        "slug": "aay",
+        "formula": "â - y - ây",
+        "audioRhyme": "audio/rhyme_aay.mp3",
+        "audioSpell": "audio/rhyme_spell_aay.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "máy bay",
+        "spell": "m - ay - may - sắc - máy",
+        "audio": "audio/spell_w_may_bay.mp3"
+      },
+      {
+        "word": "cây xanh",
+        "spell": "c - ây - cây",
+        "audio": "audio/spell_w_cay_xanh.mp3"
+      },
+      {
+        "word": "bàn tay",
+        "spell": "t - ay - tay",
+        "audio": "audio/spell_w_ban_tay.mp3"
+      },
+      {
+        "word": "đám mây",
+        "spell": "m - ây - mây",
+        "audio": "audio/spell_w_dam_may.mp3"
+      }
+    ],
+    "sentence": "Bàn tay bé nhỏ xinh. Máy bay lướt qua từng đám mây trắng.",
+    "sentenceAudio": "audio/les_sen_7.mp3"
   },
   {
-    id: 8,
-    title: "Bài 8: Phụ âm CH, TR",
-    rhymes: ["cha", "cho", "chô", "chơ", "che", "chê", "chi", "chu", "tra", "tro", "trô", "trơ", "tre", "trê", "tri", "tru"],
-    words: ["cha mẹ", "chả cá", "chó xù", "đi chợ", "che chở", "trà đá", "cây tre", "cá trê", "vũ trụ", "bầu trời"],
-    sentence: "Dì Ba có chú chó xù. Bé bê ly trà đá cho bố."
+    "id": 8,
+    "title": "Bài 8: Vần OM - AM",
+    "rhymes": [
+      {
+        "rhyme": "om",
+        "slug": "om",
+        "formula": "o - m - om",
+        "audioRhyme": "audio/rhyme_om.mp3",
+        "audioSpell": "audio/rhyme_spell_om.mp3"
+      },
+      {
+        "rhyme": "am",
+        "slug": "am",
+        "formula": "a - m - am",
+        "audioRhyme": "audio/rhyme_am.mp3",
+        "audioSpell": "audio/rhyme_spell_am.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "đom đóm",
+        "spell": "đ - om - đom",
+        "audio": "audio/spell_w_dom_dom.mp3"
+      },
+      {
+        "word": "quả cam",
+        "spell": "c - am - cam",
+        "audio": "audio/spell_w_qua_cam.mp3"
+      },
+      {
+        "word": "chòm râu",
+        "spell": "ch - om - chom - huyền - chòm",
+        "audio": "audio/spell_w_chom_rau.mp3"
+      },
+      {
+        "word": "chăm làm",
+        "spell": "l - am - lam - huyền - làm",
+        "audio": "audio/spell_w_cham_lam.mp3"
+      }
+    ],
+    "sentence": "Đom đóm thắp đèn bay trong đêm. Mẹ cho bé quả cam ngọt lành.",
+    "sentenceAudio": "audio/les_sen_8.mp3"
   },
   {
-    id: 9,
-    title: "Bài 9: Phụ âm NH, TH",
-    rhymes: ["nha", "nho", "nhô", "nhơ", "nhe", "nhê", "nhi", "nhu", "tha", "tho", "thô", "thơ", "the", "thê", "thi", "thu"],
-    words: ["nha sĩ", "nhà lá", "chùm nho", "nhỏ bé", "thỏ mẹ", "thơ ca", "thủ thỉ", "quả thị", "thi sĩ", "lá thư"],
-    sentence: "Cô Ba là nha sĩ. Mẹ và bé ra bờ hồ thả cá cờ."
+    "id": 9,
+    "title": "Bài 9: Vần ÔM - ƠM",
+    "rhymes": [
+      {
+        "rhyme": "ôm",
+        "slug": "oom",
+        "formula": "ô - m - ôm",
+        "audioRhyme": "audio/rhyme_oom.mp3",
+        "audioSpell": "audio/rhyme_spell_oom.mp3"
+      },
+      {
+        "rhyme": "ơm",
+        "slug": "owm",
+        "formula": "ơ - m - ơm",
+        "audioRhyme": "audio/rhyme_owm.mp3",
+        "audioSpell": "audio/rhyme_spell_owm.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con tôm",
+        "spell": "t - ôm - tôm",
+        "audio": "audio/spell_w_con_tom.mp3"
+      },
+      {
+        "word": "bát cơm",
+        "spell": "c - ơm - cơm",
+        "audio": "audio/spell_w_bat_com.mp3"
+      },
+      {
+        "word": "ôm mẹ",
+        "spell": "ô - m - ôm",
+        "audio": "audio/spell_w_om_me.mp3"
+      },
+      {
+        "word": "hương thơm",
+        "spell": "th - ơm - thơm",
+        "audio": "audio/spell_w_huong_thom.mp3"
+      }
+    ],
+    "sentence": "Bé sà vào lòng ôm mẹ. Cơm mẹ nấu tỏa hương thơm ngát.",
+    "sentenceAudio": "audio/les_sen_9.mp3"
   },
   {
-    id: 10,
-    title: "Bài 10: Phụ âm GI, KH",
-    rhymes: ["gia", "gio", "giô", "giơ", "gie", "giê", "giu", "kha", "kho", "khô", "khơ", "khe", "khê", "khi", "khu"],
-    words: ["cụ già", "giò chả", "giỏ cá", "giá đỗ", "gia vị", "cá kho", "lá khô", "khe đá", "chú khỉ", "khế chua"],
-    sentence: "Bà đi chợ về có giỏ cá to. Mẹ kho cá với khế."
+    "id": 10,
+    "title": "Bài 10: Vần EM - ÊM",
+    "rhymes": [
+      {
+        "rhyme": "em",
+        "slug": "em",
+        "formula": "e - m - em",
+        "audioRhyme": "audio/rhyme_em.mp3",
+        "audioSpell": "audio/rhyme_spell_em.mp3"
+      },
+      {
+        "rhyme": "êm",
+        "slug": "eem",
+        "formula": "ê - m - êm",
+        "audioRhyme": "audio/rhyme_eem.mp3",
+        "audioSpell": "audio/rhyme_spell_eem.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "que kem",
+        "spell": "k - em - kem",
+        "audio": "audio/spell_w_que_kem.mp3"
+      },
+      {
+        "word": "ban đêm",
+        "spell": "đ - êm - đêm",
+        "audio": "audio/spell_w_ban_dem.mp3"
+      },
+      {
+        "word": "em bé",
+        "spell": "e - m - em",
+        "audio": "audio/spell_w_em_be.mp3"
+      },
+      {
+        "word": "êm ái",
+        "spell": "ê - m - êm",
+        "audio": "audio/spell_w_em_ai.mp3"
+      }
+    ],
+    "sentence": "Em bé thích ăn que kem dâu. Chiếc gối êm đềm ru bé ngủ ngon.",
+    "sentenceAudio": "audio/les_sen_10.mp3"
   },
   {
-    id: 11,
-    title: "Bài 11: Ôn tập Đọc trơn",
-    rhymes: ["ba", "ca", "da", "ga", "ha", "la", "ma", "na", "ra", "ta", "va", "xa"],
-    words: ["nhà có cỗ", "chả giò", "cá kho", "no nê", "ngủ khò", "mở quà", "búp bê", "chó con"],
-    sentence: "Nhà có giỗ, có cỗ to: có chả giò, có cá kho. Bé ăn no, bé ngủ khò."
+    "id": 11,
+    "title": "Bài 11: Vần IM - UM",
+    "rhymes": [
+      {
+        "rhyme": "im",
+        "slug": "im",
+        "formula": "i - m - im",
+        "audioRhyme": "audio/rhyme_im.mp3",
+        "audioSpell": "audio/rhyme_spell_im.mp3"
+      },
+      {
+        "rhyme": "um",
+        "slug": "um",
+        "formula": "u - m - um",
+        "audioRhyme": "audio/rhyme_um.mp3",
+        "audioSpell": "audio/rhyme_spell_um.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con chim",
+        "spell": "ch - im - chim",
+        "audio": "audio/spell_w_con_chim.mp3"
+      },
+      {
+        "word": "cái chum",
+        "spell": "ch - um - chum",
+        "audio": "audio/spell_w_cai_chum.mp3"
+      },
+      {
+        "word": "trái tim",
+        "spell": "t - im - tim",
+        "audio": "audio/spell_w_trai_tim.mp3"
+      },
+      {
+        "word": "sum vầy",
+        "spell": "s - um - sum",
+        "audio": "audio/spell_w_sum_vay.mp3"
+      }
+    ],
+    "sentence": "Chú chim hót líu lo trên cành. Cả nhà sum vầy bên mâm cơm ấm áp.",
+    "sentenceAudio": "audio/les_sen_11.mp3"
   },
   {
-    id: 12,
-    title: "Bài 12: Vần AN, ĂN, ÂN, ON, ÔN, ƠN, EN, ÊN, IN, UN",
-    rhymes: ["an", "ăn", "ân", "on", "ôn", "ơn", "en", "ên", "in", "un"],
-    words: ["đàn ngan", "bàn ghế", "căn dặn", "cẩn thận", "khăn đỏ", "bạn thân", "ăn ngon", "con chồn", "ngọn nến", "con trăn"],
-    sentence: "Bé đeo khăn quàng đỏ đi học. Bạn thân cùng học chăm ngoan."
+    "id": 12,
+    "title": "Bài 12: Vần IN - UN",
+    "rhymes": [
+      {
+        "rhyme": "in",
+        "slug": "in",
+        "formula": "i - n - in",
+        "audioRhyme": "audio/rhyme_in.mp3",
+        "audioSpell": "audio/rhyme_spell_in.mp3"
+      },
+      {
+        "rhyme": "un",
+        "slug": "un",
+        "formula": "u - n - un",
+        "audioRhyme": "audio/rhyme_un.mp3",
+        "audioSpell": "audio/rhyme_spell_un.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "quả chín",
+        "spell": "ch - in - chin - sắc - chín",
+        "audio": "audio/spell_w_qua_chin.mp3"
+      },
+      {
+        "word": "chó cún",
+        "spell": "c - un - cun - sắc - cún",
+        "audio": "audio/spell_w_cho_cun.mp3"
+      },
+      {
+        "word": "xin phép",
+        "spell": "x - in - xin",
+        "audio": "audio/spell_w_xin_phep.mp3"
+      },
+      {
+        "word": "vun xới",
+        "spell": "v - un - vun",
+        "audio": "audio/spell_w_vun_xoi.mp3"
+      }
+    ],
+    "sentence": "Bé ngoan biết xin phép bố mẹ. Chú cún con mừng rỡ vẫy đuôi.",
+    "sentenceAudio": "audio/les_sen_12.mp3"
   },
   {
-    id: 13,
-    title: "Bài 13: Vần AM, ĂM, ÂM, OM, ÔM, ƠM, EM, ÊM, IM, UM",
-    rhymes: ["am", "ăm", "âm", "om", "ôm", "ơm", "em", "êm", "im", "um"],
-    words: ["quả cam", "chăm làm", "mầm non", "tăm tre", "con tằm", "giỏ kem", "ban đêm", "con chim", "cơm gà", "tôm hùm"],
-    sentence: "Mẹ mua giỏ cam ngọt và tôm hùm tươi ngon cho cả nhà."
+    "id": 13,
+    "title": "Bài 13: Vần AU - ÂU",
+    "rhymes": [
+      {
+        "rhyme": "au",
+        "slug": "au",
+        "formula": "a - u - au",
+        "audioRhyme": "audio/rhyme_au.mp3",
+        "audioSpell": "audio/rhyme_spell_au.mp3"
+      },
+      {
+        "rhyme": "âu",
+        "slug": "aau",
+        "formula": "â - u - âu",
+        "audioRhyme": "audio/rhyme_aau.mp3",
+        "audioSpell": "audio/rhyme_spell_aau.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "rau xanh",
+        "spell": "r - au - rau",
+        "audio": "audio/spell_w_rau_xanh.mp3"
+      },
+      {
+        "word": "dưa hấu",
+        "spell": "h - âu - hâu - sắc - hấu",
+        "audio": "audio/spell_w_dua_hau.mp3"
+      },
+      {
+        "word": "cây cau",
+        "spell": "c - au - cau",
+        "audio": "audio/spell_w_cay_cau.mp3"
+      },
+      {
+        "word": "chú gấu",
+        "spell": "g - âu - gâu - sắc - gấu",
+        "audio": "audio/spell_w_chu_gau.mp3"
+      }
+    ],
+    "sentence": "Mẹ mua dưa hấu đỏ ngọt mát. Bé giúp mẹ tưới luống rau xanh.",
+    "sentenceAudio": "audio/les_sen_13.mp3"
   },
   {
-    id: 14,
-    title: "Bài 14: Vần AI, AY, ÂY, OI, ÔI, ƠI, UI, ƯI, UY",
-    rhymes: ["ai", "ay", "ây", "oi", "ôi", "ơi", "ui", "ưi", "uy"],
-    words: ["số hai", "máy bay", "thợ xây", "cây hoa", "cá voi", "xe nôi", "con dơi", "cái túi", "gửi thư", "thủy thủ"],
-    sentence: "Bố dạy bé vẽ chiếc máy bay bay lượn trên bầu trời."
+    "id": 14,
+    "title": "Bài 14: Vần EO - AO",
+    "rhymes": [
+      {
+        "rhyme": "eo",
+        "slug": "eo",
+        "formula": "e - o - eo",
+        "audioRhyme": "audio/rhyme_eo.mp3",
+        "audioSpell": "audio/rhyme_spell_eo.mp3"
+      },
+      {
+        "rhyme": "ao",
+        "slug": "ao",
+        "formula": "a - o - ao",
+        "audioRhyme": "audio/rhyme_ao.mp3",
+        "audioSpell": "audio/rhyme_spell_ao.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chú mèo",
+        "spell": "m - eo - meo - huyền - mèo",
+        "audio": "audio/spell_w_chu_meo.mp3"
+      },
+      {
+        "word": "ngôi sao",
+        "spell": "s - ao - sao",
+        "audio": "audio/spell_w_ngoi_sao.mp3"
+      },
+      {
+        "word": "leo trèo",
+        "spell": "l - eo - leo",
+        "audio": "audio/spell_w_leo_treo.mp3"
+      },
+      {
+        "word": "quả táo",
+        "spell": "t - ao - tao - sắc - táo",
+        "audio": "audio/spell_w_qua_tao.mp3"
+      }
+    ],
+    "sentence": "Chú mèo con thích trèo cau. Đêm rằm bầu trời lấp lánh muôn vì sao.",
+    "sentenceAudio": "audio/les_sen_14.mp3"
   },
   {
-    id: 15,
-    title: "Bài 15: Vần AO, EO, AU, ÂU, ÊU, IU, ƯU",
-    rhymes: ["ao", "eo", "au", "âu", "êu", "iu", "ưu"],
-    words: ["tờ báo", "chào cờ", "quả táo", "chú mèo", "leo trèo", "bó rau", "dưa hấu", "cây nêu", "cái rìu", "quả lựu"],
-    sentence: "Mẹ cho bé quả táo đỏ và dưa hấu mát ngọt."
+    "id": 15,
+    "title": "Bài 15: Vần IU - ÊU",
+    "rhymes": [
+      {
+        "rhyme": "iu",
+        "slug": "iu",
+        "formula": "i - u - iu",
+        "audioRhyme": "audio/rhyme_iu.mp3",
+        "audioSpell": "audio/rhyme_spell_iu.mp3"
+      },
+      {
+        "rhyme": "êu",
+        "slug": "eeu",
+        "formula": "ê - u - êu",
+        "audioRhyme": "audio/rhyme_eeu.mp3",
+        "audioSpell": "audio/rhyme_spell_eeu.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "cái rìu",
+        "spell": "r - iu - riu - huyền - rìu",
+        "audio": "audio/spell_w_cai_riu.mp3"
+      },
+      {
+        "word": "cây nêu",
+        "spell": "n - êu - nêu",
+        "audio": "audio/spell_w_cay_neu.mp3"
+      },
+      {
+        "word": "líu lo",
+        "spell": "l - iu - liu - sắc - líu",
+        "audio": "audio/spell_w_liu_lo.mp3"
+      },
+      {
+        "word": "kêu to",
+        "spell": "k - êu - kêu",
+        "audio": "audio/spell_w_keu_to.mp3"
+      }
+    ],
+    "sentence": "Bé dựng cây nêu ngày Tết. Đàn chim non hót líu lo chào ngày mới.",
+    "sentenceAudio": "audio/les_sen_15.mp3"
   },
   {
-    id: 16,
-    title: "Bài 16: Vần AC, ĂC, ÂC, OC, ÔC, UC, ƯC",
-    rhymes: ["ac", "ăc", "âc", "oc", "ôc", "uc", "ưc"],
-    words: ["bác sĩ", "củ lạc", "mắc áo", "quả gấc", "bậc thang", "con cóc", "con ốc", "hoa cúc", "lọ mực", "bức tranh"],
-    sentence: "Hoa cúc vàng rực rỡ dưới nắng ban mai."
+    "id": 16,
+    "title": "Bài 16: Vần UI - ƯI",
+    "rhymes": [
+      {
+        "rhyme": "ui",
+        "slug": "ui",
+        "formula": "u - i - ui",
+        "audioRhyme": "audio/rhyme_ui.mp3",
+        "audioSpell": "audio/rhyme_spell_ui.mp3"
+      },
+      {
+        "rhyme": "ưi",
+        "slug": "uwi",
+        "formula": "ư - i - ưi",
+        "audioRhyme": "audio/rhyme_uwi.mp3",
+        "audioSpell": "audio/rhyme_spell_uwi.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "cái túi",
+        "spell": "t - ui - tui - sắc - túi",
+        "audio": "audio/spell_w_cai_tui.mp3"
+      },
+      {
+        "word": "gửi thư",
+        "spell": "g - ưi - gưi - hỏi - gửi",
+        "audio": "audio/spell_w_gui_thu.mp3"
+      },
+      {
+        "word": "vui vẻ",
+        "spell": "v - ui - vui",
+        "audio": "audio/spell_w_vui_ve.mp3"
+      },
+      {
+        "word": "ngửi hoa",
+        "spell": "ng - ưi - ngưi - hỏi - ngửi",
+        "audio": "audio/spell_w_ngui_hoa.mp3"
+      }
+    ],
+    "sentence": "Bé vui vẻ bỏ vở vào túi để đến trường. Bé gửi thư thăm ông bà.",
+    "sentenceAudio": "audio/les_sen_16.mp3"
   },
   {
-    id: 17,
-    title: "Bài 17: Vần AT, ĂT, ÂT, OT, ÔT, ƠT, ET, ÊT, IT, UT, ƯT",
-    rhymes: ["at", "ăt", "ât", "ot", "ôt", "ơt", "et", "êt", "it", "ut", "ưt"],
-    words: ["cái bát", "giặt giũ", "lật đật", "hót ca", "cà rốt", "quả ớt", "con vẹt", "bồ kết", "vịt con", "bút chì", "mứt tết"],
-    sentence: "Bé dùng bút chì vẽ chú vịt con bơi lội tung tăng."
+    "id": 17,
+    "title": "Bài 17: Vần ONG - ÔNG",
+    "rhymes": [
+      {
+        "rhyme": "ong",
+        "slug": "ong",
+        "formula": "o - ng - ong",
+        "audioRhyme": "audio/rhyme_ong.mp3",
+        "audioSpell": "audio/rhyme_spell_ong.mp3"
+      },
+      {
+        "rhyme": "ông",
+        "slug": "oong",
+        "formula": "ô - ng - ông",
+        "audioRhyme": "audio/rhyme_oong.mp3",
+        "audioSpell": "audio/rhyme_spell_oong.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con ong",
+        "spell": "o - ng - ong",
+        "audio": "audio/spell_w_con_ong.mp3"
+      },
+      {
+        "word": "chú công",
+        "spell": "c - ông - công",
+        "audio": "audio/spell_w_chu_cong.mp3"
+      },
+      {
+        "word": "chong chóng",
+        "spell": "ch - ong - chong",
+        "audio": "audio/spell_w_chong_chong.mp3"
+      },
+      {
+        "word": "dòng sông",
+        "spell": "s - ông - sông",
+        "audio": "audio/spell_w_dong_song.mp3"
+      }
+    ],
+    "sentence": "Con ong chăm chỉ tìm mật. Chú công múa xoè đuôi rực rỡ bên bờ sông.",
+    "sentenceAudio": "audio/les_sen_17.mp3"
   },
   {
-    id: 18,
-    title: "Bài 18: Vần AP, ĂP, ÂP, OP, ÔP, ƠP, EP, ÊP, IP, UP",
-    rhymes: ["ap", "ăp", "âp", "op", "ôp", "ơp", "ep", "êp", "ip", "up"],
-    words: ["sáp màu", "cái cặp", "bài tập", "ngăn nắp", "hộp quà", "tia chớp", "đôi dép", "bếp gas", "bìm bịp", "búp bê"],
-    sentence: "Bé soạn sách vở ngăn nắp vào chiếc cặp mới tinh."
+    "id": 18,
+    "title": "Bài 18: Vần UÔN - ƯƠN",
+    "rhymes": [
+      {
+        "rhyme": "uôn",
+        "slug": "uoon",
+        "formula": "u - ô - n - uôn",
+        "audioRhyme": "audio/rhyme_uoon.mp3",
+        "audioSpell": "audio/rhyme_spell_uoon.mp3"
+      },
+      {
+        "rhyme": "ươn",
+        "slug": "uwown",
+        "formula": "ư - ơ - n - ươn",
+        "audioRhyme": "audio/rhyme_uwown.mp3",
+        "audioSpell": "audio/rhyme_spell_uwown.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chuồn chuồn",
+        "spell": "ch - uôn - chuon - huyền - chuồn",
+        "audio": "audio/spell_w_chuon_chuon.mp3"
+      },
+      {
+        "word": "khu vườn",
+        "spell": "v - ươn - vươn - huyền - vườn",
+        "audio": "audio/spell_w_khu_vuon.mp3"
+      },
+      {
+        "word": "cuốn sách",
+        "spell": "c - uôn - cuon - sắc - cuốn",
+        "audio": "audio/spell_w_cuon_sach.mp3"
+      },
+      {
+        "word": "con lươn",
+        "spell": "l - ươn - lươn",
+        "audio": "audio/spell_w_con_luon.mp3"
+      }
+    ],
+    "sentence": "Chú chuồn chuồn ớt bay lượn quanh khu vườn rực rỡ hoa tươi.",
+    "sentenceAudio": "audio/les_sen_18.mp3"
   },
   {
-    id: 19,
-    title: "Bài 19: Vần ANH, ÊNH, INH, ACH, ÊCH, ICH",
-    rhymes: ["anh", "ênh", "inh", "ach", "êch", "ich"],
-    words: ["bầu trời xanh", "bập bênh", "thông minh", "cuốn sách", "viên gạch", "con ếch", "du lịch", "tích tắc"],
-    sentence: "Bầu trời xanh trong vắt. Bé đọc cuốn sách truyện hay."
+    "id": 19,
+    "title": "Bài 19: Vần OT - AT",
+    "rhymes": [
+      {
+        "rhyme": "ot",
+        "slug": "ot",
+        "formula": "o - t - ot",
+        "audioRhyme": "audio/rhyme_ot.mp3",
+        "audioSpell": "audio/rhyme_spell_ot.mp3"
+      },
+      {
+        "rhyme": "at",
+        "slug": "at",
+        "formula": "a - t - at",
+        "audioRhyme": "audio/rhyme_at.mp3",
+        "audioSpell": "audio/rhyme_spell_at.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chim hót",
+        "spell": "h - ot - hot - sắc - hót",
+        "audio": "audio/spell_w_chim_hot.mp3"
+      },
+      {
+        "word": "ca hát",
+        "spell": "h - at - hat - sắc - hát",
+        "audio": "audio/spell_w_ca_hat.mp3"
+      },
+      {
+        "word": "gọt vỏ",
+        "spell": "g - ot - got - nặng - gọt",
+        "audio": "audio/spell_w_got_vo.mp3"
+      },
+      {
+        "word": "bãi cát",
+        "spell": "c - at - cat - sắc - cát",
+        "audio": "audio/spell_w_bai_cat.mp3"
+      }
+    ],
+    "sentence": "Bé cùng bạn ca hát rộn vang. Đàn chim hót véo von trong vòm lá.",
+    "sentenceAudio": "audio/les_sen_19.mp3"
   },
   {
-    id: 20,
-    title: "Bài 20: Vần ANG, ĂNG, ÂNG, ONG, ÔNG, ENG, UNG, ƯNG",
-    rhymes: ["ang", "ăng", "âng", "ong", "ông", "eng", "ung", "ưng"],
-    words: ["vầng trăng", "cây bàng", "con ong", "quả bóng", "bông hồng", "tiếng leng keng", "hoa súng", "củ gừng"],
-    sentence: "Đêm rằm vầng trăng tròn sáng lung linh tỏa khắp sân nhà."
+    "id": 20,
+    "title": "Bài 20: Vần ET - ÊT",
+    "rhymes": [
+      {
+        "rhyme": "et",
+        "slug": "et",
+        "formula": "e - t - et",
+        "audioRhyme": "audio/rhyme_et.mp3",
+        "audioSpell": "audio/rhyme_spell_et.mp3"
+      },
+      {
+        "rhyme": "êt",
+        "slug": "eet",
+        "formula": "ê - t - êt",
+        "audioRhyme": "audio/rhyme_eet.mp3",
+        "audioSpell": "audio/rhyme_spell_eet.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chim vẹt",
+        "spell": "v - et - vet - nặng - vẹt",
+        "audio": "audio/spell_w_chim_vet.mp3"
+      },
+      {
+        "word": "ngày Tết",
+        "spell": "t - êt - tet - sắc - tết",
+        "audio": "audio/spell_w_ngay_tet.mp3"
+      },
+      {
+        "word": "nét chữ",
+        "spell": "n - et - net - sắc - nét",
+        "audio": "audio/spell_w_net_chu.mp3"
+      },
+      {
+        "word": "bánh tét",
+        "spell": "t - et - tet - sắc - tét",
+        "audio": "audio/spell_w_banh_tet.mp3"
+      }
+    ],
+    "sentence": "Bé nắn nót viết từng nét chữ. Ngày Tết cả nhà quây quần gói bánh tét.",
+    "sentenceAudio": "audio/les_sen_20.mp3"
   },
   {
-    id: 21,
-    title: "Bài 21: Vần IA, UA, ƯA, IÊC, IÊP, IÊN, YÊN, IÊM, YÊM",
-    rhymes: ["ia", "ua", "ưa", "iêc", "iêp", "iên", "yên", "iêm", "yêm"],
-    words: ["quả dưa", "con cua", "cái thìa", "xem xiếc", "tấm thiệp", "cô tiên", "chim yến", "trái tim", "cái yếm"],
-    sentence: "Bé đi xem xiếc có chú voi huơ cái vòi dài thật ngộ nghĩnh."
+    "id": 21,
+    "title": "Bài 21: Vần IT - UT",
+    "rhymes": [
+      {
+        "rhyme": "it",
+        "slug": "it",
+        "formula": "i - t - it",
+        "audioRhyme": "audio/rhyme_it.mp3",
+        "audioSpell": "audio/rhyme_spell_it.mp3"
+      },
+      {
+        "rhyme": "ut",
+        "slug": "ut",
+        "formula": "u - t - ut",
+        "audioRhyme": "audio/rhyme_ut.mp3",
+        "audioSpell": "audio/rhyme_spell_ut.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "con vịt",
+        "spell": "v - it - vit - nặng - vịt",
+        "audio": "audio/spell_w_con_vit.mp3"
+      },
+      {
+        "word": "cây bút",
+        "spell": "b - ut - but - sắc - bút",
+        "audio": "audio/spell_w_cay_but.mp3"
+      },
+      {
+        "word": "trái mít",
+        "spell": "m - it - mit - sắc - mít",
+        "audio": "audio/spell_w_trai_mit.mp3"
+      },
+      {
+        "word": "chim cút",
+        "spell": "c - ut - cut - sắc - cút",
+        "audio": "audio/spell_w_chim_cut.mp3"
+      }
+    ],
+    "sentence": "Bé cầm cây bút chì tô màu chú vịt con bơi lội dưới ao.",
+    "sentenceAudio": "audio/les_sen_21.mp3"
   },
   {
-    id: 22,
-    title: "Bài 22: Vần IÊU, YÊU, IÊT, YÊT, IÊNG, YÊNG",
-    rhymes: ["iêu", "yêu", "iêt", "yêt", "iêng", "yêng"],
-    words: ["vải thiều", "buổi chiều", "yêu quý", "tiết kiệm", "tiếng chim", "cái giếng", "khiêng bàn", "chim yểng"],
-    sentence: "Buổi chiều hè, đàn chim hót líu lo rộn rã trên cành cây."
+    "id": 22,
+    "title": "Bài 22: Vần IA",
+    "rhymes": [
+      {
+        "rhyme": "ia",
+        "slug": "ia",
+        "formula": "i - a - ia",
+        "audioRhyme": "audio/rhyme_ia.mp3",
+        "audioSpell": "audio/rhyme_spell_ia.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "cây mía",
+        "spell": "m - ia - mia - sắc - mía",
+        "audio": "audio/spell_w_cay_mia.mp3"
+      },
+      {
+        "word": "cái thìa",
+        "spell": "th - ia - thia - huyền - thìa",
+        "audio": "audio/spell_w_cai_thia.mp3"
+      },
+      {
+        "word": "cá lia thia",
+        "spell": "l - ia - lia",
+        "audio": "audio/spell_w_ca_lia_thia.mp3"
+      },
+      {
+        "word": "chia quà",
+        "spell": "ch - ia - chia",
+        "audio": "audio/spell_w_chia_qua.mp3"
+      }
+    ],
+    "sentence": "Mẹ dùng thìa bón sữa chua cho bé. Bé cùng bạn chia kẹo vui vẻ.",
+    "sentenceAudio": "audio/les_sen_22.mp3"
   },
   {
-    id: 23,
-    title: "Bài 23: Vần UÔI, UÔM, UÔC, UÔT, UÔN, UÔNG",
-    rhymes: ["uôi", "uôm", "uôc", "uôt", "uôn", "uông"],
-    words: ["nải chuối", "con suối", "cánh buồm", "con cuốc", "chuột túi", "chuồn chuồn", "hoa muống", "uống nước"],
-    sentence: "Chú chuồn chuồn ớt bay lượn trên mặt hồ nước mát lành."
+    "id": 23,
+    "title": "Bài 23: Vần UÔI - ƯƠI",
+    "rhymes": [
+      {
+        "rhyme": "uôi",
+        "slug": "uooi",
+        "formula": "u - ô - i - uôi",
+        "audioRhyme": "audio/rhyme_uooi.mp3",
+        "audioSpell": "audio/rhyme_spell_uooi.mp3"
+      },
+      {
+        "rhyme": "ươi",
+        "slug": "uwowi",
+        "formula": "ư - ơ - i - ươi",
+        "audioRhyme": "audio/rhyme_uwowi.mp3",
+        "audioSpell": "audio/rhyme_spell_uwowi.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "nải chuối",
+        "spell": "ch - uôi - chuoi - sắc - chuối",
+        "audio": "audio/spell_w_nai_chuoi.mp3"
+      },
+      {
+        "word": "tươi cười",
+        "spell": "c - ươi - cươi - huyền - cười",
+        "audio": "audio/spell_w_tuoi_cuoi.mp3"
+      },
+      {
+        "word": "con suối",
+        "spell": "s - uôi - suoi - sắc - suối",
+        "audio": "audio/spell_w_con_suoi.mp3"
+      },
+      {
+        "word": "lưới cá",
+        "spell": "l - ươi - luoi - sắc - lưới",
+        "audio": "audio/spell_w_luoi_ca.mp3"
+      }
+    ],
+    "sentence": "Nải chuối chín vàng thơm phức. Bé luôn tươi cười chào mọi người.",
+    "sentenceAudio": "audio/les_sen_23.mp3"
   },
   {
-    id: 24,
-    title: "Bài 24: Vần ƯƠI, ƯƠU, ƯƠC, ƯƠT, ƯƠM, ƯƠP, ƯƠN, ƯƠNG",
-    rhymes: ["ươi", "ươu", "ươc", "ươt", "ươm", "ươp", "ươn", "ương"],
-    words: ["quả bưởi", "con hươu", "ngọn đuốc", "lướt sóng", "con bướm", "khu vườn", "quê hương", "đo đường"],
-    sentence: "Trong khu vườn nhà, chú bướm xinh rập rờn bên khóm hoa hồng."
+    "id": 24,
+    "title": "Bài 24: Vần ANH - ACH",
+    "rhymes": [
+      {
+        "rhyme": "anh",
+        "slug": "anh",
+        "formula": "a - nh - anh",
+        "audioRhyme": "audio/rhyme_anh.mp3",
+        "audioSpell": "audio/rhyme_spell_anh.mp3"
+      },
+      {
+        "rhyme": "ach",
+        "slug": "ach",
+        "formula": "a - ch - ach",
+        "audioRhyme": "audio/rhyme_ach.mp3",
+        "audioSpell": "audio/rhyme_spell_ach.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "quả chanh",
+        "spell": "ch - anh - chanh",
+        "audio": "audio/spell_w_qua_chanh.mp3"
+      },
+      {
+        "word": "cuốn sách",
+        "spell": "s - ach - sach - sắc - sách",
+        "audio": "audio/spell_w_cuon_sach2.mp3"
+      },
+      {
+        "word": "màu xanh",
+        "spell": "x - anh - xanh",
+        "audio": "audio/spell_w_mau_xanh.mp3"
+      },
+      {
+        "word": "viên gạch",
+        "spell": "g - ach - gach - sắc - gạch",
+        "audio": "audio/spell_w_vien_gach.mp3"
+      }
+    ],
+    "sentence": "Bé mở cuốn sách sạch đẹp ra đọc. Bầu trời xanh biếc bao la.",
+    "sentenceAudio": "audio/les_sen_24.mp3"
   },
   {
-    id: 25,
-    title: "Bài 25: Vần OA, OE, OAI, OAN, OAC, OAT",
-    rhymes: ["oa", "oe", "oai", "oan", "oac", "oat"],
-    words: ["bông hoa", "hoa khoe sắc", "củ khoai", "bé ngoan", "áo khoác", "hoạt hình", "chích chòe", "đoạt giải"],
-    sentence: "Mùa xuân về, trăm hoa đua nở khoe sắc rực rỡ khắp muôn nơi."
+    "id": 25,
+    "title": "Bài 25: Vần IÊN - YÊN",
+    "rhymes": [
+      {
+        "rhyme": "iên",
+        "slug": "ieen",
+        "formula": "i - ê - n - iên",
+        "audioRhyme": "audio/rhyme_ieen.mp3",
+        "audioSpell": "audio/rhyme_spell_ieen.mp3"
+      },
+      {
+        "rhyme": "yên",
+        "slug": "yeen",
+        "formula": "y - ê - n - yên",
+        "audioRhyme": "audio/rhyme_yeen.mp3",
+        "audioSpell": "audio/rhyme_spell_yeen.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "cô tiên",
+        "spell": "t - iên - tiên",
+        "audio": "audio/spell_w_co_tien.mp3"
+      },
+      {
+        "word": "chim yến",
+        "spell": "y - ên - yên - sắc - yến",
+        "audio": "audio/spell_w_chim_yen.mp3"
+      },
+      {
+        "word": "bãi biển",
+        "spell": "b - iên - biên - hỏi - biển",
+        "audio": "audio/spell_w_bai_bien.mp3"
+      },
+      {
+        "word": "yên tĩnh",
+        "spell": "y - ên - yên",
+        "audio": "audio/spell_w_yen_tinh.mp3"
+      }
+    ],
+    "sentence": "Cô tiên hiền từ mang phép màu. Đàn chim yến chao liệng trên bãi biển.",
+    "sentenceAudio": "audio/les_sen_25.mp3"
   },
   {
-    id: 26,
-    title: "Bài 26: Vần OĂN, OẮT, OANH, OACH, OANG, OĂNG",
-    rhymes: ["oăn", "oắt", "oanh", "oach", "oang", "oăng"],
-    words: ["tóc xoăn", "thoăn thoắt", "chim oanh", "kế hoạch", "khoảng trời", "con hoẵng", "loanh quanh", "thu hoạch"],
-    sentence: "Bé có mái tóc xoăn xinh xắn. Bé chạy thoăn thoắt đón bà."
+    "id": 26,
+    "title": "Bài 26: Vần UÔNG - ƯƠNG",
+    "rhymes": [
+      {
+        "rhyme": "uông",
+        "slug": "uoong",
+        "formula": "u - ô - ng - uông",
+        "audioRhyme": "audio/rhyme_uoong.mp3",
+        "audioSpell": "audio/rhyme_spell_uoong.mp3"
+      },
+      {
+        "rhyme": "ương",
+        "slug": "uwowng",
+        "formula": "ư - ơ - ng - ương",
+        "audioRhyme": "audio/rhyme_uwowng.mp3",
+        "audioSpell": "audio/rhyme_spell_uwowng.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "tiếng chuông",
+        "spell": "ch - uông - chuông",
+        "audio": "audio/spell_w_tieng_chuong.mp3"
+      },
+      {
+        "word": "hoa phượng",
+        "spell": "ph - ương - phuong - nặng - phượng",
+        "audio": "audio/spell_w_hoa_phuong.mp3"
+      },
+      {
+        "word": "ruộng lúa",
+        "spell": "r - uông - ruong - nặng - ruộng",
+        "audio": "audio/spell_w_ruong_lua.mp3"
+      },
+      {
+        "word": "soi gương",
+        "spell": "g - ương - gương",
+        "audio": "audio/spell_w_soi_guong.mp3"
+      }
+    ],
+    "sentence": "Tiếng chuông ngân vang rộn ràng. Hoa phượng vĩ nở đỏ rực sân trường.",
+    "sentenceAudio": "audio/les_sen_26.mp3"
   },
   {
-    id: 27,
-    title: "Bài 27: Vần UÊ, UY, UÂN, UÂT, UÂY, UYÊN, UYÊT",
-    rhymes: ["uê", "uy", "uân", "uât", "uây", "uyên", "uyêt"],
-    words: ["hoa huệ", "tàu thủy", "mùa xuân", "kỷ luật", "sum vầy", "kể chuyện", "trăng khuyết", "hoa cúc vàng"],
-    sentence: "Mùa xuân ấm áp, cả gia đình sum vầy bên mâm cơm ấm cúng."
+    "id": 27,
+    "title": "Bài 27: Vần UÔT - ƯƠT",
+    "rhymes": [
+      {
+        "rhyme": "uôt",
+        "slug": "uoot",
+        "formula": "u - ô - t - uôt",
+        "audioRhyme": "audio/rhyme_uoot.mp3",
+        "audioSpell": "audio/rhyme_spell_uoot.mp3"
+      },
+      {
+        "rhyme": "ươt",
+        "slug": "uwowt",
+        "formula": "ư - ơ - t - ươt",
+        "audioRhyme": "audio/rhyme_uwowt.mp3",
+        "audioSpell": "audio/rhyme_spell_uwowt.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "chú chuột",
+        "spell": "ch - uôt - chuot - nặng - chuột",
+        "audio": "audio/spell_w_chu_chuot.mp3"
+      },
+      {
+        "word": "lướt sóng",
+        "spell": "l - ươt - luot - sắc - lướt",
+        "audio": "audio/spell_w_luot_song.mp3"
+      },
+      {
+        "word": "tuốt lúa",
+        "spell": "t - uôt - tuot - sắc - tuốt",
+        "audio": "audio/spell_w_tuot_lua.mp3"
+      },
+      {
+        "word": "xanh mướt",
+        "spell": "m - ươt - muot - sắc - mướt",
+        "audio": "audio/spell_w_xanh_muot.mp3"
+      }
+    ],
+    "sentence": "Cánh đồng lúa chín vàng óng ả, cây cối xanh mướt quanh năm.",
+    "sentenceAudio": "audio/les_sen_27.mp3"
   },
   {
-    id: 28,
-    title: "Bài 28: Vần Mở Rộng OAO, OAY, OAM, OĂM, OEN, OET, UYA",
-    rhymes: ["oao", "oay", "oam", "oăm", "oen", "oet", "uya", "oong", "ooc"],
-    words: ["ngoao ngoao", "cơn gió xoáy", "ngoàm ngoàm", "sâu hoắm", "cười nhoẻn", "đêm khuya", "quần soóc", "cái xoong"],
-    sentence: "Mùa hè bé mặc quần soóc đi dạo phố. Chú mèo kêu ngoao ngoao đáng yêu."
+    "id": 28,
+    "title": "Bài 28: Vần OAI - OAY",
+    "rhymes": [
+      {
+        "rhyme": "oai",
+        "slug": "oai",
+        "formula": "o - a - i - oai",
+        "audioRhyme": "audio/rhyme_oai.mp3",
+        "audioSpell": "audio/rhyme_spell_oai.mp3"
+      },
+      {
+        "rhyme": "oay",
+        "slug": "oay",
+        "formula": "o - a - y - oay",
+        "audioRhyme": "audio/rhyme_oay.mp3",
+        "audioSpell": "audio/rhyme_spell_oay.mp3"
+      }
+    ],
+    "words": [
+      {
+        "word": "củ khoai",
+        "spell": "kh - oai - khoai",
+        "audio": "audio/spell_w_cu_khoai.mp3"
+      },
+      {
+        "word": "xoay tròn",
+        "spell": "x - oay - xoay",
+        "audio": "audio/spell_w_xoay_tron.mp3"
+      },
+      {
+        "word": "quả xoài",
+        "spell": "x - oai - xoai - huyền - xoài",
+        "audio": "audio/spell_w_qua_xoai.mp3"
+      },
+      {
+        "word": "loay hoay",
+        "spell": "h - oay - hoay",
+        "audio": "audio/spell_w_loay_hoay.mp3"
+      }
+    ],
+    "sentence": "Bé thích ăn quả xoài cát thơm ngọt. Chong chóng gió xoay tít trong sân.",
+    "sentenceAudio": "audio/les_sen_28.mp3"
   }
 ];
 
-// Tuyển tập Bài đọc trơn ngắn chuẩn bị vào Lớp 1 (Trích Sách Luyện Đọc Cô Huyền & Bài Đọc Lớp 1)
 const VN_STORIES = [
   {
     id: "co_co",
