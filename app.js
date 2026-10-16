@@ -6,7 +6,7 @@ const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
 const ls={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const NV="không,một,hai,ba,bốn,năm,sáu,bảy,tám,chín,mười,mười một,mười hai,mười ba,mười bốn,mười lăm,mười sáu,mười bảy,mười tám,mười chín,hai mươi".split(","),NE="zero,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen,twenty".split(",");
-const LV="a,á,ớ ngắn,bê,xê,dê,đê,e,ê,giê,hát,i,ca,lờ,mờ,nờ,o,ô,ờ,pê,cu,rờ,ét,tê,u,ư,vê,ích xì,i dài".split(",");
+const LV="a,ă,â,b,c,d,đ,e,ê,g,h,i,k,l,m,n,o,ô,ơ,p,q,r,s,t,u,ư,v,x,y".split(",");
 const OBJ={};"ant|ant|kiến;apple|apple|quả táo;ball|ball|quả bóng;bear|bear|con gấu;car|car|xe hơi;cat|cat|con mèo;dog|dog|con chó;donut|donut|bánh donut;egg|egg|quả trứng;elephant|elephant|con voi;flower|flower|bông hoa;frog|frog|con ếch;gift|gift|hộp quà;grape|grape|chùm nho;hat|hat|cái mũ;house|house|ngôi nhà;ice_cream|ice cream|cây kem;igloo|igloo|nhà băng;jelly|jelly|thạch;juice|juice|nước ép;key|key|chìa khóa;kite|kite|con diều;leaf|leaf|chiếc lá;lion|lion|sư tử;mango|mango|quả xoài;moon|moon|mặt trăng;nest|nest|tổ chim;notebook|notebook|quyển vở;octopus|octopus|bạch tuộc;orange|orange|quả cam;panda|panda|gấu trúc;pencil|pencil|bút chì;queen|queen|nữ hoàng;quill|quill|bút lông;rainbow|rainbow|cầu vồng;rocket|rocket|tên lửa;star|star|ngôi sao;sun|sun|mặt trời;train|train|tàu hỏa;tree|tree|cái cây;umbrella|umbrella|cái ô;unicorn|unicorn|kỳ lân;vase|vase|bình hoa;volcano|volcano|núi lửa;watermelone|watermelon|dưa hấu;whale|whale|cá voi;x-ray|x-ray|ảnh X-quang;xylophone|xylophone|đàn xylophone;yacht|yacht|du thuyền;yo-yo|yo-yo|yo-yo;zebra|zebra|ngựa vằn;zipper|zipper|khóa kéo".split(";").forEach(s=>{const[k,e,v]=s.split("|");OBJ[k]={en:e,vi:v,L:k[0].toUpperCase()}});
 const LET_VI="A,Ă,Â,B,C,D,Đ,E,Ê,G,H,I,K,L,M,N,O,Ô,Ơ,P,Q,R,S,T,U,Ư,V,X,Y".split(",");
 const LET_EN="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -32,14 +32,23 @@ loadVoices();
 if(SS){const vc=()=>{loadVoices();if(cur==="parent")parent()};try{SS.addEventListener("voiceschanged",vc)}catch(e){SS.onvoiceschanged=vc}}
 const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
 const vState=()=>{if(!SS)return{k:"none"};loadVoices();if(!VOICES.length)return vWait?{k:"none"}:{k:"wait"};const v=viV();return v?{k:"ok",n:v.name}:{k:"no"}};
+const getAudio=ak=>REC[ak]||(window.AUDIO_MAP&&(
+  window.AUDIO_MAP[ak] ||
+  window.AUDIO_MAP[ak+"."] ||
+  window.AUDIO_MAP[ak+"!"] ||
+  window.AUDIO_MAP[ak+"?"] ||
+  window.AUDIO_MAP[ak.replace(/[.!?]+$/,"")] ||
+  window.AUDIO_MAP[ak.toLowerCase()] ||
+  window.AUDIO_MAP[ak.toLowerCase()+"."]
+));
 function say(vi,en){A.pause();const my=++tok;busy=true;if(SS)SS.cancel();
  const sp=(t,l)=>t.split(/[.!?]+\s*/).map(s=>s.trim()).filter(Boolean).map(s=>[s,l]);
  const LG=ql||lang,q=LG==="vi"?sp(vi,"vi-VN"):LG==="en"?sp(en,"en-US"):[...sp(en,"en-US"),...sp(vi,"vi-VN")];
  const fin=()=>{if(my===tok){busy=false;busyEnd=Date.now()}};
- setTimeout(fin,3000+q.reduce((s,c)=>s+((REC[c[1].slice(0,2)+"|"+c[0]]||(window.AUDIO_MAP&&window.AUDIO_MAP[c[1].slice(0,2)+"|"+c[0]]))?8000:c[0].length*130/RATE)+900/RATE,0));
+ setTimeout(fin,3000+q.reduce((s,c)=>s+(getAudio(c[1].slice(0,2)+"|"+c[0])?8000:c[0].length*130/RATE)+900/RATE,0));
  (function nx(i){if(my!==tok)return;if(i>=q.length){fin();return}let d=0;
   const nt=()=>{if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>nx(i+1),900/RATE)};
-  const ak=q[i][1].slice(0,2)+"|"+q[i][0],rk=REC[ak]||(window.AUDIO_MAP&&window.AUDIO_MAP[ak]);
+  const ak=q[i][1].slice(0,2)+"|"+q[i][0],rk=getAudio(ak);
   if(rk){A.onended=A.onerror=nt;A.src=rk;A.play().catch(nt);return}
   if(!SS){nt();return}
   const u=new SpeechSynthesisUtterance(q[i][0]);u.lang=q[i][1];u.rate=RATE;u.pitch=1.2;u.onend=nt;u.onerror=nt;SS.speak(u)})(0)}
@@ -72,8 +81,8 @@ function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new S
 function letL(){const arr=LET_ALL();m.innerHTML=`<div class="row"><button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button></div><h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
  m.innerHTML=`<div class="row"><button class="pill" onclick="go('letL')">← ${T("Chữ cái","Letters")}</button></div><div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayL('${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayL(L);need("s").then(upSpr)}
-function sayL(L){const viIdx=LET_VI.indexOf(L),it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
- say(`${viIdx>=0?LV[viIdx]:L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
+function sayL(L){const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
+ say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
  quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
 
@@ -191,6 +200,42 @@ async function importAudio(list){let ok=0;const bad=[];
   try{await putRec(k,bl);ok++}catch(e){bad.push(f.name+" (lỗi lưu)")}}
  recS();const r=document.getElementById("rmsg");
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
+function playSpell(c, v, toneIdx, finalWord, spellText){
+  A.pause(); if(SS) SS.cancel();
+  const cKey = "vi|" + c.toLowerCase();
+  const vKey = "vi|" + v.toLowerCase();
+  const tName = VN_SPELL.TONES[toneIdx]?.k;
+  const tKey = tName ? "vi|" + tName : null;
+  const wKey = "vi|" + finalWord;
+
+  const cAudio = getAudio(cKey);
+  const vAudio = getAudio(vKey);
+  const tAudio = tKey ? getAudio(tKey) : null;
+  const wAudio = getAudio(wKey);
+
+  const seq = [];
+  if(cAudio) seq.push(cAudio);
+  if(vAudio) seq.push(vAudio);
+  if(tAudio) seq.push(tAudio);
+  if(wAudio) seq.push(wAudio);
+
+  if(seq.length >= 2){
+    let idx = 0;
+    const playNext = () => {
+      if(idx >= seq.length){
+        if(!wAudio) say(finalWord, finalWord);
+        return;
+      }
+      A.src = seq[idx++];
+      A.onended = () => setTimeout(playNext, 180);
+      A.onerror = () => setTimeout(playNext, 180);
+      A.play().catch(playNext);
+    };
+    playNext();
+  } else {
+    say(spellText, finalWord);
+  }
+}
 let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
 function readL(tab){
   if(tab)readTab=tab;
@@ -205,13 +250,13 @@ function readL(tab){
       <div class="spell-head"><span>${cObj.c}</span><span style="color:var(--acc2)">+</span><span>${vObj.v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline">${curSyl.text}</span></div>
       <div class="spell-sub">🔊 Đánh vần: <b>${curSyl.spell}</b></div>
       <div class="syl-grid">
-        ${syls.map((s,idx)=>`<button class="syl-btn" onclick="say('${s.spell}','${s.text}');rp(this)"><b class="n" style="font-size:30px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small></button>`).join("")}
+        ${syls.map((s,idx)=>`<button class="syl-btn" onclick="playSpell('${cObj.c}','${vObj.v}',${idx},'${s.text}','${s.spell}');rp(this)"><b class="n" style="font-size:30px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small></button>`).join("")}
       </div>
     </div>
     <div style="margin:8px 0 2px"><b>1. Chọn Phụ âm:</b></div>
-    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="curC='${x.c}';readL()">${x.c}</button>`).join("")}</div>
+    <div class="chips">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:44px;border-radius:16px;padding:0 8px;font-size:22px" onclick="curC='${x.c}';readL();say('${x.c}','${x.c}')">${x.c}</button>`).join("")}</div>
     <div style="margin:8px 0 2px"><b>2. Chọn Nguyên âm:</b></div>
-    <div class="chips">${VN_SPELL.V.map(x=>`<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px" onclick="curV='${x.v}';readL()">${x.v}</button>`).join("")}</div>`;
+    <div class="chips">${VN_SPELL.V.map(x=>`<button class="chip ${x.v===curV?"on":""}" style="width:44px;height:44px;font-size:22px" onclick="curV='${x.v}';readL();say('${x.v}','${x.v}')">${x.v}</button>`).join("")}</div>`;
     say(`Ghép chữ ${cObj.c} và ${vObj.v}`,`Spell ${cObj.c} and ${vObj.v}`);
   }else if(readTab==="lessons"){
     const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
@@ -329,6 +374,7 @@ function storyL(catId, page, search){
       const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
       const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
       const isAudio=!!curated;
+      const hasTctAudio=!!s.audio;
       const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
       return `
         <div class="story-item" onclick="${clickFn}">
@@ -337,10 +383,10 @@ function storyL(catId, page, search){
             <div class="story-title">${esc(s.title)}</div>
             <div class="story-desc">${esc(s.summary)}</div>
             <div style="margin-top:4px">
-              ${isAudio?`<span class="story-badge audio">🎙️ Có kể truyện audio & bài học</span>`:`<span class="story-badge cat">📖 Tóm tắt & Đọc thêm</span>`}
+              ${isAudio?`<span class="story-badge audio">🎙️ Có kể truyện audio & bài học</span>`:(hasTctAudio?`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`:`<span class="story-badge cat">📖 Tóm tắt & Đọc thêm</span>`)}
             </div>
           </div>
-          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể chuyện ❯":"Xem truyện ❯"}</button>
+          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể chuyện ❯":(hasTctAudio?"Nghe & Đọc ❯":"Xem truyện ❯")}</button>
         </div>
       `;
     }).join("")}
@@ -384,6 +430,14 @@ function storyDetail(id){
         <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${T(cat.name,cat.en)}</small>
       </div>
     </div>
+    ${s.audio?`
+      <div style="background:#eaf5ff;border:3px solid var(--acc);border-radius:22px;padding:12px 14px;margin:12px 0;text-align:center">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:var(--ink);font-size:17px;margin-bottom:8px">
+          <span>🎧</span><span>Giọng đọc audio gốc từ truyencotich.top:</span>
+        </div>
+        <audio controls preload="metadata" src="${s.audio}" style="width:100%;max-width:540px;height:44px;outline:none"></audio>
+      </div>
+    `:""}
     <div style="background:var(--bg);padding:14px 18px;border-radius:20px;font-size:20px;line-height:1.6;margin:12px 0;text-align:left">
       <b>📝 Tóm tắt truyện:</b><br>
       <span style="display:inline-block;margin-top:6px">${esc(s.summary)}</span>
@@ -425,6 +479,7 @@ function storyRead(id){
       setTimeout(()=>{if(storyPlay&&readingIdx===i)nextP(i+1);},waitMs);
     })(0);
   };
+  const tctMatch=typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.find(sc=>sc.audio&&(sc.id===s.id||sc.title.toLowerCase().includes(s.title.toLowerCase())||s.title.toLowerCase().includes(sc.title.toLowerCase())));
   m.innerHTML=`<div class="row"><button class="pill" onclick="window.__stopStory();go('storyL','${s.cat}')">← ${T("Danh sách truyện","Story list")}</button></div>
   <div class="story-view">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
@@ -434,6 +489,14 @@ function storyRead(id){
         <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${T(FAIRY_CATEGORIES.find(c=>c.id===s.cat).name,FAIRY_CATEGORIES.find(c=>c.id===s.cat).en)}</small>
       </div>
     </div>
+    ${tctMatch?`
+      <div style="background:#eaf5ff;border:3px solid var(--acc);border-radius:22px;padding:12px 14px;margin:12px 0;text-align:center">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:var(--ink);font-size:17px;margin-bottom:8px">
+          <span>🎧</span><span>Audio kể chuyện gốc từ truyencotich.top:</span>
+        </div>
+        <audio controls preload="metadata" src="${tctMatch.audio}" style="width:100%;max-width:540px;height:44px;outline:none" onplay="window.__stopStory()"></audio>
+      </div>
+    `:""}
     <div class="story-ctrls">
       <button class="pill on" id="stPlayBtn" onclick="window.__playStory()">🔊 Kể truyện (Nghe đọc)</button>
       <button class="pill" onclick="window.__stopStory()">⏹ Dừng</button>
