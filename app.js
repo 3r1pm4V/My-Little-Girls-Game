@@ -343,9 +343,29 @@ const getAudio=ak=>{
   );
 };
 
+let pendingAutoplayAudio=null;
+function handleAutoplayUnlock(){
+  if(!pendingAutoplayAudio)return;
+  const pending=pendingAutoplayAudio;
+  pendingAutoplayAudio=null;
+  console.log("[Audio] Unlocking autoplay upon user interaction, playing:", pending.src);
+  try{
+    A.pause();
+    if(SS){try{SS.cancel()}catch(e){}}
+    A.src=pending.src;
+    A.onended=pending.finishOnce;
+    A.play().catch(err=>{
+      console.warn("[Audio] User interaction deferred play failed:", err);
+    });
+  }catch(e){}
+}
+window.addEventListener("pointerdown",handleAutoplayUnlock,{passive:true});
+window.addEventListener("keydown",handleAutoplayUnlock,{passive:true});
+
 // ============================================================================
 // HÀM CHÍNH: playSafeAudio(text, voice, onEnd)
 // Đảm bảo không bao giờ gọi TTS API trước khi check Map và Local DB
+// Không fallback giọng máy khi bị chặn bởi chính sách Autoplay của trình duyệt
 // ============================================================================
 async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   let finished=false;
@@ -388,6 +408,11 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
       return;
     }catch(e){
       if(e&&e.name==="AbortError")return;
+      if(e&&(e.name==="NotAllowedError"||e.name==="SecurityError")){
+        console.warn("[Audio] Autoplay bị chặn bởi chính sách trình duyệt. Chờ bé chạm màn hình để phát:", mapPath);
+        pendingAutoplayAudio={src:mapPath,key:cleanKey,finishOnce};
+        return;
+      }
       console.warn("[Audio] Play map audio error:", e);
       fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
       return;
@@ -416,6 +441,11 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
       return;
     }catch(e){
       if(e&&e.name==="AbortError")return;
+      if(e&&(e.name==="NotAllowedError"||e.name==="SecurityError")){
+        console.warn("[Audio] Autoplay bị chặn cho DB audio. Chờ tương tác người dùng:", rawText);
+        pendingAutoplayAudio={src:cachedBlobUrl,key:cleanKey,finishOnce};
+        return;
+      }
       console.warn("[Audio] Play DB audio error:", e);
       fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
       return;
@@ -471,7 +501,17 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
               resolve();
             };
             A.src=data.url;
-            await A.play();
+            try{
+              await A.play();
+            }catch(playErr){
+              if(playErr&&(playErr.name==="NotAllowedError"||playErr.name==="SecurityError")){
+                console.warn("[Audio] Autoplay bị chặn cho API audio. Chờ tương tác người dùng:", data.url);
+                pendingAutoplayAudio={src:data.url,key:cleanKey,finishOnce};
+                resolve();
+                return;
+              }
+              fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+            }
             return;
           }
         }
@@ -506,7 +546,11 @@ function say(vi,en){
     });
     return;
   }
-  const sp=(t,l)=>t.split(/[.!?]+\s*/).map(s=>s.trim()).filter(Boolean).map(s=>[s,l]);
+  const sp=(t,l)=>{
+    if(!t)return[];
+    if(window.AUDIO_MAP&&(window.AUDIO_MAP[t]||(typeof window.__normAudioKey==="function"&&window.AUDIO_MAP[window.__normAudioKey(t)])))return[[t,l]];
+    return t.split(/[.!?]+\s*/).map(s=>s.trim()).filter(Boolean).map(s=>[s,l]);
+  };
   const q=LG==="vi"?sp(vi,"vi-VN"):LG==="en"?sp(en,"en-US"):[...sp(en,"en-US"),...sp(vi,"vi-VN")];
   const fin=()=>{if(my===tok){busy=false;busyEnd=Date.now()}};
   setTimeout(fin,3000+q.reduce((s,c)=>(window.AUDIO_MAP&&window.AUDIO_MAP[c[0]]?8000:c[0].length*130/RATE)+900/RATE,0));
@@ -1239,7 +1283,7 @@ function home(){
   }
 
   m.innerHTML = `
-    <div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div>
+    <div class="hero"><button onclick="say('Chào bé! Mình cùng học nhé','Hello! Let\\'s learn together')" aria-label="${T("Nghe chào","Hear greeting")}" style="background:none;border:none;cursor:pointer;padding:0;display:inline-block">${im("cat_idle")}</button><h1>Bé học vui<small>Fun Learning</small></h1></div>
     ${tierSelectorHtml}
     <div class="cards">${cardsHtml}</div>
     <p style="margin-top:16px">

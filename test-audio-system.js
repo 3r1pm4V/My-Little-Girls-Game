@@ -42,9 +42,17 @@ assert(map['Không!'] === 'audio/vi_khong_1othrk.mp3', 'Lookup từ có viết h
 assert(map['vi|không'] === 'audio/vi_khong_1othrk.mp3', 'Lookup có prefix "vi|không"');
 assert(map['vi|Một!'] === 'audio/vi_mot_7ht4.mp3', 'Lookup "vi|Một!"');
 assert(map['mười hai'] === 'audio/vi_muoi_hai_d8v39b.mp3', 'Lookup "mười hai"');
-console.log('✔ Proxy lookup hoạt động thông minh, tìm đúng file dù text có dấu câu hoặc chữ hoa');
 
-// 1.4 Đảm bảo đường dẫn trong AUDIO_MAP là đường dẫn tương đối (không bắt đầu bằng '/')
+// 1.4 Kiểm tra câu chào và các biến thể trang chủ (tránh lỗi đọc giọng máy)
+assert(map['Chào bé! Mình cùng học nhé'] === 'audio/vi_chao_be_minh_cung_ho_j63sgh.mp3', 'Câu chào chính trang chủ');
+assert(map['chào bé'] === 'audio/vi_chao_be_minh_cung_ho_j63sgh.mp3', 'Biến thể tách câu "chào bé"');
+assert(map['mình cùng học nhé'] === 'audio/vi_chao_be_minh_cung_ho_j63sgh.mp3', 'Biến thể tách câu "mình cùng học nhé"');
+assert(map['Xin chào bé. Mình cùng học nhé'] === 'audio/ui_xin_chao_be.mp3', 'Câu chào phụ "Xin chào bé"');
+assert(map['Đây là các huy hiệu và bộ sưu tập của bé'] === 'audio/ui_huy_hieu_thanh_tich.mp3', 'Lời dẫn trang huy hiệu');
+assert(fs.existsSync(map['Chào bé! Mình cùng học nhé']), 'File audio câu chào phải tồn tại thực tế trên đĩa');
+console.log('✔ Toàn bộ câu chào trang chủ và biến thể đều có file audio MP3 thực tế trên đĩa');
+
+// 1.5 Đảm bảo đường dẫn trong AUDIO_MAP là đường dẫn tương đối (không bắt đầu bằng '/')
 let nonRelativeCount = 0;
 for (const [k, p] of Object.entries(map)) {
   if (typeof p === 'string' && p.startsWith('/')) {
