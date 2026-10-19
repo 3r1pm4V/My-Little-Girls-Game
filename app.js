@@ -1,6 +1,15 @@
 const I=IMG,m=document.getElementById("m");
-const im=(n,c="")=>`<img class="${c}" src="${I[n]}" alt="">`;
-const imL=(L,c="")=>{if(lang==="vi"&&LET_VI.includes(L))return`<span class="let-vn ${c}">${L}</span>`;const k=lang==="en"?L:(I["vi_"+L]?"vi_"+L:L);return im(k,c)};
+const ALT_MAP={
+  cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
+  cat_thinking:"Chú mèo con đang suy nghĩ",cat_celebrate:"Chú mèo con chúc mừng",cat_pointing:"Chú mèo con hướng dẫn",
+  apple:"Quả táo",ball:"Quả bóng",star:"Ngôi sao",gstar:"Ngôi sao vàng thưởng điểm",flower:"Bông hoa",
+  cat:"Con mèo",dog:"Con chó",donut:"Bánh donut",egg:"Quả trứng",grape:"Chùm nho",orange:"Quả cam",
+  mango:"Quả xoài",frog:"Con ếch",gift:"Hộp quà",sun:"Mặt trời",moon:"Mặt trăng",tree:"Cái cây",
+  btn_back:"Nút quay lại",btn_next:"Nút tiếp theo",btn_home:"Nút trang chủ",kite:"Con diều",
+  rocket:"Tàu tên lửa",pencil:"Bút chì",confetti:"Pháo hoa giấy sắc màu"
+};
+const im=(n,c="",alt="")=>`<img class="${c}" src="${I[n]}" alt="${alt||ALT_MAP[n]||(OBJ[n]?OBJ[n].vi:n)}" loading="lazy" decoding="async">`;
+const imL=(L,c="")=>{if(lang==="vi"&&LET_VI.includes(L))return`<span class="let-vn ${c}">${L}</span>`;const k=lang==="en"?L:(I["vi_"+L]?"vi_"+L:L);return im(k,c,`Chữ cái ${L}`)};
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
@@ -22,7 +31,24 @@ let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
 const sayAs=(l,vi,en)=>{const o=ql;ql=l;say(vi,en);ql=o};
 const exLD=L=>{const v=exL(L,"vi"),e=exL(L,"en");return lang==="vi"?(v.length?v.slice(0,3):e.slice(0,2)):lang==="en"?e.slice(0,3):[...v.slice(0,2),...e.slice(0,2)]};
 const COUNT="apple,ball,star,flower,cat,dog,donut,egg,grape,orange,mango,frog,gift,sun,moon,tree".split(",");
-let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
+let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
+const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
+function toggleSoundMaster(){
+  const nxt=SOUND_ON()?"0":"1";
+  ls.set("sound_master",nxt);
+  if(!SOUND_ON()){
+    A.pause();
+    if(SS){try{SS.cancel()}catch(e){}}
+  } else {
+    sfxOk();
+    say("Đã bật âm thanh","Sound is on");
+  }
+  head();
+  if(cur==="parent")parent();
+}
+window.toggleSoundMaster=toggleSoundMaster;
+let currentTier=ls.get("ageTier",lvl===1?"preschool":(lvl===3?"grade3_5":"grade1_2"));
+function setAgeTier(tierId){if(typeof AGE_TIERS==="undefined"||!AGE_TIERS[tierId])tierId="preschool";currentTier=tierId;ls.set("ageTier",currentTier);if(tierId==="preschool")lvl=1;else if(tierId==="grade1_2")lvl=2;else if(tierId==="grade3_5")lvl=3;ls.set("lvl",lvl);home();if(typeof AGE_TIERS!=="undefined"){sayPrompt("tier_"+tierId,AGE_TIERS[tierId].nameVi+". "+AGE_TIERS[tierId].descVi,AGE_TIERS[tierId].nameEn,60000);}}window.setAgeTier=setAgeTier;
 function setLang(l){lang=l;ls.set("lang",l);ql=null;head();if(cur==="parent")parent();}window.setLang=setLang;
 const A=new Audio(),REC={},RECSZ={};let tok=0,sc=0,busy=false,busyEnd=0,lastSig="",dupN=0,vWait=false;
 const SS=window.speechSynthesis;
@@ -46,6 +72,11 @@ const getAudio=ak=>{
   ));
 };
 function say(vi,en){
+  if(!SOUND_ON()){
+    A.pause();
+    if(SS){try{SS.cancel()}catch(e){}}
+    return;
+  }
   const my=++tok;busy=true;
   A.pause();A.onended=null;A.onerror=null;
   if(SS){try{SS.cancel()}catch(e){}}
@@ -113,16 +144,68 @@ function kbc(crumbs,actionHtml=""){
   return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${backHtml}${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
 }
 
-const BADGES=[
+/* ========================================================
+   HỆ THỐNG ĐỘNG LỰC HỌC TẬP: STREAK, SAO & BỘ SƯU TẬP
+   ======================================================== */
+function getLocalDateStr(d = new Date()){
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function getDailyStreak(){
+  const count = parseInt(ls.get("kids_streak_count", "0"), 10) || 0;
+  const lastDate = ls.get("kids_streak_last_date", "");
+  return { count, lastDate };
+}
+
+function recordDailyActivity(){
+  const { count, lastDate } = getDailyStreak();
+  const today = getLocalDateStr();
+  if(lastDate === today){
+    return { count, updated: false };
+  }
+  
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = getLocalDateStr(yesterday);
+  
+  let newCount = 1;
+  if(lastDate === yesterdayStr){
+    newCount = count + 1;
+  }
+  
+  ls.set("kids_streak_count", newCount);
+  ls.set("kids_streak_last_date", today);
+  head();
+  return { count: newCount, updated: true };
+}
+
+const BADGES = [
   {id:"star5",name:"Bé Chăm Chỉ",en:"Diligent Star",icon:"⭐",desc:"Đạt 5 ngôi sao đầu tiên",enDesc:"Earn 5 stars",test:()=>stars>=5},
   {id:"star20",name:"Ngôi Sao Sáng",en:"Bright Star",icon:"🌟",desc:"Đạt 20 ngôi sao học tập",enDesc:"Earn 20 stars",test:()=>stars>=20},
   {id:"star50",name:"Vua Học Vui",en:"Learning King",icon:"👑",desc:"Chinh phục 50 ngôi sao",enDesc:"Earn 50 stars",test:()=>stars>=50},
+  {id:"star100",name:"Siêu Sao Vô Địch",en:"Super Champion",icon:"💎",desc:"Chinh phục 100 ngôi sao",enDesc:"Earn 100 stars",test:()=>stars>=100},
   {id:"let5",name:"Bác Học Chữ Cái",en:"Alphabet Master",icon:"🔤",desc:"Khám phá ít nhất 5 chữ cái",enDesc:"Explore 5 letters",test:()=>(ST.letCount||0)>=5},
   {id:"num5",name:"Siêu Sao Đếm Số",en:"Counting Champ",icon:"🔢",desc:"Khám phá các con số đến 10",enDesc:"Explore numbers",test:()=>(ST.numCount||0)>=5},
   {id:"trace3",name:"Bút Chì Vàng",en:"Golden Pencil",icon:"✍️",desc:"Tập viết chữ hoặc nét vẽ",enDesc:"Trace 3 letters/strokes",test:()=>(ST.traceCount||0)>=3},
   {id:"story2",name:"Mọt Sách Nhí",en:"Story Lover",icon:"📖",desc:"Nghe đọc truyện cổ tích",enDesc:"Listen to fairy tales",test:()=>(ST.storyCount||0)>=2},
   {id:"streak3",name:"Tay Đua Bất Bại",en:"Winning Streak",icon:"🚀",desc:"Đúng liên tiếp 3 câu hỏi",enDesc:"3 correct answers in a row",test:()=>(ST.maxStreak||0)>=3},
-  {id:"math5",name:"Thần Đồng Toán",en:"Math Prodigy",icon:"➕",desc:"Hoàn thành 5 phép tính",enDesc:"Solve 5 math problems",test:()=>(ST.mathCount||0)>=5}
+  {id:"math5",name:"Thần Đồng Toán",en:"Math Prodigy",icon:"➕",desc:"Hoàn thành 5 phép tính",enDesc:"Solve 5 math problems",test:()=>(ST.mathCount||0)>=5},
+  {id:"dayStreak3",name:"Chăm Chỉ 3 Ngày",en:"3-Day Streak",icon:"🔥",desc:"Học bài 3 ngày liên tiếp",enDesc:"Study 3 days in a row",test:()=>getDailyStreak().count>=3},
+  {id:"dayStreak7",name:"Kiên Trì 7 Ngày",en:"7-Day Streak",icon:"✨",desc:"Học bài 7 ngày liên tiếp",enDesc:"Study 7 days in a row",test:()=>getDailyStreak().count>=7}
+];
+
+const STICKERS = [
+  {id:"cat",name:"Mèo Mimi",en:"Mimi Kitty",icon:"🐱",desc:"Tặng bé ngày đầu tiên đến lớp",enDesc:"Welcome to learning",test:()=>true},
+  {id:"apple",name:"Táo Ngọt Ngào",en:"Sweet Apple",icon:"🍎",desc:"Đạt 5 ngôi sao đầu tiên",enDesc:"Earn 5 stars",test:()=>stars>=5},
+  {id:"rocket",name:"Phi Thuyền Nhí",en:"Space Rocket",icon:"🚀",desc:"Đạt chuỗi học 2 ngày liên tiếp",enDesc:"2-day streak",test:()=>getDailyStreak().count>=2},
+  {id:"rainbow",name:"Cầu Vồng Kì Diệu",en:"Magic Rainbow",icon:"🌈",desc:"Đạt 25 ngôi sao rực rỡ",enDesc:"Earn 25 stars",test:()=>stars>=25},
+  {id:"unicorn",name:"Kỳ Lân Mộng Mơ",en:"Dreamy Unicorn",icon:"🦄",desc:"Đạt chuỗi học 3 ngày liên tiếp",enDesc:"3-day streak",test:()=>getDailyStreak().count>=3},
+  {id:"lion",name:"Sư Tử Trí Tuệ",en:"Wise Lion",icon:"🦁",desc:"Chinh phục 50 ngôi sao",enDesc:"Earn 50 stars",test:()=>stars>=50},
+  {id:"icecream",name:"Kem Vui Vẻ",en:"Happy Ice Cream",icon:"🍦",desc:"Làm đúng 10 câu hỏi",enDesc:"Answer 10 questions",test:()=>(ST.f||0)>=10},
+  {id:"crown",name:"Vương Miện Nhí",en:"Kid's Crown",icon:"👑",desc:"Đạt chuỗi học 5 ngày liên tiếp",enDesc:"5-day streak",test:()=>getDailyStreak().count>=5}
 ];
 
 function getUnlockedBadges(){
@@ -168,17 +251,64 @@ function getCurrentLevel(){
   return LEVELS[0];
 }
 
-function showBadges(){
+let currentAchieveTab = "badges";
+function showBadges(tab = currentAchieveTab){
+  currentAchieveTab = tab;
   const curLv=getCurrentLevel();
   const nextLv=LEVELS.find(l=>l.lv===curLv.lv+1);
   const curMin=curLv.min;
   const nextMin=nextLv?nextLv.min:curLv.max;
   const span=Math.max(1,nextMin-curMin);
   const progress=nextLv?Math.min(100,Math.round(((stars-curMin)/span)*100)):100;
-  const unlocked=new Set(getUnlockedBadges());
+  const unlockedBadges=new Set(getUnlockedBadges());
+  const dailyStreak=getDailyStreak();
 
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Huy hiệu & Thành tích","Badges & Progress"),i:"🏆"}])}
-  <h2>🏆 ${T("Huy hiệu & Cấp độ của bé","Badges & Progress")}</h2>
+  const tabButtonsHtml = `
+    <div class="sticker-tabs">
+      <button class="sticker-tab-btn ${tab === 'badges' ? 'on' : ''}" onclick="showBadges('badges')">
+        🏆 ${T("Huy hiệu học tập", "Milestone Badges")} (${unlockedBadges.size}/${BADGES.length})
+      </button>
+      <button class="sticker-tab-btn ${tab === 'stickers' ? 'on' : ''}" onclick="showBadges('stickers')">
+        ✨ ${T("Bộ sưu tập Sticker", "Sticker Book")} (${STICKERS.filter(s => s.test()).length}/${STICKERS.length})
+      </button>
+    </div>
+  `;
+
+  let contentHtml = "";
+  if(tab === "badges"){
+    contentHtml = `
+      <div class="badge-grid">
+        ${BADGES.map(b=>{
+          const isUn=unlockedBadges.has(b.id);
+          return `<div class="badge-card ${isUn?"unlocked":"locked"}" onclick="say('${b.name}','${b.en}')">
+            <div class="badge-card-icon">${b.icon}</div>
+            <div class="badge-card-title">${lang==="vi"?b.name:b.en}</div>
+            <div class="badge-card-desc">${lang==="vi"?b.desc:b.enDesc}</div>
+            <div class="badge-card-status ${isUn?"unlocked":"locked"}">${isUn?"✔ "+T("Đã đạt","Earned"):"🔒 "+T("Đang khóa","Locked")}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    `;
+  } else {
+    contentHtml = `
+      <div class="sticker-grid">
+        ${STICKERS.map(s=>{
+          const isUn=s.test();
+          return `<div class="sticker-card ${isUn?"unlocked":"locked"}" onclick="window.__clickSticker('${s.id}')">
+            <div class="sticker-emoji">${s.icon}</div>
+            <div class="sticker-title">${lang==="vi"?s.name:s.en}</div>
+            <div class="sticker-badge ${isUn?"unlocked":"locked"}">
+              ${isUn?"✔ "+T("Đã dán","Collected"):"🔒 "+T("Khóa","Locked")}
+            </div>
+            <div class="badge-card-desc" style="font-size:11px;margin-top:2px">${lang==="vi"?s.desc:s.enDesc}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Thành tích của bé","Kid's Achievements"),i:"🏆"}])}
+  <h2>🏆 ${T("Thành tích & Phần thưởng của bé","Kid's Achievements & Rewards")}</h2>
   <div class="star-progress-wrap">
     <div class="star-progress-head">
       <span>${lang==="vi"?curLv.title:curLv.en}</span>
@@ -187,29 +317,69 @@ function showBadges(){
     <div class="star-progress-bar">
       <div class="star-progress-fill" style="width:${progress}%"></div>
     </div>
-    <small style="font-size:15px;opacity:.85;margin-top:4px">
-      ${nextLv?(lang==="vi"?`Bé cần thêm ${nextMin-stars} ⭐ để đạt ${nextLv.title}`:`Need ${nextMin-stars} more ⭐ to reach ${nextLv.en}`):(lang==="vi"?"Bé đã đạt cấp độ cao nhất! Tuyệt vời!":"Maximum level reached! Fantastic!")}
-    </small>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-top:6px">
+      <small style="font-size:15px;opacity:.9">
+        ${nextLv?(lang==="vi"?`Cần thêm ${nextMin-stars} ⭐ để lên cấp ${nextLv.title}`:`Need ${nextMin-stars} more ⭐ for ${nextLv.en}`):(lang==="vi"?"Đã đạt cấp độ cao nhất! Tuyệt vời!":"Maximum level reached!")}
+      </small>
+      <span class="streak-btn" style="pointer-events:none">
+        🔥 ${T(`Chuỗi học: ${dailyStreak.count} ngày`, `Streak: ${dailyStreak.count} days`)}
+      </span>
+    </div>
   </div>
-  <div class="badge-grid">
-    ${BADGES.map(b=>{
-      const isUn=unlocked.has(b.id);
-      return `<div class="badge-card ${isUn?"unlocked":"locked"}">
-        <div class="badge-card-icon">${b.icon}</div>
-        <div class="badge-card-title">${lang==="vi"?b.name:b.en}</div>
-        <div class="badge-card-desc">${lang==="vi"?b.desc:b.enDesc}</div>
-        <div class="badge-card-status ${isUn?"unlocked":"locked"}">${isUn?"✔ "+T("Đã đạt","Earned"):"🔒 "+T("Đang khóa","Locked")}</div>
-      </div>`;
-    }).join("")}
-  </div>
-  <div class="row" style="justify-content:center;margin:16px 0">
-    <button class="pill on" onclick="goBack()" style="font-size:18px;padding:8px 26px">✔ ${T("Quay lại","Back")}</button>
+  ${tabButtonsHtml}
+  ${contentHtml}
+  <div class="row" style="justify-content:center;margin:18px 0">
+    <button class="pill on" onclick="goBack()" style="font-size:18px;padding:8px 26px;min-height:56px">✔ ${T("Quay lại","Back")}</button>
   </div>`;
-  sayPrompt("badges","Đây là các huy hiệu và thành tích của bé","Here are your badges and progress",180000);
+  sayPrompt("badges","Đây là các huy hiệu và bộ sưu tập của bé","Here are your achievements and rewards",180000);
 }
 window.showBadges=showBadges;
 
+window.__clickSticker = function(id){
+  const s = STICKERS.find(x => x.id === id);
+  if(!s) return;
+  if(s.test()){
+    sfxOk();
+    say(`Sticker ${s.name}! Đã mở khóa!`, `Sticker ${s.en}! Unlocked!`);
+  } else {
+    say(`Sticker ${s.name}: ${s.desc}`, `Sticker ${s.en}: ${s.enDesc}`);
+  }
+};
+
+function isConfettiDisabled(){
+  return ls.get("kids_confetti_disabled", "0") === "1";
+}
+
+function toggleConfettiFx(e){
+  if(e) e.stopPropagation();
+  const next = !isConfettiDisabled();
+  ls.set("kids_confetti_disabled", next ? "1" : "0");
+  updateConfettiBtnText();
+  if(next){
+    const cv = document.getElementById("confettiCv");
+    if(cv){
+      const ctx = cv.getContext("2d");
+      ctx.clearRect(0, 0, cv.width, cv.height);
+    }
+  } else {
+    runConfetti();
+  }
+}
+window.toggleConfettiFx = toggleConfettiFx;
+
+function updateConfettiBtnText(){
+  const btn = document.getElementById("celebFxToggle");
+  if(btn){
+    const dis = isConfettiDisabled();
+    btn.textContent = lang === "vi" 
+      ? (dis ? "🎊 Hiệu ứng pháo hoa: TẮT" : "🎊 Hiệu ứng pháo hoa: BẬT")
+      : (dis ? "🎊 Confetti: OFF" : "🎊 Confetti: ON");
+    btn.style.opacity = dis ? "0.6" : "1";
+  }
+}
+
 function runConfetti(){
+  if(isConfettiDisabled() || rmOn()) return;
   const cv=document.getElementById("confettiCv");
   if(!cv)return;
   const ctx=cv.getContext("2d");
@@ -259,6 +429,7 @@ function triggerCelebration(title,desc,icon="🎉",starsCount="⭐⭐⭐",cb=nul
   document.getElementById("celebDesc").textContent=desc;
   document.getElementById("celebIcon").textContent=icon;
   document.getElementById("celebStars").textContent=starsCount;
+  updateConfettiBtnText();
   el.style.display="flex";
   sfxFanfare();
   catSet("celebrate");
@@ -297,6 +468,17 @@ function head(){
     const unlocked=getUnlockedBadges();
     bc.textContent=unlocked.length;
   }
+  const scEl=document.getElementById("streakCount");
+  if(scEl){
+    scEl.textContent=getDailyStreak().count;
+  }
+  const sndBtn=document.getElementById("soundBtn");
+  if(sndBtn){
+    const on=SOUND_ON();
+    sndBtn.textContent=on?"🔊":"🔇";
+    sndBtn.setAttribute("aria-label",on?(lang==="vi"?"Âm thanh đang bật, bấm để tắt":"Sound is on, tap to mute"):(lang==="vi"?"Âm thanh đang tắt, bấm để bật":"Sound is muted, tap to unmute"));
+    sndBtn.classList.toggle("muted",!on);
+  }
 }
 function toggleLang(){const next=lang==="vi"?"en":"vi";setLang(next);if(typeof cur!=="undefined"&&cur)go(cur);}
 window.toggleLang=toggleLang;
@@ -314,13 +496,177 @@ function sayPrompt(key,vi,en,cd=180000){
   promptCooldown[key]=now;
   say(vi,en);
 }
+/* ========================================================
+   ERROR BOUNDARY & SAFE RENDERING
+   ======================================================== */
+window.addEventListener("error", function(e){
+  console.error("Global Error Caught:", e.message, e.filename, e.lineno);
+  recordAppError(e.message, `${e.filename}:${e.lineno}`);
+});
+
+window.addEventListener("unhandledrejection", function(e){
+  console.error("Unhandled Promise Rejection:", e.reason);
+  recordAppError(String(e.reason && e.reason.message ? e.reason.message : e.reason), "Promise");
+});
+
+function recordAppError(msg, src){
+  try {
+    const errs = JSON.parse(ls.get("bhv_errors", "[]")) || [];
+    errs.push({ msg, src, t: new Date().toLocaleTimeString() });
+    if(errs.length > 10) errs.shift();
+    ls.set("bhv_errors", JSON.stringify(errs));
+  } catch(e){}
+}
+
+function renderErrorBoundary(errorMsg = ""){
+  const m = document.getElementById("m");
+  if(!m) return;
+  m.innerHTML = `
+    <div class="act-player-box" style="margin-top:24px;border-color:#f59e0b">
+      <div style="font-size:56px;line-height:1;margin:8px 0">🐱💭</div>
+      <h2 style="color:#d97706;margin:6px 0">${T("Ôi, có một chút nhầm lẫn nhỏ!","Oops, a little hiccup!")}</h2>
+      <p style="font-size:16px;color:#334155;line-height:1.5;margin:8px auto 18px;max-width:440px">
+        ${T("Mèo con và ứng dụng vừa gặp sự cố nhỏ. Bé đừng lo nhé, mình cùng quay về trang chủ để tiếp tục vui chơi nào!","The app had a small hiccup. Don't worry, let's head home!")}
+      </p>
+      ${errorMsg ? `<div style="font-size:12px;color:#94a3b8;margin-bottom:14px;word-break:break-all">Chi tiết: ${esc(errorMsg)}</div>` : ""}
+      <div class="act-ctrl-row">
+        <button class="pill on" onclick="go('home')" style="font-size:18px;font-weight:800;padding:10px 24px">
+          🏠 ${T("Về trang chủ","Go Home")}
+        </button>
+        <button class="pill" onclick="location.reload()" style="font-size:16px;padding:8px 18px">
+          🔄 ${T("Tải lại trang","Reload")}
+        </button>
+      </div>
+    </div>
+  `;
+  say("Ôi, có sự cố nhỏ. Mình cùng về trang chủ nhé","Let's go home!");
+}
+window.renderErrorBoundary = renderErrorBoundary;
+
+/* ========================================================
+   ANONYMOUS EVENT TRACKING (ANALYTICS)
+   - COPPA & GDPR-K compliant: anonymous, no PII.
+   ======================================================== */
+const Analytics = {
+  MAX_EVENTS: 60,
+  activeSession: null,
+
+  getEvents(){
+    try {
+      return JSON.parse(ls.get("bhv_events", "[]")) || [];
+    } catch(e) { return []; }
+  },
+
+  getStats(){
+    try {
+      return JSON.parse(ls.get("bhv_act_stats", "{}")) || {};
+    } catch(e) { return {}; }
+  },
+
+  track(name, data = {}){
+    try {
+      const events = this.getEvents();
+      const ev = { event: name, t: Date.now(), d: data };
+      events.push(ev);
+      if(events.length > this.MAX_EVENTS) events.shift();
+      ls.set("bhv_events", JSON.stringify(events));
+      this.updateAggregates(name, data);
+    } catch(e){}
+  },
+
+  updateAggregates(name, data){
+    try {
+      const agg = this.getStats();
+      const actId = data.actId || (this.activeSession && this.activeSession.actId);
+      if(!actId) return;
+      agg[actId] = agg[actId] || { starts: 0, completes: 0, abandons: 0, title: data.title || actId };
+      if(name === "activity_start") agg[actId].starts = (agg[actId].starts || 0) + 1;
+      if(name === "activity_complete") agg[actId].completes = (agg[actId].completes || 0) + 1;
+      if(name === "activity_abandon") agg[actId].abandons = (agg[actId].abandons || 0) + 1;
+      ls.set("bhv_act_stats", JSON.stringify(agg));
+    } catch(e){}
+  },
+
+  startActivity(act){
+    this.checkAndRecordAbandon("new_activity");
+    this.activeSession = {
+      actId: act.id,
+      title: act.title,
+      tier: act.ageTier,
+      subject: act.subject,
+      startTime: Date.now(),
+      attempts: 0,
+      completed: false
+    };
+    this.track("activity_start", {
+      actId: act.id,
+      title: act.title,
+      tier: act.ageTier,
+      subject: act.subject
+    });
+  },
+
+  answerActivity(isCorrect, chosenId){
+    if(!this.activeSession) return;
+    this.activeSession.attempts++;
+    this.track("activity_answer", {
+      actId: this.activeSession.actId,
+      attempt: this.activeSession.attempts,
+      isCorrect,
+      chosenId,
+      durationMs: Date.now() - this.activeSession.startTime
+    });
+  },
+
+  completeActivity(starsEarned){
+    if(!this.activeSession) return;
+    this.activeSession.completed = true;
+    this.track("activity_complete", {
+      actId: this.activeSession.actId,
+      title: this.activeSession.title,
+      stars: starsEarned,
+      totalAttempts: this.activeSession.attempts,
+      durationMs: Date.now() - this.activeSession.startTime
+    });
+    this.activeSession = null;
+  },
+
+  checkAndRecordAbandon(reason = "navigation"){
+    if(this.activeSession && !this.activeSession.completed){
+      const duration = Date.now() - this.activeSession.startTime;
+      if(duration >= 3500){
+        this.track("activity_abandon", {
+          actId: this.activeSession.actId,
+          title: this.activeSession.title,
+          attemptsBeforeAbandon: this.activeSession.attempts,
+          durationMs: duration,
+          reason
+        });
+      }
+      this.activeSession = null;
+    }
+  }
+};
+window.Analytics = Analytics;
+
+window.addEventListener("pagehide", () => Analytics.checkAndRecordAbandon("pagehide"));
+window.addEventListener("beforeunload", () => Analytics.checkAndRecordAbandon("beforeunload"));
+
 function show(s,a,isBack=false){
+  if(cur==="playActivity" && s!=="playActivity"){
+    Analytics.checkAndRecordAbandon("nav_" + s);
+  }
   if(!V[s])s="home";
   cur=s;ql=null;tok++;sc++;busy=false;lastSig="";dupN=0;
   A.pause();if(SS)SS.cancel();
   if(GM.test(s))rd={n:0,f:0,st:0};
   isBackNav=!!isBack;
-  V[s](a);
+  try {
+    V[s](a);
+  } catch(err){
+    console.error("View render error:", err);
+    renderErrorBoundary(err.message);
+  }
   isBackNav=false;
   if(!GM.test(s))catSet("idle");
   cat.style.display=s==="parent"||s==="rec"?"none":"";
@@ -404,8 +750,566 @@ function pwaGuide(){
     <div class="note ok" style="max-width:540px;margin:12px auto;text-align:left">${guideHtml}</div>
     <div class="row" style="justify-content:center;margin-top:14px"><button class="pill" onclick="go('home')">✔ ${T("Đã hiểu","Got it")}</button></div>`;
 }
-function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
-function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}</p>`;sayPrompt("home","Chào bé! Mình cùng học nhé","Hello! Let's learn together",300000)}
+function card(f,vis,vi,en,subject="default"){
+  const cls = subject !== "default" ? `card card-${subject}` : "card";
+  return`<button class="${cls}" onclick="go('${f}')"><div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
+}
+function home(){
+  const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : {
+    id: "preschool", nameVi: "Tiền tiểu học", nameEn: "Preschool", ageVi: "4–6 tuổi", ageEn: "Ages 4–6", badge: "🐣", descVi: "Chữ cái, Học số & Đếm hình", descEn: "Letters, Numbers & Counting"
+  };
+
+  const tierSelectorHtml = `
+    <div class="tier-selector-wrap">
+      <div class="tier-tabs">
+        ${(typeof AGE_TIERS !== "undefined" ? Object.values(AGE_TIERS) : []).map(t => `
+          <button class="tier-tab ${t.id === currentTier ? "on" : ""}" onclick="setAgeTier('${t.id}')">
+            <span class="tier-tab-badge">${t.badge}</span>
+            <span class="tier-tab-title">${T(t.nameVi, t.nameEn)}</span>
+            <span class="tier-tab-sub">${T(t.ageVi, t.ageEn)}</span>
+          </button>
+        `).join("")}
+      </div>
+      <div class="tier-info-banner">
+        <span>${tInfo.badge}</span>
+        <span>${T(tInfo.descVi, tInfo.descEn)}</span>
+      </div>
+    </div>
+  `;
+
+  let cardsHtml = "";
+  if(currentTier === "preschool"){
+    cardsHtml = `
+      ${card("letL", imL("A")+imL("B"), "Chữ cái", "Letters", "vietnamese")}
+      ${card("numL", "<b>1 2 3</b>", "Học số", "Numbers", "math")}
+      ${card("countGame", "<b>🍎 3 ⭐</b>", "Đếm hình chọn số", "Count & Match", "game")}
+      ${card("readL", "<b>ĐỌC</b>", "Đánh vần & Đọc", "Reading", "reading")}
+      ${card("tierActivities", "<b>🎯 BÀI TẬP</b>", "Bài tập mầm non", "Preschool Tasks", "logic")}
+      ${card("storyL", "<b>📖✨</b>", "Truyện cổ tích", "Stories", "reading")}
+      ${card("games", im("kite")+im("rocket"), "Trò chơi", "Games", "game")}
+    `;
+  } else if(currentTier === "grade1_2"){
+    cardsHtml = `
+      ${card("tierActivities", "<b>🎯 BÀI HỌC</b>", "Bài tập Lớp 1-2", "Grade 1-2 Lessons", "logic")}
+      ${card("math10", "<b>8 + 7</b>", "Toán 20 - 100", "Math 20 - 100", "math")}
+      ${card("tierActWord", "<b>GHÉP TỪ</b>", "Ghép vần & Từ", "Word Phonics", "vietnamese")}
+      ${card("cmpS", "<b>&gt; = &lt;</b>", "Dấu so sánh", "Signs", "math")}
+      ${card("trace", im("pencil")+"<b>Aa1</b>", "Luyện chữ đẹp", "Handwriting", "trace")}
+      ${card("storyL", "<b>📖✨</b>", "Đọc truyện", "Stories", "reading")}
+      ${card("games", im("kite")+im("rocket"), "Trò chơi", "Games", "game")}
+    `;
+  } else {
+    cardsHtml = `
+      ${card("tierActivities", "<b>🎯 BÀI HỌC</b>", "Bài tập Lớp 3-5", "Grade 3-5 Lessons", "logic")}
+      ${card("tierActMath", "<b>7 × 8</b>", "Nhân chia & Phân số", "Multiply & Fractions", "math")}
+      ${card("tierActRead", "<b>📖 ĐỌC HIỂU</b>", "Đọc hiểu văn bản", "Reading Comprehension", "reading")}
+      ${card("cmpS", "<b>&gt; = &lt;</b>", "Toán so sánh", "Signs", "math")}
+      ${card("storyL", "<b>📖✨</b>", "Truyện & Bài học", "Stories & Morals", "reading")}
+      ${card("games", im("kite")+im("rocket"), "Trò chơi trí tuệ", "Logic Games", "game")}
+    `;
+  }
+
+  m.innerHTML = `
+    <div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div>
+    ${tierSelectorHtml}
+    <div class="cards">${cardsHtml}</div>
+    <p style="margin-top:16px">
+      <button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>
+      ${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}
+    </p>
+  `;
+  sayPrompt("home","Chào bé! Mình cùng học nhé","Hello! Let's learn together",300000);
+}
+
+/* ========================================================
+   QUẢN LÝ BÀI TẬP PHÂN TẦNG (TIER ACTIVITIES & PLAYER)
+   ======================================================== */
+function tierActivities(filterSubject){
+  const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : { nameVi: "Bài học", nameEn: "Activities", badge: "🎯" };
+  const allActs = typeof getActivitiesByTier === "function" ? getActivitiesByTier(currentTier) : [];
+  const acts = (filterSubject && filterSubject !== "all") ? allActs.filter(a => a.subject === filterSubject) : allActs;
+
+  const subjectBadges = {
+    math: { vi: "Toán học", en: "Math", icon: "📐", cls: "math" },
+    vietnamese: { vi: "Tiếng Việt", en: "Vietnamese", icon: "🔤", cls: "vietnamese" },
+    reading: { vi: "Đọc hiểu", en: "Reading", icon: "📖", cls: "reading" },
+    english: { vi: "Tiếng Anh", en: "English", icon: "🇬🇧", cls: "english" },
+    logic: { vi: "Tư duy", en: "Logic", icon: "💡", cls: "logic" }
+  };
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {t:T(tInfo.nameVi, tInfo.nameEn), i:tInfo.badge || "🎒"}
+  ]);
+
+  const cardsHtml = acts.length ? acts.map(act => {
+    const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
+    return `
+      <div class="act-card" onclick="go('playActivity', '${act.id}')">
+        <div class="act-card-icon">${sInfo.icon}</div>
+        <div class="act-card-body">
+          <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
+          <div class="act-card-skill">🎯 ${act.skill}</div>
+          <div class="act-card-meta">
+            <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
+            <span class="act-badge reward">⭐ +${act.reward.stars} sao</span>
+            <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(act.difficulty).fill("★").join("")}</span>
+          </div>
+        </div>
+        <div style="font-size:24px;color:var(--acc)">➔</div>
+      </div>
+    `;
+  }).join("") : `<div class="note">${T("Chưa có bài học nào trong mục này.", "No activities in this category.")}</div>`;
+
+  const filters = [
+    { id: "all", vi: "Tất cả", en: "All" },
+    { id: "math", vi: "Toán học 📐", en: "Math" },
+    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
+    { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
+    { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
+    { id: "logic", vi: "Tư duy 💡", en: "Logic" }
+  ];
+
+  m.innerHTML = `
+    ${bcHtml}
+    <h2>${tInfo.badge} ${T("Bài học " + tInfo.nameVi, tInfo.nameEn + " Activities")}</h2>
+    <div class="chips" style="margin-bottom:12px">
+      ${filters.map(f => `
+        <button class="pill ${(!filterSubject && f.id === "all") || filterSubject === f.id ? "on" : ""}" onclick="tierActivities('${f.id}')">
+          ${T(f.vi, f.en)}
+        </button>
+      `).join("")}
+    </div>
+    <div class="act-list-wrap">
+      ${cardsHtml}
+    </div>
+  `;
+}
+
+function tierActMath(){ tierActivities("math"); }
+function tierActWord(){ tierActivities("vietnamese"); }
+function tierActRead(){ tierActivities("reading"); }
+
+let currentPlayingAct = null;
+let actAnswered = false;
+let currentActAttempts = 0;
+
+function __completeActSuccess(act, earnedStars){
+  actAnswered = true;
+  if(window.Analytics) Analytics.completeActivity(earnedStars);
+  stars += earnedStars;
+  ls.set("stars", stars);
+
+  recordDailyActivity();
+  ST.n = (ST.n || 0) + 1;
+  if(currentActAttempts === 0) ST.f = (ST.f || 0) + 1;
+  if(act.subject === "math") ST.mathCount = (ST.mathCount || 0) + 1;
+  else if(act.subject === "vietnamese") ST.letCount = (ST.letCount || 0) + 1;
+  else if(act.subject === "reading") ST.storyCount = (ST.storyCount || 0) + 1;
+  else if(act.subject === "english") ST.engCount = (ST.engCount || 0) + 1;
+
+  if(act.skill){
+    ST.skills = ST.skills || {};
+    ST.skills[act.skill] = (ST.skills[act.skill] || 0) + 1;
+  }
+  svS();
+
+  head();
+  checkBadges();
+
+  sfxOk();
+  fx();
+  catSet("celebrate");
+
+  const starIcons = Array(earnedStars).fill("⭐").join("");
+  const fbDiv = document.getElementById("actFeedback");
+  const ctrlsDiv = document.getElementById("actCtrls");
+
+  if(fbDiv){
+    fbDiv.className = "act-feedback-card good";
+    fbDiv.innerHTML = `🎉 <b>${T(`Chính xác! Thưởng bé ${starIcons} (+${earnedStars} sao)!`, `Correct! You earned ${starIcons} (+${earnedStars} stars)!`)}</b><br>${T(act.feedback.correct, act.feedback.correct)}`;
+  }
+  if(ctrlsDiv){
+    ctrlsDiv.style.display = "flex";
+  }
+  say(`Chính xác! Thưởng bé ${earnedStars} sao! ` + act.feedback.correct, `Correct! You earned ${earnedStars} stars!`);
+}
+
+function playActivity(actId){
+  const act = typeof getActivityById === "function" ? getActivityById(actId) : null;
+  if(!act){
+    tierActivities();
+    return;
+  }
+  currentPlayingAct = act;
+  actAnswered = false;
+  currentActAttempts = 0;
+  if(window.Analytics) Analytics.startActivity(act);
+
+  const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[act.ageTier]) ? AGE_TIERS[act.ageTier] : { nameVi: "Bài học", nameEn: "Activities", badge: "🎯" };
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"tierActivities", t:T(tInfo.nameVi, tInfo.nameEn), i:tInfo.badge || "🎒"},
+    {t:T(act.title, act.titleEn || act.title), i:"✨"}
+  ]);
+
+  const mediaHtml = act.content.media ? `
+    <div class="act-media">${act.content.media}</div>
+  ` : "";
+
+  const escSay = s => String(s||"").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+  let bodyHtml = "";
+
+  if(act.type === "reading_passage"){
+    const storyBoxHtml = act.content.storyText ? `
+      <div class="act-story-box">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <b>📖 ${T("Đoạn văn ngắn:","Short passage:")}</b>
+          <button class="pill" style="font-size:13px;padding:4px 10px;min-height:36px;min-width:auto" onclick="say('${escSay(act.content.storyText)}', '${escSay(act.content.storyText)}')" aria-label="${T("Nghe đọc đoạn văn","Listen to passage")}">🔊 ${T("Nghe đọc","Listen")}</button>
+        </div>
+        ${act.content.storyText}
+      </div>
+    ` : "";
+    const optsHtml = (act.options || []).map((opt, idx) => `
+      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
+        <span class="act-opt-bullet">${idx + 1}</span>
+        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </button>
+    `).join("");
+    bodyHtml = `
+      ${storyBoxHtml}
+      ${mediaHtml}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      </div>
+      <div class="act-options">${optsHtml}</div>
+    `;
+  } else if(act.type === "fill_blank"){
+    const templateStr = act.content.template || "___";
+    const blankHtml = templateStr.replace(/\[\s*\?\s*\]/g, `<span class="act-blank-slot" id="actBlankSlot">?</span>`);
+    const optsHtml = (act.options || []).map((opt, idx) => `
+      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChooseBlank('${opt.id}', '${esc(opt.text)}', this)" aria-label="${opt.text}">
+        <span class="act-opt-bullet">${idx + 1}</span>
+        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </button>
+    `).join("");
+    bodyHtml = `
+      ${mediaHtml}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      </div>
+      <div class="act-blank-box">${blankHtml}</div>
+      <div class="act-options">${optsHtml}</div>
+    `;
+  } else if(act.type === "matching"){
+    const pairs = act.content.pairs || [];
+    window.__matchState = { selLeft: null, matchedIds: new Set(), total: pairs.length };
+    const leftPairs = pairs;
+    const rightPairs = shuf([...pairs]);
+    bodyHtml = `
+      ${mediaHtml}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      </div>
+      <div style="font-size:13px;color:#334155;font-weight:700;margin-bottom:8px">👆 ${T("Chạm 1 ô bên trái rồi chạm ô tương ứng bên phải nhé:","Tap an item on the left, then tap its match on the right:")}</div>
+      <div class="act-match-grid">
+        <div class="act-match-col">
+          ${leftPairs.map(p => `<button class="act-match-btn" id="match-l-${p.id}" onclick="window.__matchTapLeft('${p.id}', this)" aria-label="${p.left}">${p.left}</button>`).join("")}
+        </div>
+        <div class="act-match-col">
+          ${rightPairs.map(p => `<button class="act-match-btn" id="match-r-${p.id}" onclick="window.__matchTapRight('${p.id}', this)" aria-label="${p.right}">${p.right}</button>`).join("")}
+        </div>
+      </div>
+    `;
+  } else if(act.type === "drag_drop"){
+    const seq = act.content.correctSequence || [];
+    const slotsCount = act.content.slots || seq.length;
+    const tokens = act.content.tokens || [];
+    window.__sortState = { slotted: Array(slotsCount).fill(null), tokens, sequence: seq };
+    const slotsHtml = Array(slotsCount).fill(0).map((_, idx) => `
+      <button class="act-slot" id="sort-slot-${idx}" onclick="window.__slotTap(${idx})" title="${T("Chạm để gỡ ra","Tap to remove")}" aria-label="${T("Ô số " + (idx+1), "Slot " + (idx+1))}">___</button>
+    `).join("");
+    const tokensHtml = tokens.map(tok => `
+      <button class="act-token-btn" id="token-btn-${tok.id}" onclick="window.__tokenTap('${tok.id}', '${esc(tok.text)}')">${tok.text}</button>
+    `).join("");
+    bodyHtml = `
+      ${mediaHtml}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      </div>
+      <div style="font-size:13.5px;color:#334155;font-weight:700;margin-bottom:6px">👆 ${T("Chạm vào từ/số bên dưới để đưa lên ô trống, chạm vào ô để gỡ ra:","Tap token below to place in slot, tap slot to remove:")}</div>
+      <div class="act-sort-slots" id="actSortSlots">${slotsHtml}</div>
+      <div class="act-sort-tray" id="actSortTray">${tokensHtml}</div>
+      <div style="text-align:center;margin-top:6px">
+        <button class="pill" onclick="window.__resetSort()" style="font-size:14px;padding:6px 14px;min-height:42px">🔄 ${T("Xếp lại từ đầu","Reset")}</button>
+      </div>
+    `;
+  } else {
+    // Standard image_quiz / quiz
+    const optsHtml = (act.options || []).map((opt, idx) => `
+      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
+        <span class="act-opt-bullet">${idx + 1}</span>
+        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </button>
+    `).join("");
+    bodyHtml = `
+      ${mediaHtml}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      </div>
+      <div class="act-options">${optsHtml}</div>
+    `;
+  }
+
+  m.innerHTML = `
+    ${bcHtml}
+    <div class="act-player-box">
+      <div class="act-meta-row">
+        <span>🎯 ${act.skill}</span>
+        <button class="pill act-read-all-btn" onclick="window.__readActAloud()" aria-label="${T("Đọc to toàn bộ câu hỏi và đáp án","Read question and options aloud")}">🔊 ${T("Đọc to cả bài","Read all aloud")}</button>
+      </div>
+      ${bodyHtml}
+      <div id="actFeedback"></div>
+      <div class="act-ctrl-row" id="actCtrls" style="display:none">
+        <button class="cg-btn-replay" onclick="window.__nextAct()">
+          ${T("Bài tiếp theo ➡️", "Next Lesson ➡️")}
+        </button>
+        <button class="cg-btn-back" onclick="go('tierActivities')">
+          🔙 ${T("Quay lại danh mục", "Back to Lessons")}
+        </button>
+      </div>
+    </div>
+  `;
+
+  say(act.content.question, act.content.questionEn || act.content.question);
+  catSet("thinking");
+}
+
+window.__readActAloud = function(){
+  if(!currentPlayingAct) return;
+  const act = currentPlayingAct;
+  let qVi = act.content.question;
+  let qEn = act.content.questionEn || act.content.question;
+  if(act.content.storyText){
+    qVi = act.content.storyText + ". " + qVi;
+    qEn = act.content.storyText + ". " + qEn;
+  }
+  if(act.options && act.options.length){
+    const optsVi = act.options.map((o, i) => `Đáp án ${i+1}: ${o.text}`).join(". ");
+    const optsEn = act.options.map((o, i) => `Option ${i+1}: ${o.textEn || o.text}`).join(". ");
+    qVi += ". " + optsVi;
+    qEn += ". " + optsEn;
+  }
+  say(qVi, qEn);
+};
+
+window.__actChoose = function(chosenId, btn){
+  if(actAnswered || !currentPlayingAct) return;
+  const act = currentPlayingAct;
+  const isRight = String(chosenId) === String(act.correctAnswer);
+  if(window.Analytics) Analytics.answerActivity(isRight, chosenId);
+  const fbDiv = document.getElementById("actFeedback");
+
+  if(isRight){
+    btn.classList.add("good");
+    const sp = btn.querySelector("span");
+    if(sp) sp.textContent = "✔";
+    const earnedStars = currentActAttempts === 0 ? 3 : (currentActAttempts === 1 ? 2 : 1);
+    __completeActSuccess(act, earnedStars);
+  } else {
+    currentActAttempts++;
+    btn.classList.add("bad");
+    const sp = btn.querySelector("span");
+    if(sp) sp.textContent = "✖";
+    btn.disabled = true;
+    sfxNo();
+    catSet("sad");
+    if(fbDiv){
+      fbDiv.className = "act-feedback-card bad";
+      fbDiv.innerHTML = `💡 <b>${T("Chưa chính xác!", "Not quite!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}`;
+    }
+    say(act.feedback.wrong, act.feedback.wrong);
+    setTimeout(() => { catSet("thinking"); }, 900);
+  }
+};
+
+window.__actChooseBlank = function(chosenId, optText, btn){
+  if(actAnswered || !currentPlayingAct) return;
+  const act = currentPlayingAct;
+  const isRight = String(chosenId) === String(act.correctAnswer);
+  if(window.Analytics) Analytics.answerActivity(isRight, chosenId);
+  const slot = document.getElementById("actBlankSlot");
+  const fbDiv = document.getElementById("actFeedback");
+
+  if(isRight){
+    if(slot){ slot.textContent = optText; slot.className = "act-blank-slot good"; }
+    btn.classList.add("good");
+    const sp = btn.querySelector("span");
+    if(sp) sp.textContent = "✔";
+    const earnedStars = currentActAttempts === 0 ? 3 : (currentActAttempts === 1 ? 2 : 1);
+    __completeActSuccess(act, earnedStars);
+  } else {
+    currentActAttempts++;
+    if(slot){
+      slot.textContent = optText;
+      slot.className = "act-blank-slot bad";
+      setTimeout(() => { if(!actAnswered){ slot.textContent = "?"; slot.className = "act-blank-slot"; } }, 800);
+    }
+    btn.classList.add("bad");
+    const sp = btn.querySelector("span");
+    if(sp) sp.textContent = "✖";
+    btn.disabled = true;
+    sfxNo();
+    catSet("sad");
+    if(fbDiv){
+      fbDiv.className = "act-feedback-card bad";
+      fbDiv.innerHTML = `💡 <b>${T("Chưa chính xác!", "Not quite!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}`;
+    }
+    say(act.feedback.wrong, act.feedback.wrong);
+    setTimeout(() => { catSet("thinking"); }, 900);
+  }
+};
+
+window.__matchTapLeft = function(pairId, btn){
+  if(actAnswered || !currentPlayingAct || !window.__matchState) return;
+  if(window.__matchState.matchedIds.has(pairId)) return;
+  window.__matchState.selLeft = pairId;
+  document.querySelectorAll(".act-match-col:first-child .act-match-btn").forEach(b => {
+    if(!b.classList.contains("matched")) b.classList.remove("sel");
+  });
+  btn.classList.add("sel");
+  const p = (currentPlayingAct.content.pairs || []).find(x => x.id === pairId);
+  if(p) say(p.left, p.left);
+};
+
+window.__matchTapRight = function(pairId, btn){
+  if(actAnswered || !currentPlayingAct || !window.__matchState) return;
+  if(window.__matchState.matchedIds.has(pairId)) return;
+  const sel = window.__matchState.selLeft;
+  if(!sel){
+    say("Bé hãy chạm vào 1 ô bên trái trước nhé!", "Tap an item on the left first!");
+    return;
+  }
+  const leftBtn = document.getElementById("match-l-" + sel);
+  if(sel === pairId){
+    if(window.Analytics) Analytics.answerActivity(true, pairId);
+    window.__matchState.matchedIds.add(pairId);
+    window.__matchState.selLeft = null;
+    if(leftBtn){ leftBtn.classList.remove("sel"); leftBtn.classList.add("matched"); leftBtn.innerHTML += " ✔"; }
+    btn.classList.add("matched");
+    btn.innerHTML += " ✔";
+    sfxOk();
+    fx();
+    const p = (currentPlayingAct.content.pairs || []).find(x => x.id === pairId);
+    if(p) say(p.right, p.right);
+    if(window.__matchState.matchedIds.size === window.__matchState.total){
+      const earnedStars = currentActAttempts === 0 ? 3 : (currentActAttempts === 1 ? 2 : 1);
+      __completeActSuccess(currentPlayingAct, earnedStars);
+    }
+  } else {
+    currentActAttempts++;
+    if(window.Analytics) Analytics.answerActivity(false, pairId);
+    if(leftBtn) leftBtn.classList.add("bad");
+    btn.classList.add("bad");
+    sfxNo();
+    catSet("sad");
+    setTimeout(() => {
+      if(leftBtn) leftBtn.classList.remove("bad", "sel");
+      btn.classList.remove("bad");
+      window.__matchState.selLeft = null;
+      catSet("thinking");
+    }, 700);
+    const fbDiv = document.getElementById("actFeedback");
+    if(fbDiv){
+      fbDiv.className = "act-feedback-card bad";
+      fbDiv.innerHTML = `💡 <b>${T("Chưa ghép đúng cặp!", "Not a match!")}</b><br>${T(currentPlayingAct.feedback.wrong, currentPlayingAct.feedback.wrong)}`;
+    }
+    say(currentPlayingAct.feedback.wrong, currentPlayingAct.feedback.wrong);
+  }
+};
+
+window.__tokenTap = function(tokId, tokText){
+  if(actAnswered || !window.__sortState) return;
+  const emptyIdx = window.__sortState.slotted.findIndex(x => x === null);
+  if(emptyIdx === -1) return;
+  window.__sortState.slotted[emptyIdx] = { id: tokId, text: tokText };
+  const slotEl = document.getElementById("sort-slot-" + emptyIdx);
+  if(slotEl){ slotEl.textContent = tokText; slotEl.className = "act-slot filled"; }
+  const tBtn = document.getElementById("token-btn-" + tokId);
+  if(tBtn){ tBtn.classList.add("used"); }
+  say(tokText, tokText);
+
+  if(window.__sortState.slotted.every(x => x !== null)){
+    window.__checkSortResult();
+  }
+};
+
+window.__slotTap = function(idx){
+  if(actAnswered || !window.__sortState) return;
+  const item = window.__sortState.slotted[idx];
+  if(!item) return;
+  window.__sortState.slotted[idx] = null;
+  const slotEl = document.getElementById("sort-slot-" + idx);
+  if(slotEl){ slotEl.textContent = "___"; slotEl.className = "act-slot"; }
+  const tBtn = document.getElementById("token-btn-" + item.id);
+  if(tBtn){ tBtn.classList.remove("used"); }
+  const fbDiv = document.getElementById("actFeedback");
+  if(fbDiv && fbDiv.classList.contains("bad")) fbDiv.innerHTML = "";
+};
+
+window.__resetSort = function(){
+  if(actAnswered || !window.__sortState) return;
+  window.__sortState.slotted.fill(null);
+  document.querySelectorAll(".act-slot").forEach(s => { s.textContent = "___"; s.className = "act-slot"; });
+  document.querySelectorAll(".act-token-btn").forEach(b => { b.classList.remove("used"); });
+  const fbDiv = document.getElementById("actFeedback");
+  if(fbDiv) fbDiv.innerHTML = "";
+};
+
+window.__checkSortResult = function(){
+  const act = currentPlayingAct;
+  const currentTexts = window.__sortState.slotted.map(x => x.text);
+  const expected = window.__sortState.sequence;
+  const isMatch = currentTexts.length === expected.length && currentTexts.every((t, i) => t.trim().toLowerCase() === expected[i].trim().toLowerCase());
+  if(window.Analytics) Analytics.answerActivity(isMatch, currentTexts.join(" "));
+
+  if(isMatch){
+    document.querySelectorAll(".act-slot").forEach(s => { s.className = "act-slot good"; });
+    const earnedStars = currentActAttempts === 0 ? 3 : (currentActAttempts === 1 ? 2 : 1);
+    __completeActSuccess(act, earnedStars);
+  } else {
+    currentActAttempts++;
+    document.querySelectorAll(".act-slot").forEach(s => {
+      s.classList.add("bad");
+      setTimeout(() => s.classList.remove("bad"), 800);
+    });
+    sfxNo();
+    catSet("sad");
+    const fbDiv = document.getElementById("actFeedback");
+    if(fbDiv){
+      fbDiv.className = "act-feedback-card bad";
+      fbDiv.innerHTML = `💡 <b>${T("Chưa đúng thứ tự rồi bé ơi!", "Incorrect order!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}<br><small style="color:#64748b">${T("Chạm vào ô để gỡ ra hoặc bấm 'Xếp lại từ đầu' nhé!","Tap a slot to remove or tap Reset!")}</small>`;
+    }
+    say(act.feedback.wrong, act.feedback.wrong);
+    setTimeout(() => catSet("thinking"), 900);
+  }
+};
+
+window.__nextAct = function(){
+  if(!currentPlayingAct) { tierActivities(); return; }
+  const allActs = getActivitiesByTier(currentPlayingAct.ageTier);
+  const currIdx = allActs.findIndex(a => a.id === currentPlayingAct.id);
+  const nextAct = allActs[(currIdx + 1) % allActs.length];
+  if(nextAct){
+    go('playActivity', nextAct.id);
+  } else {
+    go('tierActivities');
+  }
+};
+
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
@@ -454,10 +1358,17 @@ function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k])
 
 function result(){
   const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kết quả","Results"),i:"🏆"}])}<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:N},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<f?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;
-  ql=null;catSet("celebrate");fx();checkBadges();
-  triggerCelebration(T("Hoàn thành xuất sắc!","All Done!"),T(`Bé làm đúng ${f} trên ${N} câu! Giỏi quá!`,`You got ${f} out of ${N} right!`),"🏆",Array(Math.min(5,Math.max(1,f))).fill("⭐").join(""));
-  say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}. Great job!`);
+  const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
+  stars += starCount;
+  ls.set("stars", stars);
+  recordDailyActivity();
+  head();
+  checkBadges();
+
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kết quả","Results"),i:"🏆"}])}<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:3},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<starCount?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;
+  ql=null;catSet("celebrate");fx();
+  triggerCelebration(T("Hoàn thành xuất sắc!","All Done!"),T(`Bé làm đúng ${f} trên ${N} câu và nhận được ${starCount} sao! Giỏi quá!`,`You got ${f} out of ${N} right and earned ${starCount} stars!`),"🏆",Array(starCount).fill("⭐").join(""));
+  say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu, thưởng bé ${starCount} sao. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}, you earned ${starCount} stars. Great job!`);
 }
 function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
 function win(wr,next,vi,en){
@@ -469,7 +1380,295 @@ function win(wr,next,vi,en){
   adv(rd.n>=(RL[cur]||ROUND)?result:next);
 }
 const bk=(curT,parentS="games",parentT=T("Trò chơi","Games"),action="")=>kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:parentS,t:parentT,i:parentS==="games"?"🎮":"📚"},...(curT?[{t:curT,i:"✨"}]:[])],action);
-function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;sayPrompt("games","Bé chọn trò chơi nhé","Pick a game",180000)}
+function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory","logic")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice","trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}</div>`;sayPrompt("games","Bé chọn trò chơi nhé","Pick a game",180000)}
+
+/* ========================================================
+   TRÒ CHƠI HỌC TẬP TIỀN TIỂU HỌC: ĐẾM HÌNH CHỌN SỐ (COUNT GAME)
+   ======================================================== */
+const COUNT_ITEMS_POOL = [
+  { emoji: "🍎", nameVi: "quả táo", nameEn: "apples" },
+  { emoji: "🐱", nameVi: "chú mèo", nameEn: "cats" },
+  { emoji: "🚗", nameVi: "ô tô", nameEn: "cars" },
+  { emoji: "⭐", nameVi: "ngôi sao", nameEn: "stars" },
+  { emoji: "🎈", nameVi: "bóng bay", nameEn: "balloons" },
+  { emoji: "🐥", nameVi: "gà con", nameEn: "chicks" },
+  { emoji: "🍓", nameVi: "dâu tây", nameEn: "strawberries" },
+  { emoji: "🐰", nameVi: "chú thỏ", nameEn: "bunnies" },
+  { emoji: "🍦", nameVi: "cây kem", nameEn: "ice creams" },
+  { emoji: "🍉", nameVi: "miếng dưa", nameEn: "watermelons" },
+  { emoji: "🐻", nameVi: "chú gấu", nameEn: "teddy bears" },
+  { emoji: "🚀", nameVi: "tên lửa", nameEn: "rockets" }
+];
+
+let cgState = {
+  qIndex: 0,
+  score: 0,
+  total: 5,
+  questions: [],
+  answered: false,
+  countedItems: new Set()
+};
+
+function initCountGame(){
+  const pool = shuf([...COUNT_ITEMS_POOL]);
+  const nums = shuf([1, 2, 3, 4, 5, 6, 7]).slice(0, 5);
+  const questions = [];
+  for(let i = 0; i < 5; i++){
+    const item = pool[i % pool.length];
+    const target = nums[i];
+    const c = new Set([target]);
+    while(c.size < 3){
+      const offset = pick([-2, -1, 1, 2, 3]);
+      let cand = target + offset;
+      if(cand < 1) cand = target + R(1, 3);
+      if(cand > 9) cand = target - R(1, 3);
+      if(cand >= 1 && cand <= 9 && cand !== target) c.add(cand);
+    }
+    questions.push({
+      item,
+      target,
+      options: shuf([...c]),
+      attempted: false
+    });
+  }
+  cgState = {
+    qIndex: 0,
+    score: 0,
+    total: 5,
+    questions,
+    answered: false,
+    countedItems: new Set()
+  };
+}
+
+function countGame(isReplay){
+  if(isReplay || !cgState.questions || cgState.questions.length !== 5 || cgState.qIndex >= 5){
+    initCountGame();
+  }
+  renderCountQuestion();
+}
+
+function renderCountQuestion(){
+  const { qIndex, total, questions } = cgState;
+  if(qIndex >= total){
+    renderCountResult();
+    return;
+  }
+  cgState.answered = false;
+  cgState.countedItems = new Set();
+  const q = questions[qIndex];
+  const item = q.item;
+  const count = q.target;
+  const viPrompt = `Có bao nhiêu ${item.nameVi}?`;
+  const enPrompt = `How many ${item.nameEn}?`;
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Đếm hình chọn số","Count & Match"), i:"🍎"}
+  ]);
+
+  const dotsHtml = Array.from({length: total}, (_, i) => {
+    const cls = i < qIndex ? "done" : (i === qIndex ? "cur" : "");
+    return `<span class="cg-dot ${cls}"></span>`;
+  }).join("");
+
+  const itemsHtml = Array.from({length: count}, (_, i) => {
+    return `<button class="cg-item-btn" data-i="${i+1}" onclick="window.__cgCountTap(this, ${i+1})" aria-label="${i+1}">
+      ${item.emoji}
+      <span class="cg-badge">${i+1}</span>
+    </button>`;
+  }).join("");
+
+  const optsHtml = q.options.map(num => {
+    return `<button class="cg-opt-btn" data-n="${num}" onclick="window.__cgChoose(${num}, this)">
+      <span class="cg-opt-num">${num}</span>
+    </button>`;
+  }).join("");
+
+  m.innerHTML = `${bcHtml}
+  <div class="cg-wrap">
+    <div class="cg-progress">
+      <span>${T(`Câu ${qIndex + 1} / ${total}`, `Question ${qIndex + 1} / ${total}`)}</span>
+      <div class="cg-progress-bar">
+        <div class="cg-progress-fill" style="width:${Math.round(((qIndex + 1) / total) * 100)}%"></div>
+      </div>
+      <div class="cg-dots">${dotsHtml}</div>
+    </div>
+
+    <div class="cg-stage">
+      <div class="cg-prompt" id="cgPrompt" onclick="say('${viPrompt}', '${enPrompt}')" title="${T("Bấm để nghe lại câu hỏi","Tap to listen again")}">
+        <span>🔊</span> ${T(viPrompt, enPrompt)}
+      </div>
+      <div class="cg-items-box">
+        ${itemsHtml}
+      </div>
+      <div class="cg-hint-text">${T("💡 Chạm vào từng hình để bé cùng đếm nhé!","💡 Tap each item to count together!")}</div>
+      
+      <div class="cg-opts">
+        ${optsHtml}
+      </div>
+
+      <div class="cg-feedback" id="cgFeedback"></div>
+    </div>
+  </div>`;
+
+  say(viPrompt, enPrompt);
+  catSet("thinking");
+}
+
+window.__cgCountTap = function(btn, num){
+  if(rmOn()) return;
+  sfxTap();
+  btn.classList.add("counted");
+  btn.style.animation = "pop .3s ease";
+  setTimeout(() => { btn.style.animation = ""; }, 300);
+  cgState.countedItems.add(num);
+  sayN(num);
+};
+
+window.__cgChoose = function(chosen, btn){
+  if(cgState.answered) return;
+  const q = cgState.questions[cgState.qIndex];
+  const fb = document.getElementById("cgFeedback");
+
+  if(chosen === q.target){
+    cgState.answered = true;
+    if(!q.attempted){
+      cgState.score++;
+    }
+    btn.classList.add("good");
+    sfxOk();
+    fx();
+    catSet("celebrate");
+    const praise = pick(PR);
+    if(fb){
+      fb.className = "cg-feedback good";
+      fb.innerHTML = `🎉 ${T(praise[0], praise[1])} ${T("Đúng rồi!", "That's right!")} ⭐`;
+    }
+    say(`${praise[0]} Có ${NV[q.target]} ${q.item.nameVi}.`, `${praise[1]} There are ${NE[q.target]} ${q.item.nameEn}.`);
+    
+    setTimeout(() => {
+      cgState.qIndex++;
+      renderCountQuestion();
+    }, 1250);
+  } else {
+    q.attempted = true;
+    btn.classList.add("bad");
+    btn.disabled = true;
+    sfxNo();
+    catSet("sad");
+    if(fb){
+      fb.className = "cg-feedback bad";
+      fb.innerHTML = `💡 ${T("Bé đếm lại cẩn thận rồi chọn nhé!","Count again carefully and try!")}`;
+    }
+    say("Bé thử đếm lại nhé", "Try counting again");
+    setTimeout(() => {
+      catSet("thinking");
+    }, 900);
+  }
+};
+
+function renderCountResult(){
+  const { score, total } = cgState;
+  // Tính sao 1-3 theo độ chính xác:
+  // 5/5 -> 3 sao, 3-4/5 -> 2 sao, 1-2/5 -> 1 sao
+  const starCount = score === 5 ? 3 : (score >= 3 ? 2 : 1);
+  stars += starCount;
+  ls.set("stars", stars);
+  recordDailyActivity();
+  head();
+  checkBadges();
+
+  const now = new Date();
+  const dateFormatted = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")} - ${now.getDate()}/${now.getMonth() + 1}`;
+  const saveObj = {
+    score,
+    total,
+    stars: starCount,
+    timestamp: Date.now(),
+    dateStr: dateFormatted
+  };
+  ls.set("kids_count_game_last", JSON.stringify(saveObj));
+
+  let lastRecordText = "";
+  try {
+    const raw = ls.get("kids_count_game_last", "");
+    if(raw){
+      const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+      if(parsed && parsed.score !== undefined){
+        lastRecordText = T(
+          `🕒 Lần chơi gần nhất: ${parsed.score}/${parsed.total} câu đúng (${parsed.dateStr})`,
+          `🕒 Last played: ${parsed.score}/${parsed.total} correct (${parsed.dateStr})`
+        );
+      }
+    }
+  } catch(e){}
+
+  const starsHtml = Array.from({length: 3}, (_, i) => {
+    return i < starCount ? `<span>⭐</span>` : `<span style="opacity:0.25;filter:grayscale(1)">⭐</span>`;
+  }).join("");
+
+  let msgVi = "Bé rất chăm chỉ và đáng khen!";
+  let msgEn = "Great effort! Keep practicing!";
+  if(score === 5){
+    msgVi = "Xuất sắc! Bé là thiên tài đếm số! 🌟";
+    msgEn = "Outstanding! You are a counting master! 🌟";
+  } else if(score >= 4){
+    msgVi = "Rất giỏi! Bé đếm số rất cừ khôi! 👏";
+    msgEn = "Awesome job! You did so well! 👏";
+  } else if(score >= 3){
+    msgVi = "Tốt lắm! Cùng luyện tập để đạt điểm tuyệt đối nhé! 💪";
+    msgEn = "Good job! Play again to get 3/3 stars! 💪";
+  }
+
+  triggerCelebration(
+    T("Hoàn thành trò chơi đếm!","Counting Game Complete!"),
+    T(`Bé làm đúng ${score}/${total} câu và nhận được ${starCount} sao!`,`You got ${score}/${total} right and earned ${starCount} stars!`),
+    "🏆",
+    Array(starCount).fill("⭐").join("")
+  );
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Kết quả","Results"), i:"🏆"}
+  ]);
+
+  m.innerHTML = `${bcHtml}
+  <div class="cg-wrap">
+    <div class="cg-result-card">
+      <div class="cg-result-trophy">🏆</div>
+      <h2>${T("Hoàn thành vòng chơi!","Game Complete!")}</h2>
+      <div class="cg-result-stars">${starsHtml}</div>
+      <div class="cg-result-score">${T(`Bé làm đúng ${score} / ${total} câu`, `You got ${score} / ${total} right`)}</div>
+      <p class="cg-result-msg">${T(msgVi, msgEn)}</p>
+      ${lastRecordText ? `<div class="cg-result-last">${lastRecordText}</div>` : ""}
+      <div class="cg-result-btns">
+        <button class="cg-btn-replay" onclick="countGame(true)">
+          🔄 ${T("Chơi lại","Play Again")}
+        </button>
+        <button class="cg-btn-back" onclick="go('games')">
+          🔙 ${T("Quay lại","Back to Games")}
+        </button>
+      </div>
+    </div>
+  </div>`;
+
+  sfxFanfare();
+  fx();
+  catSet("celebrate");
+  triggerCelebration(
+    T("Hoàn thành xuất sắc!", "All Done!"),
+    T(`Bé làm đúng ${score} / ${total} câu! Nhận được ${starCount} sao!`, `You got ${score}/${total} right and earned ${starCount} stars!`),
+    "🏆",
+    Array(starCount).fill("⭐").join("")
+  );
+  say(
+    `Hoan hô bé! Bé làm đúng ${NV[score]} trên ${NV[total]} câu. Nhận được ${NV[starCount]} sao vàng!`,
+    `Hooray! You got ${NE[score]} out of ${NE[total]}. You earned ${NE[starCount]} stars!`
+  );
+}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
@@ -534,21 +1733,478 @@ function trace(selItem){const md=TR[trm]||TR.up;
    triggerCelebration(T("Bé viết đẹp quá!","Great Writing!"),T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!","Wonderful tracing, +1 ⭐!"),"✍️","⭐",()=>win(0,trace,"",""));
   };
  md.say(it);catSet("pointing")}
-const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="">`};
+const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);const alt=ALT_MAP[key]||(OBJ[key]?OBJ[key].vi:key);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})" role="img" aria-label="${alt}"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="${alt}">`};
 function rp(b){const s=b.querySelector(".spr");if(s){s.style.animation="none";void s.offsetWidth;s.style.animation=""}}
 let ST;try{ST=JSON.parse(ls.get("st",""))||{}}catch(e){ST={}}ST.n=ST.n||0;ST.f=ST.f||0;ST.w=ST.w||{};
 const svS=()=>ls.set("st",JSON.stringify(ST)),sta=ok=>{ST.n++;if(ok)ST.f++;svS()};
 function stw(r){const l=cur==="letP"?"Chữ "+(OBJ[r]?OBJ[r].L:r):(cur==="numP"||cur==="mis")?"Số "+r:"";if(l){ST.w[l]=(ST.w[l]||0)+1;svS()}}
 function adapt(r){if(cur==="trace"||ls.get("auto","1")!="1")return"";let[g,b]=ls.get("ad","0,0").split(",").map(Number);if(r>=.8){g++;b=0}else if(r<=.4){b++;g=0}else g=b=0;let s="";if(g>=2&&lvl<3){lvl++;g=0;s=`⬆ Mức ${lvl} · Level ${lvl}`}else if(b>=2&&lvl>1){lvl--;b=0;s=`⬇ Mức ${lvl} · Level ${lvl}`}ls.set("ad",g+","+b);ls.set("lvl",lvl);return s}
 const togAuto=()=>{ls.set("auto",ls.get("auto","1")=="1"?"0":"1");parent()};
-function gate(){const a=R(4,9),b=R(4,9),c=new Set([a+b]);while(c.size<3)c.add(R(8,18));
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Khóa phụ huynh","Parent Gate"),i:"🔒"}])}<h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","For parents")}</h2><h2>${a} + ${b} = ?</h2><div class="opts">${shuf([...c]).map(v=>`<button class="opt" onclick="go('${v==a+b?"parent":"home"}')"><span class="ans">${v}</span></button>`).join("")}</div>`}
-function parent(){const top=Object.entries(ST.w).sort((a,b)=>b[1]-a[1]).slice(0,8),au=ls.get("auto","1")=="1",sf=SFX(),rp=ls.get("rm","auto"),vs=vState(),nrec=Object.keys(REC).length;
- if(vs.k==="wait")setTimeout(()=>{vWait=true;if(cur==="parent")parent()},2000);
- const vh=vs.k==="ok"?`<div class="note ok">✅ ${T("Máy có giọng đọc tiếng Việt","This device has a Vietnamese voice")}<small>${esc(vs.n)}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button></div>`
-  :vs.k==="wait"?`<div class="note">⏳ ${T("Đang kiểm tra giọng đọc…","Checking voices…")}</div>`
-  :`<div class="note warn">⚠ ${T(vs.k==="no"?"Máy chưa có giọng đọc tiếng Việt":"Không tìm thấy giọng đọc của máy","No Vietnamese voice found")}<small>${VIHELP}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record your voice")}</button></div>`;
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Phụ huynh","Parents"),i:"👨‍👩‍👧"}])}<h2>👨‍👩‍👧 ${T("Phụ huynh","Parents")}</h2><div class="pair"><button><b class="n">⭐ ${stars}</b>${T("Tổng sao","Stars")}</button><button><b class="n">${ST.n}</b>${T("Câu đã làm","Questions")}</button><button><b class="n">${ST.n?Math.round(ST.f/ST.n*100):0}%</b>${T("Đúng ngay lần đầu","First try")}</button></div><h2>${T("Cần luyện thêm","Needs practice")}</h2><div class="chips">${top.length?top.map(([k,v])=>`<span class="pill">${k} ×${v}</span>`).join(""):"—"}</div><h2>💡 ${T("Cẩm nang đồng hành cùng bé","Parenting Guide")}</h2><div class="note" style="text-align:left"><b>⏰ ${T("Thời lượng sử dụng màn hình hợp lý","Healthy Screen Time")}</b><small style="line-height:1.4;margin:4px 0">${T("Với trẻ 3–6 tuổi, khuyến nghị mỗi phiên học kéo dài từ 15–20 phút và không quá 1 giờ mỗi ngày. Hãy cùng bé nghỉ mắt, vươn vai sau mỗi buổi học nhỏ.","For 3–6 year olds, 15–20 minutes per session is ideal. Take regular eye breaks and stretch together.")}</small></div><div class="note" style="text-align:left"><b>🗣 ${T("Khen ngợi nỗ lực (Tư duy phát triển)","Praise the Process")}</b><small style="line-height:1.4;margin:4px 0">${T("Thay vì chỉ khen 'Con thông minh quá!', hãy khen sự kiên trì: 'Bố mẹ thấy con rất kiên nhẫn tìm chữ cái này!' hoặc 'Con đã lắng nghe và thử lại rất tuyệt vời!'.","Praise persistence rather than just outcome: 'I love how patiently you kept trying!' to build confidence.")}</small></div><div class="note" style="text-align:left"><b>🤝 ${T("Đồng hành tương tác cùng bé","Interactive Co-playing")}</b><small style="line-height:1.4;margin:4px 0">${T("Đặt câu hỏi gợi mở cho bé: 'Chữ O tròn giống quả gì trong nhà mình nhỉ?', 'Con thử tìm 3 đồ vật màu đỏ trong phòng xem nào!'. Biến bài học thành trò chơi khám phá thực tế.","Ask open questions: 'What round fruits do we have at home?', 'Can you find 3 red objects in the living room?'.")}</small></div><h2>${T("Giọng đọc","Voice")}</h2>${vh}<h2>${T("Cài đặt","Settings")}</h2><div class="chips">${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 Tiếng Anh"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}')">${t}</button>`).join("")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="lvl=${v};ls.set('lvl',${v});parent()">${T("Mức "+v,"Level "+v)}</button>`).join("")}<button class="pill${au?" on":""}" onclick="togAuto()">${T("Tự chỉnh mức: "+(au?"BẬT":"TẮT"),"Auto level: "+(au?"ON":"OFF"))}</button></div><div class="chips"><button class="pill${sf?" on":""}" onclick="togSfx()">🔊 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button><button class="pill${rmOn()?" on":""}" onclick="togRM()">🎞 ${T("Giảm chuyển động: "+(rp==="auto"?"THEO MÁY":rp==="1"?"BẬT":"TẮT"),"Reduce motion: "+(rp==="auto"?"AUTO":rp==="1"?"ON":"OFF"))}</button></div><div class="chips"><button class="pill" onclick="go('rec')">🎙 ${T("Giọng bố mẹ · nhập file âm thanh","Your voice · import audio")}</button><button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">🗑 ${T("Xóa thống kê","Reset stats")}</button></div><h2>📲 ${T("Cài đặt ứng dụng PWA","App Installation")}</h2><div class="note ok" style="text-align:left"><b>${isStandalone()?T("✅ Ứng dụng đang chạy toàn màn hình (Standalone)","✅ App is running in standalone mode"):T("📲 Cài đặt vào màn hình chính","📲 Install to Home Screen")}</b><small style="margin:4px 0 6px;line-height:1.4">${isStandalone()?T("Ứng dụng đã được cài đặt, mở toàn màn hình không có thanh địa chỉ web, hoạt động mượt mà offline.","App is installed, runs full-screen without web bar, works offline."):T("Cài đặt để chơi toàn màn hình như ứng dụng xịn, không còn thanh web, lưu trữ bài học và chạy mượt offline.","Install to play full-screen without browser bar, save lessons and run offline.")}</small><button class="pill" onclick="triggerPWAInstall()" style="margin-top:4px;background:var(--ok);color:#fff;font-weight:800;padding:6px 14px">📲 ${isStandalone()?T("Xem hướng dẫn","View guide"):T("Cài đặt ngay / Hướng dẫn","Install now / Guide")}</button></div><h2>${T("Sao lưu","Backup")}</h2><div class="note">${T("Lưu sao, thống kê và cài đặt ra một file để chuyển sang máy khác.","Save stars, stats and settings to a file to move to another device.")}<small>Chọn “kèm giọng thu” nếu muốn mang cả bản thu và file âm thanh đã nhập (file sẽ nặng hơn).</small></div><div class="chips"><button class="pill" onclick="exportData(0)">💾 ${T("Tiến độ","Progress")}</button><button class="pill" onclick="exportData(1)">💾 ${T("Kèm giọng thu"+(nrec?" ("+nrec+")":""),"With voices")}</button><button class="pill" onclick="document.getElementById('bf').click()">📂 ${T("Khôi phục","Restore")}</button></div><input type="file" id="bf" accept=".json,application/json" hidden onchange="importData(this.files[0]);this.value=''"><div class="note" id="bmsg" hidden></div>`}
+/* ========================================================
+   KHÓA PHỤ HUYNH VỚI MÃ PIN & BẢNG ĐIỀU KHIỂN (PARENT DASHBOARD)
+   ======================================================== */
+let enteredPin = "";
+function gate(){
+  enteredPin = "";
+  renderGatePin();
+}
+
+function renderGatePin(errorMsg = ""){
+  const dotsHtml = [0, 1, 2, 3].map(i => {
+    return `<span class="pin-dot ${i < enteredPin.length ? 'filled' : ''}"></span>`;
+  }).join("");
+
+  const keysHtml = [1, 2, 3, 4, 5, 6, 7, 8, 9, "C", 0, "⌫"].map(k => {
+    return `<button class="pin-key" onclick="window.__pinPress('${k}')">${k}</button>`;
+  }).join("");
+
+  m.innerHTML = `
+    ${kbc([{s:"home", t:T("Trang chủ","Home"), i:"🏠"}, {t:T("Khóa phụ huynh","Parent Gate"), i:"🔒"}])}
+    <h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","Parent Area")}</h2>
+    <div class="pin-box">
+      <div style="font-size:42px;line-height:1">🔒</div>
+      <h3 style="margin:8px 0 4px;font-size:20px">${T("Nhập mã PIN phụ huynh","Enter Parent PIN")}</h3>
+      <div class="pin-display">${dotsHtml}</div>
+      ${errorMsg ? `<div style="color:var(--bad);font-weight:800;font-size:14px;margin-bottom:8px;animation:shake .3s">${errorMsg}</div>` : ""}
+      <div class="pin-pad">${keysHtml}</div>
+      <p class="pin-msg">💡 ${T("Mã PIN mặc định là <b>1234</b>. Bố mẹ có thể đổi mã PIN bên trong bảng điều khiển.","Default PIN is <b>1234</b>. You can change it in the dashboard.")}</p>
+    </div>
+  `;
+}
+
+window.__pinPress = function(k){
+  const correctPin = ls.get("parent_pin", "1234");
+  if(k === "C"){
+    enteredPin = "";
+    renderGatePin();
+    return;
+  }
+  if(k === "⌫"){
+    enteredPin = enteredPin.slice(0, -1);
+    renderGatePin();
+    return;
+  }
+  if(enteredPin.length < 4){
+    enteredPin += k;
+    renderGatePin();
+    if(enteredPin.length === 4){
+      setTimeout(() => {
+        if(enteredPin === correctPin){
+          sfxOk();
+          go("parent");
+        } else {
+          sfxNo();
+          enteredPin = "";
+          renderGatePin(lang === "vi" ? "Mã PIN chưa đúng! Vui lòng thử lại" : "Incorrect PIN! Please try again");
+        }
+      }, 150);
+    }
+  }
+};
+
+function changeParentPin(){
+  const curr = ls.get("parent_pin", "1234");
+  const p1 = prompt(lang === "vi" ? "Nhập mã PIN mới (gồm 4 chữ số):" : "Enter new 4-digit PIN:", "");
+  if(!p1) return;
+  if(/^\d{4}$/.test(p1.trim())){
+    ls.set("parent_pin", p1.trim());
+    alert(lang === "vi" ? `✅ Đã đổi mã PIN thành công: ${p1.trim()}` : `✅ PIN changed to: ${p1.trim()}`);
+  } else {
+    alert(lang === "vi" ? "⚠ Mã PIN phải gồm đúng 4 chữ số!" : "⚠ PIN must be 4 digits!");
+  }
+}
+window.changeParentPin = changeParentPin;
+
+function updateKidName(newName){
+  const clean = (newName || "").trim();
+  if(clean){
+    ls.set("kid_name", clean);
+  }
+}
+window.updateKidName = updateKidName;
+
+function cycleKidAvatar(){
+  const avatars = ["🐣", "🐥", "🚀", "🐱", "🐰", "🦁", "👧", "👦", "⭐", "🦄"];
+  const curr = ls.get("kid_avatar", "🐣");
+  const next = avatars[(avatars.indexOf(curr) + 1) % avatars.length];
+  ls.set("kid_avatar", next);
+  const el = document.getElementById("kidAvatarEl");
+  if(el) el.textContent = next;
+}
+window.cycleKidAvatar = cycleKidAvatar;
+
+function getTodayStudyMinutes(){
+  const sec = parseInt(ls.get("study_sec_" + getLocalDateStr(), "0"), 10) || 0;
+  return Math.round(sec / 60);
+}
+
+setInterval(() => {
+  if(!document.hidden){
+    const today = getLocalDateStr();
+    const sec = (parseInt(ls.get("study_sec_" + today, "0"), 10) || 0) + 10;
+    ls.set("study_sec_" + today, sec);
+    checkDailyTimeLimit(Math.round(sec / 60));
+  }
+}, 10000);
+
+let limitModalDismissedUntil = 0;
+function checkDailyTimeLimit(mins){
+  const limit = parseInt(ls.get("daily_limit_minutes", "0"), 10) || 0;
+  if(limit > 0 && mins >= limit){
+    if(Date.now() > limitModalDismissedUntil){
+      const modal = document.getElementById("timeLimitModal");
+      if(modal && modal.style.display !== "flex"){
+        modal.style.display = "flex";
+      }
+    }
+  }
+}
+
+window.__unlockTimeLimit = function(){
+  const pin = prompt(lang === "vi" ? "Nhập mã PIN phụ huynh để mở thêm 15 phút:" : "Enter Parent PIN for 15 more minutes:");
+  if(pin === ls.get("parent_pin", "1234")){
+    limitModalDismissedUntil = Date.now() + 15 * 60 * 1000;
+    const modal = document.getElementById("timeLimitModal");
+    if(modal) modal.style.display = "none";
+    alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học!" : "✅ Extended 15 more minutes!");
+  } else if(pin !== null){
+    alert(lang === "vi" ? "⚠ Mã PIN không đúng!" : "⚠ Incorrect PIN!");
+  }
+};
+
+function setDailyLimit(mins){
+  ls.set("daily_limit_minutes", mins);
+  if(cur === "parent") parent();
+}
+window.setDailyLimit = setDailyLimit;
+
+function getWeakSkillRecommendation(){
+  const mistakes = Object.entries(ST.w || {}).sort((a,b) => b[1] - a[1]);
+  if(mistakes.length > 0){
+    const topError = mistakes[0];
+    const name = topError[0];
+    const count = topError[1];
+    if(name.startsWith("Số")){
+      return {
+        title: lang === "vi" ? `Luyện tập thêm: ${name} (chưa đúng ${count} lần)` : `Practice: ${name}`,
+        desc: lang === "vi" ? "Bé cần củng cố thêm nhận biết mặt số và đếm số lượng hình minh họa." : "Strengthen number recognition.",
+        action: "countGame",
+        btnText: lang === "vi" ? "Cho bé luyện số ➔" : "Practice Numbers ➔"
+      };
+    } else if(name.startsWith("Chữ")){
+      return {
+        title: lang === "vi" ? `Luyện tập thêm: ${name} (chưa đúng ${count} lần)` : `Practice: ${name}`,
+        desc: lang === "vi" ? "Bé cần làm quen thêm phát âm và hình dáng của chữ cái này." : "Practice this letter.",
+        action: "letL",
+        btnText: lang === "vi" ? "Cho bé luyện chữ ➔" : "Practice Letter ➔"
+      };
+    }
+  }
+  
+  if(currentTier === "preschool"){
+    return {
+      title: lang === "vi" ? "Đếm hình chọn số & Bảng chữ cái" : "Count & Letters",
+      desc: lang === "vi" ? "Hoạt động rèn luyện tư duy số lượng và thị giác hoàn hảo cho lứa tuổi mầm non." : "Best for preschool visual & counting skills.",
+      action: "countGame",
+      btnText: lang === "vi" ? "Cho bé học ngay ➔" : "Start Activity ➔"
+    };
+  } else if(currentTier === "grade1_2"){
+    return {
+      title: lang === "vi" ? "Phép cộng trừ 20–100 & Ghép vần" : "Math 20–100 & Words",
+      desc: lang === "vi" ? "Rèn luyện tính nhẩm nhanh và ghép vần từ vựng tự tin cho lớp 1–2." : "Mental math and phonics.",
+      action: "math10",
+      btnText: lang === "vi" ? "Cho bé luyện toán ➔" : "Start Activity ➔"
+    };
+  } else {
+    return {
+      title: lang === "vi" ? "Nhân chia, Phân số & Đọc hiểu văn bản" : "Multiply & Reading",
+      desc: lang === "vi" ? "Phát triển tư duy logic toán học nâng cao và khả năng đọc hiểu ngữ liệu." : "Math & reading comprehension.",
+      action: "tierActMath",
+      btnText: lang === "vi" ? "Khám phá ngay ➔" : "Start Activity ➔"
+    };
+  }
+}
+
+function resetAllKidsData(){
+  const msg = lang === "vi"
+    ? "Bố mẹ có chắc chắn muốn đặt lại TOÀN BỘ dữ liệu học tập của bé (Số sao, Chuỗi ngày học streak, Huy hiệu đã đạt)? Dữ liệu sau khi xóa sẽ bắt đầu lại từ đầu."
+    : "Are you sure you want to reset all learning progress (stars, daily streak, badges)?";
+  if(confirm(msg)){
+    stars = 0;
+    ls.set("stars", 0);
+    ls.set("badges", "[]");
+    ls.set("kids_streak_count", 0);
+    ls.set("kids_streak_last_date", "");
+    ls.set("kids_count_game_last", "");
+    ls.set("bhv_events", "[]");
+    ls.set("bhv_act_stats", "{}");
+    ST = { n: 0, f: 0, w: {} };
+    svS();
+    head();
+    if(cur === "parent") parent();
+    alert(lang === "vi" ? "Đã đặt lại dữ liệu học tập thành công!" : "Progress reset successfully!");
+  }
+}
+window.resetAllKidsData = resetAllKidsData;
+
+function parent(){
+  const kidName = ls.get("kid_name", "Bé Yêu");
+  const kidAvatar = ls.get("kid_avatar", "🐣");
+  const curLv = getCurrentLevel();
+  const streakInfo = getDailyStreak();
+  const todayMins = getTodayStudyMinutes();
+  const dailyLimit = parseInt(ls.get("daily_limit_minutes", "0"), 10) || 0;
+  const recom = getWeakSkillRecommendation();
+  const topErrors = Object.entries(ST.w || {}).sort((a,b)=>b[1]-a[1]).slice(0, 6);
+  const correctPct = ST.n ? Math.round((ST.f / ST.n) * 100) : 100;
+  const actStats = typeof Analytics !== "undefined" ? Analytics.getStats() : {};
+  const statsList = Object.entries(actStats);
+  const totalStarts = statsList.reduce((acc, [, s]) => acc + (s.starts || 0), 0);
+  const totalCompletes = statsList.reduce((acc, [, s]) => acc + (s.completes || 0), 0);
+  const totalAbandons = statsList.reduce((acc, [, s]) => acc + (s.abandons || 0), 0);
+  const abandonedList = statsList
+    .filter(([, s]) => (s.abandons || 0) > 0)
+    .sort((a, b) => (b[1].abandons || 0) - (a[1].abandons || 0));
+  const au = ls.get("auto", "1") == "1";
+  const sf = SFX();
+  const rp = ls.get("rm", "auto");
+  const vs = vState();
+  const nrec = Object.keys(REC).length;
+
+  if(vs.k === "wait") setTimeout(() => { vWait = true; if(cur === "parent") parent(); }, 2000);
+  const vh = vs.k === "ok" ? `<div class="note ok">✅ ${T("Máy có giọng đọc tiếng Việt","Vietnamese voice available")}<small>${esc(vs.n)}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button></div>`
+    : vs.k === "wait" ? `<div class="note">⏳ ${T("Đang kiểm tra giọng đọc…","Checking voices…")}</div>`
+    : `<div class="note warn">⚠ ${T(vs.k==="no"?"Máy chưa có giọng đọc tiếng Việt":"Không tìm thấy giọng đọc của máy","No Vietnamese voice found")}<small>${VIHELP}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button></div>`;
+
+  m.innerHTML = `
+    ${kbc([{s:"home", t:T("Trang chủ","Home"), i:"🏠"}, {t:T("Bảng điều khiển phụ huynh","Parent Dashboard"), i:"👨‍👩‍👧"}])}
+    <h2>👨‍👩‍👧 ${T("Bảng điều khiển của phụ huynh","Parent Dashboard")}</h2>
+
+    <div class="parent-dash">
+      <!-- 1. HỒ SƠ BÉ -->
+      <div class="dash-card">
+        <div class="dash-card-title">👤 ${T("Hồ sơ & Nhóm tuổi của bé","Kid Profile & Age Group")}</div>
+        <div class="profile-row">
+          <div class="profile-avatar" id="kidAvatarEl" onclick="cycleKidAvatar()" title="${T("Bấm để đổi hình đại diện","Tap to change avatar")}">${kidAvatar}</div>
+          <div class="profile-info">
+            <div style="font-size:13px;color:#64748b;font-weight:700">${T("Tên của bé (Bố mẹ chạm để sửa):","Kid's Name (Tap to edit):")}</div>
+            <input class="profile-name-input" type="text" value="${esc(kidName)}" onchange="updateKidName(this.value)" placeholder="Ví dụ: Bé Bơ, Bé Na...">
+            <div style="font-size:14px;color:var(--acc);font-weight:800;margin-top:4px">
+              ${curLv.title} · ⭐ ${stars} sao · 🔥 ${streakInfo.count} ngày học
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:6px">${T("Chọn nhóm tuổi học tập phù hợp:","Select Learning Age Group:")}</div>
+          <div class="tier-tabs">
+            ${(typeof AGE_TIERS !== "undefined" ? Object.values(AGE_TIERS) : []).map(t => `
+              <button class="tier-tab ${t.id === currentTier ? "on" : ""}" onclick="setAgeTier('${t.id}');parent()">
+                <span class="tier-tab-badge">${t.badge}</span>
+                <span class="tier-tab-title">${T(t.nameVi, t.nameEn)}</span>
+                <span class="tier-tab-sub">${T(t.ageVi, t.ageEn)}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. THỜI GIAN & GIỚI HẠN SỬ DỤNG MỖI NGÀY -->
+      <div class="dash-card">
+        <div class="dash-card-title">⏰ ${T("Thời gian học & Giới hạn hằng ngày","Screen Time & Daily Limit")}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:14px;color:#64748b;font-weight:700">${T("Hôm nay bé đã học:","Today's study time:")}</div>
+            <div style="font-size:26px;font-weight:900;color:#0284c7">⏱ ~${todayMins} ${T("phút","mins")}</div>
+          </div>
+          <div>
+            <div style="font-size:14px;color:#64748b;font-weight:700">${T("Giới hạn màn hình mỗi ngày:","Daily Screen Limit:")}</div>
+            <div class="chips" style="margin-top:4px">
+              ${[0, 15, 30, 45, 60].map(mVal => `
+                <button class="pill ${dailyLimit === mVal ? "on" : ""}" onclick="setDailyLimit(${mVal})">
+                  ${mVal === 0 ? T("Không giới hạn","No limit") : mVal + " " + T("phút","mins")}
+                </button>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. TIẾN ĐỘ THEO MÔN HỌC & KỸ NĂNG -->
+      <div class="dash-card">
+        <div class="dash-card-title">📊 ${T("Tiến độ học tập theo môn","Subject Progress & Accuracy")}</div>
+        <div class="prog-grid">
+          <div class="prog-item">
+            <div class="prog-item-head">
+              <span style="color:#0284c7">📐 ${T("Toán học & Đếm số","Math & Numbers")}</span>
+              <span>${ST.mathCount || 0} ${T("bài","lessons")}</span>
+            </div>
+            <div class="prog-bar-bg"><div class="prog-bar-fill math" style="width:${Math.min(100, (ST.mathCount || 0) * 12)}%"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-item-head">
+              <span style="color:#ea580c">🔤 ${T("Chữ cái & Tiếng Việt","Letters & Phonics")}</span>
+              <span>${ST.letCount || 0} ${T("chữ","letters")}</span>
+            </div>
+            <div class="prog-bar-bg"><div class="prog-bar-fill vietnamese" style="width:${Math.min(100, (ST.letCount || 0) * 10)}%"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-item-head">
+              <span style="color:#8b5cf6">📖 ${T("Truyện & Đọc hiểu","Stories & Reading")}</span>
+              <span>${ST.storyCount || 0} ${T("truyện","stories")}</span>
+            </div>
+            <div class="prog-bar-bg"><div class="prog-bar-fill reading" style="width:${Math.min(100, (ST.storyCount || 0) * 25)}%"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-item-head">
+              <span style="color:#10b981">✍️ ${T("Luyện viết chữ đẹp","Handwriting")}</span>
+              <span>${ST.traceCount || 0} ${T("bài viết","pages")}</span>
+            </div>
+            <div class="prog-bar-bg"><div class="prog-bar-fill logic" style="width:${Math.min(100, (ST.traceCount || 0) * 20)}%"></div></div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-item-head">
+              <span style="color:#db2777">🇬🇧 ${T("Tiếng Anh cơ bản","Basic English")}</span>
+              <span>${ST.engCount || 0} ${T("bài","lessons")}</span>
+            </div>
+            <div class="prog-bar-bg"><div class="prog-bar-fill english" style="width:${Math.min(100, (ST.engCount || 0) * 15)}%"></div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div style="background:#f1f5f9;border-radius:14px;padding:8px 12px;font-size:14px;font-weight:700">
+            🎯 ${T("Đúng ngay lần đầu:","First-try accuracy:")} <b>${correctPct}%</b> (${ST.f || 0}/${ST.n || 0} ${T("câu","questions")})
+          </div>
+          <div style="background:#f1f5f9;border-radius:14px;padding:8px 12px;font-size:14px;font-weight:700">
+            🔥 ${T("Chuỗi ngày học liên tiếp:","Current Streak:")} <b>${streakInfo.count} ${T("ngày","days")}</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- NHÃN KỸ NĂNG ĐÃ RÈN LUYỆN -->
+      ${Object.keys(ST.skills || {}).length ? `
+        <div class="dash-card">
+          <div class="dash-card-title">🎯 ${T("Nhãn kỹ năng bé đã rèn luyện","Skill Badges & Practice")}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+            ${Object.entries(ST.skills).sort((a,b)=>b[1]-a[1]).map(([sk, cnt]) => `
+              <span style="background:#e0f2fe;border:2px solid #bae6fd;color:#0369a1;padding:6px 12px;border-radius:14px;font-size:13px;font-weight:800">
+                🎯 ${sk} <span style="background:#0284c7;color:#fff;border-radius:10px;padding:2px 7px;font-size:11px;margin-left:4px">×${cnt}</span>
+              </span>
+            `).join("")}
+          </div>
+        </div>
+      ` : ""}
+
+      <!-- 4. GỢI Ý BÀI HỌC TIẾP THEO -->
+      <div class="dash-card">
+        <div class="dash-card-title">💡 ${T("Gợi ý hoạt động tiếp theo cho bé","Smart Recommendation")}</div>
+        <div class="recom-card">
+          <div style="flex:1">
+            <div style="font-size:17px;font-weight:800;color:#92400e;margin-bottom:2px">🎯 ${recom.title}</div>
+            <div style="font-size:14px;color:#78350f;line-height:1.35">${recom.desc}</div>
+          </div>
+          <button class="recom-btn" onclick="go('${recom.action}')">
+            ${recom.btnText}
+          </button>
+        </div>
+      </div>
+
+      <!-- 4B. THỐNG KÊ HOẠT ĐỘNG & BỎ DỞ (ANALYTICS) -->
+      <div class="dash-card">
+        <div class="dash-card-title">📊 ${T("Thống kê hoàn thành & Bài học bỏ dở","Activity Completion & Drop-offs")}</div>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:105px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#16a34a">${totalCompletes}</div>
+            <div style="font-size:12px;font-weight:700;color:#15803d">${T("Đã hoàn thành","Completed")}</div>
+          </div>
+          <div style="flex:1;min-width:105px;background:#fef2f2;border:2px solid #fecaca;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#dc2626">${totalAbandons}</div>
+            <div style="font-size:12px;font-weight:700;color:#b91c1c">${T("Bỏ dở giữa chừng","Abandoned")}</div>
+          </div>
+          <div style="flex:1;min-width:105px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#2563eb">${totalStarts ? Math.round((totalCompletes / totalStarts) * 100) : 100}%</div>
+            <div style="font-size:12px;font-weight:700;color:#1d4ed8">${T("Tỷ lệ hoàn thành","Completion rate")}</div>
+          </div>
+        </div>
+
+        ${abandonedList.length > 0 ? `
+          <div style="margin-top:12px">
+            <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:6px">⚠️ ${T("Các bài học bé dừng lại nhiều nhất (cần bố mẹ hỗ trợ):","Activities most frequently abandoned:")}</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              ${abandonedList.slice(0, 5).map(([id, s]) => `
+                <div style="display:flex;align-items:center;justify-content:space-between;background:#fff1f2;border:1px solid #fecdd3;padding:8px 12px;border-radius:10px;font-size:13px">
+                  <span style="font-weight:700;color:#9f1239">📌 ${esc(s.title || id)}</span>
+                  <span>
+                    <span style="background:#f43f5e;color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:800;margin-right:8px">${s.abandons} ${T("lần bỏ dở","abandons")}</span>
+                    <button class="pill" style="font-size:11px;padding:3px 8px" onclick="go('playActivity', '${id}')">🎮 ${T("Xem bài","View")}</button>
+                  </span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        ` : `
+          <div style="margin-top:10px;padding:8px 12px;background:#f8fafc;border-radius:10px;font-size:13px;color:#475569;font-weight:600">
+            🌟 ${T("Tuyệt vời! Bé chưa từng bỏ dở bài học nào giữa chừng.","Great! No activities have been abandoned midway.")}
+          </div>
+        `}
+      </div>
+
+      <!-- 5. KỸ NĂNG CẦN LUYỆN THÊM -->
+      ${topErrors.length ? `
+        <div class="dash-card">
+          <div class="dash-card-title">🔄 ${T("Các điểm bé thường nhầm lẫn","Needs Extra Practice")}</div>
+          <div class="chips">
+            ${topErrors.map(([k, v]) => `<span class="pill" style="border-color:#fca5a5;background:#fef2f2;color:#991b1b">⚠ ${k} ×${v}</span>`).join("")}
+          </div>
+        </div>
+      ` : ""}
+
+      <!-- 6. BẢO MẬT & CÀI ĐẶT -->
+      <div class="dash-card">
+        <div class="dash-card-title">⚙️ ${T("Cài đặt hệ thống & Giọng đọc","Settings & Voice")}</div>
+        <div style="margin-bottom:8px">${vh}</div>
+        <div style="font-size:13px;color:#64748b;font-weight:700;margin-top:8px">${T("Ngôn ngữ hiển thị & phát âm:","Language:")}</div>
+        <div class="chips">
+          ${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 English"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}');parent()">${t}</button>`).join("")}
+        </div>
+        <div style="font-size:13px;color:#334155;font-weight:700;margin-top:8px">${T("Hiệu ứng & Cảm ứng:","Sound & Effects:")}</div>
+        <div class="chips">
+          <button class="pill${SOUND_ON()?" on":""}" onclick="toggleSoundMaster();parent()">🔊 ${T("Âm thanh & Giọng đọc: "+(SOUND_ON()?"BẬT":"TẮT"),"Master sound: "+(SOUND_ON()?"ON":"OFF"))}</button>
+          <button class="pill${sf?" on":""}" onclick="togSfx();parent()">🔔 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button>
+          <button class="pill${rmOn()?" on":""}" onclick="togRM();parent()">🎞 ${T("Giảm chuyển động: "+(rp==="auto"?"THEO MÁY":rp==="1"?"BẬT":"TẮT"),"Reduce motion: "+(rp==="auto"?"AUTO":rp==="1"?"ON":"OFF"))}</button>
+          <button class="pill" onclick="changeParentPin()">🔑 ${T("Đổi mã PIN phụ huynh","Change PIN")}</button>
+          <button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button>
+        </div>
+      </div>
+
+      <!-- 7. ĐẶT LẠI DỮ LIỆU & SAO LƯU -->
+      <div class="dash-card">
+        <div class="dash-card-title">🗑 ${T("Dữ liệu & Đặt lại","Data & Reset")}</div>
+        <div class="note warn" style="text-align:left">
+          <b>${T("Đặt lại tiến độ học tập của bé","Reset Kid's Progress")}</b>
+          <small style="margin:4px 0 8px;line-height:1.4">${T("Bố mẹ có thể đặt lại số sao, chuỗi ngày học streak, huy hiệu để bé học lại từ đầu nếu muốn.","Reset stars, streak, and badges to start over.")}</small>
+          <div class="chips" style="margin-top:8px">
+            <button class="pill" onclick="resetAllKidsData()" style="background:#fee2e2;color:#991b1b;border-color:#ef4444;font-weight:800">
+              🗑 ${T("Đặt lại toàn bộ tiến độ của bé","Reset All Progress")}
+            </button>
+            <button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">
+              📊 ${T("Chỉ xóa thống kê câu hỏi","Reset Quiz Stats Only")}
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <div style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:6px">${T("Sao lưu / Khôi phục tiến độ ra máy khác:","Backup & Restore:")}</div>
+          <div class="chips">
+            <button class="pill" onclick="exportData(0)">💾 ${T("Sao lưu tiến độ","Backup progress")}</button>
+            <button class="pill" onclick="exportData(1)">💾 ${T("Kèm giọng thu"+(nrec?" ("+nrec+")":""),"With voices")}</button>
+            <button class="pill" onclick="document.getElementById('bf').click()">📂 ${T("Khôi phục","Restore")}</button>
+          </div>
+          <input type="file" id="bf" accept=".json,application/json" hidden onchange="importData(this.files[0]);this.value=''">
+          <div class="note" id="bmsg" hidden></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
 function idb(mode,fn){return new Promise((res,rej)=>{try{const r=indexedDB.open("bhv",1);r.onupgradeneeded=()=>r.result.createObjectStore("rec");r.onerror=()=>rej(r.error);r.onsuccess=()=>{const tx=r.result.transaction("rec",mode),q=fn(tx.objectStore("rec"));tx.oncomplete=()=>res(q&&q.result);tx.onerror=()=>rej(tx.error)}}catch(e){rej(e)}})}
 let rt="num",rl="vi",mr=null;
 const RMAX=2*1024*1024,RTOT=40*1024*1024,recTotal=()=>Object.values(RECSZ).reduce((a,b)=>a+b,0);
@@ -1170,15 +2826,15 @@ function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges};
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,tierActivities,tierActMath,tierActWord,tierActRead,playActivity};
 const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
 function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
  return LP[k]=new Promise(res=>{const s=document.createElement("script");s.src=LAZY[k];s.onload=()=>res(true);s.onerror=()=>{delete LP[k];s.remove();res(false)};document.head.appendChild(s)})}
 function upSpr(){m.querySelectorAll("img.spf").forEach(e=>{const k=e.dataset.sk;if(!I["s_"+k])return;const s=document.createElement("span");s.className="spr";s.style.cssText=`--z:${e.dataset.z};background-image:url(${I["s_"+k]})`;e.replaceWith(s)})}
-const SFX=()=>ls.get("sfx","1")!=="0";
+const SFX=()=>SOUND_ON()&&ls.get("sfx","1")!=="0";
 const rmOn=()=>{const p=ls.get("rm","auto");return p==="1"||(p==="auto"&&!!window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)};
 const applyRM=()=>document.documentElement.classList.toggle("rm",rmOn());
-const togSfx=()=>{ls.set("sfx",SFX()?"0":"1");parent()};
+const togSfx=()=>{ls.set("sfx",ls.get("sfx","1")!=="0"?"0":"1");parent()};
 const togRM=()=>{const p=ls.get("rm","auto");ls.set("rm",p==="auto"?"1":p==="1"?"0":"auto");applyRM();parent()};
 const MINW=2000,PAUSE=700,MAXW=30000;
 function adv(fn){const my=sc,t0=Date.now();(function chk(){if(sc!==my)return;const n=Date.now();if(n-t0>=MAXW||(n-t0>=MINW&&!busy&&n-busyEnd>=PAUSE))fn();else setTimeout(chk,150)})()}
@@ -1186,8 +2842,8 @@ const VIHELP="Cách xử lý: cài giọng tiếng Việt cho máy, hoặc dùng
 function testVi(){const o=lang;lang="vi";say("Xin chào bé. Mình cùng học nhé","Hello");lang=o}
 const bm=t=>{const e=document.getElementById("bmsg");if(e){e.textContent=t;e.hidden=false}};
 const b2d=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(b)});
-const LSK=["stars","st","lvl","lang","rate2","auto","ad","sfx","rm","trm"];
-const LSV={stars:/^\d{1,9}$/,lvl:/^[123]$/,lang:/^(vi|en|both)$/,rate2:/^\d?\.?\d{1,3}$/,auto:/^[01]$/,ad:/^\d{1,3},\d{1,3}$/,sfx:/^[01]$/,rm:/^(auto|0|1)$/,trm:/^(up|lo|nu)$/};
+const LSK=["stars","st","lvl","lang","rate2","auto","ad","sfx","rm","trm","sound_master"];
+const LSV={stars:/^\d{1,9}$/,lvl:/^[123]$/,lang:/^(vi|en|both)$/,rate2:/^\d?\.?\d{1,3}$/,auto:/^[01]$/,ad:/^\d{1,3},\d{1,3}$/,sfx:/^[01]$/,rm:/^(auto|0|1)$/,trm:/^(up|lo|nu)$/,sound_master:/^[01]$/};
 const okSt=v=>{try{const o=JSON.parse(v);return!!o&&typeof o==="object"&&Number.isFinite(+o.n)&&Number.isFinite(+o.f)&&(!o.w||typeof o.w==="object")}catch(e){return false}};
 async function saveFile(bl,name){const f=new File([bl],name,{type:bl.type});
  if(matchMedia("(pointer:coarse)").matches&&navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:name});return"share"}catch(e){if(e&&e.name==="AbortError")return"cancel"}}
