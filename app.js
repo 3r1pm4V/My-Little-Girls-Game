@@ -129,19 +129,205 @@ loadVoices();
 if(SS){const vc=()=>{loadVoices();if(cur==="parent")parent()};try{SS.addEventListener("voiceschanged",vc)}catch(e){SS.onvoiceschanged=vc}}
 const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
 const vState=()=>{if(!SS)return{k:"none"};loadVoices();if(!VOICES.length)return vWait?{k:"none"}:{k:"wait"};const v=viV();return v?{k:"ok",n:v.name}:{k:"no"}};
+// ============================================================================
+// HỆ THỐNG ÂM THANH VIENEU TTS & CACHING NÂNG CAO (CLIENT-ONLY)
+// 1. Lazy Hydration cho AUDIO_MAP
+// 2. Advanced IndexedDB Audio Caching (LRU eviction max 50MB)
+// 3. Fallback mượt mà sang Web Speech API khi mạng yếu hoặc TTS lỗi
+// ============================================================================
+const AUDIO_CACHE_DB = "bhv_audio_cache";
+const AUDIO_CACHE_STORE = "audios";
+const MAX_AUDIO_CACHE_BYTES = 50 * 1024 * 1024; // 50 MB
+const MEM_AUDIO_URLS = new Map();
+
+function openAudioCacheDB(){
+  return new Promise(res=>{
+    try{
+      if(!window.indexedDB)return res(null);
+      const req=indexedDB.open(AUDIO_CACHE_DB,1);
+      req.onupgradeneeded=()=>{
+        const db=req.result;
+        if(!db.objectStoreNames.contains(AUDIO_CACHE_STORE)){
+          const store=db.createObjectStore(AUDIO_CACHE_STORE,{keyPath:"url"});
+          store.createIndex("lastUsed","lastUsed",{unique:false});
+        }
+      };
+      req.onsuccess=()=>res(req.result);
+      req.onerror=()=>res(null);
+    }catch(e){res(null)}
+  });
+}
+
+async function getCachedAudio(url){
+  if(!url)return null;
+  if(MEM_AUDIO_URLS.has(url))return MEM_AUDIO_URLS.get(url);
+  try{
+    const db=await openAudioCacheDB();
+    if(!db)return null;
+    return new Promise(res=>{
+      const tx=db.transaction(AUDIO_CACHE_STORE,"readwrite");
+      const store=tx.objectStore(AUDIO_CACHE_STORE);
+      const req=store.get(url);
+      req.onsuccess=()=>{
+        const it=req.result;
+        if(it&&it.blob){
+          it.lastUsed=Date.now();
+          try{store.put(it)}catch(e){}
+          const u=URL.createObjectURL(it.blob);
+          MEM_AUDIO_URLS.set(url,u);
+          res(u);
+        }else res(null);
+      };
+      req.onerror=()=>res(null);
+    });
+  }catch(e){return null}
+}
+
+async function cacheAudio(url,blob){
+  if(!url||!blob||!window.indexedDB)return null;
+  try{
+    const db=await openAudioCacheDB();
+    if(!db)return null;
+    const size=blob.size||0;
+    await evictLRUIfNeeded(db,size);
+    return new Promise(res=>{
+      const tx=db.transaction(AUDIO_CACHE_STORE,"readwrite");
+      const store=tx.objectStore(AUDIO_CACHE_STORE);
+      store.put({url,blob,size,lastUsed:Date.now()});
+      tx.oncomplete=()=>{
+        if(!MEM_AUDIO_URLS.has(url)){
+          MEM_AUDIO_URLS.set(url,URL.createObjectURL(blob));
+        }
+        res(true);
+      };
+      tx.onerror=()=>res(false);
+    });
+  }catch(e){
+    console.warn("Lỗi cacheAudio IndexedDB:",e);
+    return null;
+  }
+}
+window.cacheAudio=cacheAudio;
+window.getCachedAudio=getCachedAudio;
+
+async function evictLRUIfNeeded(db,incomingSize){
+  return new Promise(res=>{
+    try{
+      const tx=db.transaction(AUDIO_CACHE_STORE,"readwrite");
+      const store=tx.objectStore(AUDIO_CACHE_STORE);
+      const idx=store.index("lastUsed");
+      const req=idx.openCursor();
+      let totalSize=0;
+      const recs=[];
+      req.onsuccess=e=>{
+        const cur=e.target.result;
+        if(cur){
+          totalSize+=cur.value.size||0;
+          recs.push({url:cur.value.url,size:cur.value.size||0});
+          cur.continue();
+        }else{
+          if(totalSize+incomingSize>MAX_AUDIO_CACHE_BYTES){
+            let toRemove=(totalSize+incomingSize)-(MAX_AUDIO_CACHE_BYTES*0.85);
+            for(const r of recs){
+              if(toRemove<=0)break;
+              store.delete(r.url);
+              if(MEM_AUDIO_URLS.has(r.url)){
+                try{URL.revokeObjectURL(MEM_AUDIO_URLS.get(r.url))}catch(err){}
+                MEM_AUDIO_URLS.delete(r.url);
+              }
+              toRemove-=r.size;
+            }
+          }
+          res();
+        }
+      };
+      req.onerror=()=>res();
+    }catch(e){res()}
+  });
+}
+
+function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
+  if(!text||!SOUND_ON()){if(onEnd)onEnd();return}
+  if(!SS){if(onEnd)onEnd();return}
+  try{
+    SS.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=langCode;
+    u.rate=RATE;
+    u.pitch=1.15;
+    if(/^vi/i.test(langCode)){
+      const v=viV();if(v)u.voice=v;
+    }else if(/^en/i.test(langCode)){
+      const enV=VOICES.find(v=>/^en([-_]|$)/i.test(v.lang||""));
+      if(enV)u.voice=enV;
+    }
+    u.onend=u.onerror=()=>{if(onEnd)onEnd()};
+    SS.speak(u);
+  }catch(e){if(onEnd)onEnd()}
+}
+
+async function playAudioUrl(url,fallbackText,langCode="vi-VN",onFinish){
+  let done=false;
+  const finishOnce=()=>{if(done)return;done=true;if(typeof onFinish==="function")onFinish()};
+  if(!SOUND_ON()){
+    A.pause();if(SS){try{SS.cancel()}catch(e){}}
+    finishOnce();return;
+  }
+  let playSource=await getCachedAudio(url);
+  if(!playSource&&/^https?:\/\/|^\.?\/?audio\//i.test(url)){
+    try{
+      const controller=new AbortController();
+      const timeoutId=setTimeout(()=>controller.abort(),2500);
+      const res=await fetch(url,{signal:controller.signal});
+      clearTimeout(timeoutId);
+      if(res&&res.ok){
+        const blob=await res.blob();
+        await cacheAudio(url,blob);
+        playSource=URL.createObjectURL(blob);
+      }
+    }catch(e){}
+  }
+  if(playSource||url){
+    try{
+      A.pause();
+      A.onended=finishOnce;
+      A.onerror=()=>fallbackToWebSpeech(fallbackText,langCode,finishOnce);
+      A.src=playSource||url;
+      await A.play();
+      return;
+    }catch(e){
+      if(e&&e.name==="AbortError")return;
+      fallbackToWebSpeech(fallbackText,langCode,finishOnce);
+      return;
+    }
+  }
+  fallbackToWebSpeech(fallbackText,langCode,finishOnce);
+}
+
 const getAudio=ak=>{
-  if(!REC&&!window.AUDIO_MAP)return null;
-  const raw=ak.replace(/^(vi|en)\|/i,"");
-  return REC[ak]||REC[raw]||(window.AUDIO_MAP&&(
-    window.AUDIO_MAP[ak] ||
-    window.AUDIO_MAP[raw] ||
-    window.AUDIO_MAP[raw.toLowerCase()] ||
-    window.AUDIO_MAP[ak.toLowerCase()] ||
-    window.AUDIO_MAP[raw+"."] ||
-    window.AUDIO_MAP[raw.replace(/[.!?]+$/,"")] ||
-    window.AUDIO_MAP[raw.toLowerCase().replace(/[.!?]+$/,"")]
-  ));
+  if(!ak)return null;
+  const raw=ak.replace(/^(vi|en)\|/i,"").trim();
+  if(REC[ak]||REC[raw])return REC[ak]||REC[raw];
+  const map=window.AUDIO_MAP||(typeof window.__hydrateAudioMap==="function"?window.__hydrateAudioMap():null);
+  if(!map)return null;
+  const norm=raw.replace(/[.!?]+$/,"");
+  const normLower=norm.toLowerCase();
+  const akClean=ak.trim().replace(/[.!?]+$/,"");
+  return(
+    map[ak]||
+    map[raw]||
+    map[norm]||
+    map[normLower]||
+    map[akClean]||
+    map[akClean.toLowerCase()]||
+    map["vi|"+norm]||
+    map["vi|"+normLower]||
+    map["en|"+norm]||
+    map["en|"+normLower]||
+    null
+  );
 };
+
 function say(vi,en){
   if(!SOUND_ON()){
     A.pause();
@@ -155,10 +341,9 @@ function say(vi,en){
   if(LG==="vi"&&vi){
     const fullAudio=getAudio("vi|"+vi.trim());
     if(fullAudio){
-      A.src=fullAudio;
-      const fin=()=>{if(my===tok){busy=false;busyEnd=Date.now()}};
-      A.onended=A.onerror=fin;
-      A.play().catch(e=>{if(my===tok&&e&&e.name!=="AbortError")fin()});
+      playAudioUrl(fullAudio, vi, "vi-VN", ()=>{
+        if(my===tok){busy=false;busyEnd=Date.now()}
+      });
       return;
     }
   }
@@ -173,16 +358,10 @@ function say(vi,en){
     const nt=()=>{if(my!==tok)return;if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>{if(my===tok)nx(i+1)},300/RATE)};
     const ak=q[i][1].slice(0,2)+"|"+q[i][0],rk=getAudio(ak);
     if(rk){
-      if(SS){try{SS.cancel()}catch(e){}}
-      A.onended=A.onerror=nt;A.src=rk;
-      A.play().catch(e=>{if(my===tok&&e&&e.name!=="AbortError")nt()});
+      playAudioUrl(rk, q[i][0], q[i][1], nt);
       return;
     }
-    if(q[i][1]==="vi-VN"&&!viV()){nt();return}
-    if(!SS){nt();return}
-    const u=new SpeechSynthesisUtterance(q[i][0]);u.lang=q[i][1];u.rate=RATE;u.pitch=1.2;
-    if(q[i][1]==="vi-VN"){const v=viV();if(v)u.voice=v}
-    u.onend=u.onerror=nt;SS.speak(u);
+    fallbackToWebSpeech(q[i][0], q[i][1], nt);
   })(0);
 }
 let AC;
@@ -2353,21 +2532,17 @@ let curTone = 0;
 function playConsonant(c, r){
   const cAudio = getAudio("vi|" + r) || getAudio(r);
   if(cAudio){
-    A.pause(); if(SS) SS.cancel();
-    A.src = cAudio;
-    A.play().catch(()=>{});
+    playAudioUrl(cAudio, r, "vi-VN");
   } else {
-    say(r, c);
+    fallbackToWebSpeech(r, "vi-VN");
   }
 }
 function playVowel(v){
   const vAudio = getAudio("vi|" + v) || getAudio(v);
   if(vAudio){
-    A.pause(); if(SS) SS.cancel();
-    A.src = vAudio;
-    A.play().catch(()=>{});
+    playAudioUrl(vAudio, v, "vi-VN");
   } else {
-    say(v, v);
+    fallbackToWebSpeech(v, "vi-VN");
   }
 }
 function playSyllable(text, c, v, toneIdx, spellText){
@@ -2387,11 +2562,9 @@ function playSyllable(text, c, v, toneIdx, spellText){
   });
   const sylAudio = getAudio("vi|" + text) || getAudio(text);
   if(sylAudio){
-    A.pause(); if(SS) SS.cancel();
-    A.src = sylAudio;
-    A.play().catch(()=>{});
+    playAudioUrl(sylAudio, text, "vi-VN");
   } else {
-    say(text, text);
+    fallbackToWebSpeech(text, "vi-VN");
   }
 }
 function playSpell(c, v, toneIdx, finalWord, spellText){
@@ -2420,39 +2593,54 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
                      getAudio(spoken);
 
   if(spellAudio){
-    A.src = spellAudio;
-    A.onended = fin;
-    A.onerror = fin;
-    A.play().catch(e => {
-      if(my === tok && e && e.name !== "AbortError") fin();
-    });
+    playAudioUrl(spellAudio, spoken, "vi-VN", fin);
     return;
   }
 
-  // 2. Thử gọi Local Server TTS nếu đang chạy (hỗ trợ sinh audio Vieneu động)
-  fetch('/api/tts', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: spoken, voice: 'Tưởng Vy' })
-  })
-  .then(res => res.ok ? res.json() : null)
-  .then(data => {
+  // 2. Thử kiểm tra IndexedDB cache cho TTS động
+  const ttsKey = "tts:vi:" + spoken;
+  getCachedAudio(ttsKey).then(cachedUrl => {
     if(my !== tok) return;
-    if(data && data.url){
-      A.src = data.url;
-      A.onended = fin;
-      A.onerror = fin;
-      A.play().catch(fin);
+    if(cachedUrl){
+      playAudioUrl(cachedUrl, spoken, "vi-VN", fin);
       return;
     }
-    // 3. Fallback: Phát âm mượt mà bằng giọng đọc tiếng Việt Web Speech API
-    say(spoken, spoken);
-    setTimeout(fin, spoken.length * 120 + 800);
-  })
-  .catch(() => {
-    if(my !== tok) return;
-    say(spoken, spoken);
-    setTimeout(fin, spoken.length * 120 + 800);
+
+    // 3. Thử gọi Local Server TTS nếu đang chạy (hỗ trợ sinh audio Vieneu động) kèm timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+    fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: spoken, voice: 'Tưởng Vy' }),
+      signal: controller.signal
+    })
+    .then(res => {
+      clearTimeout(timeoutId);
+      return res.ok ? res.json() : null;
+    })
+    .then(async data => {
+      if(my !== tok) return;
+      if(data && data.url){
+        try{
+          const aRes = await fetch(data.url);
+          if(aRes && aRes.ok){
+            const blob = await aRes.blob();
+            await cacheAudio(ttsKey, blob);
+            await cacheAudio(data.url, blob);
+          }
+        }catch(e){}
+        playAudioUrl(data.url, spoken, "vi-VN", fin);
+        return;
+      }
+      fallbackToWebSpeech(spoken, "vi-VN", fin);
+    })
+    .catch(() => {
+      clearTimeout(timeoutId);
+      if(my !== tok) return;
+      fallbackToWebSpeech(spoken, "vi-VN", fin);
+    });
   });
 }
 function pickConsonant(c, r){
@@ -2480,26 +2668,15 @@ const CO_LAN_ANH_LESSONS = {
   25: "04w8wNfFliw", 26: "YJ8Ms45Ttio", 27: "_9mHo5uIlvA", 28: "y2bFgBHTxUk"
 };
 function playLessonAudio(audioUrl, fallbackText){
-  A.pause(); A.onended = null; A.onerror = null;
-  if(SS){ try{ SS.cancel(); } catch(e){} }
   const my = ++tok;
   busy = true;
   const fin = () => { if(my === tok){ busy = false; busyEnd = Date.now(); } };
 
   const target = audioUrl ? (getAudio(audioUrl) || audioUrl) : null;
   if(target){
-    A.src = target;
-    A.onended = fin;
-    A.onerror = () => {
-      if(my === tok) say(fallbackText, fallbackText);
-    };
-    A.play().catch(e => {
-      if(my === tok && e && e.name !== "AbortError"){
-        say(fallbackText, fallbackText);
-      }
-    });
+    playAudioUrl(target, fallbackText, "vi-VN", fin);
   } else {
-    say(fallbackText, fallbackText);
+    fallbackToWebSpeech(fallbackText, "vi-VN", fin);
   }
 }
 let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
