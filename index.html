@@ -44,19 +44,34 @@ h1{font-size:clamp(30px,7vw,52px);line-height:1.1;margin:6px 0 12px}
 h2{font-size:clamp(22px,5vw,36px);margin:8px 0;cursor:pointer;line-height:1.2}
 .hero img{width:clamp(110px,22vw,180px)}
 .cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:920px;margin:12px auto}
-.card{background:var(--card);border-radius:28px;border:5px solid var(--acc);width:clamp(145px,26vw,240px);min-height:165px;padding:14px 10px 16px;font-size:clamp(19px,4vw,24px);font-weight:800;color:var(--ink);line-height:1.25;box-shadow:0 8px 0 #0002;transition:transform .12s,box-shadow .12s,filter .12s;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;word-break:break-word}
-.card.card-math{border-color:#0284c7;box-shadow:0 8px 0 #0369a1;background:linear-gradient(180deg,#fff 55%,#f0f9ff 100%)}
+.card{background:#fff!important;border-radius:28px;border:5px solid var(--acc);width:clamp(145px,26vw,240px);min-height:165px;padding:14px 10px 16px;font-size:clamp(19px,4vw,24px);font-weight:800;color:#1e293b!important;line-height:1.25;box-shadow:0 8px 0 #0002;transition:transform .12s,box-shadow .12s,filter .12s;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;word-break:break-word}
+.card > span{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
+.card > span > span{display:block;font-size:1em;font-weight:800;line-height:1.2;color:#1e293b}
+.card > span > small{display:block;font-size:.68em;font-weight:700;line-height:1.2;margin-top:3px;color:#64748b;opacity:1}
+.card.card-math{border-color:#0284c7;box-shadow:0 8px 0 #0369a1;background:linear-gradient(180deg,#fff 55%,#f0f9ff 100%)!important}
 .card.card-math .vis b{color:#0284c7}
-.card.card-vietnamese{border-color:#ea580c;box-shadow:0 8px 0 #c2410c;background:linear-gradient(180deg,#fff 55%,#fff7ed 100%)}
+.card.card-math > span > span{color:#0369a1!important}
+.card.card-math > span > small{color:#0284c7!important}
+.card.card-vietnamese{border-color:#ea580c;box-shadow:0 8px 0 #c2410c;background:linear-gradient(180deg,#fff 55%,#fff7ed 100%)!important}
 .card.card-vietnamese .vis b{color:#ea580c}
-.card.card-reading{border-color:#8b5cf6;box-shadow:0 8px 0 #6d28d9;background:linear-gradient(180deg,#fff 55%,#faf5ff 100%)}
+.card.card-vietnamese > span > span{color:#9a3412!important}
+.card.card-vietnamese > span > small{color:#ea580c!important}
+.card.card-reading{border-color:#8b5cf6;box-shadow:0 8px 0 #6d28d9;background:linear-gradient(180deg,#fff 55%,#faf5ff 100%)!important}
 .card.card-reading .vis b{color:#8b5cf6}
-.card.card-game{border-color:#10b981;box-shadow:0 8px 0 #047857;background:linear-gradient(180deg,#fff 55%,#f0fdf4 100%)}
+.card.card-reading > span > span{color:#6b21a8!important}
+.card.card-reading > span > small{color:#8b5cf6!important}
+.card.card-game{border-color:#10b981;box-shadow:0 8px 0 #047857;background:linear-gradient(180deg,#fff 55%,#f0fdf4 100%)!important}
 .card.card-game .vis b{color:#10b981}
-.card.card-logic{border-color:#f59e0b;box-shadow:0 8px 0 #b45309;background:linear-gradient(180deg,#fff 55%,#fffbeb 100%)}
+.card.card-game > span > span{color:#065f46!important}
+.card.card-game > span > small{color:#10b981!important}
+.card.card-logic{border-color:#f59e0b;box-shadow:0 8px 0 #b45309;background:linear-gradient(180deg,#fff 55%,#fffbeb 100%)!important}
 .card.card-logic .vis b{color:#f59e0b}
-.card.card-trace{border-color:#ec4899;box-shadow:0 8px 0 #be185d;background:linear-gradient(180deg,#fff 55%,#fdf2f8 100%)}
+.card.card-logic > span > span{color:#92400e!important}
+.card.card-logic > span > small{color:#d97706!important}
+.card.card-trace{border-color:#ec4899;box-shadow:0 8px 0 #be185d;background:linear-gradient(180deg,#fff 55%,#fdf2f8 100%)!important}
 .card.card-trace .vis b{color:#ec4899}
+.card.card-trace > span > span{color:#9d174d!important}
+.card.card-trace > span > small{color:#ec4899!important}
 button, .card, .opt, .chip, .pill, .syl-btn, .word-btn, .rhyme-chip, .story-item, .k-bc-btn, .ob, .k-bc-back, .trace-sample-card, .trace-picker button, .nav, .act-opt-btn, .cg-opt-btn{min-height:64px;min-width:64px;touch-action:manipulation}
 button:active,.card:active,.opt:active,.chip:active,.pill:active,.syl-btn:active,.word-btn:active,.rhyme-chip:active,.story-item:active,.k-bc-btn:active,.ob:active,.k-bc-back:active,.badge-btn:active{transform:scale(.92) translateY(2px)!important;box-shadow:0 1px 0 #0003!important;filter:brightness(1.12) saturate(1.15)}
 .k-bc{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border:2.5px solid var(--acc2);border-radius:24px;padding:6px 10px;margin:6px auto 12px;max-width:760px;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
@@ -91,8 +106,9 @@ button:active,.card:active,.opt:active,.chip:active,.pill:active,.syl-btn:active
 .confetti-cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-.vis{height:clamp(64px,16vw,95px);display:flex;align-items:center;justify-content:center;gap:2px;margin-bottom:4px;overflow:hidden}
-.vis img{height:clamp(52px,13vw,85px)}.vis b{font-size:clamp(28px,6vw,44px);letter-spacing:2px;color:var(--acc);white-space:nowrap}
+.vis{height:clamp(60px,15vw,88px);display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:6px;overflow:hidden;max-width:100%}
+.vis img{height:clamp(48px,12vw,76px);width:auto}
+.vis b,.vis span{font-size:clamp(26px,5.8vw,40px);letter-spacing:1px;color:var(--acc);white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;line-height:1}
 .row{display:flex;justify-content:flex-start;margin:6px 0}
 .pill{background:var(--card);border:3px solid var(--acc);border-radius:30px;padding:8px 16px;font-size:18px;line-height:1.2;text-align:center;min-height:48px;min-width:48px;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 0 #0002;font-family:inherit;font-weight:700;transition:transform .12s,box-shadow .12s,background .12s}
 .stage{display:flex;align-items:center;justify-content:center;gap:10px}

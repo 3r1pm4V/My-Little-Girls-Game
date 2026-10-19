@@ -784,27 +784,27 @@ function home(){
       ${card("numL", "<b>1 2 3</b>", "Học số", "Numbers", "math")}
       ${card("countGame", "<b>🍎 3 ⭐</b>", "Đếm hình chọn số", "Count & Match", "game")}
       ${card("readL", "<b>ĐỌC</b>", "Đánh vần & Đọc", "Reading", "reading")}
-      ${card("tierActivities", "<b>🎯 BÀI TẬP</b>", "Bài tập mầm non", "Preschool Tasks", "logic")}
-      ${card("storyL", "<b>📖✨</b>", "Truyện cổ tích", "Stories", "reading")}
+      ${card("tierActivities", "<b>🎯 🎒</b>", "Bài tập mầm non", "Preschool Tasks", "logic")}
+      ${card("storyL", "<b>📖 ✨</b>", "Truyện cổ tích", "Stories", "reading")}
       ${card("games", im("kite")+im("rocket"), "Trò chơi", "Games", "game")}
     `;
   } else if(currentTier === "grade1_2"){
     cardsHtml = `
-      ${card("tierActivities", "<b>🎯 BÀI HỌC</b>", "Bài tập Lớp 1-2", "Grade 1-2 Lessons", "logic")}
+      ${card("tierActivities", "<b>🎯 🎒</b>", "Bài tập Lớp 1-2", "Grade 1-2 Lessons", "logic")}
       ${card("math10", "<b>8 + 7</b>", "Toán 20 - 100", "Math 20 - 100", "math")}
-      ${card("tierActWord", "<b>GHÉP TỪ</b>", "Ghép vần & Từ", "Word Phonics", "vietnamese")}
+      ${card("tierActWord", "<b>🔤 🧩</b>", "Ghép vần & Từ", "Word Phonics", "vietnamese")}
       ${card("cmpS", "<b>&gt; = &lt;</b>", "Dấu so sánh", "Signs", "math")}
       ${card("trace", im("pencil")+"<b>Aa1</b>", "Luyện chữ đẹp", "Handwriting", "trace")}
-      ${card("storyL", "<b>📖✨</b>", "Đọc truyện", "Stories", "reading")}
+      ${card("storyL", "<b>📖 ✨</b>", "Đọc truyện", "Stories", "reading")}
       ${card("games", im("kite")+im("rocket"), "Trò chơi", "Games", "game")}
     `;
   } else {
     cardsHtml = `
-      ${card("tierActivities", "<b>🎯 BÀI HỌC</b>", "Bài tập Lớp 3-5", "Grade 3-5 Lessons", "logic")}
+      ${card("tierActivities", "<b>🎯 🎒</b>", "Bài tập Lớp 3-5", "Grade 3-5 Lessons", "logic")}
       ${card("tierActMath", "<b>7 × 8</b>", "Nhân chia & Phân số", "Multiply & Fractions", "math")}
-      ${card("tierActRead", "<b>📖 ĐỌC HIỂU</b>", "Đọc hiểu văn bản", "Reading Comprehension", "reading")}
+      ${card("tierActRead", "<b>📖 🔍</b>", "Đọc hiểu văn bản", "Reading Comprehension", "reading")}
       ${card("cmpS", "<b>&gt; = &lt;</b>", "Toán so sánh", "Signs", "math")}
-      ${card("storyL", "<b>📖✨</b>", "Truyện & Bài học", "Stories & Morals", "reading")}
+      ${card("storyL", "<b>📖 ✨</b>", "Truyện & Bài học", "Stories & Morals", "reading")}
       ${card("games", im("kite")+im("rocket"), "Trò chơi trí tuệ", "Logic Games", "game")}
     `;
   }
