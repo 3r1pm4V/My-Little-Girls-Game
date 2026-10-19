@@ -2,6 +2,7 @@
 
 [build]
   publish = "."
+  functions = "netlify/functions"
 
 [[headers]]
   for = "/*"
@@ -40,6 +41,12 @@
   for = "/*.png"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
+
+# TTS API endpoint to Netlify serverless function
+[[redirects]]
+  from = "/api/tts"
+  to = "/.netlify/functions/tts"
+  status = 200
 
 # SPA redirect fallback
 [[redirects]]

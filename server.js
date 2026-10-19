@@ -80,17 +80,32 @@ function fetchVieneuTTS(text, voice) {
   });
 }
 
+function normAudioKey(s) {
+  if (!s) return "";
+  return String(s)
+    .trim()
+    .toLowerCase()
+    .normalize("NFC")
+    .replace(/[.,!?:;'"“”„…\-–—()\[\]{}]+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function updateAudioMap(key, relativePath) {
   const mapPath = path.join(__dirname, 'audio-map.js');
   try {
     if (fs.existsSync(mapPath)) {
       let content = fs.readFileSync(mapPath, 'utf8');
-      const m = content.match(/window\.AUDIO_MAP\s*=\s*(\{[\s\S]*?\});/);
+      const m = content.match(/(const\s+RAW_MAP\s*=\s*)(\{[\s\S]*?\})(\s*;)/);
       if (m) {
-        const map = JSON.parse(m[1]);
+        const map = JSON.parse(m[2]);
+        const clean = normAudioKey(key.replace(/^(vi|en)\|/, ''));
         map[key] = relativePath;
-        map[key + "."] = relativePath;
-        fs.writeFileSync(mapPath, `// Bản đồ âm thanh VieNeu (Giọng #11 Tường Vy) & Bảng chữ cái VTV7 & Đánh vần Ghép tiếng chuẩn\nwindow.AUDIO_MAP = ${JSON.stringify(map, null, 2)};\n`, 'utf8');
+        map[clean] = relativePath;
+        map['vi|' + clean] = relativePath;
+        const newMapJson = JSON.stringify(map, null, 2);
+        content = content.replace(m[0], m[1] + newMapJson + m[3]);
+        fs.writeFileSync(mapPath, content, 'utf8');
       }
     }
   } catch (e) {

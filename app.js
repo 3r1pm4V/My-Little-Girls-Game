@@ -187,14 +187,18 @@ const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
 const vState=()=>{if(!SS)return{k:"none"};loadVoices();if(!VOICES.length)return vWait?{k:"none"}:{k:"wait"};const v=viV();return v?{k:"ok",n:v.name}:{k:"no"}};
 // ============================================================================
 // HỆ THỐNG ÂM THANH VIENEU TTS & CACHING NÂNG CAO (CLIENT-ONLY)
-// 1. Lazy Hydration cho AUDIO_MAP
-// 2. Advanced IndexedDB Audio Caching (LRU eviction max 50MB)
-// 3. Fallback mượt mà sang Web Speech API khi mạng yếu hoặc TTS lỗi
+// 1. window.AUDIO_MAP load đồng bộ từ audio-map.js
+// 2. Hàm playSafeAudio(text, voice, onEnd):
+//    - Bước 1: Kiểm tra window.AUDIO_MAP[text] -> Phát trực tiếp file MP3 tương đối.
+//    - Bước 2: Kiểm tra IndexedDB ('audios') -> Phát blob URL.
+//    - Bước 3: Gọi API TTS (/api/tts) với debounce 300ms -> Lưu IDB + update AUDIO_MAP -> Phát.
+//    - Bước 4: Fallback Web Speech API (window.speechSynthesis).
 // ============================================================================
 const AUDIO_CACHE_DB = "bhv_audio_cache";
 const AUDIO_CACHE_STORE = "audios";
 const MAX_AUDIO_CACHE_BYTES = 50 * 1024 * 1024; // 50 MB
 const MEM_AUDIO_URLS = new Map();
+const ttsDebounceTimers = new Map();
 
 function openAudioCacheDB(){
   return new Promise(res=>{
@@ -303,6 +307,7 @@ async function evictLRUIfNeeded(db,incomingSize){
 }
 
 function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
+  console.log("[Audio] Fallback to Web Speech:", text);
   if(!text||!SOUND_ON()){if(onEnd)onEnd();return}
   if(!SS){if(onEnd)onEnd();return}
   try{
@@ -322,67 +327,168 @@ function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
   }catch(e){if(onEnd)onEnd()}
 }
 
-async function playAudioUrl(url,fallbackText,langCode="vi-VN",onFinish){
-  let done=false;
-  const finishOnce=()=>{if(done)return;done=true;if(typeof onFinish==="function")onFinish()};
-  if(!SOUND_ON()){
-    A.pause();if(SS){try{SS.cancel()}catch(e){}}
-    finishOnce();return;
-  }
-  let playSource=await getCachedAudio(url);
-  if(!playSource&&/^https?:\/\/|^\.?\/?audio\//i.test(url)){
-    try{
-      const controller=new AbortController();
-      const timeoutId=setTimeout(()=>controller.abort(),2500);
-      const res=await fetch(url,{signal:controller.signal});
-      clearTimeout(timeoutId);
-      if(res&&res.ok){
-        const blob=await res.blob();
-        await cacheAudio(url,blob);
-        playSource=URL.createObjectURL(blob);
-      }
-    }catch(e){}
-  }
-  if(playSource||url){
-    try{
-      A.pause();
-      A.onended=finishOnce;
-      A.onerror=()=>fallbackToWebSpeech(fallbackText,langCode,finishOnce);
-      A.src=playSource||url;
-      await A.play();
-      return;
-    }catch(e){
-      if(e&&e.name==="AbortError")return;
-      fallbackToWebSpeech(fallbackText,langCode,finishOnce);
-      return;
-    }
-  }
-  fallbackToWebSpeech(fallbackText,langCode,finishOnce);
-}
-
 const getAudio=ak=>{
   if(!ak)return null;
   const raw=ak.replace(/^(vi|en)\|/i,"").trim();
   if(REC[ak]||REC[raw])return REC[ak]||REC[raw];
-  const map=window.AUDIO_MAP||(typeof window.__hydrateAudioMap==="function"?window.__hydrateAudioMap():null);
-  if(!map)return null;
-  const norm=raw.replace(/[.!?]+$/,"");
-  const normLower=norm.toLowerCase();
-  const akClean=ak.trim().replace(/[.!?]+$/,"");
+  if(!window.AUDIO_MAP)return null;
+  const clean=typeof window.__normAudioKey==="function"?window.__normAudioKey(raw):raw.toLowerCase();
   return(
-    map[ak]||
-    map[raw]||
-    map[norm]||
-    map[normLower]||
-    map[akClean]||
-    map[akClean.toLowerCase()]||
-    map["vi|"+norm]||
-    map["vi|"+normLower]||
-    map["en|"+norm]||
-    map["en|"+normLower]||
+    window.AUDIO_MAP[ak]||
+    window.AUDIO_MAP[raw]||
+    window.AUDIO_MAP[clean]||
+    window.AUDIO_MAP["vi|"+clean]||
+    window.AUDIO_MAP["en|"+clean]||
     null
   );
 };
+
+// ============================================================================
+// HÀM CHÍNH: playSafeAudio(text, voice, onEnd)
+// Đảm bảo không bao giờ gọi TTS API trước khi check Map và Local DB
+// ============================================================================
+async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
+  let finished=false;
+  const finishOnce=()=>{
+    if(finished)return;
+    finished=true;
+    if(typeof onEnd==="function")onEnd();
+  };
+
+  if(!SOUND_ON()||!text){
+    finishOnce();
+    return;
+  }
+
+  const rawText=String(text).trim();
+  const nk=typeof window.__normAudioKey==="function"?window.__normAudioKey(rawText):rawText.toLowerCase().trim();
+  const cleanKey=nk.replace(/^(vi|en)\|/,"");
+
+  // BƯỚC 1: Kiểm tra window.AUDIO_MAP[text]
+  const mapPath=getAudio(rawText)||(window.AUDIO_MAP&&(
+    window.AUDIO_MAP[rawText]||
+    window.AUDIO_MAP[nk]||
+    window.AUDIO_MAP[cleanKey]||
+    window.AUDIO_MAP["vi|"+cleanKey]||
+    window.AUDIO_MAP["en|"+cleanKey]
+  ));
+
+  if(mapPath){
+    console.log("[Audio] Found in Map:", mapPath);
+    try{
+      A.pause();
+      if(SS){try{SS.cancel()}catch(e){}}
+      A.onended=finishOnce;
+      A.onerror=()=>{
+        console.warn("[Audio] Lỗi phát file từ Map, chuyển Web Speech:", mapPath);
+        fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+      };
+      A.src=mapPath;
+      await A.play();
+      return;
+    }catch(e){
+      if(e&&e.name==="AbortError")return;
+      console.warn("[Audio] Play map audio error:", e);
+      fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+      return;
+    }
+  }
+
+  // BƯỚC 2: Kiểm tra IndexedDB (store 'audios')
+  const dbKey="tts:"+cleanKey;
+  let cachedBlobUrl=await getCachedAudio(dbKey);
+  if(!cachedBlobUrl){
+    cachedBlobUrl=await getCachedAudio(rawText);
+  }
+
+  if(cachedBlobUrl){
+    console.log("[Audio] Found in DB:", rawText);
+    try{
+      A.pause();
+      if(SS){try{SS.cancel()}catch(e){}}
+      A.onended=finishOnce;
+      A.onerror=()=>{
+        console.warn("[Audio] Lỗi phát blob từ DB, chuyển Web Speech:", rawText);
+        fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+      };
+      A.src=cachedBlobUrl;
+      await A.play();
+      return;
+    }catch(e){
+      if(e&&e.name==="AbortError")return;
+      console.warn("[Audio] Play DB audio error:", e);
+      fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+      return;
+    }
+  }
+
+  // BƯỚC 3: Gọi API TTS (/api/tts hoặc Netlify Function) với debounce 300ms
+  console.log("[Audio] Fetching from API:", rawText);
+
+  if(ttsDebounceTimers.has(cleanKey)){
+    clearTimeout(ttsDebounceTimers.get(cleanKey));
+  }
+
+  return new Promise(resolve=>{
+    const timerId=setTimeout(async()=>{
+      ttsDebounceTimers.delete(cleanKey);
+      try{
+        const controller=new AbortController();
+        const timeoutId=setTimeout(()=>controller.abort(),3500);
+
+        const res=await fetch('/api/tts',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({text:cleanKey,voice:voice||'Tưởng Vy'}),
+          signal:controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if(res&&res.ok){
+          const data=await res.json();
+          if(data&&data.url){
+            // Lưu vào IndexedDB và cập nhật vào AUDIO_MAP
+            try{
+              const aRes=await fetch(data.url);
+              if(aRes&&aRes.ok){
+                const blob=await aRes.blob();
+                await cacheAudio(dbKey,blob);
+                await cacheAudio(data.url,blob);
+                if(window.AUDIO_MAP){
+                  window.AUDIO_MAP[cleanKey]=data.url;
+                  window.AUDIO_MAP["vi|"+cleanKey]=data.url;
+                }
+              }
+            }catch(saveErr){
+              console.warn("[Audio] Lỗi lưu IndexedDB:", saveErr);
+            }
+
+            A.pause();
+            if(SS){try{SS.cancel()}catch(e){}}
+            A.onended=()=>{finishOnce();resolve()};
+            A.onerror=()=>{
+              fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+              resolve();
+            };
+            A.src=data.url;
+            await A.play();
+            return;
+          }
+        }
+        // BƯỚC 4: Fallback Web Speech nếu API trả về không hợp lệ
+        fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+        resolve();
+      }catch(apiErr){
+        // BƯỚC 4: Fallback Web Speech nếu API lỗi / timeout / offline
+        fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+        resolve();
+      }
+    }, 300);
+
+    ttsDebounceTimers.set(cleanKey, timerId);
+  });
+}
+window.playSafeAudio=playSafeAudio;
 
 function say(vi,en){
   if(!SOUND_ON()){
@@ -395,29 +501,21 @@ function say(vi,en){
   if(SS){try{SS.cancel()}catch(e){}}
   const LG=ql||lang;
   if(LG==="vi"&&vi){
-    const fullAudio=getAudio("vi|"+vi.trim());
-    if(fullAudio){
-      playAudioUrl(fullAudio, vi, "vi-VN", ()=>{
-        if(my===tok){busy=false;busyEnd=Date.now()}
-      });
-      return;
-    }
+    playSafeAudio(vi, "Tưởng Vy", ()=>{
+      if(my===tok){busy=false;busyEnd=Date.now()}
+    });
+    return;
   }
   const sp=(t,l)=>t.split(/[.!?]+\s*/).map(s=>s.trim()).filter(Boolean).map(s=>[s,l]);
   const q=LG==="vi"?sp(vi,"vi-VN"):LG==="en"?sp(en,"en-US"):[...sp(en,"en-US"),...sp(vi,"vi-VN")];
   const fin=()=>{if(my===tok){busy=false;busyEnd=Date.now()}};
-  setTimeout(fin,3000+q.reduce((s,c)=>s+(getAudio(c[1].slice(0,2)+"|"+c[0])?8000:c[0].length*130/RATE)+900/RATE,0));
+  setTimeout(fin,3000+q.reduce((s,c)=>(window.AUDIO_MAP&&window.AUDIO_MAP[c[0]]?8000:c[0].length*130/RATE)+900/RATE,0));
   (function nx(i){
     if(my!==tok)return;
     if(i>=q.length){fin();return}
     let d=0;
     const nt=()=>{if(my!==tok)return;if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>{if(my===tok)nx(i+1)},300/RATE)};
-    const ak=q[i][1].slice(0,2)+"|"+q[i][0],rk=getAudio(ak);
-    if(rk){
-      playAudioUrl(rk, q[i][0], q[i][1], nt);
-      return;
-    }
-    fallbackToWebSpeech(q[i][0], q[i][1], nt);
+    playSafeAudio(q[i][0], "Tưởng Vy", nt);
   })(0);
 }
 let AC;
@@ -2595,20 +2693,10 @@ async function importAudio(list){let ok=0;const bad=[];
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
 let curTone = 0;
 function playConsonant(c, r){
-  const cAudio = getAudio("vi|" + r) || getAudio(r);
-  if(cAudio){
-    playAudioUrl(cAudio, r, "vi-VN");
-  } else {
-    fallbackToWebSpeech(r, "vi-VN");
-  }
+  playSafeAudio(r, "Tưởng Vy");
 }
 function playVowel(v){
-  const vAudio = getAudio("vi|" + v) || getAudio(v);
-  if(vAudio){
-    playAudioUrl(vAudio, v, "vi-VN");
-  } else {
-    fallbackToWebSpeech(v, "vi-VN");
-  }
+  playSafeAudio(v, "Tưởng Vy");
 }
 function playSyllable(text, c, v, toneIdx, spellText){
   curTone = toneIdx;
@@ -2625,12 +2713,7 @@ function playSyllable(text, c, v, toneIdx, spellText){
     btn.classList.toggle("active", i === toneIdx);
     btn.classList.toggle("on", i === toneIdx);
   });
-  const sylAudio = getAudio("vi|" + text) || getAudio(text);
-  if(sylAudio){
-    playAudioUrl(sylAudio, text, "vi-VN");
-  } else {
-    fallbackToWebSpeech(text, "vi-VN");
-  }
+  playSafeAudio(text, "Tưởng Vy");
 }
 function playSpell(c, v, toneIdx, finalWord, spellText){
   A.pause(); A.onended = null; A.onerror = null;
@@ -2652,61 +2735,7 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
     }
   };
 
-  // 1. Kiểm tra file âm thanh chất lượng cao VieNeu Tưởng Vy trong AUDIO_MAP hoặc REC
-  const spellAudio = getAudio("vi|" + spoken) || 
-                     getAudio("vi|spell_" + c + "_" + v + "_" + toneIdx) || 
-                     getAudio(spoken);
-
-  if(spellAudio){
-    playAudioUrl(spellAudio, spoken, "vi-VN", fin);
-    return;
-  }
-
-  // 2. Thử kiểm tra IndexedDB cache cho TTS động
-  const ttsKey = "tts:vi:" + spoken;
-  getCachedAudio(ttsKey).then(cachedUrl => {
-    if(my !== tok) return;
-    if(cachedUrl){
-      playAudioUrl(cachedUrl, spoken, "vi-VN", fin);
-      return;
-    }
-
-    // 3. Thử gọi Local Server TTS nếu đang chạy (hỗ trợ sinh audio Vieneu động) kèm timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2500);
-
-    fetch('/api/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: spoken, voice: 'Tưởng Vy' }),
-      signal: controller.signal
-    })
-    .then(res => {
-      clearTimeout(timeoutId);
-      return res.ok ? res.json() : null;
-    })
-    .then(async data => {
-      if(my !== tok) return;
-      if(data && data.url){
-        try{
-          const aRes = await fetch(data.url);
-          if(aRes && aRes.ok){
-            const blob = await aRes.blob();
-            await cacheAudio(ttsKey, blob);
-            await cacheAudio(data.url, blob);
-          }
-        }catch(e){}
-        playAudioUrl(data.url, spoken, "vi-VN", fin);
-        return;
-      }
-      fallbackToWebSpeech(spoken, "vi-VN", fin);
-    })
-    .catch(() => {
-      clearTimeout(timeoutId);
-      if(my !== tok) return;
-      fallbackToWebSpeech(spoken, "vi-VN", fin);
-    });
-  });
+  playSafeAudio(spoken, "Tưởng Vy", fin);
 }
 function pickConsonant(c, r){
   curC = c;
@@ -2737,12 +2766,8 @@ function playLessonAudio(audioUrl, fallbackText){
   busy = true;
   const fin = () => { if(my === tok){ busy = false; busyEnd = Date.now(); } };
 
-  const target = audioUrl ? (getAudio(audioUrl) || audioUrl) : null;
-  if(target){
-    playAudioUrl(target, fallbackText, "vi-VN", fin);
-  } else {
-    fallbackToWebSpeech(fallbackText, "vi-VN", fin);
-  }
+  const target = audioUrl ? (getAudio(audioUrl) || audioUrl) : fallbackText;
+  playSafeAudio(target, "Tưởng Vy", fin);
 }
 let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
 function readL(tab){
