@@ -7,7 +7,7 @@ const path = require('path');
 const url = require('url');
 
 const PORT = process.env.PORT || 8000;
-const API_KEY = 'vn_sk_36eb689920476e948285a849b44976ccdbf39b04df8e68ff';
+const API_KEY = process.env.VIENEU_API_KEY || 'vn_sk_622f6140a9fb7f079e25fd9f5831a072b5fed9a195e4f499';
 const DEFAULT_VOICE = 'Tưởng Vy';
 const AUDIO_DIR = path.join(__dirname, 'audio');
 

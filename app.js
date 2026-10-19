@@ -96,9 +96,9 @@ function goBack(){
   if(stk.length>1){
     stk.pop();
     const prev=stk[stk.length-1];
-    show(prev.s,prev.a);
+    show(prev.s,prev.a,true);
   } else {
-    go("home");
+    show("home",undefined,true);
   }
 }
 window.goBack=goBack;
@@ -205,7 +205,7 @@ function showBadges(){
   <div class="row" style="justify-content:center;margin:16px 0">
     <button class="pill on" onclick="goBack()" style="font-size:18px;padding:8px 26px">✔ ${T("Quay lại","Back")}</button>
   </div>`;
-  say("Đây là các huy hiệu và thành tích của bé","Here are your badges and progress");
+  sayPrompt("badges","Đây là các huy hiệu và thành tích của bé","Here are your badges and progress",180000);
 }
 window.showBadges=showBadges;
 
@@ -281,7 +281,7 @@ const cat=document.getElementById("cat");
 function catSet(s){cat.src=I["cat_"+s];cat.className=(s==="happy"||s==="celebrate")?"happy":""}
 function head(){
   const lb=document.getElementById("langBtn");
-  if(lb)lb.innerHTML=lang==="vi"?"🇻🇳 Tiếng Việt":"🇬🇧 English";
+  if(lb)lb.innerHTML=lang==="vi"?'🇻🇳 <span class="lang-txt">Tiếng Việt</span>':'🇬🇧 <span class="lang-txt">English</span>';
   const spBtn=document.getElementById("sp");
   if(spBtn)spBtn.textContent=RATE<.5?"🐢🐢":RATE<.7?"🐢":"🐇";
   const stEl=document.getElementById("stars");
@@ -301,20 +301,57 @@ function head(){
 function toggleLang(){const next=lang==="vi"?"en":"vi";setLang(next);if(typeof cur!=="undefined"&&cur)go(cur);}
 window.toggleLang=toggleLang;
 document.getElementById("hb").innerHTML=im("btn_home");
-document.getElementById("hb").onclick=()=>go("home");
+document.getElementById("hb").onclick=()=>{if(cur==="home")return;show("home",undefined,true);};
 document.getElementById("sp").onclick=()=>{RATE=RATE<.5?.6:RATE<.7?.85:.4;ls.set("rate2",RATE);head();say("Bé nghe nhé","Listen")};
 function fx(){if(rmOn())return;const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
 const ER=[["Thử lại nhé","Try again"],["Gần đúng rồi, bé thử lại nào","Almost! Try again"],["Không sao, bé thử lại nhé","It's okay, try again"]];
-let stk=[{s:"home"}],pend=0;
-function show(s,a){if(!V[s])s="home";cur=s;ql=null;tok++;sc++;busy=false;lastSig="";dupN=0;A.pause();if(SS)SS.cancel();if(GM.test(s))rd={n:0,f:0,st:0};V[s](a);if(!GM.test(s))catSet("idle");cat.style.display=s==="parent"||s==="rec"?"none":"";head();m.scrollTop=0}
-function go(s,a){const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{history.replaceState({i:n,s,a},"")}catch(e){}show(s,a)};
- if(top.s===s){rep();return}
- let k=-1;for(let j=n-1;j>=0;j--)if(stk[j].s===s){k=j;break}
- if(k>=0){const b=n-k;stk.length=k+1;pend=setTimeout(()=>{if(pend){pend=0;show(s,a)}},300);try{history.go(-b)}catch(e){clearTimeout(pend);pend=0;show(s,a)}return}
- if(top.s==="gate"){rep();return}
- stk.push({s,a});try{history.pushState({i:n+1,s,a},"")}catch(e){}show(s,a)}
-addEventListener("popstate",e=>{if(pend){clearTimeout(pend);pend=0}const st=e.state||{i:0,s:"home"};while(stk.length<=st.i)stk.push({s:"home"});stk.length=st.i+1;stk[st.i]={s:st.s,a:st.a};show(st.s,st.a)});
+let stk=[{s:"home"}],pend=0,isBackNav=false,promptCooldown={};
+function sayPrompt(key,vi,en,cd=180000){
+  if(isBackNav)return;
+  const now=Date.now();
+  if(promptCooldown[key]&&(now-promptCooldown[key]<cd))return;
+  promptCooldown[key]=now;
+  say(vi,en);
+}
+function show(s,a,isBack=false){
+  if(!V[s])s="home";
+  cur=s;ql=null;tok++;sc++;busy=false;lastSig="";dupN=0;
+  A.pause();if(SS)SS.cancel();
+  if(GM.test(s))rd={n:0,f:0,st:0};
+  isBackNav=!!isBack;
+  V[s](a);
+  isBackNav=false;
+  if(!GM.test(s))catSet("idle");
+  cat.style.display=s==="parent"||s==="rec"?"none":"";
+  head();
+  m.scrollTop=0;
+}
+function go(s,a){
+  const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{history.replaceState({i:n,s,a},"")}catch(e){}show(s,a,false)};
+  if(top.s===s){rep();return}
+  let k=-1;for(let j=n-1;j>=0;j--)if(stk[j].s===s){k=j;break}
+  if(k>=0){
+    const b=n-k;
+    stk.length=k+1;
+    pend=setTimeout(()=>{if(pend){pend=0;show(s,a,true)}},300);
+    try{history.go(-b)}catch(e){clearTimeout(pend);pend=0;show(s,a,true)}
+    return;
+  }
+  if(top.s==="gate"){rep();return}
+  stk.push({s,a});
+  try{history.pushState({i:n+1,s,a},"")}catch(e){}
+  show(s,a,false);
+}
+addEventListener("popstate",e=>{
+  if(pend){clearTimeout(pend);pend=0}
+  const st=e.state||{i:0,s:"home"};
+  const isBack=(st.i<stk.length-1);
+  while(stk.length<=st.i)stk.push({s:"home"});
+  stk.length=st.i+1;
+  stk[st.i]={s:st.s,a:st.a};
+  show(st.s,st.a,isBack);
+});
 let defPrompt = null;
 window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
@@ -368,15 +405,15 @@ function pwaGuide(){
     <div class="row" style="justify-content:center;margin-top:14px"><button class="pill" onclick="go('home')">✔ ${T("Đã hiểu","Got it")}</button></div>`;
 }
 function card(f,vis,vi,en){return`<button class="card" onclick="go('${f}')"><div class="vis">${vis}</div>${T(vi,en)}</button>`}
-function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}</p>`;say("Chào bé! Mình cùng học nhé","Hello! Let's learn together")}
+function home(){m.innerHTML=`<div class="hero">${im("cat_idle")}<h1>Bé học vui<small>Fun Learning</small></h1></div><div class="cards">${card("letL",imL("A")+imL("B"),"Chữ cái","Letters")}${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading")}${card("storyL","<b>📖✨</b>","Truyện cổ tích","Stories")}${card("numL","<b>1 2 3</b>","Học số","Numbers")}${card("math10","<b>2 + 3</b>","Toán 10","Math 10")}${card("cmp",im("apple")+"<b>&gt;</b>"+im("ball"),"So sánh","Compare")}${card("games",im("kite")+im("rocket"),"Trò chơi","Games")}</div><div class="chips">${[1,2,3].map(v=>`<button class="pill${v==lvl?" on":""}" onclick="setLv(${v})">${T("Mức "+v,"Level "+v)}</button>`).join("")}</div><p><button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}</p>`;sayPrompt("home","Chào bé! Mình cùng học nhé","Hello! Let's learn together",300000)}
 const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
  ST.numCount=(ST.numCount||0)+1;svS();checkBadges();
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;sayN(n)}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word">${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;if(!isBackNav)sayN(n)}
 function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new Set([n]);while(c.size<3)c.add(R(1,MX()));
  quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
-function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;say("Chạm vào chữ cái nhé","Tap a letter");need("s")}
+function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2>${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;sayPrompt("letL","Chạm vào chữ cái nhé","Tap a letter",180000);need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
  ST.letCount=(ST.letCount||0)+1;svS();checkBadges();
  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
@@ -432,7 +469,7 @@ function win(wr,next,vi,en){
   adv(rd.n>=(RL[cur]||ROUND)?result:next);
 }
 const bk=(curT,parentS="games",parentT=T("Trò chơi","Games"),action="")=>kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:parentS,t:parentT,i:parentS==="games"?"🎮":"📚"},...(curT?[{t:curT,i:"✨"}]:[])],action);
-function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;say("Bé chọn trò chơi nhé","Pick a game")}
+function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs")}</div>`;sayPrompt("games","Bé chọn trò chơi nhé","Pick a game",180000)}
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
@@ -877,95 +914,159 @@ function storyL(catId, page, search){
   storyPlay=false;A.pause();if(SS)SS.cancel();
 
   const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
-  const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
-
-  let list=[];
-  const q=(curStorySearch||"").trim();
-  if(q){
-    const nq=normStr(q);
-    list=catalog.filter(s=>normStr(s.title).includes(nq)||normStr(s.summary).includes(nq));
-  } else {
-    list=catalog.filter(s=>s.cat===curCat);
-  }
-
-  const pageSize=12;
-  const totalPages=Math.max(1,Math.ceil(list.length/pageSize));
-  if(curStoryPage>totalPages)curStoryPage=totalPages;
-  if(curStoryPage<1)curStoryPage=1;
-
-  const startIdx=(curStoryPage-1)*pageSize;
-  const pageItems=list.slice(startIdx,startIdx+pageSize);
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
 
-  window.onStorySearch=function(val){
-    curStorySearch=val;
+  window.debouncedStorySearch=function(val){
+    clearTimeout(window.__stTimer);
+    window.__stTimer=setTimeout(()=>{
+      curStorySearch=(val||"").trim();
+      curStoryPage=1;
+      const clr=document.getElementById("stClearBtn");
+      if(clr)clr.style.display=curStorySearch?'inline-flex':'none';
+      renderStoryItems();
+    },280);
+  };
+
+  window.clearStorySearch=function(){
+    curStorySearch="";
     curStoryPage=1;
-    storyL(curCat,1,val);
+    const inp=document.getElementById("stSearchInput");
+    if(inp){inp.value="";inp.focus();}
+    const clr=document.getElementById("stClearBtn");
+    if(clr)clr.style.display="none";
+    renderStoryItems();
   };
+
+  window.switchStoryCat=function(cId){
+    curCat=cId;
+    curStorySearch="";
+    curStoryPage=1;
+    const inp=document.getElementById("stSearchInput");
+    if(inp)inp.value="";
+    const clr=document.getElementById("stClearBtn");
+    if(clr)clr.style.display="none";
+    renderStoryItems();
+  };
+
   window.storyGoPage=function(p){
-    storyL(curCat,p,curStorySearch);
+    curStoryPage=p;
+    renderStoryItems();
+    const inp=document.getElementById("stSearchInput");
+    if(inp)inp.scrollIntoView({behavior:"smooth",block:"nearest"});
   };
 
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Truyện cổ tích","Fairy Tales"),i:"📖"}])}
-  <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
+  function renderStoryItems(){
+    const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
 
-  <div class="story-search-wrap">
-    <input type="search" class="story-search" id="stSearchInput" placeholder="🔍 Tìm kiếm trong ${catalog.length} truyện có audio gốc..." value="${esc(curStorySearch)}" oninput="clearTimeout(window.__stTimer);window.__stTimer=setTimeout(()=>window.onStorySearch(this.value),200)">
-    ${curStorySearch?`<button class="pill" onclick="window.onStorySearch('')" style="padding:4px 12px">✖</button>`:""}
-  </div>
+    // Cập nhật trạng thái nút danh mục
+    const chips=document.getElementById("storyChips");
+    if(chips){
+      chips.querySelectorAll("button").forEach(btn=>{
+        btn.classList.toggle("on",btn.dataset.cat===curCat&&!curStorySearch);
+      });
+    }
 
-  <div class="chips" style="margin-bottom:10px">
-    ${FAIRY_CATEGORIES.map(c=>`
-      <button class="pill${c.id===curCat&&!curStorySearch?" on":""}" onclick="curStorySearch='';storyL('${c.id}',1,'')">
-        ${c.icon} ${T(c.name,c.en)} (${getCatCount(c.id)})
-      </button>
-    `).join("")}
-  </div>
+    let list=[];
+    const q=(curStorySearch||"").trim();
+    if(q){
+      const nq=normStr(q);
+      list=catalog.filter(s=>normStr(s.title).includes(nq)||normStr(s.summary).includes(nq));
+    } else {
+      list=catalog.filter(s=>s.cat===curCat);
+    }
 
-  <div style="font-size:15px;opacity:.85;margin-bottom:8px">
-    ${curStorySearch?`🔍 Tìm thấy <b>${list.length}</b> truyện cho "<em>${esc(curStorySearch)}</em>"`:`${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span>`}
-  </div>
+    const pageSize=12;
+    const totalPages=Math.max(1,Math.ceil(list.length/pageSize));
+    if(curStoryPage>totalPages)curStoryPage=totalPages;
+    if(curStoryPage<1)curStoryPage=1;
 
-  ${list.length===0?`<div style="padding:30px;opacity:.7;font-size:20px">Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!</div>`:""}
+    const startIdx=(curStoryPage-1)*pageSize;
+    const pageItems=list.slice(startIdx,startIdx+pageSize);
 
-  <div style="display:flex;flex-direction:column;gap:10px">
-    ${pageItems.map(s=>{
-      const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
-      const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
-      const isAudio=!!curated;
-      const hasTctAudio=!!s.audio;
-      const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
-      return `
-        <div class="story-item" onclick="${clickFn}">
-          <div class="story-icon">${icon}</div>
-          <div class="story-info">
-            <div class="story-title">${esc(s.title)}</div>
-            <div class="story-desc">${esc(s.summary)}</div>
-            <div style="margin-top:4px">
-              ${isAudio?`<span class="story-badge audio">🎙️ Kể truyện audio & bài học</span>`:`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`}
+    // Cập nhật dòng trạng thái tìm kiếm
+    const statusEl=document.getElementById("storySearchStatus");
+    if(statusEl){
+      statusEl.innerHTML=curStorySearch
+        ?`🔍 Tìm thấy <b>${list.length}</b> truyện cho "<em>${esc(curStorySearch)}</em>"`
+        :`${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span>`;
+    }
+
+    // Cập nhật danh sách truyện
+    const listWrap=document.getElementById("storyListWrap");
+    if(listWrap){
+      if(list.length===0){
+        listWrap.innerHTML=`<div style="padding:30px;opacity:.7;font-size:20px">Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!</div>`;
+      } else {
+        listWrap.innerHTML=pageItems.map(s=>{
+          const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+          const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
+          const isAudio=!!curated;
+          const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
+          return `
+            <div class="story-item" onclick="${clickFn}">
+              <div class="story-icon">${icon}</div>
+              <div class="story-info">
+                <div class="story-title">${esc(s.title)}</div>
+                <div class="story-desc">${esc(s.summary)}</div>
+                <div style="margin-top:4px">
+                  ${isAudio?`<span class="story-badge audio">🎙️ Kể truyện audio & bài học</span>`:`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`}
+                </div>
+              </div>
+              <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể truyện ❯":"Nghe & Đọc ❯"}</button>
             </div>
+          `;
+        }).join("");
+      }
+    }
+
+    // Cập nhật thanh phân trang
+    const pagWrap=document.getElementById("storyPaginationWrap");
+    if(pagWrap){
+      if(totalPages>1){
+        pagWrap.innerHTML=`
+          <div class="story-page-ctrl">
+            <button class="story-page-btn" onclick="storyGoPage(1)" ${curStoryPage<=1?"disabled":""}>⏮ Đầu</button>
+            <button class="story-page-btn" onclick="storyGoPage(${curStoryPage-1})" ${curStoryPage<=1?"disabled":""}>◀ Trước</button>
+            <span style="font-size:16px;font-weight:700">Trang 
+              <select class="story-page-select" onchange="storyGoPage(+this.value)">
+                ${Array.from({length:totalPages},(_,i)=>`<option value="${i+1}" ${i+1===curStoryPage?"selected":""}>${i+1} / ${totalPages}</option>`).join("")}
+              </select>
+            </span>
+            <button class="story-page-btn" onclick="storyGoPage(${curStoryPage+1})" ${curStoryPage>=totalPages?"disabled":""}>Sau ▶</button>
+            <button class="story-page-btn" onclick="storyGoPage(${totalPages})" ${curStoryPage>=totalPages?"disabled":""}>Cuối (${totalPages}) ⏭</button>
           </div>
-          <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể truyện ❯":"Nghe & Đọc ❯"}</button>
-        </div>
-      `;
-    }).join("")}
-  </div>
+        `;
+      } else {
+        pagWrap.innerHTML="";
+      }
+    }
+  }
 
-  ${totalPages>1?`
-    <div class="story-page-ctrl">
-      <button class="story-page-btn" onclick="storyGoPage(1)" ${curStoryPage<=1?"disabled":""}>⏮ Đầu</button>
-      <button class="story-page-btn" onclick="storyGoPage(${curStoryPage-1})" ${curStoryPage<=1?"disabled":""}>◀ Trước</button>
-      <span style="font-size:16px;font-weight:700">Trang 
-        <select class="story-page-select" onchange="storyGoPage(+this.value)">
-          ${Array.from({length:totalPages},(_,i)=>`<option value="${i+1}" ${i+1===curStoryPage?"selected":""}>${i+1} / ${totalPages}</option>`).join("")}
-        </select>
-      </span>
-      <button class="story-page-btn" onclick="storyGoPage(${curStoryPage+1})" ${curStoryPage>=totalPages?"disabled":""}>Sau ▶</button>
-      <button class="story-page-btn" onclick="storyGoPage(${totalPages})" ${curStoryPage>=totalPages?"disabled":""}>Cuối (${totalPages}) ⏭</button>
+  // Khởi tạo khung giao diện nếu chưa có
+  const existingInput=document.getElementById("stSearchInput");
+  if(!existingInput){
+    m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Truyện cổ tích","Fairy Tales"),i:"📖"}])}
+    <h2>${T("Truyện cổ tích & Kể bé nghe","Fairy Tales & Stories")}</h2>
+
+    <div class="story-search-wrap">
+      <input type="search" class="story-search" id="stSearchInput" placeholder="🔍 Tìm kiếm trong ${catalog.length} truyện..." value="${esc(curStorySearch)}" oninput="window.debouncedStorySearch(this.value)">
+      <button class="pill" id="stClearBtn" onclick="window.clearStorySearch()" style="padding:4px 12px;display:${curStorySearch?'inline-flex':'none'}">✖</button>
     </div>
-  `:""}`;
 
-  if(!curStorySearch)say(cat.name,cat.en);
+    <div class="chips" id="storyChips" style="margin-bottom:10px">
+      ${FAIRY_CATEGORIES.map(c=>`
+        <button class="pill${c.id===curCat&&!curStorySearch?" on":""}" data-cat="${c.id}" onclick="window.switchStoryCat('${c.id}')">
+          ${c.icon} ${T(c.name,c.en)} (${getCatCount(c.id)})
+        </button>
+      `).join("")}
+    </div>
+
+    <div id="storySearchStatus" style="font-size:15px;opacity:.85;margin-bottom:8px"></div>
+    <div id="storyListWrap" style="display:flex;flex-direction:column;gap:10px"></div>
+    <div id="storyPaginationWrap"></div>`;
+  }
+
+  renderStoryItems();
 }
 
 function storyDetail(id){
