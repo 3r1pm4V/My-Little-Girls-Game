@@ -1297,7 +1297,6 @@ function home(){
   let cardsHtml = "";
   if(currentTier === "preschool"){
     cardsHtml = `
-      ${card("tierActLanAnh", "<b>👩‍🏫 🎬</b>", "Bé học Cô Lan Anh", "Teacher Lan Anh", "vietnamese")}
       ${card("letL", imL("A")+imL("B"), "Chữ cái", "Letters", "vietnamese")}
       ${card("numL", "<b>1 2 3</b>", "Học số", "Numbers", "math")}
       ${card("countGame", "<b>🍎 3 ⭐</b>", "Đếm hình chọn số", "Count & Match", "game")}
@@ -1308,6 +1307,7 @@ function home(){
     `;
   } else if(currentTier === "grade1_2"){
     cardsHtml = `
+      ${card("tierActLanAnh", "<b>👩‍🏫 🎬</b>", "Bé học Cô Lan Anh", "Teacher Lan Anh", "vietnamese")}
       ${card("tierActVtv7", "<b>📺 🔤</b>", "Chữ cái VTV7", "VTV7 Alphabet", "vietnamese")}
       ${card("tierActivities", "<b>🎯 🎒</b>", "Bài tập Lớp 1-2", "Grade 1-2 Lessons", "logic")}
       ${card("math10", "<b>8 + 7</b>", "Toán 20 - 100", "Math 20 - 100", "math")}
@@ -1354,14 +1354,11 @@ async function tierActivities(filterSubject){
 
   let acts = allActs;
   if(filterSubject === "lananh"){
-    acts = allActs.filter(a => a.id.startsWith("pre_lananh") || (a.title && a.title.includes("Lan Anh")));
+    acts = allActs.filter(a => a.id.startsWith("g1_lananh") || a.id.startsWith("pre_lananh") || (a.title && a.title.includes("Lan Anh")));
   } else if(filterSubject === "vtv7"){
     acts = allActs.filter(a => a.id.startsWith("g1_vtv7") || (a.title && a.title.includes("VTV7")));
   } else if(filterSubject && filterSubject !== "all"){
     acts = allActs.filter(a => a.subject === filterSubject);
-  }
-  if(isPreschool){
-    acts = [...acts].sort((a, b) => (b.id.startsWith("pre_lananh") ? 1 : 0) - (a.id.startsWith("pre_lananh") ? 1 : 0));
   }
 
   const subjectBadges = {
@@ -1381,7 +1378,6 @@ async function tierActivities(filterSubject){
 
   const filters = isPreschool ? [
     { id: "all", vi: "Tất cả", en: "All" },
-    { id: "lananh", vi: "Cô Lan Anh 👩‍🏫", en: "Teacher Lan Anh" },
     { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
     { id: "math", vi: "Toán học 📐", en: "Math" },
     { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
@@ -1391,6 +1387,7 @@ async function tierActivities(filterSubject){
     { id: "logic", vi: "Tư duy 💡", en: "Logic" }
   ] : [
     { id: "all", vi: "Tất cả", en: "All" },
+    { id: "lananh", vi: "Cô Lan Anh 👩‍🏫", en: "Teacher Lan Anh" },
     { id: "vtv7", vi: "Chữ cái VTV7 📺", en: "VTV7 Alphabet" },
     { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
     { id: "math", vi: "Toán học 📐", en: "Math" },
@@ -1458,12 +1455,19 @@ async function tierActivities(filterSubject){
       } else {
         template.innerHTML = acts.map(act => {
           const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
+          let iconHtml = `<div class="act-card-icon">${sInfo.icon}</div>`;
+          if (act.mediaSource && act.mediaSource.thumbnail) {
+            iconHtml = `<div class="act-card-icon" style="width:52px;height:40px;overflow:hidden;border-radius:8px"><img src="${act.mediaSource.thumbnail}" style="width:100%;height:100%;object-fit:cover" alt=""></div>`;
+          } else if (act.videoUrl) {
+            const ytId = act.videoUrl.includes("v=") ? act.videoUrl.split("v=")[1].split("&")[0] : act.videoUrl.split("/").pop();
+            iconHtml = `<div class="act-card-icon" style="width:52px;height:40px;overflow:hidden;border-radius:8px"><img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" style="width:100%;height:100%;object-fit:cover" alt=""></div>`;
+          }
           return `
             <div class="act-card" onclick="go('playActivity', '${act.id}')">
-              <div class="act-card-icon">${sInfo.icon}</div>
+              ${iconHtml}
               <div class="act-card-body">
                 <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
-                <div class="act-card-skill">🎯 ${act.learningObjective || act.skill || ""}</div>
+                <div class="act-card-skill">🎯 ${act.learningGoal || act.learningObjective || act.skill || ""}</div>
                 <div class="act-card-meta">
                   <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
                   <span class="act-badge reward">⭐ +${(act.reward && act.reward.stars) || act.difficulty || 3} sao</span>
@@ -1482,11 +1486,11 @@ async function tierActivities(filterSubject){
 }
 
 function tierActLanAnh(){
-  if(currentTier !== "preschool"){
-    currentTier = "preschool";
-    ls.set("ageTier", "preschool");
-    lvl = 1;
-    ls.set("lvl", 1);
+  if(currentTier !== "grade1_2"){
+    currentTier = "grade1_2";
+    ls.set("ageTier", "grade1_2");
+    lvl = 2;
+    ls.set("lvl", 2);
   }
   tierActivities("lananh");
 }
@@ -3893,8 +3897,8 @@ function readL(tab){
   const lanAnhBanner = `
     <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:8px 14px;margin:8px auto 12px;max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:8px">
       <div style="font-size:13.5px;font-weight:700;color:#92400e;text-align:left">
-        👩‍🏫 <b>5 Bài học Tiền tiểu học Cô Lan Anh (A, Ă, Â, B, C)</b><br>
-        <span style="font-size:12px;color:#b45309;font-weight:500">Video sinh động, bài tập trắc nghiệm kèm Mẹo bố mẹ</span>
+        👩‍🏫 <b>Bài học Đánh vần Cô Lan Anh (Lớp 1)</b><br>
+        <span style="font-size:12px;color:#b45309;font-weight:500">Video sinh động, nhận biết mặt chữ và bài tập ghép vần</span>
       </div>
       <button class="pill on" onclick="go('tierActLanAnh')" style="font-size:13px;padding:6px 14px;background:#ea580c;color:#fff;border:0;flex-shrink:0">Học ngay ▶</button>
     </div>

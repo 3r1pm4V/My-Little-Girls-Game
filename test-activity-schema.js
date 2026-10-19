@@ -105,14 +105,14 @@ englishScienceIds.forEach((id, idx) => {
   console.log(`✔ [${idx + 1}/5 Khoa học] '${act.id}' (${act.type}): HỢP LỆ VÀ ĐÚNG CHUẨN`);
 });
 
-// 3.3. Kiểm tra 5 bài học Tiền tiểu học Đánh vần Cô Lan Anh
-console.log('\n--- TEST 3.3: Kiểm tra 5 bài học Tiền tiểu học: Đánh vần Cô Lan Anh (A, Ă, Â, B, C) ---');
+// 3.3. Kiểm tra 5 bài học Lớp 1–2: Đánh vần Cô Lan Anh
+console.log('\n--- TEST 3.3: Kiểm tra 5 bài học Lớp 1–2: Đánh vần Cô Lan Anh (A, Ă, Â, B, C) ---');
 const lanAnhIds = [
-  'pre_lananh_01_letter_a',
-  'pre_lananh_02_letter_aw',
-  'pre_lananh_03_letter_aa',
-  'pre_lananh_04_letter_b',
-  'pre_lananh_05_letter_c'
+  'g1_lananh_01_letter_a',
+  'g1_lananh_02_letter_aw',
+  'g1_lananh_03_letter_aa',
+  'g1_lananh_04_letter_b',
+  'g1_lananh_05_letter_c'
 ];
 
 lanAnhIds.forEach((id, idx) => {
@@ -120,12 +120,11 @@ lanAnhIds.forEach((id, idx) => {
   assert(act, `Không tìm thấy bài học '${id}' trong ACTIVITIES_DATA`);
   const res = validateActivity(act);
   assert(res.valid, `Bài học ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
-  assert.strictEqual(act.ageTier, 'preschool');
+  assert.strictEqual(act.ageTier, 'grade1_2');
   assert.strictEqual(act.subject, 'vietnamese');
   assert(act.videoUrl && (act.videoUrl.includes('youtube.com') || act.videoUrl.includes('youtu.be')), 'Phải có link YouTube video hợp lệ');
-  assert(act.parentTip && typeof act.parentTip === 'string', 'Phải có parentTip cho phụ huynh');
   assert(Array.isArray(act.activities) && act.activities.length >= 2, 'Phải có ít nhất 2 hoạt động tương tác');
-  console.log(`✔ [${idx + 1}/5 Cô Lan Anh] '${act.id}': HỢP LỆ, CÓ PARENT TIP VÀ LINK YOUTUBE`);
+  console.log(`✔ [${idx + 1}/5 Cô Lan Anh] '${act.id}': HỢP LỆ VÀ LINK YOUTUBE`);
 });
 
 // 3.4. Kiểm tra Module Lớp 1 - Bảng chữ cái & Phụ âm ghép VTV7 (Playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL)

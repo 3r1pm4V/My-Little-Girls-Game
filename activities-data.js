@@ -1779,13 +1779,13 @@ const ACTIVITIES_DATA = [
   },
 
   // ==========================================================================
-  // 5 BÀI HỌC TIỀN TIỂU HỌC (4 TUỔI) - ĐÁNH VẦN CÔ LAN ANH (A, Ă, Â, B, C)
+  // 5 BÀI HỌC LỚP 1–2 - TẬP ĐÁNH VẦN CHỮ CÁI CÙNG CÔ LAN ANH (A, Ă, Â, B, C)
   // ==========================================================================
   {
-    id: "pre_lananh_01_letter_a",
-    title: "Làm quen chữ A tươi cười 🍎",
-    titleEn: "Letter A: Happy Open Mouth",
-    ageTier: "preschool",
+    id: "g1_lananh_01_letter_a",
+    title: "Học chữ A cùng cô Lan Anh: Chữ A tươi cười 🍎",
+    titleEn: "Letter A: Happy Open Mouth with Teacher Lan Anh",
+    ageTier: "grade1_2",
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=t5As5kwFvRM",
     learningGoal: "Bé nhận biết mặt chữ A, mở rộng khẩu hình miệng cười tươi và phát âm 'A' to, rõ ràng.",
@@ -1822,10 +1822,10 @@ const ACTIVITIES_DATA = [
     ]
   },
   {
-    id: "pre_lananh_02_letter_aw",
-    title: "Làm quen chữ Ă: Chiếc mũ trăng khuyết 🌙",
-    titleEn: "Letter Ă: Crescent Smile",
-    ageTier: "preschool",
+    id: "g1_lananh_02_letter_aw",
+    title: "Học chữ Ă cùng cô Lan Anh: Chiếc mũ trăng khuyết 🌙",
+    titleEn: "Letter Ă: Crescent Smile with Teacher Lan Anh",
+    ageTier: "grade1_2",
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=1qAjhNd2N6M",
     learningGoal: "Bé nhận diện chữ Ă (Á), liên tưởng dấu á với vầng trăng khuyết ngửa lên trời.",
@@ -1862,10 +1862,10 @@ const ACTIVITIES_DATA = [
     ]
   },
   {
-    id: "pre_lananh_03_letter_aa",
-    title: "Làm quen chữ Â: Chiếc nón che mưa 🛖",
-    titleEn: "Letter Â: The Little Hat",
-    ageTier: "preschool",
+    id: "g1_lananh_03_letter_aa",
+    title: "Học chữ Â cùng cô Lan Anh: Chiếc nón che mưa 🛖",
+    titleEn: "Letter Â: The Little Hat with Teacher Lan Anh",
+    ageTier: "grade1_2",
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=rErOluFSNT0",
     learningGoal: "Bé phân biệt rõ ràng chữ Â (Ớ) với Ă nhờ chiếc nón úp nhọn đầu như mái nhà che mưa.",
@@ -1902,10 +1902,10 @@ const ACTIVITIES_DATA = [
     ]
   },
   {
-    id: "pre_lananh_04_letter_b",
-    title: "Làm quen chữ B bụng bự ⚽",
-    titleEn: "Letter B: Big Round Bellies",
-    ageTier: "preschool",
+    id: "g1_lananh_04_letter_b",
+    title: "Học chữ B cùng cô Lan Anh: Chữ B bụng bự ⚽",
+    titleEn: "Letter B: Big Round Bellies with Teacher Lan Anh",
+    ageTier: "grade1_2",
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=bicX1RNzHos",
     learningGoal: "Nhận biết phụ âm B, mím hai môi bật hơi phát âm chuẩn 'Bờ' và tìm chữ B trong đồ chơi quen thuộc.",
@@ -1942,10 +1942,10 @@ const ACTIVITIES_DATA = [
     ]
   },
   {
-    id: "pre_lananh_05_letter_c",
-    title: "Làm quen chữ C cong cong & Chú Cá nhỏ 🐟",
-    titleEn: "Letter C: Curved Crescent & Fish",
-    ageTier: "preschool",
+    id: "g1_lananh_05_letter_c",
+    title: "Học chữ C cùng cô Lan Anh: Chữ C cong cong & Chú Cá nhỏ 🐟",
+    titleEn: "Letter C: Curved Crescent with Teacher Lan Anh",
+    ageTier: "grade1_2",
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=uP9Ri14I28o",
     learningGoal: "Nhận biết chữ C với nét cong hở phải, phát âm 'Cờ' dứt khoát và làm quen ghép tiếng 'Cá'.",
