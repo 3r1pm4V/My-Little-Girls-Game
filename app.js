@@ -46,6 +46,62 @@ function toggleSoundMaster(){
   head();
   if(cur==="parent")parent();
 }
+
+// ============================================================================
+// PERFORMANCE UTILITIES: DEBOUNCE, THROTTLE & EVENT MANAGERS
+// ============================================================================
+function debounce(fn, ms=250){
+  let timer;
+  return function(...args){
+    clearTimeout(timer);
+    timer=setTimeout(()=>fn.apply(this,args),ms);
+  };
+}
+
+function throttle(fn, limit=100){
+  let inThrottle=false,lastArgs=null;
+  return function(...args){
+    if(!inThrottle){
+      fn.apply(this,args);
+      inThrottle=true;
+      setTimeout(()=>{
+        inThrottle=false;
+        if(lastArgs){
+          fn.apply(this,lastArgs);
+          lastArgs=null;
+        }
+      },limit);
+    }else{
+      lastArgs=args;
+    }
+  };
+}
+
+let scrollHandlers = [];
+function onScroll(fn){ if(!scrollHandlers.includes(fn)) scrollHandlers.push(fn); }
+function offScroll(fn){ scrollHandlers = scrollHandlers.filter(h => h !== fn); }
+
+const throttledScroll = throttle(e => {
+  scrollHandlers.forEach(h => {
+    try { h(e); } catch(err){}
+  });
+}, 100);
+
+if(m) {
+  m.addEventListener("scroll", throttledScroll, { passive: true });
+}
+
+let resizeHandlers = [];
+function onResize(fn){ if(!resizeHandlers.includes(fn)) resizeHandlers.push(fn); }
+function offResize(fn){ resizeHandlers = resizeHandlers.filter(h => h !== fn); }
+
+const throttledResize = throttle(e => {
+  resizeHandlers.forEach(h => {
+    try { h(e); } catch(err){}
+  });
+}, 150);
+
+window.addEventListener("resize", throttledResize, { passive: true });
 const AGE_TIERS = {
   preschool: {
     id: "preschool",
@@ -1121,25 +1177,6 @@ async function tierActivities(filterSubject){
     {t:T(tInfo.nameVi, tInfo.nameEn), i:tInfo.badge || "🎒"}
   ]);
 
-  const cardsHtml = acts.length ? acts.map(act => {
-    const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
-    return `
-      <div class="act-card" onclick="go('playActivity', '${act.id}')">
-        <div class="act-card-icon">${sInfo.icon}</div>
-        <div class="act-card-body">
-          <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
-          <div class="act-card-skill">🎯 ${act.skill}</div>
-          <div class="act-card-meta">
-            <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
-            <span class="act-badge reward">⭐ +${act.reward.stars} sao</span>
-            <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(act.difficulty).fill("★").join("")}</span>
-          </div>
-        </div>
-        <div style="font-size:24px;color:var(--acc)">➔</div>
-      </div>
-    `;
-  }).join("") : `<div class="note">${T("Chưa có bài học nào trong mục này.", "No activities in this category.")}</div>`;
-
   const filters = [
     { id: "all", vi: "Tất cả", en: "All" },
     { id: "math", vi: "Toán học 📐", en: "Math" },
@@ -1159,10 +1196,38 @@ async function tierActivities(filterSubject){
         </button>
       `).join("")}
     </div>
-    <div class="act-list-wrap">
-      ${cardsHtml}
-    </div>
+    <div class="act-list-wrap"></div>
   `;
+
+  const listWrap = m.querySelector(".act-list-wrap");
+  if(listWrap){
+    if(!acts.length){
+      listWrap.innerHTML = `<div class="note">${T("Chưa có bài học nào trong mục này.", "No activities in this category.")}</div>`;
+    } else {
+      const frag = document.createDocumentFragment();
+      const template = document.createElement("template");
+      template.innerHTML = acts.map(act => {
+        const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
+        return `
+          <div class="act-card" onclick="go('playActivity', '${act.id}')">
+            <div class="act-card-icon">${sInfo.icon}</div>
+            <div class="act-card-body">
+              <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
+              <div class="act-card-skill">🎯 ${act.skill}</div>
+              <div class="act-card-meta">
+                <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
+                <span class="act-badge reward">⭐ +${act.reward.stars} sao</span>
+                <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(act.difficulty).fill("★").join("")}</span>
+              </div>
+            </div>
+            <div style="font-size:24px;color:var(--acc)">➔</div>
+          </div>
+        `;
+      }).join("");
+      frag.appendChild(template.content);
+      listWrap.appendChild(frag);
+    }
+  }
 }
 
 function tierActMath(){ tierActivities("math"); }
@@ -2842,11 +2907,41 @@ function math10(){
 }
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
-let curCat="vn",curStoryPage=1,curStorySearch="",readingStory=null,storyPlay=false;
+let curCat="vn",curStorySearch="",readingStory=null,storyPlay=false;
+const STORY_BATCH_SIZE=14;
+let storyRenderedCount=STORY_BATCH_SIZE;
+
+function storyCardHtml(s){
+  const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+  const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
+  const isAudio=!!curated;
+  const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
+  return `
+    <div class="story-item" onclick="${clickFn}">
+      <div class="story-icon">${icon}</div>
+      <div class="story-info">
+        <div class="story-title">${esc(s.title)}</div>
+        <div class="story-desc">${esc(s.summary)}</div>
+        <div style="margin-top:4px">
+          ${isAudio?`<span class="story-badge audio">🎙️ Kể truyện audio & bài học</span>`:`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`}
+        </div>
+      </div>
+      <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể truyện ❯":"Nghe & Đọc ❯"}</button>
+    </div>
+  `;
+}
+
+function getFilteredStories(catalog){
+  const q=(curStorySearch||"").trim();
+  if(q){
+    const nq=normStr(q);
+    return catalog.filter(s=>normStr(s.title).includes(nq)||normStr(s.summary).includes(nq));
+  }
+  return catalog.filter(s=>s.cat===curCat);
+}
 
 async function storyL(catId, page, search){
   if(catId)curCat=catId;
-  if(page!==undefined)curStoryPage=page;
   if(search!==undefined)curStorySearch=search;
   storyPlay=false;A.pause();if(SS)SS.cancel();
 
@@ -2858,46 +2953,40 @@ async function storyL(catId, page, search){
   const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
 
-  window.debouncedStorySearch=function(val){
-    clearTimeout(window.__stTimer);
-    window.__stTimer=setTimeout(()=>{
-      curStorySearch=(val||"").trim();
-      curStoryPage=1;
-      const clr=document.getElementById("stClearBtn");
-      if(clr)clr.style.display=curStorySearch?'inline-flex':'none';
-      renderStoryItems();
-    },280);
-  };
+  window.debouncedStorySearch = debounce(function(val){
+    curStorySearch=(val||"").trim();
+    storyRenderedCount=STORY_BATCH_SIZE;
+    const clr=document.getElementById("stClearBtn");
+    if(clr)clr.style.display=curStorySearch?'inline-flex':'none';
+    m.scrollTop=0;
+    renderStoryItems(true);
+  }, 250);
 
   window.clearStorySearch=function(){
     curStorySearch="";
-    curStoryPage=1;
+    storyRenderedCount=STORY_BATCH_SIZE;
     const inp=document.getElementById("stSearchInput");
     if(inp){inp.value="";inp.focus();}
     const clr=document.getElementById("stClearBtn");
     if(clr)clr.style.display="none";
-    renderStoryItems();
+    m.scrollTop=0;
+    renderStoryItems(true);
   };
 
   window.switchStoryCat=function(cId){
     curCat=cId;
     curStorySearch="";
-    curStoryPage=1;
+    storyRenderedCount=STORY_BATCH_SIZE;
     const inp=document.getElementById("stSearchInput");
     if(inp)inp.value="";
     const clr=document.getElementById("stClearBtn");
     if(clr)clr.style.display="none";
-    renderStoryItems();
+    m.scrollTop=0;
+    renderStoryItems(true);
   };
 
-  window.storyGoPage=function(p){
-    curStoryPage=p;
-    renderStoryItems();
-    const inp=document.getElementById("stSearchInput");
-    if(inp)inp.scrollIntoView({behavior:"smooth",block:"nearest"});
-  };
-
-  function renderStoryItems(){
+  function renderStoryItems(reset=false){
+    if(reset) storyRenderedCount=STORY_BATCH_SIZE;
     const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
 
     // Cập nhật trạng thái nút danh mục
@@ -2908,22 +2997,8 @@ async function storyL(catId, page, search){
       });
     }
 
-    let list=[];
-    const q=(curStorySearch||"").trim();
-    if(q){
-      const nq=normStr(q);
-      list=catalog.filter(s=>normStr(s.title).includes(nq)||normStr(s.summary).includes(nq));
-    } else {
-      list=catalog.filter(s=>s.cat===curCat);
-    }
-
-    const pageSize=12;
-    const totalPages=Math.max(1,Math.ceil(list.length/pageSize));
-    if(curStoryPage>totalPages)curStoryPage=totalPages;
-    if(curStoryPage<1)curStoryPage=1;
-
-    const startIdx=(curStoryPage-1)*pageSize;
-    const pageItems=list.slice(startIdx,startIdx+pageSize);
+    const list=getFilteredStories(catalog);
+    const visibleItems=list.slice(0, storyRenderedCount);
 
     // Cập nhật dòng trạng thái tìm kiếm
     const statusEl=document.getElementById("storySearchStatus");
@@ -2933,56 +3008,59 @@ async function storyL(catId, page, search){
         :`${cat.desc} · <span style="color:var(--acc);font-weight:700">truyencotich.top</span>`;
     }
 
-    // Cập nhật danh sách truyện
+    // Cập nhật danh sách truyện với DocumentFragment
     const listWrap=document.getElementById("storyListWrap");
+    const loadMoreWrap=document.getElementById("storyLoadMoreWrap");
     if(listWrap){
       if(list.length===0){
         listWrap.innerHTML=`<div style="padding:30px;opacity:.7;font-size:20px">Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!</div>`;
+        if(loadMoreWrap) loadMoreWrap.innerHTML="";
       } else {
-        listWrap.innerHTML=pageItems.map(s=>{
-          const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
-          const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
-          const isAudio=!!curated;
-          const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
-          return `
-            <div class="story-item" onclick="${clickFn}">
-              <div class="story-icon">${icon}</div>
-              <div class="story-info">
-                <div class="story-title">${esc(s.title)}</div>
-                <div class="story-desc">${esc(s.summary)}</div>
-                <div style="margin-top:4px">
-                  ${isAudio?`<span class="story-badge audio">🎙️ Kể truyện audio & bài học</span>`:`<span class="story-badge audio">🎧 Audio gốc truyencotich.top</span>`}
-                </div>
-              </div>
-              <button class="pill" style="font-size:15px;padding:6px 12px;margin:0;flex-shrink:0">${isAudio?"Kể truyện ❯":"Nghe & Đọc ❯"}</button>
-            </div>
-          `;
-        }).join("");
-      }
-    }
+        const frag=document.createDocumentFragment();
+        const tpl=document.createElement("template");
+        tpl.innerHTML=visibleItems.map(storyCardHtml).join("");
+        frag.appendChild(tpl.content);
+        listWrap.replaceChildren(frag);
 
-    // Cập nhật thanh phân trang
-    const pagWrap=document.getElementById("storyPaginationWrap");
-    if(pagWrap){
-      if(totalPages>1){
-        pagWrap.innerHTML=`
-          <div class="story-page-ctrl">
-            <button class="story-page-btn" onclick="storyGoPage(1)" ${curStoryPage<=1?"disabled":""}>⏮ Đầu</button>
-            <button class="story-page-btn" onclick="storyGoPage(${curStoryPage-1})" ${curStoryPage<=1?"disabled":""}>◀ Trước</button>
-            <span style="font-size:16px;font-weight:700">Trang 
-              <select class="story-page-select" onchange="storyGoPage(+this.value)">
-                ${Array.from({length:totalPages},(_,i)=>`<option value="${i+1}" ${i+1===curStoryPage?"selected":""}>${i+1} / ${totalPages}</option>`).join("")}
-              </select>
-            </span>
-            <button class="story-page-btn" onclick="storyGoPage(${curStoryPage+1})" ${curStoryPage>=totalPages?"disabled":""}>Sau ▶</button>
-            <button class="story-page-btn" onclick="storyGoPage(${totalPages})" ${curStoryPage>=totalPages?"disabled":""}>Cuối (${totalPages}) ⏭</button>
-          </div>
-        `;
-      } else {
-        pagWrap.innerHTML="";
+        if(loadMoreWrap){
+          if(storyRenderedCount < list.length){
+            loadMoreWrap.innerHTML=`<div class="story-infinite-tip" style="padding:14px;font-size:15px;color:#64748b;font-weight:700">📜 Bé cuộn xuống để xem thêm truyện nhé (${visibleItems.length}/${list.length})</div>`;
+          } else {
+            loadMoreWrap.innerHTML=`<div style="padding:14px;font-size:14px;color:#94a3b8;font-weight:700">🌟 Bé đã xem hết ${list.length} truyện trong mục này!</div>`;
+          }
+        }
       }
     }
   }
+
+  // Đăng ký Infinite Scroll qua throttled scroll handler
+  onScroll(function(){
+    if(cur!=="storyL") return;
+    const listWrap=document.getElementById("storyListWrap");
+    if(!listWrap) return;
+    const list=getFilteredStories(catalog);
+    if(storyRenderedCount >= list.length) return;
+    if(m.scrollTop + m.clientHeight >= m.scrollHeight - 350){
+      const nextBatch = list.slice(storyRenderedCount, storyRenderedCount + STORY_BATCH_SIZE);
+      if(nextBatch.length){
+        storyRenderedCount += nextBatch.length;
+        const frag=document.createDocumentFragment();
+        const tpl=document.createElement("template");
+        tpl.innerHTML=nextBatch.map(storyCardHtml).join("");
+        frag.appendChild(tpl.content);
+        listWrap.appendChild(frag);
+
+        const loadMoreWrap=document.getElementById("storyLoadMoreWrap");
+        if(loadMoreWrap){
+          if(storyRenderedCount < list.length){
+            loadMoreWrap.innerHTML=`<div class="story-infinite-tip" style="padding:14px;font-size:15px;color:#64748b;font-weight:700">📜 Bé cuộn xuống để xem thêm truyện nhé (${storyRenderedCount}/${list.length})</div>`;
+          } else {
+            loadMoreWrap.innerHTML=`<div style="padding:14px;font-size:14px;color:#94a3b8;font-weight:700">🌟 Bé đã xem hết ${list.length} truyện trong mục này!</div>`;
+          }
+        }
+      }
+    }
+  });
 
   // Khởi tạo khung giao diện nếu chưa có
   const existingInput=document.getElementById("stSearchInput");
@@ -3005,10 +3083,10 @@ async function storyL(catId, page, search){
 
     <div id="storySearchStatus" style="font-size:15px;opacity:.85;margin-bottom:8px"></div>
     <div id="storyListWrap" style="display:flex;flex-direction:column;gap:10px"></div>
-    <div id="storyPaginationWrap"></div>`;
+    <div id="storyLoadMoreWrap" style="text-align:center"></div>`;
   }
 
-  renderStoryItems();
+  renderStoryItems(true);
 }
 
 async function storyDetail(id){

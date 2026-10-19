@@ -51,12 +51,13 @@ class MockLRUCache {
   constructor(maxBytes) {
     this.maxBytes = maxBytes;
     this.store = new Map(); // url -> { blob, size, lastUsed }
+    this.clock = 1;
   }
 
   get(url) {
     if (!this.store.has(url)) return null;
     const item = this.store.get(url);
-    item.lastUsed = Date.now();
+    item.lastUsed = ++this.clock;
     return item;
   }
 
@@ -67,7 +68,7 @@ class MockLRUCache {
       url,
       blob,
       size,
-      lastUsed: Date.now()
+      lastUsed: ++this.clock
     });
   }
 
