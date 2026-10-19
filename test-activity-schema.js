@@ -72,6 +72,39 @@ assert.strictEqual(g12Vq.length, 4, 'Lớp 1-2 phải có 4 bài đánh vần c�
 assert.strictEqual(g35Vq.length, 3, 'Lớp 3-5 phải có 3 bài khám phá vũ trụ');
 console.log('✔ Phân bổ chuẩn: 3 bài Mầm non, 4 bài Lớp 1-2, 3 bài Lớp 3-5');
 
+// 3.1 Kiểm tra 5 Mini-game Toán Lớp 3 (Phép nhân & chia)
+console.log('\n--- TEST 3.1: Kiểm tra 5 Mini-game Toán lớp 3 ---');
+const mathG3Acts = ACTIVITIES_DATA.filter(a => a.id.startsWith('act_g3_math_'));
+assert.strictEqual(mathG3Acts.length, 5, 'Phải có đủ 5 mini-game Toán lớp 3');
+mathG3Acts.forEach((act, idx) => {
+  const res = validateActivity(act);
+  assert(res.valid, `Mini-game ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
+  assert.strictEqual(act.subject, 'math');
+  assert.strictEqual(act.ageTier, 'grade3_5');
+  assert.strictEqual(act.content.length, 3, 'Mỗi game phải có đúng 3 câu hỏi trắc nghiệm');
+  console.log(`✔ [${idx + 1}/5 Toán] '${act.id}': HỢP LỆ SCHEMA VÀ ĐỦ 3 CÂU HỎI`);
+});
+
+// 3.2. Kiểm tra 5 bài học Tiếng Anh Khoa học: Vòng đời của bướm
+console.log('\n--- TEST 3.2: Kiểm tra 5 bài học Tiếng Anh Khoa học: Vòng đời của bướm ---');
+const englishScienceIds = [
+  'act_g35_sci_01_butterfly_vocab',
+  'act_g35_sci_02_sentence_match',
+  'act_g35_sci_03_lifecycle_dragdrop',
+  'act_g35_sci_04_listening_script',
+  'act_g35_sci_05_metamorphosis'
+];
+
+englishScienceIds.forEach((id, idx) => {
+  const act = ACTIVITIES_DATA.find(a => a.id === id);
+  assert(act, `Không tìm thấy bài học '${id}' trong ACTIVITIES_DATA`);
+  const res = validateActivity(act);
+  assert(res.valid, `Bài học ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
+  assert.strictEqual(act.subject, 'science');
+  assert.strictEqual(act.ageTier, 'grade3_5');
+  console.log(`✔ [${idx + 1}/5 Khoa học] '${act.id}' (${act.type}): HỢP LỆ VÀ ĐÚNG CHUẨN`);
+});
+
 // 4. Kiểm tra tính tương thích của getActivitiesByTier
 console.log('\n--- TEST 4: Kiểm tra tính tương thích của getActivitiesByTier() ---');
 const tiers = ['preschool', 'grade1_2', 'grade3_5'];

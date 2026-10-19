@@ -1280,6 +1280,501 @@ const ACTIVITIES_DATA = [
         explanation: "Kính viễn vọng không gian như Hubble và James Webb hoạt động ngoài khí quyển Trái Đất, chụp được những bức ảnh vũ trụ sâu vô cùng rõ nét và kỳ ảo!"
       }
     ]
+  },
+
+  // ==========================================================================
+  // 5 MINI-GAME TOÁN LỚP 3: PHÉP NHÂN & PHÉP CHIA (CT GDPT 2018)
+  // ==========================================================================
+
+  // --- GAME 1: SIÊU THỊ TOÁN HỌC (PHÉP NHÂN TÍNH TIỀN) ---
+  {
+    id: "act_g3_math_01_supermarket",
+    title: "Siêu thị toán học: Tính tiền giỏ hàng 🛒🧺",
+    titleEn: "Math Supermarket: Cart Total",
+    ageTier: "grade3_5",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/supermarket_math.png",
+      thumbnail: "img/supermarket_math_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 3: Thực hiện phép nhân số có nhiều chữ số với số có một chữ số; vận dụng tính tổng tiền hàng mua sắm thực tế.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Bé mua 4 hộp sữa tươi 🥛, mỗi hộp có giá 8.000 đồng. Hỏi bé phải trả thu ngân bao nhiêu tiền?",
+        options: [
+          "24.000 đồng",
+          "32.000 đồng",
+          "36.000 đồng",
+          "40.000 đồng"
+        ],
+        correctAnswer: 1,
+        explanation: "Phép nhân: 8.000 × 4 = 32.000 đồng! Bé tính tiền siêu thị rất chuẩn xác!"
+      },
+      {
+        question: "Mẹ mua 5 quyển vở ô ly 📓 giá 6.000 đồng/quyển và đưa cho cô thu ngân tờ 50.000 đồng. Cô thu ngân phải thối lại cho mẹ bao nhiêu tiền?",
+        options: [
+          "10.000 đồng",
+          "15.000 đồng",
+          "20.000 đồng",
+          "25.000 đồng"
+        ],
+        correctAnswer: 2,
+        explanation: "Tiền mua vở: 6.000 × 5 = 30.000 đồng. Tiền thối lại: 50.000 - 30.000 = 20.000 đồng!"
+      },
+      {
+        question: "Bé chọn 3 gói bánh quy 🍪 (12.000 đồng/gói) và 2 que kem 🍦 (7.000 đồng/que). Tổng cộng hóa đơn của bé hết bao nhiêu tiền?",
+        options: [
+          "45.000 đồng",
+          "50.000 đồng",
+          "52.000 đồng",
+          "55.000 đồng"
+        ],
+        correctAnswer: 1,
+        explanation: "Tiền bánh: 12.000 × 3 = 36.000 đồng. Tiền kem: 7.000 × 2 = 14.000 đồng. Tổng tiền: 36.000 + 14.000 = 50.000 đồng!"
+      }
+    ]
+  },
+
+  // --- GAME 2: CHIA BÁNH TRUNG THU (PHÉP CHIA ĐỀU & CHIA CÓ DƯ) ---
+  {
+    id: "act_g3_math_02_mooncakes",
+    title: "Chia bánh trung thu rằm tháng Tám 🥮🏮",
+    titleEn: "Mid-Autumn Mooncake Sharing",
+    ageTier: "grade3_5",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/mooncake_share.png",
+      thumbnail: "img/mooncake_share_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 3: Hiểu bản chất phép chia (chia đều thành các phần bằng nhau); thực hiện thành thạo phép chia hết và chia có dư.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Đêm rằm có 24 chiếc bánh nướng thơm lừng 🥮, xếp đều vào 6 hộp quà trung thu. Hỏi mỗi hộp có bao nhiêu chiếc bánh?",
+        options: [
+          "3 chiếc bánh",
+          "4 chiếc bánh",
+          "5 chiếc bánh",
+          "6 chiếc bánh"
+        ],
+        correctAnswer: 1,
+        explanation: "Phép chia đều: 24 : 6 = 4 chiếc bánh cho mỗi hộp quà!"
+      },
+      {
+        question: "Có 15 chiếc bánh dẻo tuyết 🥮, chia đều cho 4 bạn nhỏ. Hỏi mỗi bạn nhận được mấy chiếc bánh và còn thừa mấy chiếc?",
+        options: [
+          "Mỗi bạn 3 chiếc, thừa 3 chiếc",
+          "Mỗi bạn 4 chiếc, thừa 1 chiếc",
+          "Mỗi bạn 3 chiếc, thừa 2 chiếc",
+          "Mỗi bạn 2 chiếc, thừa 7 chiếc"
+        ],
+        correctAnswer: 0,
+        explanation: "Phép chia có dư: 15 : 4 = 3 (dư 3). Mỗi bạn được 3 chiếc và còn thừa đúng 3 chiếc bánh dẻo!"
+      },
+      {
+        question: "Xưởng làm bánh nướng được 48 chiếc bánh, đóng mỗi hộp 4 chiếc. Hỏi xưởng đóng được tất cả bao nhiêu hộp bánh?",
+        options: [
+          "10 hộp",
+          "11 hộp",
+          "12 hộp",
+          "14 hộp"
+        ],
+        correctAnswer: 2,
+        explanation: "Phép chia số có 2 chữ số: 48 : 4 = 12 hộp bánh hoàn chỉnh!"
+      }
+    ]
+  },
+
+  // --- GAME 3: ĐIỀN SỐ CÒN THIẾU (DÃY SỐ CẤP SỐ NHÂN) ---
+  {
+    id: "act_g3_math_03_number_pattern",
+    title: "Thám tử số học: Mật mã cấp số nhân 🔍🔢",
+    titleEn: "Number Detective: Geometric Sequence",
+    ageTier: "grade3_5",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/number_pattern.png",
+      thumbnail: "img/number_pattern_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 3: Rèn luyện tư duy logic toán học, nhận diện quy luật tăng theo bội số nhân của dãy số.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Dãy số bí ẩn: 3, 6, 12, 24, [ ? ]. Tìm số thích hợp điền vào dấu hỏi chấm:",
+        options: [
+          "36",
+          "42",
+          "48",
+          "52"
+        ],
+        correctAnswer: 2,
+        explanation: "Quy luật gấp đôi (nhân 2): 3 × 2 = 6, 6 × 2 = 12, 12 × 2 = 24, và 24 × 2 = 48!"
+      },
+      {
+        question: "Dãy số mật mã: 2, 6, 18, 54, [ ? ]. Điền số chính xác để mở rương kho báu:",
+        options: [
+          "108",
+          "150",
+          "162",
+          "180"
+        ],
+        correctAnswer: 2,
+        explanation: "Quy luật gấp 3 lần (nhân 3): 2 × 3 = 6, 6 × 3 = 18, 18 × 3 = 54, và 54 × 3 = 162!"
+      },
+      {
+        question: "Dãy số bậc thang: 5, 25, 125, [ ? ]. Số tiếp theo trong dãy là số nào?",
+        options: [
+          "250",
+          "500",
+          "625",
+          "750"
+        ],
+        correctAnswer: 2,
+        explanation: "Quy luật gấp 5 lần (nhân 5): 5 × 5 = 25, 25 × 5 = 125, và 125 × 5 = 625!"
+      }
+    ]
+  },
+
+  // --- GAME 4: NÔNG TRẠI THU HOẠCH TÁO (CHIA ĐỀU SỌT) ---
+  {
+    id: "act_g3_math_04_apple_harvest",
+    title: "Nông trại vui vẻ: Thu hoạch táo chín 🍏🧺",
+    titleEn: "Fun Farm: Apple Harvest Division",
+    ageTier: "grade3_5",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/apple_harvest.png",
+      thumbnail: "img/apple_harvest_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 3: Giải bài toán có lời văn liên quan đến phép chia rút về đơn vị trong đời sống nông trại thực tế.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Bác nông dân hái được 72 quả táo đỏ 🍎, chia đều vào 8 sọt tre. Hỏi mỗi sọt có bao nhiêu quả táo?",
+        options: [
+          "7 quả táo",
+          "8 quả táo",
+          "9 quả táo",
+          "10 quả táo"
+        ],
+        correctAnswer: 2,
+        explanation: "Phép chia trong bảng chia 8: 72 : 8 = 9 quả táo cho mỗi sọt!"
+      },
+      {
+        question: "Có 5 sọt táo, mỗi sọt có 14 quả. Bác nông dân vừa hái thêm 10 quả nữa bỏ vào. Hỏi hiện có tất cả bao nhiêu quả táo?",
+        options: [
+          "70 quả",
+          "75 quả",
+          "80 quả",
+          "85 quả"
+        ],
+        correctAnswer: 2,
+        explanation: "Tính 2 bước: 5 sọt có 14 × 5 = 70 quả táo. Thêm 10 quả: 70 + 10 = 80 quả táo!"
+      },
+      {
+        question: "Có 65 quả táo, xếp vào các hộp quà, mỗi hộp chỉ chứa được 6 quả. Hỏi cần ít nhất bao nhiêu hộp để xếp hết số táo đó?",
+        options: [
+          "10 hộp",
+          "11 hộp",
+          "12 hộp",
+          "13 hộp"
+        ],
+        correctAnswer: 1,
+        explanation: "Ta có 65 : 6 = 10 (dư 5). 10 hộp xếp được 60 quả, còn 5 quả thừa cần thêm 1 hộp nữa. Vậy cần ít nhất 10 + 1 = 11 hộp!"
+      }
+    ]
+  },
+
+  // --- GAME 5: ĐẤU TRƯỜNG PHÉP NHÂN (BẮN BÓNG CỬU CHƯƠNG) ---
+  {
+    id: "act_g3_math_05_multiplication_duel",
+    title: "Đấu trường toán nhí: Bắn bóng cửu chương 🎯⚡",
+    titleEn: "Math Arena: Multiplication Balloon Pop",
+    ageTier: "grade3_5",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/balloon_pop_math.png",
+      thumbnail: "img/balloon_pop_math_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 3: Thuộc làu bảng nhân 6, 7, 8, 9; rèn luyện phản xạ tính nhẩm nhanh và kết hợp cộng trừ nhân chia.",
+    difficulty: 4,
+    content: [
+      {
+        question: "Quả bóng bay mang phép tính '7 × 8' 🎈. Kết quả chính xác là bao nhiêu?",
+        options: [
+          "48",
+          "54",
+          "56",
+          "64"
+        ],
+        correctAnswer: 2,
+        explanation: "Bảng nhân 7: 7 × 8 = 56! Bé bắn bóng rất chuẩn xác!"
+      },
+      {
+        question: "Trong các phép nhân dưới đây, quả bóng nào có giá trị bằng 54?",
+        options: [
+          "6 × 9 🎈",
+          "7 × 7 🎈",
+          "8 × 6 🎈",
+          "9 × 5 🎈"
+        ],
+        correctAnswer: 0,
+        explanation: "Ta có 6 × 9 = 54 (còn 7 × 7 = 49, 8 × 6 = 48, 9 × 5 = 45)!"
+      },
+      {
+        question: "Thử thách tính nhanh: Tính giá trị biểu thức '9 × 7 + 8 × 4'?",
+        options: [
+          "85",
+          "91",
+          "95",
+          "99"
+        ],
+        correctAnswer: 2,
+        explanation: "Tính từng tích: 9 × 7 = 63 và 8 × 4 = 32. Sau đó cộng lại: 63 + 32 = 95!"
+      }
+    ]
+  },
+
+  // ==========================================================================
+  // 5 BÀI HỌC TIẾNG ANH LỚP 4–5: KHOA HỌC TỰ NHIÊN (VÒNG ĐỜI CỦA BƯỚM)
+  // ==========================================================================
+
+  // --- BÀI 1: TỪ VỰNG 4 GIAI ĐOẠN VÒNG ĐỜI ---
+  {
+    id: "act_g35_sci_01_butterfly_vocab",
+    title: "Vòng đời của bướm: Khám phá từ vựng 🐛🦋",
+    titleEn: "Life Cycle of a Butterfly: Key Vocabulary",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/butterfly_cycle.png",
+      thumbnail: "img/butterfly_cycle_thumb.png"
+    },
+    learningObjective: "Tiếng Anh & Khoa học Lớp 4-5: Nắm vững 4 thuật ngữ khoa học chính của vòng đời loài bướm (Egg, Larva / Caterpillar, Pupa / Chrysalis, Adult Butterfly).",
+    difficulty: 3,
+    content: [
+      {
+        question: "Stage 1: A female butterfly lays tiny green dots on a leaf. What is this stage called? 🍃",
+        options: [
+          "Egg (Trứng)",
+          "Pupa (Kén nhộng)",
+          "Adult (Bướm trưởng thành)",
+          "Larva (Sâu bướm)"
+        ],
+        correctAnswer: 0,
+        explanation: "Correct! The mother butterfly lays tiny round eggs on green leaves. Giai đoạn 1 là Egg (Trứng)."
+      },
+      {
+        question: "Stage 2: The egg hatches into a hungry caterpillar that eats green leaves all day. What is the scientific name? 🐛",
+        options: [
+          "Pupa",
+          "Larva (Caterpillar)",
+          "Adult",
+          "Egg"
+        ],
+        correctAnswer: 1,
+        explanation: "Awesome! 'Larva' (hoặc caterpillar) là sâu bướm, ăn rất nhiều lá cây để lớn nhanh!"
+      },
+      {
+        question: "Stage 3: The caterpillar builds a hard protective shell around itself to transform. What is it? 🛖",
+        options: [
+          "Egg",
+          "Larva",
+          "Pupa (Chrysalis)",
+          "Adult Butterfly"
+        ],
+        correctAnswer: 2,
+        explanation: "Super! 'Pupa' (kén nhộng/chrysalis) là giai đoạn nghỉ ngơi và biến đổi kỳ diệu bên trong lớp vỏ cứng."
+      }
+    ]
+  },
+
+  // --- BÀI 2: ĐỌC HIỂU CÂU VÍ DỤ & NGHĨA KHOA HỌC ---
+  {
+    id: "act_g35_sci_02_sentence_match",
+    title: "Tiếng Anh Khoa học: Ghép câu & ý nghĩa 📖🌿",
+    titleEn: "Butterfly Science: Sentences & Meaning",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/butterfly_stages.png",
+      thumbnail: "img/butterfly_stages_thumb.png"
+    },
+    learningObjective: "Đọc hiểu các câu văn khoa học miêu tả đặc điểm sinh học của từng giai đoạn phát triển.",
+    difficulty: 3,
+    content: [
+      {
+        question: "'The pupa rests quietly inside the hard shell.' Câu này có nghĩa là gì?",
+        options: [
+          "Con nhộng nằm yên tĩnh bên trong lớp vỏ cứng.",
+          "Con bướm bay lượn hút mật hoa.",
+          "Sâu bướm bò đi tìm lá non.",
+          "Quả trứng nở ra sau cơn mưa."
+        ],
+        correctAnswer: 0,
+        explanation: "Chính xác! 'pupa' = nhộng, 'rests quietly' = nằm yên tĩnh, 'hard shell' = vỏ cứng."
+      },
+      {
+        question: "Chọn câu tiếng Anh miêu tả đúng nhất giai đoạn 'Adult Butterfly': 🦋🌸",
+        options: [
+          "The adult butterfly has colorful wings and drinks sweet flower nectar.",
+          "The adult stays underground all winter.",
+          "The adult has no wings and crawls slowly.",
+          "The adult only lives inside an egg."
+        ],
+        correctAnswer: 0,
+        explanation: "Great job! Bướm trưởng thành ('adult butterfly') có đôi cánh sặc sỡ và hút mật hoa ngọt ngào."
+      },
+      {
+        question: "Hoàn thành câu: 'A tiny ______ hatches from the egg and eats leaves.' 🐛",
+        options: [
+          "larva",
+          "wing",
+          "flower",
+          "shell"
+        ],
+        correctAnswer: 0,
+        explanation: "Well done! 'A tiny larva (caterpillar) hatches from the egg' (Một chú ấu trùng nhỏ nở ra từ quả trứng)."
+      }
+    ]
+  },
+
+  // --- BÀI 3: DRAG & DROP LOGIC - SẮP XẾP THỨ TỰ VÒNG ĐỜI ---
+  {
+    id: "act_g35_sci_03_lifecycle_dragdrop",
+    title: "Sắp xếp vòng đời của Bướm (Drag & Drop) 🔄✨",
+    titleEn: "Order the Butterfly Life Cycle (Sequence)",
+    ageTier: "grade3_5",
+    subject: "science",
+    skill: "Khoa học tự nhiên: Sắp xếp đúng trình tự 4 giai đoạn vòng đời sinh vật",
+    type: "drag_drop",
+    difficulty: 3,
+    mediaSource: {
+      type: "image_set",
+      url: "img/butterfly_order.png",
+      thumbnail: "img/butterfly_order_thumb.png"
+    },
+    learningObjective: "Rèn luyện tư duy logic khoa học qua việc xếp đúng 4 bước theo thời gian: Egg ➔ Larva ➔ Pupa ➔ Adult.",
+    content: {
+      question: "Bé hãy chạm vào các thẻ để xếp đúng thứ tự 4 giai đoạn vòng đời của bướm nhé! 🔄",
+      questionEn: "Place the 4 stages of the butterfly life cycle in the correct chronological order!",
+      media: "🥚 ➔ 🐛 ➔ 🛖 ➔ 🦋",
+      slots: 4,
+      tokens: [
+        { id: "t_pupa", text: "3. Pupa" },
+        { id: "t_egg", text: "1. Egg" },
+        { id: "t_adult", text: "4. Adult" },
+        { id: "t_larva", text: "2. Larva" }
+      ],
+      correctSequence: ["1. Egg", "2. Larva", "3. Pupa", "4. Adult"]
+    },
+    feedback: {
+      correct: "Xuất sắc! Vòng đời của bướm bắt đầu từ: 1. Egg (Trứng) ➔ 2. Larva (Ấu trùng sâu) ➔ 3. Pupa (Nhộng) ➔ 4. Adult (Bướm trưởng thành)! 🌟🦋",
+      wrong: "Bé nhớ lại nhé: Trứng nở thành Sâu, Sâu hóa thành Nhộng, rồi mới nở thành Bướm xinh đẹp!"
+    },
+    reward: { stars: 3 }
+  },
+
+  // --- BÀI 4: LUYỆN NGHE AUDIO SCRIPT (LISTENING COMPREHENSION) ---
+  {
+    id: "act_g35_sci_04_listening_script",
+    title: "Luyện nghe tiếng Anh: Chú sâu háu ăn 🎧🐛",
+    titleEn: "Listening: The Hungry Caterpillar Transformation",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "reading_passage",
+    difficulty: 3,
+    mediaSource: {
+      type: "image_set",
+      url: "img/hungry_caterpillar.png",
+      thumbnail: "img/hungry_caterpillar_thumb.png"
+    },
+    learningObjective: "Luyện kỹ năng nghe hiểu đoạn văn ngắn tiếng Anh về quá trình sâu bướm chuẩn bị làm kén.",
+    content: {
+      storyText: "Listen to the story: 'On a sunny morning, a tiny caterpillar hatches from an egg. It eats green leaves day and night. Soon, it grows big and fat. Then, it hangs upside down on a branch to make a pupa.'",
+      question: "According to the audio story, what does the caterpillar do when it grows big and fat? 🎧",
+      questionEn: "What does the caterpillar do when it grows big and fat?",
+      media: "🎧 🐛 🍃 🛖"
+    },
+    options: [
+      { id: "optA", text: "It flies away to find sweet flowers." },
+      { id: "optB", text: "It hangs upside down to make a pupa." },
+      { id: "optC", text: "It lays tiny eggs under a rock." },
+      { id: "optD", text: "It goes to sleep under the soil." }
+    ],
+    correctAnswer: "optB",
+    feedback: {
+      correct: "Awesome listening! 'Then, it hangs upside down on a branch to make a pupa' (Sau đó, chú treo ngược mình trên cành cây để tạo thành chiếc kén nhộng)! 🎧🌟",
+      wrong: "Bé nghe lại câu cuối nhé: 'Then, it hangs upside down on a branch to make a pupa.'"
+    },
+    reward: { stars: 3 }
+  },
+
+  // --- BÀI 5: KHOA HỌC MỞ RỘNG (METAMORPHOSIS QUIZ) ---
+  {
+    id: "act_g35_sci_05_metamorphosis",
+    title: "Bí mật biến thái hoàn toàn: Metamorphosis 🔬✨",
+    titleEn: "Science Secret: Complete Metamorphosis",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/metamorphosis.png",
+      thumbnail: "img/metamorphosis_thumb.png"
+    },
+    learningObjective: "Tìm hiểu hiện tượng biến thái hoàn toàn (Metamorphosis) và vai trò của bướm đối với hệ sinh thái thực vật.",
+    difficulty: 4,
+    content: [
+      {
+        question: "The complete transformation from an egg into an adult butterfly is called: 🔬",
+        options: [
+          "Metamorphosis (Biến thái hoàn toàn)",
+          "Photosynthesis (Quang hợp)",
+          "Evaporation (Bay hơi)",
+          "Hibernation (Ngủ đông)"
+        ],
+        correctAnswer: 0,
+        explanation: "Exactly! 'Metamorphosis' là thuật ngữ sinh học chỉ sự biến thái hoàn toàn trải qua 4 giai đoạn rõ rệt."
+      },
+      {
+        question: "Inside the pupa, the caterpillar's body breaks down and rebuilds into wings and long legs. How long does it usually take? ⏳",
+        options: [
+          "About 1 to 2 weeks (Khoảng 1 đến 2 tuần)",
+          "10 seconds (10 giây)",
+          "5 years (5 năm)",
+          "Only 1 minute (Chỉ 1 phút)"
+        ],
+        correctAnswer: 0,
+        explanation: "Correct! Hầu hết các loài bướm ở trong kén nhộng từ 1 đến 2 tuần trước khi bung kén xòe cánh."
+      },
+      {
+        question: "How do adult butterflies help plants and flowers in nature? 🌸🐝",
+        options: [
+          "They help pollinate flowers (Thụ phấn cho hoa)",
+          "They eat tree roots (Ăn rễ cây)",
+          "They dig deep holes in the ground",
+          "They make the flowers dry up"
+        ],
+        correctAnswer: 0,
+        explanation: "Wonderful! Khi bay đi hút mật hoa, bướm mang theo phấn hoa giúp cây cối thụ phấn ('pollinate flowers') để kết trái."
+      }
+    ]
   }
 ];
 
@@ -1344,15 +1839,23 @@ function validateActivity(act) {
   }
   if (!act.learningObjective && !act.skill) errors.push("Missing 'learningObjective'");
   if (typeof act.difficulty !== "number" || act.difficulty < 1 || act.difficulty > 5) errors.push("Invalid 'difficulty' (must be 1-5)");
-  if (!Array.isArray(act.content) || act.content.length === 0) {
-    errors.push("'content' must be a non-empty array");
-  } else {
+  if (Array.isArray(act.content)) {
+    if (act.content.length === 0) errors.push("'content' array cannot be empty");
     act.content.forEach((item, idx) => {
       if (!item.question || typeof item.question !== "string") errors.push(`Item ${idx}: missing 'question'`);
       if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Item ${idx}: 'options' must have at least 2 items`);
       if (item.correctAnswer === undefined) errors.push(`Item ${idx}: missing 'correctAnswer'`);
       if (!item.explanation || typeof item.explanation !== "string") errors.push(`Item ${idx}: missing 'explanation'`);
     });
+  } else if (act.content && typeof act.content === "object") {
+    if (act.type === "drag_drop") {
+      if (!Array.isArray(act.content.tokens) || act.content.tokens.length < 2) errors.push("drag_drop: 'tokens' must have at least 2 items");
+      if (!Array.isArray(act.content.correctSequence)) errors.push("drag_drop: missing 'correctSequence'");
+    } else if (!act.content.question && !act.content.storyText) {
+      errors.push("Missing question or storyText in content object");
+    }
+  } else {
+    errors.push("Invalid 'content': must be an array or content object");
   }
   return { valid: errors.length === 0, errors };
 }
