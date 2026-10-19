@@ -128,29 +128,19 @@ lanAnhIds.forEach((id, idx) => {
   console.log(`✔ [${idx + 1}/5 Cô Lan Anh] '${act.id}': HỢP LỆ, CÓ PARENT TIP VÀ LINK YOUTUBE`);
 });
 
-// 3.4. Kiểm tra Module Tiền tiểu học - Tiếng Việt (Playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL)
-console.log('\n--- TEST 3.4: Kiểm tra Module Tiền tiểu học - Tiếng Việt (pre_vi_*) ---');
-const preViIds = [
-  'pre_vi_a',
-  'pre_vi_aw',
-  'pre_vi_aa',
-  'pre_vi_b',
-  'pre_vi_c',
-  'pre_vi_d',
-  'pre_vi_dd'
-];
+// 3.4. Kiểm tra Module Lớp 1 - Bảng chữ cái & Phụ âm ghép VTV7 (Playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL)
+console.log('\n--- TEST 3.4: Kiểm tra Module Lớp 1 - Bảng chữ cái & Phụ âm ghép VTV7 (g1_vtv7_*) ---');
+const vtv7Acts = ACTIVITIES_DATA.filter(a => a.id.startsWith('g1_vtv7_'));
+assert(vtv7Acts.length >= 20, 'Phải có ít nhất 20 bài học chữ cái & vần VTV7 cho Lớp 1');
 
-preViIds.forEach((id, idx) => {
-  const act = ACTIVITIES_DATA.find(a => a.id === id);
-  assert(act, `Không tìm thấy bài học '${id}' trong ACTIVITIES_DATA`);
+vtv7Acts.forEach((act, idx) => {
   const res = validateActivity(act);
-  assert(res.valid, `Bài học ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
-  assert.strictEqual(act.ageTier, 'preschool');
-  assert.strictEqual(act.subject, 'vietnamese');
-  assert(act.videoUrl && act.videoUrl.includes('PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL'), 'Phải có link YouTube playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL');
-  assert(Array.isArray(act.exercises) && act.exercises.length >= 2, 'Phải có ít nhất 2 câu hỏi exercises');
-  assert(act.parentTip && typeof act.parentTip === 'string', 'Phải có parentTip');
-  console.log(`✔ [${idx + 1}/7 pre_vi] '${act.id}': HỢP LỆ VÀ ĐỦ TIÊU CHUẨN`);
+  assert(res.valid, `Bài học ${act.id} phải hợp lệ theo Schema. Lỗi: ${res.errors.join(', ')}`);
+  assert.strictEqual(act.ageTier, 'grade1_2', 'Bài học VTV7 chi tiết phải thuộc Lớp 1 (grade1_2)');
+  assert.strictEqual(act.subject, 'vietnamese', 'Môn học phải là vietnamese');
+  assert(act.mediaSource && act.mediaSource.url.includes('PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL'), 'Phải có link YouTube playlist VTV7');
+  assert(Array.isArray(act.content) && act.content.length === 3, 'Mỗi bài học VTV7 phải có đúng 3 câu hỏi trắc nghiệm');
+  console.log(`✔ [${idx + 1}/${vtv7Acts.length} VTV7 Lớp 1] '${act.id}': HỢP LỆ VÀ ĐẠT CHUẨN GDPT 2018`);
 });
 
 // 4. Kiểm tra tính tương thích của getActivitiesByTier

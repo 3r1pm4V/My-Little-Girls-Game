@@ -1983,289 +1983,886 @@ const ACTIVITIES_DATA = [
   },
 
   // ==========================================================================
-  // MODULE: TIỀN TIỂU HỌC - TIẾNG VIỆT (PLAYLIST CÔ LAN ANH)
-  // https://www.youtube.com/playlist?list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL
+  // LỚP 1–2 (6–8 TUỔI) - BẢNG CHỮ CÁI & PHỤ ÂM GHÉP VTV7 (ABC VUI TỪNG GIỜ)
+  // Toàn bộ playlist chuẩn VTV7: https://www.youtube.com/playlist?list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL
+  // Bám sát chuẩn CT GDPT 2018 môn Tiếng Việt Lớp 1
   // ==========================================================================
   {
-    id: "pre_vi_a",
-    title: "Học chữ A cùng cô Lan Anh",
-    titleEn: "Learn Letter A with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_01_letter_o",
+    title: "VTV7 Lớp 1: Học chữ O tròn xoe ⭕ (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter O",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=mk6HhmS3SEg&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=4",
-    learningGoal: "Nhận diện mặt chữ A và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=iBX6RT_xrg0&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=1",
+      thumbnail: "https://img.youtube.com/vi/iBX6RT_xrg0/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 môn Tiếng Việt lớp 1: Nhận diện chữ O, phát âm âm O tròn môi và tìm các tiếng chứa chữ O trong đời sống.",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'A' giống cái gì bé nhỉ? 🍎",
-        options: [
-          { "text": "Chiếc thang đứng vững", "icon": "🪜" },
-          { "text": "Quả bóng tròn", "icon": "⚽" }
-        ],
-        correctAnswer: "Chiếc thang đứng vững",
-        audioHint: "Chữ A có hai chân thẳng đứng và nét gạch ngang giống chiếc thang!"
+        question: "Chữ 'O' có hình dáng tròn xoe giống vật thể quen thuộc nào?",
+        options: ["Quả trứng gà tròn 🥚","Chiếc thang đứng 🪜","Mái nhà nhọn 🛖","Chiếc nón lá 👒"],
+        correctAnswer: 0,
+        explanation: "O tròn như quả trứng gà! Chữ O là một nét cong tròn khép kín hoàn hảo."
       },
       {
-        question: "Tìm chữ 'A' trong các từ dưới đây nào:",
-        options: [
-          { "text": "Anh Đào", "icon": "🍒" },
-          { "text": "Bắp ngô", "icon": "🌽" }
-        ],
-        correctAnswer: "Anh Đào",
-        audioHint: "A - Quả Anh Đào mọng nước thơm ngon!"
+        question: "Tìm từ có chứa chữ 'O' chỉ đồ chơi bé yêu thích:",
+        options: ["Ô tô 🚗","Búp bê 🪆","Quả bóng ⚽","Viên bi ⚪"],
+        correctAnswer: 2,
+        explanation: "Quả bóng (b-ong-bong-sắc-bóng): tiếng 'bóng' có chữ O!"
       },
       {
-        question: "Chữ A có trong từ chỉ trang phục nào bé mặc mỗi ngày?",
-        options: [
-          { "text": "Cái Áo", "icon": "👕" },
-          { "text": "Đôi Giày", "icon": "👟" }
-        ],
-        correctAnswer: "Cái Áo",
-        audioHint: "A - Cái Áo xinh xắn bé mặc đi học!"
+        question: "Khẩu hình miệng khi phát âm âm 'O' chuẩn xác là gì?",
+        options: ["Miệng mở tròn đều, môi uốn tròn","Mím chặt hai môi","Răng cắn nhẹ vào môi","Há to hết cỡ sang hai bên"],
+        correctAnswer: 0,
+        explanation: "Khi phát âm 'O', hai môi mở tròn đều tạo luồng hơi thoát ra tự nhiên: O!"
       }
-    ],
-    parentTip: "Ba mẹ cho bé mở to miệng phát âm 'Aaaa', liên tưởng chữ A với chiếc thang đứng hoặc mái nhà nhọn."
+    ]
   },
   {
-    id: "pre_vi_aw",
-    title: "Học chữ Ă cùng cô Lan Anh",
-    titleEn: "Learn Letter Ă with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_02_letter_oo",
+    title: "VTV7 Lớp 1: Học chữ Ô đội mũ 🧢 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Ô",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=waszboqAEeY&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=5",
-    learningGoal: "Nhận diện mặt chữ Ă (Á) và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=lYpWGqbGbkw&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=2",
+      thumbnail: "https://img.youtube.com/vi/lYpWGqbGbkw/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ Ô, dấu nón úp trên đầu chữ O và phân biệt âm O với Ô.",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'Ă' đội chiếc mũ gì trên đầu bé ơi?",
-        options: [
-          { "text": "Trăng khuyết ngửa lên trời", "icon": "🌙" },
-          { "text": "Chiếc ô tròn xoe", "icon": "☂️" }
-        ],
-        correctAnswer: "Trăng khuyết ngửa lên trời",
-        audioHint: "Chữ Ă có chiếc nón trăng khuyết cong cong ngửa lên trời đón trăng!"
+        question: "Chữ 'Ô' khác chữ 'O' ở điểm đặc biệt nào?",
+        options: ["Có thêm chiếc mũ nón úp trên đầu 🧢","Có dấu râu bên phải","Có nét gạch ngang ở bụng","Không khác nhau"],
+        correctAnswer: 0,
+        explanation: "Ô thì đội mũ! Chữ Ô chính là chữ O có thêm chiếc nón úp nhọn trên đầu."
       },
       {
-        question: "Chữ 'Ă' (Á) xuất hiện trong vật dụng nào bé dùng lau mặt?",
-        options: [
-          { "text": "Khăn mặt", "icon": "🧣" },
-          { "text": "Gương soi", "icon": "🪞" }
-        ],
-        correctAnswer: "Khăn mặt",
-        audioHint: "Khăn mặt mềm mại giúp bé rửa mặt sạch tinh mỗi sáng!"
+        question: "Phương tiện giao thông nào bắt đầu bằng chữ 'Ô'?",
+        options: ["Ô tô 🚗","Xe máy 🛵","Tàu hỏa 🚂","Máy bay ✈️"],
+        correctAnswer: 0,
+        explanation: "Ô tô: tiếng 'Ô' đứng đầu chỉ xe ô tô chạy bon bon trên đường!"
       },
       {
-        question: "Tìm hình ảnh vầng sáng trên bầu trời đêm có chữ 'Ă':",
-        options: [
-          { "text": "Mặt trăng", "icon": "🌙" },
-          { "text": "Ngôi sao", "icon": "⭐" }
-        ],
-        correctAnswer: "Mặt trăng",
-        audioHint: "Mờ - Ăn - Măng - Nặng - Mặt trăng sáng soi ban đêm!"
+        question: "Tìm con vật có chữ 'Ô' trong tên gọi:",
+        options: ["Con gà trống 🐓","Con cá vàng 🐠","Con mèo con 🐱","Con chó con 🐶"],
+        correctAnswer: 0,
+        explanation: "Gà trống (tr-ông-trông-sắc-trống): tiếng 'trống' có chữ Ô!"
       }
-    ],
-    parentTip: "Mẹo vui: Đố bé nón ngửa hay nón úp. Ba mẹ uốn ngón tay làm hình vầng trăng khuyết cho bé bắt chước."
+    ]
   },
   {
-    id: "pre_vi_aa",
-    title: "Học chữ Â cùng cô Lan Anh",
-    titleEn: "Learn Letter Â with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_03_letter_ow",
+    title: "VTV7 Lớp 1: Học chữ Ơ có râu 🐱 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Ơ",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=wNL8V_MlmTA&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=6",
-    learningGoal: "Nhận diện mặt chữ Â (Ớ) và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=KPzCvB3890o&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=3",
+      thumbnail: "https://img.youtube.com/vi/KPzCvB3890o/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Phân biệt bộ ba nguyên âm O - Ô - Ơ, nhận diện nét râu móc chữ Ơ và ghép vần.",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'Â' giống hình ảnh quen thuộc nào che mưa nắng?",
-        options: [
-          { "text": "Chiếc nón lá úp", "icon": "🛖" },
-          { "text": "Bát nước đầy", "icon": "🥣" }
-        ],
-        correctAnswer: "Chiếc nón lá úp",
-        audioHint: "Chữ Â đội chiếc nón lá úp xuống như mái nhà che mưa nắng!"
+        question: "Câu thơ quen thuộc giúp bé ghi nhớ chữ 'Ơ' là gì?",
+        options: ["Ơ thì thêm râu 🐱","Ơ thì đội mũ 🧢","Ơ tròn như quả trứng 🥚","Ơ thẳng như cây thước 📏"],
+        correctAnswer: 0,
+        explanation: "O tròn như quả trứng gà, Ô thì đội mũ, Ơ thì thêm râu!"
       },
       {
-        question: "Đồ vật ấm áp dùng để pha trà mời ông bà có chữ 'Â' là gì?",
-        options: [
-          { "text": "Ấm trà", "icon": "🫖" },
-          { "text": "Bình nước", "icon": "🍶" }
-        ],
-        correctAnswer: "Ấm trà",
-        audioHint: "Ấm trà thơm ngát của ông bà có chữ Â!"
+        question: "Loại gia vị màu đỏ cay cay nào có chữ 'Ơ'?",
+        options: ["Quả Ớt 🌶️","Củ Tỏi 🧄","Củ Gừng 🫚","Hạt Tiêu 🧂"],
+        correctAnswer: 0,
+        explanation: "Quả Ớt: bắt đầu bằng chữ Ơ (ơ-sắc-ớt) có vị cay nồng đặc trưng!"
       },
       {
-        question: "Tìm chữ 'Â' trong thế giới âm thanh vui vẻ:",
-        options: [
-          { "text": "Âm nhạc", "icon": "🎵" },
-          { "text": "Trò chơi", "icon": "🎲" }
-        ],
-        correctAnswer: "Âm nhạc",
-        audioHint: "Âm nhạc rộn ràng cho bé múa hát reo vui!"
+        question: "Trong các từ sau, từ nào chứa chữ 'Ơ'?",
+        options: ["Lá cờ 🚩","Cái ô ☂️","Quả na 🍐","Bông hoa 🌸"],
+        correctAnswer: 0,
+        explanation: "Lá cờ (c-ơ-cơ-huyền-cờ): tiếng 'cờ' có chữ Ơ đỏ sao vàng thắm tươi!"
       }
-    ],
-    parentTip: "Ba mẹ chụm 2 bàn tay lên đầu bé hình chóp nón, dạy bé phân biệt 'Nón ngửa là Ă, nón úp là Â'."
+    ]
   },
   {
-    id: "pre_vi_b",
-    title: "Học chữ B cùng cô Lan Anh",
-    titleEn: "Learn Letter B with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_04_letter_a",
+    title: "VTV7 Lớp 1: Học chữ A & Đánh vần chữ A 🍎 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter A",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=a9kTaQY72MU&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=13",
-    learningGoal: "Nhận diện mặt chữ B và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=mk6HhmS3SEg&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=4",
+      thumbnail: "https://img.youtube.com/vi/mk6HhmS3SEg/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ A in hoa, in thường, phát âm chuẩn và làm quen ghép tiếng Ba, Ca, Gà.",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'B' (Bờ) có đặc điểm ngộ nghĩnh gì nào?",
-        options: [
-          { "text": "Bụng to tròn bự", "icon": "🤰" },
-          { "text": "Miệng hở sang phải", "icon": "👄" }
-        ],
-        correctAnswer: "Bụng to tròn bự",
-        audioHint: "Chữ B có nét thẳng đứng và hai chiếc bụng tròn bự bên phải!"
+        question: "Chữ 'A' có cấu tạo gồm những nét cơ bản nào?",
+        options: ["Hai nét xiên và một nét ngang ở giữa","Một nét cong tròn khép kín","Một nét thẳng đứng và hai bụng tròn","Một nét cong hở phải"],
+        correctAnswer: 0,
+        explanation: "Chữ A gồm hai nét xiên hai bên như hai chân đứng vững và một nét gạch ngang ở giữa!"
       },
       {
-        question: "Đồ chơi bé thích đá tung tăng trên sân cỏ bắt đầu bằng chữ 'B':",
-        options: [
-          { "text": "Quả Bóng", "icon": "⚽" },
-          { "text": "Máy bay", "icon": "✈️" }
-        ],
-        correctAnswer: "Quả Bóng",
-        audioHint: "B - Quả Bóng tròn xoe lăn trên bãi cỏ xanh!"
+        question: "Khi ghép âm 'B' với 'A' và dấu sắc, ta được tiếng nào?",
+        options: ["Bá","Bà","Bả","Bạ"],
+        correctAnswer: 0,
+        explanation: "Bờ - a - ba - sắc - Bá! Đúng quy tắc ghép âm và dấu thanh tiếng Việt lớp 1."
       },
       {
-        question: "Bạn đồ chơi búp bê dễ thương bắt đầu bằng chữ cái nào?",
-        options: [
-          { "text": "Búp bê", "icon": "🪆" },
-          { "text": "Ô tô", "icon": "🚗" }
-        ],
-        correctAnswer: "Búp bê",
-        audioHint: "B - Búp bê tóc mây má hồng hào đáng yêu!"
+        question: "Món đồ mặc trên người bé mỗi ngày bắt đầu bằng chữ 'A' là gì?",
+        options: ["Cái Áo 👕","Cái Quần 👖","Đôi Tất 🧦","Chiếc Mũ 🧢"],
+        correctAnswer: 0,
+        explanation: "Cái Áo (a-sắc-áo): bắt đầu bằng chữ cái A quen thuộc!"
       }
-    ],
-    parentTip: "Dạy bé mím môi bật hơi 'Bờ - Bụng bự', vừa xoa bụng vừa phát âm để tạo phản xạ ngôn ngữ sinh động."
+    ]
   },
   {
-    id: "pre_vi_c",
-    title: "Học chữ C cùng cô Lan Anh",
-    titleEn: "Learn Letter C with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_05_letter_aw",
+    title: "VTV7 Lớp 1: Học chữ Ă: Vầng trăng khuyết 🌙 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Ă",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=pRDN0XbGof8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=12",
-    learningGoal: "Nhận diện mặt chữ C và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=waszboqAEeY&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=5",
+      thumbnail: "https://img.youtube.com/vi/waszboqAEeY/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ Ă (Á), dấu á cong ngửa lên trời và ghép các vần có âm Ă (ăn, ắp, ắt).",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'C' (Cờ) có nét vẽ giống hình ảnh nào?",
-        options: [
-          { "text": "Miệng cười mở rộng", "icon": "😊" },
-          { "text": "Hình vuông vắn", "icon": "🔲" }
-        ],
-        correctAnswer: "Miệng cười mở rộng",
-        audioHint: "Chữ C là nét cong tròn hở một bên như khuôn miệng bé đang cười tươi!"
+        question: "Dấu á trên đầu chữ 'Ă' có hình dáng giống gì?",
+        options: ["Vầng trăng khuyết ngửa lên trời 🌙","Mái nhà nhọn úp xuống 🛖","Chiếc nơ xinh 🎀","Dấu chấm tròn 🔴"],
+        correctAnswer: 0,
+        explanation: "Dấu á của chữ Ă là nét cong ngửa lên trời tựa vầng trăng khuyết dịu dàng."
       },
       {
-        question: "Bạn nhỏ tung tăng bơi lội dưới nước bắt đầu bằng chữ 'C':",
-        options: [
-          { "text": "Chú Cá", "icon": "🐟" },
-          { "text": "Gà trống", "icon": "🐓" }
-        ],
-        correctAnswer: "Chú Cá",
-        audioHint: "C - Con Cá bơi lượn trong làn nước trong vắt!"
+        question: "Vật dụng lau mặt mềm mại mỗi sáng có chứa chữ 'Ă':",
+        options: ["Khăn mặt 🧣","Bàn chải 🪥","Gương soi 🪞","Cốc nước 🥛"],
+        correctAnswer: 0,
+        explanation: "Khăn mặt (kh-ăn-khăn): tiếng 'khăn' có vần ĂN chứa chữ Ă!"
       },
       {
-        question: "Củ gì màu cam ngọt mát bạn thỏ mê tít có chữ 'C'?",
-        options: [
-          { "text": "Cà rốt", "icon": "🥕" },
-          { "text": "Quả dưa", "icon": "🍈" }
-        ],
-        correctAnswer: "Cà rốt",
-        audioHint: "C - Củ Cà rốt màu cam giòn ngọt chú thỏ rất thích ăn!"
+        question: "Hình ảnh lung linh ban đêm trên bầu trời nào có chữ 'Ă'?",
+        options: ["Mặt trăng 🌙","Mặt trời ☀️","Cầu vồng 🌈","Đám mây ☁️"],
+        correctAnswer: 0,
+        explanation: "Mặt trăng (m-ăng-măng-nặng-mặt): tiếng 'mặt' chứa chữ Ă!"
       }
-    ],
-    parentTip: "Ba mẹ uốn bàn tay thành hình chữ C, hướng dẫn bé há miệng tròn phát âm 'Cờ' dứt khoát và rõ ràng."
+    ]
   },
   {
-    id: "pre_vi_d",
-    title: "Học chữ D cùng cô Lan Anh",
-    titleEn: "Learn Letter D with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_06_letter_aa",
+    title: "VTV7 Lớp 1: Học chữ Â: Chiếc nón che mưa 🛖 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Â",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=g6gAxkT5FuI&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=14",
-    learningGoal: "Nhận diện mặt chữ D (Dờ) và phát âm chuẩn",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=wNL8V_MlmTA&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=6",
+      thumbnail: "https://img.youtube.com/vi/wNL8V_MlmTA/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Phân biệt chữ Ă và chữ Â, nhận diện dấu nón úp và ghép vần âm, ân, ấp.",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'D' có một nét thẳng và một bụng cong to phía trước giống cái gì?",
-        options: [
-          { "text": "Cánh buồm no gió", "icon": "⛵" },
-          { "text": "Bánh xe tròn", "icon": "🛞" }
-        ],
-        correctAnswer: "Cánh buồm no gió",
-        audioHint: "Chữ D có nét thẳng và chiếc bụng cong phồng như cánh buồm lướt sóng!"
+        question: "Điểm khác biệt rõ nhất giữa dấu chữ 'Ă' và dấu chữ 'Â' là gì?",
+        options: ["Dấu Ă ngửa lên trời (🌙), dấu Â úp xuống như nón (🛖)","Dấu Ă có hình vuông, dấu Â hình tròn","Dấu Ă nằm bên dưới, dấu Â nằm bên trên","Hai dấu giống hệt nhau"],
+        correctAnswer: 0,
+        explanation: "Dễ nhớ nhất: Nón ngửa là Ă, nón úp là Â!"
       },
       {
-        question: "Loại quả màu đỏ ruột ngọt mát giải khát ngày hè có chữ 'D':",
-        options: [
-          { "text": "Dưa hấu", "icon": "🍉" },
-          { "text": "Quả ổi", "icon": "🍐" }
-        ],
-        correctAnswer: "Dưa hấu",
-        audioHint: "D - Dưa hấu đỏ tươi ngọt mát ngày hè!"
+        question: "Đồ vật dùng để pha trà nóng mời ông bà bắt đầu bằng chữ 'Â' là gì?",
+        options: ["Ấm trà 🫖","Cốc trà 🍵","Bình thủy 🍶","Cái ly 🥛"],
+        correctAnswer: 0,
+        explanation: "Ấm trà: tiếng 'Ấm' (â-m-âm-sắc-ấm) bắt đầu bằng nguyên âm Â!"
       },
       {
-        question: "Tìm chữ 'D' trong món đồ uống thơm lừng của xứ dừa:",
-        options: [
-          { "text": "Quả Dừa", "icon": "🥥" },
-          { "text": "Quả Cam", "icon": "🍊" }
-        ],
-        correctAnswer: "Quả Dừa",
-        audioHint: "D - Quả Dừa mát rượi ngọt lịm!"
+        question: "Giai điệu vui tươi rộn ràng cho bé múa hát bắt đầu bằng chữ 'Â':",
+        options: ["Âm nhạc 🎵","Bức tranh 🎨","Trò chơi 🎲","Bài thơ 📜"],
+        correctAnswer: 0,
+        explanation: "Âm nhạc: tiếng 'Âm' mở đầu bằng chữ Â mang niềm vui ca hát đến cho bé!"
       }
-    ],
-    parentTip: "Ba mẹ chỉ vào quả dưa hấu, dạy bé đặt lưỡi chạm chân răng trên để bật âm 'Dờ' chuẩn xác."
+    ]
   },
   {
-    id: "pre_vi_dd",
-    title: "Học chữ Đ cùng cô Lan Anh",
-    titleEn: "Learn Letter Đ with Teacher Lan Anh",
-    ageTier: "preschool",
+    id: "g1_vtv7_07_letter_u",
+    title: "VTV7 Lớp 1: Học chữ U & Tiếng có âm U 🥣 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter U",
+    ageTier: "grade1_2",
     subject: "vietnamese",
-    videoUrl: "https://www.youtube.com/watch?v=Xs2mbWmhdFM&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=17",
-    learningGoal: "Nhận diện mặt chữ Đ (Đờ) và phân biệt với chữ D",
-    difficulty: 1,
-    exercises: [
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=X14_q49I9O0&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=7",
+      thumbnail: "https://img.youtube.com/vi/X14_q49I9O0/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ U, nét móc dưới và ghép phụ âm với âm U (bu, cu, du, đu, thu).",
+    difficulty: 2,
+    content: [
       {
-        question: "Chữ 'Đ' khác chữ 'D' ở điểm kỳ diệu nào bé nhỉ?",
-        options: [
-          { "text": "Có chiếc thắt lưng gạch ngang", "icon": "➖" },
-          { "text": "Có chiếc nón nhọn", "icon": "👒" }
-        ],
-        correctAnswer: "Có chiếc thắt lưng gạch ngang",
-        audioHint: "Chữ Đ giống chữ D nhưng có thêm chiếc thắt lưng gạch ngang nhỏ xinh trên đầu!"
+        question: "Chữ 'U' thường được viết bởi các nét nào?",
+        options: ["Nét móc hai đầu và nét móc ngược phải","Một nét tròn khép kín","Hai nét xiên chéo nhau","Một nét lượn sóng"],
+        correctAnswer: 0,
+        explanation: "Chữ U viết thường gồm nét hất và nét móc ngược rộng, tạo dáng như chiếc bát tròn."
       },
       {
-        question: "Món đồ chơi rực rỡ đêm rằm Trung thu bắt đầu bằng chữ 'Đ':",
-        options: [
-          { "text": "Đèn ông sao", "icon": "🏮" },
-          { "text": "Ngọn nến", "icon": "🕯️" }
-        ],
-        correctAnswer: "Đèn ông sao",
-        audioHint: "Đ - Đèn ông sao năm cánh lung linh đêm rằm!"
+        question: "Loại quả giải khát ngày hè có cả hai tiếng chứa âm 'U':",
+        options: ["Quả Đu đủ 🍈","Quả Chuối 🍌","Quả Cam 🍊","Quả Táo 🍎"],
+        correctAnswer: 0,
+        explanation: "Đu đủ: đ-u-đu và đ-u-đu-hỏi-đủ! Cả 2 tiếng đều chứa nguyên âm U!"
       },
       {
-        question: "Tìm loại quả khi chín vỏ vàng ươm thơm lừng có chữ 'Đ':",
-        options: [
-          { "text": "Đu đủ", "icon": "🥭" },
-          { "text": "Quả na", "icon": "🍏" }
-        ],
-        correctAnswer: "Đu đủ",
-        audioHint: "Đ - Đu đủ chín thơm ngọt ngào giàu vitamin!"
+        question: "Vật dụng che nắng che mưa bé mang đi học có âm 'U':",
+        options: ["Cái Dù (Ô dù) ☂️","Cái Mũ 🧢","Cái Nón 👒","Áo mưa 🧥"],
+        correctAnswer: 0,
+        explanation: "Cái Dù (d-u-du-huyền-dù) giúp bé không bị ướt khi trời mưa!"
       }
-    ],
-    parentTip: "Ba mẹ lấy que tính hoặc bút chì đặt ngang lên thân chữ D để bé ghi nhớ: 'D thêm gạch ngang là biến thành Đờ'."
+    ]
+  },
+  {
+    id: "g1_vtv7_08_letter_uw",
+    title: "VTV7 Lớp 1: Học chữ Ư & Phân biệt U/Ư 🍇 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Ư",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=vZLCRG3uZg8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=8",
+      thumbnail: "https://img.youtube.com/vi/vZLCRG3uZg8/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận biết nét râu chữ Ư, phân biệt khẩu hình phát âm U (chụm môi) và Ư (cười bè môi).",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'Ư' khác chữ 'U' ở điểm nào?",
+        options: ["Chữ Ư có thêm nét râu nhỏ ở góc trên bên phải","Chữ Ư có nét gạch ngang ở bụng","Chữ Ư có chấm tròn trên đầu","Chữ Ư viết hoa chữ U viết thường"],
+        correctAnswer: 0,
+        explanation: "Chữ Ư chính là chữ U có thêm nét râu móc xinh xắn ở góc trên bên phải!"
+      },
+      {
+        question: "Bức thư bé gửi tặng bà nơi xa có chứa âm 'Ư' là từ nào?",
+        options: ["Lá thư ✉️","Tấm thiệp 💌","Cuốn sách 📖","Tờ báo 📰"],
+        correctAnswer: 0,
+        explanation: "Lá thư (th-ư-thư): tiếng 'thư' có chữ Ư chứa đựng tình yêu thương của bé!"
+      },
+      {
+        question: "Loại quả vỏ xanh nước ngọt mát lành mọc nhiều ở Bến Tre có chữ 'Ư':",
+        options: ["Quả Dừa 🥥","Quả Nhãn 🍈","Quả Vải 🍓","Quả Mận 🫐"],
+        correctAnswer: 0,
+        explanation: "Quả Dừa (d-ưa-dưa-huyền-dừa): chứa nguyên âm đôi có chữ Ư!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_09_letter_e",
+    title: "VTV7 Lớp 1: Học chữ E & Tiếng có âm E 🐑 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter E",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=5riu4_DkLug&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=9",
+      thumbnail: "https://img.youtube.com/vi/5riu4_DkLug/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ E, nét thắt cong và tìm tiếng có âm E trong đời sống (bé, me, ve, xe).",
+    difficulty: 2,
+    content: [
+      {
+        question: "Tiếng kêu be be của bạn nhỏ nào trong nông trại chứa chữ 'E'?",
+        options: ["Con Cừu / Con Dê kêu Be be 🐑","Con Chó sủa Gâu gâu 🐶","Con Mèo kêu Meo meo 🐱","Con Gà gáy Ò ó o 🐓"],
+        correctAnswer: 0,
+        explanation: "Bờ - e - be! Tiếng kêu 'be be' của chú cừu nhỏ chứa nguyên âm E."
+      },
+      {
+        question: "Phương tiện hai bánh bé đạp đi công viên có chữ 'E':",
+        options: ["Xe đạp 🚲","Thuyền buồm ⛵","Ca nô 🚤","Xe buýt 🚌"],
+        correctAnswer: 0,
+        explanation: "Xe đạp (x-e-xe): tiếng 'xe' có nguyên âm E!"
+      },
+      {
+        question: "Loại quả chua thanh mùa hè nấu canh chua rất ngon có chữ 'E':",
+        options: ["Quả Me 🥜","Quả Khế ⭐","Quả Sấu 🟢","Quả Chanh 🍋"],
+        correctAnswer: 0,
+        explanation: "Quả Me (m-e-me): tiếng 'me' bắt đầu bằng m ghép với e!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_10_letter_ee",
+    title: "VTV7 Lớp 1: Học chữ Ê & Phân biệt E/Ê 🐐 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Ê",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=_r_NziSb7yc&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=10",
+      thumbnail: "https://img.youtube.com/vi/_r_NziSb7yc/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ Ê có nón, so sánh chữ E với Ê và nhận biết tiếng bê, dê, ghế, khế.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'Ê' được tạo thành từ chữ 'E' và dấu gì?",
+        options: ["Chiếc mũ nón úp 🛖","Chiếc râu móc 🐱","Dấu chấm tròn 🔴","Dấu gạch chéo ❌"],
+        correctAnswer: 0,
+        explanation: "Chữ Ê chính là chữ E được đội chiếc nón lá úp nhỏ trên đầu!"
+      },
+      {
+        question: "Bạn bò con mới sinh được gọi là gì có chứa chữ 'Ê'?",
+        options: ["Chú Bê con 🐂","Chú Nghé con 🐃","Chú Heo con 🐖","Chú Ngựa con 🐎"],
+        correctAnswer: 0,
+        explanation: "Chú Bê (b-ê-bê): bò con được gọi là con bê, có âm Ê!"
+      },
+      {
+        question: "Đồ vật trong nhà bé ngồi vào bàn học tập mỗi ngày có chữ 'Ê':",
+        options: ["Cái Ghế 🪑","Cái Bàn 🪵","Cái Giường 🛏️","Cửa sổ 🪟"],
+        correctAnswer: 0,
+        explanation: "Cái Ghế (gh-ê-ghê-sắc-ghế): có chữ Ê nâng đỡ bé ngồi học ngoan!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_11_letter_i",
+    title: "VTV7 Lớp 1: Học chữ I ngắn & Ghép tiếng ⚪ (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter I",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=wIYIDuxp044&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=11",
+      thumbnail: "https://img.youtube.com/vi/wIYIDuxp044/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện chữ I thường có chấm trên đầu, phân biệt i ngắn và ghép tiếng bi, đi, khỉ, ví.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Đặc điểm dễ nhận ra nhất của chữ 'i' viết thường là gì?",
+        options: ["Có một chấm tròn nhỏ ở trên đầu 🔴","Có chiếc nón nhọn úp","Có chiếc râu móc bên phải","Là một vòng tròn khép kín"],
+        correctAnswer: 0,
+        explanation: "Chữ 'i' viết thường có một nét thẳng ngắn và dấu chấm nhỏ xinh ngay phía trên đầu!"
+      },
+      {
+        question: "Trò chơi dân gian với những viên tròn lấp lánh bằng thủy tinh có chữ 'I':",
+        options: ["Bắn Bi ⚪","Thả diều 🪁","Ô ăn quan 🪨","Nhảy dây 🪢"],
+        correctAnswer: 0,
+        explanation: "Viên Bi (b-i-bi): tiếng 'bi' có âm I ngắn tròn xoe lấp lánh!"
+      },
+      {
+        question: "Bạn động vật thông minh leo trèo thoăn thoắt trên cây thích ăn chuối có chữ 'I':",
+        options: ["Chú Khỉ 🐒","Chú Voi 🐘","Chú Hươu 🦌","Chú Gấu 🐻"],
+        correctAnswer: 0,
+        explanation: "Con Khỉ (kh-i-khi-hỏi-khỉ): tiếng 'khỉ' có âm I ngắn tinh nghịch!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_12_letter_c",
+    title: "VTV7 Lớp 1: Học phụ âm C & Quy tắc chính tả C/K 🐟 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter C & Orthography",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=pRDN0XbGof8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=12",
+      thumbnail: "https://img.youtube.com/vi/pRDN0XbGof8/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm C (cờ), nét cong hở phải và quy tắc chính tả: C đứng trước a, o, ô, ơ, u, ư.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'C' là nét vẽ có đặc điểm gì?",
+        options: ["Nét cong hở ở bên phải giống miệng đang cười","Nét cong khép kín tròn xoe","Nét thẳng đứng có hai bụng tròn","Hai nét chéo nhau"],
+        correctAnswer: 0,
+        explanation: "Chữ C là một nét cong một bên, hở sang phải như khuôn miệng tươi cười!"
+      },
+      {
+        question: "Theo quy tắc chính tả lớp 1, chữ 'C' đứng trước những nguyên âm nào?",
+        options: ["Đứng trước a, o, ô, ơ, u, ư (ca, cô, cư)","Chỉ đứng trước e, ê, i","Chỉ đứng trước chữ y dài","Đứng trước tất cả các chữ cái"],
+        correctAnswer: 0,
+        explanation: "Quy tắc chính tả vàng lớp 1: Chữ C đứng trước a, o, ô, ơ, u, ư. Trước e, ê, i ta phải viết bằng chữ K!"
+      },
+      {
+        question: "Bạn nhỏ tung tăng bơi lội dưới làn nước trong veo bắt đầu bằng chữ 'C':",
+        options: ["Con Cá 🐟","Con Mèo 🐱","Con Vịt 🦆","Con Thỏ 🐇"],
+        correctAnswer: 0,
+        explanation: "Con Cá (c-a-ca-sắc-cá): tiếng 'Cá' bắt đầu bằng phụ âm C!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_13_letter_b",
+    title: "VTV7 Lớp 1: Học phụ âm B & Ghép dấu thanh ⚽ (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter B & Tones",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=a9kTaQY72MU&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=13",
+      thumbnail: "https://img.youtube.com/vi/a9kTaQY72MU/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm B (bờ), phát âm âm môi-môi và luyện ghép tiếng Ba, Bà, Bá, Bả, Bã, Bạ.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'B' in hoa gồm những nét nào cấu tạo nên?",
+        options: ["Một nét thẳng đứng và hai nét cong tròn bên phải","Một nét cong khép kín","Hai nét xiên đứng","Một nét thẳng và một nét ngang"],
+        correctAnswer: 0,
+        explanation: "Chữ B in hoa có nét thẳng đứng cao và hai chiếc bụng cong tròn no căng bên phải."
+      },
+      {
+        question: "Khi ghép âm 'B' với 'A' và thanh hỏi (?), ta được tiếng nào?",
+        options: ["Bả","Bá","Bà","Bã"],
+        correctAnswer: 0,
+        explanation: "Bờ - a - ba - hỏi - Bả! Dấu hỏi uốn lượn đặt ngay trên đầu chữ a."
+      },
+      {
+        question: "Đồ chơi bé rất thích đá trên sân cỏ bắt đầu bằng chữ 'B':",
+        options: ["Quả Bóng ⚽","Xe đạp 🚲","Chong chóng 🪁","Con quay 🪀"],
+        correctAnswer: 0,
+        explanation: "Quả Bóng (b-ong-bong-sắc-bóng): bắt đầu bằng phụ âm B tròn xoe lăn tít!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_14_letter_d",
+    title: "VTV7 Lớp 1: Học phụ âm D (Dờ) & Tiếng có âm D 🐐 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter D",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=g6gAxkT5FuI&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=14",
+      thumbnail: "https://img.youtube.com/vi/g6gAxkT5FuI/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm D (dờ), đặt lưỡi phát âm chuẩn xác và ghép tiếng da, de, do, du, dưa.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'D' in hoa có hình dáng giống hình ảnh nào?",
+        options: ["Cánh buồm căng gió lướt sóng ⛵","Quả bóng tròn ⚽","Chiếc nón lá 🛖","Chiếc cầu trượt 🛝"],
+        correctAnswer: 0,
+        explanation: "Chữ D có nét thẳng đứng và chiếc bụng cong phồng về phía trước tựa cánh buồm no gió!"
+      },
+      {
+        question: "Loại quả ruột đỏ thẫm ngọt mát hạt đen nhánh có chữ 'D':",
+        options: ["Dưa hấu 🍉","Quả Ổi 🍐","Quả Chuối 🍌","Quả Bưởi 🍈"],
+        correctAnswer: 0,
+        explanation: "Dưa hấu (d-ưa-dưa): tiếng 'dưa' bắt đầu bằng phụ âm D mát ngọt ngày hè!"
+      },
+      {
+        question: "Bạn động vật có chòm râu dưới cằm thích ăn lá non bắt đầu bằng chữ 'D':",
+        options: ["Con Dê 🐐","Con Ngựa 🐎","Con Hổ 🐯","Con Cừu 🐑"],
+        correctAnswer: 0,
+        explanation: "Con Dê (d-ê-dê): bắt đầu bằng phụ âm D kêu be be trên sườn đồi!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_17_letter_dd",
+    title: "VTV7 Lớp 1: Học phụ âm Đ & Phân biệt D/Đ 🏮 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Letter Đ & Contrast D/Đ",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=Xs2mbWmhdFM&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=17",
+      thumbnail: "https://img.youtube.com/vi/Xs2mbWmhdFM/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Phân biệt chính tả và cách phát âm hai phụ âm D (dờ) và Đ (đờ), tránh lỗi phát âm vùng miền.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'Đ' khác chữ 'D' ở nét vẽ quan trọng nào?",
+        options: ["Chữ Đ có thêm nét gạch ngang nhỏ cắt qua thân chữ ➖","Chữ Đ có dấu chấm ở dưới","Chữ Đ có hai bụng cong","Chữ Đ có nét móc tròn"],
+        correctAnswer: 0,
+        explanation: "Chữ Đ chính là chữ D nhưng được thêm nét gạch ngang nhỏ xinh trên đầu cổ chữ!"
+      },
+      {
+        question: "Món đồ chơi lấp lánh năm cánh rước trong đêm rằm Trung thu có chữ 'Đ':",
+        options: ["Đèn ông sao 🏮","Mặt nạ 🎭","Trống cơm 🥁","Cái quạt 🪭"],
+        correctAnswer: 0,
+        explanation: "Đèn ông sao (đ-en-đen-huyền-đèn): bắt đầu bằng chữ Đ lung linh sắc màu!"
+      },
+      {
+        question: "Từ nào đúng chính tả để điền vào câu: 'Bé ... bộ cùng mẹ ở công viên'?",
+        options: ["đi (đ-i-đi)","di (d-i-di)","bi (b-i-bi)","ci (c-i-ci)"],
+        correctAnswer: 0,
+        explanation: "Đi bộ: viết bằng chữ Đ (đ-i-đi)! Chữ Đ phát âm dứt khoát đầu lưỡi chạm nướu răng."
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_31_letter_gh",
+    title: "VTV7 Lớp 1: Phụ âm ghép GH & Quy tắc G/GH 🪑 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph GH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=yeTaJ5GgTw8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=31",
+      thumbnail: "https://img.youtube.com/vi/yeTaJ5GgTw8/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nắm vững quy tắc chính tả phụ âm ghép GH: GH chỉ đứng trước e, ê, i (ghế, ghi, ghé).",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'GH' được ghép từ hai con chữ nào?",
+        options: ["Chữ G đơn và chữ H","Chữ G đơn và chữ K","Chữ C và chữ H","Chữ N và chữ G"],
+        correctAnswer: 0,
+        explanation: "Gờ ghép: gồm con chữ 'G' đứng trước và con chữ 'H' đứng sau tạo thành phụ âm GH!"
+      },
+      {
+        question: "Quy tắc chính tả bắt buộc của phụ âm 'GH' trong tiếng Việt là gì?",
+        options: ["GH chỉ đứng trước 3 nguyên âm: E, Ê, I","GH đứng trước tất cả các nguyên âm","GH chỉ đứng trước A, O, U","GH không bao giờ đứng đầu tiếng"],
+        correctAnswer: 0,
+        explanation: "Quy tắc chính tả ghi nhớ suốt đời: GH chỉ đứng trước e, ê, i (ví dụ: ghé, ghế, ghi). Còn lại viết bằng G đơn!"
+      },
+      {
+        question: "Từ nào dưới đây viết đúng chính tả tiếng Việt?",
+        options: ["Cái Ghế 🪑","Cái Gế","Ghi nhớ 📝","Ghé thăm 🏡"],
+        correctAnswer: 0,
+        explanation: "Cái Ghế: vì đứng trước âm Ê nên bắt buộc phải viết bằng GH ghép (gh-ê-ghê-sắc-ghế)!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_32_letter_ch",
+    title: "VTV7 Lớp 1: Phụ âm ghép CH: Chú Chó, Quả Chanh 🐕 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph CH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=pg8cSpM-B-E&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=32",
+      thumbnail: "https://img.youtube.com/vi/pg8cSpM-B-E/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm ghép CH, luyện phát âm chuẩn đầu lưỡi nhẹ nhàng và ghép từ chó, chim, chanh, chuối.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'CH' gồm hai chữ cái nào đứng cạnh nhau?",
+        options: ["Chữ C đứng trước, chữ H đứng sau","Chữ T đứng trước, chữ H đứng sau","Chữ N đứng trước, chữ H đứng sau","Chữ P đứng trước, chữ H đứng sau"],
+        correctAnswer: 0,
+        explanation: "Chữ C ghép với chữ H tạo thành phụ âm ghép CH (chờ nhẹ) quen thuộc của tiếng Việt!"
+      },
+      {
+        question: "Bạn cún cưng giữ nhà trung thành có tên gọi bắt đầu bằng 'CH':",
+        options: ["Chú Chó 🐕","Chú Mèo 🐱","Chú Chuột 🐁","Chú Gà 🐔"],
+        correctAnswer: 0,
+        explanation: "Chú Chó (ch-o-cho-sắc-chó): bắt đầu bằng phụ âm ghép CH!"
+      },
+      {
+        question: "Loại quả màu xanh vị chua dịu pha nước giải khát mùa hè bắt đầu bằng 'CH':",
+        options: ["Quả Chanh 🍋","Quả Cam 🍊","Quả Chuối 🍌","Quả Mận 🫐"],
+        correctAnswer: 0,
+        explanation: "Quả Chanh (ch-anh-chanh): thơm lừng mát lành giúp bé khỏe mạnh!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_33_letter_gi",
+    title: "VTV7 Lớp 1: Phụ âm ghép GI: Cơn Gió, Giỏ Cá 💨 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph GI",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=ZqvUrLjG81s&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=33",
+      thumbnail: "https://img.youtube.com/vi/ZqvUrLjG81s/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Phân biệt âm GI (giê) với D (dờ) và R (rờ), nhận biết hiện tượng giản lược chữ i khi ghép vần.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'GI' được tạo nên từ chữ cái nào?",
+        options: ["Chữ G và chữ I","Chữ G và chữ H","Chữ D và chữ I","Chữ C và chữ I"],
+        correctAnswer: 0,
+        explanation: "Chữ G đứng trước chữ I tạo thành phụ âm ghép GI phát âm là 'Giê'!"
+      },
+      {
+        question: "Hiện tượng thiên nhiên làm mát rượi tán cây bắt đầu bằng 'GI':",
+        options: ["Cơn Gió 💨","Cơn Mưa 🌧️","Tia Nắng ☀️","Sấm Sét ⚡"],
+        correctAnswer: 0,
+        explanation: "Cơn Gió (gi-o-gio-sắc-gió): luồng gió mát lành thổi lá cây rung rinh!"
+      },
+      {
+        question: "Đồ đan bằng mây tre bà đi chợ đựng rau củ quả có chữ 'GI':",
+        options: ["Cái Giỏ 🧺","Cái Bát 🥣","Cái Nồi 🍲","Cái Chảo 🍳"],
+        correctAnswer: 0,
+        explanation: "Cái Giỏ (gi-o-gio-hỏi-giỏ): đan bằng tre nứa xinh xắn bà mang đi chợ sớm!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_34_letter_kh",
+    title: "VTV7 Lớp 1: Phụ âm ghép KH: Chú Khỉ, Khăn Quàng 🐒 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph KH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=c2kAm44gAS8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=34",
+      thumbnail: "https://img.youtube.com/vi/c2kAm44gAS8/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm KH (khờ), phát âm âm cuống họng hơi ma sát nhẹ và làm quen các từ khỉ, khoai, khế.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'KH' được cấu tạo bởi hai chữ cái nào?",
+        options: ["Chữ K và chữ H","Chữ C và chữ H","Chữ P và chữ H","Chữ T và chữ H"],
+        correctAnswer: 0,
+        explanation: "Con chữ K đứng trước chữ H ghép lại thành phụ âm KH (khờ)!"
+      },
+      {
+        question: "Bạn khỉ tinh nghịch đu cành ăn chuối bắt đầu bằng phụ âm ghép nào?",
+        options: ["Phụ âm KH 🐒","Phụ âm CH 🐕","Phụ âm NH 🏠","Phụ âm TH 🐇"],
+        correctAnswer: 0,
+        explanation: "Con Khỉ (kh-i-khi-hỏi-khỉ): bắt đầu bằng phụ âm ghép KH!"
+      },
+      {
+        question: "Chiếc khăn quàng đỏ thắm trên vai học sinh có tiếng 'Khăn' chứa phụ âm gì?",
+        options: ["Phụ âm KH 🧣","Phụ âm PH 🏙️","Phụ âm TR ☀️","Phụ âm GH 🪑"],
+        correctAnswer: 0,
+        explanation: "Khăn quàng (kh-ăn-khăn): bắt đầu bằng phụ âm ghép KH thơm tho!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_35_letter_ng",
+    title: "VTV7 Lớp 1: Phụ âm ghép NG & NGH: Con Ngựa, Nghé Con 🐎 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraphs NG & NGH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=84ff7ouDD7A&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=35",
+      thumbnail: "https://img.youtube.com/vi/84ff7ouDD7A/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Phân biệt NG đơn và NGH ghép, quy tắc NGH chỉ đi với e, ê, i (nghé, nghỉ, nghệ).",
+    difficulty: 2,
+    content: [
+      {
+        question: "Quy tắc chính tả phân biệt NG đơn và NGH ghép là gì?",
+        options: ["NGH chỉ đi với e, ê, i; còn NG đi với các nguyên âm còn lại","NGH chỉ đi với a, o, u","Hai chữ dùng thay thế nhau tùy thích","Không có quy tắc nào"],
+        correctAnswer: 0,
+        explanation: "Quy tắc lớp 1 chuẩn: NGH (ngờ ghép 3 chữ cái) chỉ đứng trước e, ê, i (con nghé, nghỉ ngơi, củ nghệ)!"
+      },
+      {
+        question: "Bạn động vật dũng mãnh phi nước đại trên thảo nguyên có chữ 'NG':",
+        options: ["Con Ngựa 🐎","Con Voi 🐘","Con Sư tử 🦁","Con Hươu 🦌"],
+        correctAnswer: 0,
+        explanation: "Con Ngựa (ng-ưa-ngưa-nặng-ngựa): tiếng 'ngựa' bắt đầu bằng phụ âm NG đơn!"
+      },
+      {
+        question: "Từ nào dưới đây viết đúng quy tắc chính tả tiếng Việt?",
+        options: ["Cả Con Nghé 🐃 và Nghỉ hè 🏖️ đều đúng (dùng NGH)","Con Ngé","Nghỉ hè 🏖️","Con Nghé 🐃"],
+        correctAnswer: 0,
+        explanation: "Vì đứng trước nguyên âm 'e' và 'i' nên cả 'Nghé' và 'Nghỉ' đều bắt buộc phải viết bằng NGH ghép!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_37_letter_ph",
+    title: "VTV7 Lớp 1: Phụ âm ghép PH: Phố Phường, Bát Phở 🍜 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph PH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=KWElEhpaAZ0&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=37",
+      thumbnail: "https://img.youtube.com/vi/KWElEhpaAZ0/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm PH (phờ), phát âm âm răng-môi chuẩn xác và làm quen từ vựng phở, phố, pháo, phim.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'PH' được ghép từ hai con chữ nào?",
+        options: ["Chữ P và chữ H","Chữ B và chữ H","Chữ T và chữ H","Chữ C và chữ H"],
+        correctAnswer: 0,
+        explanation: "Chữ P ghép với chữ H tạo thành phụ âm ghép PH (phờ)!"
+      },
+      {
+        question: "Món ăn truyền thống thơm lừng nổi tiếng của Việt Nam bắt đầu bằng 'PH':",
+        options: ["Bát Phở 🍜","Bánh Mì 🥖","Bánh Chưng 🫔","Bún Riêu 🍲"],
+        correctAnswer: 0,
+        explanation: "Bát Phở (ph-ơ-phơ-hỏi-phở): món ăn quốc hồn quốc túy mở đầu bằng phụ âm PH!"
+      },
+      {
+        question: "Nơi đường xá tấp nập xe cộ nhà cửa san sát ở thành phố được gọi là gì?",
+        options: ["Phố Phường 🏙️","Làng quê 🌾","Cánh đồng 🌱","Khu rừng 🌲"],
+        correctAnswer: 0,
+        explanation: "Phố Phường: cả hai tiếng 'Phố' và 'Phường' đều bắt đầu bằng chữ PH nhộn nhịp!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_38_letter_tr",
+    title: "VTV7 Lớp 1: Phụ âm ghép TR & Phân biệt TR/CH ☀️ (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph TR & Contrast TR/CH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=5F8ZX9rFfXw&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=38",
+      thumbnail: "https://img.youtube.com/vi/5F8ZX9rFfXw/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Luyện phát âm uốn đầu lưỡi âm TR (trờ nặng) phân biệt với CH (chờ nhẹ), rèn chính tả không nhầm lẫn.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Khẩu hình khi phát âm âm 'TR' (trờ nặng) khác 'CH' (chờ nhẹ) như thế nào?",
+        options: ["Âm TR uốn cong đầu lưỡi lên vòm họng trên, âm CH lưỡi để thẳng nhẹ","Âm TR mím môi, âm CH mở to miệng","Hai âm phát âm y hệt nhau","Âm TR thè lưỡi ra ngoài"],
+        correctAnswer: 0,
+        explanation: "Khi phát âm TR, đầu lưỡi uốn cong lên chạm ngạc cứng tạo âm nổ bật hơi mạnh mẽ!"
+      },
+      {
+        question: "Vầng sáng khổng lồ chiếu rọi ban ngày đem ánh nắng ấm áp bắt đầu bằng 'TR':",
+        options: ["Mặt Trời ☀️","Mặt Trăng 🌙","Ngôi Sao ⭐","Đám Mây ☁️"],
+        correctAnswer: 0,
+        explanation: "Mặt Trời (tr-ơi-trơi-huyền-trời): bắt đầu bằng phụ âm ghép TR rực rỡ!"
+      },
+      {
+        question: "Cây thân đốt dẻo dai xanh mướt gắn liền với làng quê Việt Nam có chữ 'TR':",
+        options: ["Cây Tre 🎋","Cây Bàng 🌳","Cây Đa 🌿","Cây Dừa 🌴"],
+        correctAnswer: 0,
+        explanation: "Cây Tre (tr-e-tre): bắt đầu bằng phụ âm ghép TR biểu tượng kiên cường của làng quê Việt Nam!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_39_letter_nh",
+    title: "VTV7 Lớp 1: Phụ âm ghép NH: Ngôi Nhà, Chùm Nho 🏠 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph NH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=xt4lQb-pW5Q&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=39",
+      thumbnail: "https://img.youtube.com/vi/xt4lQb-pW5Q/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm NH (nhờ), phát âm âm mũi-ngạc mềm và tìm từ vựng nhà, nho, nhím, nhạn.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Chữ 'NH' gồm hai con chữ nào ghép lại?",
+        options: ["Chữ N và chữ H","Chữ M và chữ H","Chữ L và chữ H","Chữ N và chữ G"],
+        correctAnswer: 0,
+        explanation: "Con chữ N ghép với con chữ H tạo thành phụ âm ghép NH (nhờ) dịu dàng."
+      },
+      {
+        question: "Tổ ấm thân yêu nơi cả gia đình bé cùng sinh sống quây quần có chữ 'NH':",
+        options: ["Ngôi Nhà 🏠","Lớp học 🏫","Bệnh viện 🏥","Công viên 🏞️"],
+        correctAnswer: 0,
+        explanation: "Ngôi Nhà (nh-a-nha-huyền-nhà): tiếng 'nhà' mở đầu bằng phụ âm ghép NH ấm cúng!"
+      },
+      {
+        question: "Chùm quả mọng nước tròn tròn màu tím ngọt mát bé thích ăn có chữ 'NH':",
+        options: ["Quả Nho 🍇","Quả Táo 🍎","Quả Dưa 🍉","Quả Cam 🍊"],
+        correctAnswer: 0,
+        explanation: "Quả Nho (nh-o-nho): tiếng 'nho' bắt đầu bằng phụ âm ghép NH ngọt lịm!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_40_letter_th",
+    title: "VTV7 Lớp 1: Phụ âm ghép TH: Thước Kẻ, Con Thỏ 🐇 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph TH",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=lmT85DwjSV8&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=40",
+      thumbnail: "https://img.youtube.com/vi/lmT85DwjSV8/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm TH (thờ), bật hơi mạnh qua kẽ răng và làm quen từ vựng thỏ, thước, thuyền, thìa.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'TH' gồm chữ cái nào kết hợp với nhau?",
+        options: ["Chữ T và chữ H","Chữ C và chữ H","Chữ K và chữ H","Chữ P và chữ H"],
+        correctAnswer: 0,
+        explanation: "Chữ T đứng trước chữ H ghép lại thành phụ âm ghép TH (thờ) bật hơi!"
+      },
+      {
+        question: "Bạn nhỏ tai dài lông trắng mắt đỏ thích ăn củ cà rốt có chữ 'TH':",
+        options: ["Con Thỏ 🐇","Con Sóc 🐿️","Con Chuột 🐁","Con Mèo 🐱"],
+        correctAnswer: 0,
+        explanation: "Con Thỏ (th-o-tho-hỏi-thỏ): bắt đầu bằng phụ âm ghép TH đáng yêu!"
+      },
+      {
+        question: "Dụng cụ học tập thẳng tắp giúp bé kẻ đường thẳng ngay ngắn có chữ 'TH':",
+        options: ["Cây Thước kẻ 📏","Cây Bút chì ✏️","Cục Tẩy 🧼","Hộp Bút 👝"],
+        correctAnswer: 0,
+        explanation: "Thước kẻ (th-ươc-thươc-sắc-thước): bắt đầu bằng phụ âm ghép TH ngay ngắn!"
+      }
+    ]
+  },
+  {
+    id: "g1_vtv7_41_letter_qu",
+    title: "VTV7 Lớp 1: Phụ âm ghép QU: Quả Quýt, Cái Quạt 🍊 (ABC Vui từng giờ)",
+    titleEn: "Grade 1 VTV7: Digraph QU",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=td_bP6TBJnw&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=41",
+      thumbnail: "https://img.youtube.com/vi/td_bP6TBJnw/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt 1: Nhận diện phụ âm QU (quờ), phát âm tròn môi và ghép các tiếng qua, quả, quýt, quạt, quê hương.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Phụ âm ghép 'QU' được ghép từ hai con chữ nào?",
+        options: ["Chữ Q và chữ U","Chữ Q và chữ O","Chữ C và chữ U","Chữ K và chữ U"],
+        correctAnswer: 0,
+        explanation: "Chữ Q luôn luôn đi liền với chữ U để tạo thành phụ âm ghép QU (quờ) tròn môi!"
+      },
+      {
+        question: "Loại quả tép vàng mọng nước vị ngọt thơm nhiều vitamin C có chữ 'QU':",
+        options: ["Quả Quýt 🍊","Quả Táo 🍎","Quả Chuối 🍌","Quả Lê 🍐"],
+        correctAnswer: 0,
+        explanation: "Quả Quýt: cả hai tiếng 'Quả' và 'Quýt' đều bắt đầu bằng phụ âm ghép QU!"
+      },
+      {
+        question: "Đồ vật tạo ra làn gió mát lành khi hè về bắt đầu bằng chữ 'QU':",
+        options: ["Cái Quạt 🪭","Cái Gối 🛌","Cái Chăn 🛏️","Cái Đèn 💡"],
+        correctAnswer: 0,
+        explanation: "Cái Quạt (qu-at-quat-nặng-quạt): mang làn gió mát lành đến cho giấc ngủ ngon của bé!"
+      }
+    ]
   }
+
 ];
 
 // Định nghĩa JSON Schema chuẩn

@@ -1308,6 +1308,7 @@ function home(){
     `;
   } else if(currentTier === "grade1_2"){
     cardsHtml = `
+      ${card("tierActVtv7", "<b>📺 🔤</b>", "Chữ cái VTV7", "VTV7 Alphabet", "vietnamese")}
       ${card("tierActivities", "<b>🎯 🎒</b>", "Bài tập Lớp 1-2", "Grade 1-2 Lessons", "logic")}
       ${card("math10", "<b>8 + 7</b>", "Toán 20 - 100", "Math 20 - 100", "math")}
       ${card("tierActWord", "<b>🔤 🧩</b>", "Ghép vần & Từ", "Word Phonics", "vietnamese")}
@@ -1353,7 +1354,9 @@ async function tierActivities(filterSubject){
 
   let acts = allActs;
   if(filterSubject === "lananh"){
-    acts = allActs.filter(a => a.id.startsWith("pre_lananh") || (a.title && a.title.includes("Lan Anh")) || a.id.startsWith("pre_vi_"));
+    acts = allActs.filter(a => a.id.startsWith("pre_lananh") || (a.title && a.title.includes("Lan Anh")));
+  } else if(filterSubject === "vtv7"){
+    acts = allActs.filter(a => a.id.startsWith("g1_vtv7") || (a.title && a.title.includes("VTV7")));
   } else if(filterSubject && filterSubject !== "all"){
     acts = allActs.filter(a => a.subject === filterSubject);
   }
@@ -1388,6 +1391,7 @@ async function tierActivities(filterSubject){
     { id: "logic", vi: "Tư duy 💡", en: "Logic" }
   ] : [
     { id: "all", vi: "Tất cả", en: "All" },
+    { id: "vtv7", vi: "Chữ cái VTV7 📺", en: "VTV7 Alphabet" },
     { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
     { id: "math", vi: "Toán học 📐", en: "Math" },
     { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
@@ -1485,6 +1489,15 @@ function tierActLanAnh(){
     ls.set("lvl", 1);
   }
   tierActivities("lananh");
+}
+function tierActVtv7(){
+  if(currentTier !== "grade1_2"){
+    currentTier = "grade1_2";
+    ls.set("ageTier", "grade1_2");
+    lvl = 2;
+    ls.set("lvl", 2);
+  }
+  tierActivities("vtv7");
 }
 function tierActMath(){ tierActivities("math"); }
 function tierActWord(){ tierActivities("vietnamese"); }
@@ -4203,7 +4216,7 @@ async function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActMath,tierActWord,tierActRead,playActivity};
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity};
 const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
 async function need(k){
   if(window["__"+k])return true;
