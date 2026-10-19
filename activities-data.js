@@ -772,13 +772,469 @@ const ACTIVITIES_DATA = [
     reward: { stars: 3 }
   },
 
-  // ========================================================
-  // BÀI HỌC MẪU THEO CHUẨN JSON SCHEMA MỚI (GDPT 2018)
-  // ========================================================
+  // ==========================================================================
+  // 10 BÀI HỌC VIDEO QUIZ TỪ CÁC KÊNH GIÁO DỤC UY TÍN (VTV7, THIẾU NHI)
+  // ==========================================================================
+
+  // --- CẤP ĐỘ 1: MẦM NON (4–6 TUỔI) - NHẬN BIẾT CON VẬT ---
   {
-    id: "act_std_sci_01",
-    title: "Vòng tuần hoàn kỳ thú của Nước 🌧️☀️",
-    titleEn: "The Wonder Water Cycle",
+    id: "act_vq_pre_01_pets",
+    title: "Bé làm quen thú cưng đáng yêu trong nhà 🐶🐱🐹",
+    titleEn: "Meet Cute Household Pets",
+    ageTier: "preschool",
+    subject: "skills",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=kdrjFqjp9NY",
+      thumbnail: "https://img.youtube.com/vi/kdrjFqjp9NY/hqdefault.jpg"
+    },
+    learningObjective: "CT GD Mầm non: Nhận biết tên gọi, tiếng kêu và đặc điểm nổi bật của các loài vật nuôi quen thuộc gần gũi trong gia đình.",
+    difficulty: 1,
+    content: [
+      {
+        question: "Bạn nhỏ nào trong video có bộ lông mềm mượt và kêu 'Meo meo'? 🐱",
+        options: [
+          "Bạn Chó 🐶",
+          "Bạn Mèo 🐱",
+          "Bạn Cá vàng 🐟",
+          "Bạn Vịt 🦆"
+        ],
+        correctAnswer: 1,
+        explanation: "Bạn Mèo kêu 'Meo meo' và rất thích cuộn tròn ngủ nướng ấm áp! 🐱"
+      },
+      {
+        question: "Bạn Chó 🐶 giúp gia đình chúng mình làm nhiệm vụ quan trọng gì?",
+        options: [
+          "Trông giữ nhà và làm bạn thân thiết",
+          "Bắt chuột trên mái nhà",
+          "Bay lên trời đón mặt trời",
+          "Bơi lặn dưới đáy sông"
+        ],
+        correctAnswer: 0,
+        explanation: "Bạn Chó rất trung thành, sủa 'Gâu gâu' báo tin khi có khách và luôn bảo vệ ngôi nhà của bé! 🐶"
+      },
+      {
+        question: "Bạn Thỏ trắng 🐇 thích ăn củ màu cam giòn ngọt nào nhất trong vườn?",
+        options: [
+          "Củ Cà rốt 🥕",
+          "Thịt cá rán",
+          "Kẹo sô-cô-la",
+          "Xương hầm"
+        ],
+        correctAnswer: 0,
+        explanation: "Bạn Thỏ có đôi tai dài xinh xắn, thích nhất là gặm củ cà rốt giòn ngọt giàu vitamin! 🥕"
+      }
+    ]
+  },
+  {
+    id: "act_vq_pre_02_wildlife",
+    title: "Những người bạn khổng lồ nơi rừng xanh 🐘🦒🦁",
+    titleEn: "Giant Friends in the Wild Jungle",
+    ageTier: "preschool",
+    subject: "science",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=czZBOWlGlaE",
+      thumbnail: "https://img.youtube.com/vi/czZBOWlGlaE/hqdefault.jpg"
+    },
+    learningObjective: "CT GD Mầm non & GDPT 2018: Nhận biết thế giới động vật hoang dã to lớn, nhận diện các bộ phận cơ thể đặc trưng (vòi dài, cổ cao, bờm to).",
+    difficulty: 1,
+    content: [
+      {
+        question: "Con vật nào có chiếc vòi dài khéo léo dùng để hút nước và lấy thức ăn? 🐘",
+        options: [
+          "Chú Hươu cao cổ 🦒",
+          "Bác Voi to lớn 🐘",
+          "Bác Gấu đen 🐻",
+          "Chú Khỉ nâu 🐒"
+        ],
+        correctAnswer: 1,
+        explanation: "Bác Voi có chiếc vòi dài đặc biệt như cánh tay, vừa để hút nước tắm mát vừa bẻ lá cây ăn! 🐘"
+      },
+      {
+        question: "Nhờ có chiếc cổ thật dài, bạn Hươu cao cổ 🦒 có thể làm được điều gì?",
+        options: [
+          "Bơi lặn sâu dưới nước",
+          "Vươn lên ăn lá non trên ngọn cây cao",
+          "Đào hang sâu dưới lòng đất",
+          "Bay lượn trên mây"
+        ],
+        correctAnswer: 1,
+        explanation: "Cổ cao giúp bạn Hươu với tới những chiếc lá non tươi ngon nhất trên đỉnh cây cao! 🦒"
+      },
+      {
+        question: "Chúa sơn lâm Sư tử 🦁 có đặc điểm nhận diện nổi bật nào quanh cổ?",
+        options: [
+          "Một chiếc bờm dày dặn oai phong",
+          "Một đôi cánh sặc sỡ",
+          "Đôi tai nhọn dài",
+          "Bộ vảy lấp lánh"
+        ],
+        correctAnswer: 0,
+        explanation: "Sư tử đực có chiếc bờm dày rực rỡ quanh đầu cổ, trông thật dũng mãnh và uy nghi! 🦁"
+      }
+    ]
+  },
+  {
+    id: "act_vq_pre_03_ocean",
+    title: "Chuyến du hành dưới đáy đại dương bao la 🐬🐢🐙",
+    titleEn: "Ocean Journey: Friendly Sea Creatures",
+    ageTier: "preschool",
+    subject: "science",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=ww5wazKT7Ck",
+      thumbnail: "https://img.youtube.com/vi/ww5wazKT7Ck/hqdefault.jpg"
+    },
+    learningObjective: "CT GD Mầm non: Nhận biết thế giới động vật dưới biển, nhận diện sinh vật biển thông minh và bồi dưỡng tình yêu thiên nhiên đại dương.",
+    difficulty: 1,
+    content: [
+      {
+        question: "Bạn Cá Heo 🐬 dưới biển thường biểu diễn hành động đẹp mắt nào trên mặt nước?",
+        options: [
+          "Nhảy vút lên không trung nhào lộn vui vẻ",
+          "Leo trèo lên cây dừa",
+          "Đi bộ trên bờ cát",
+          "Chạy thi cùng thỏ rừng"
+        ],
+        correctAnswer: 0,
+        explanation: "Cá Heo rất thông minh, thân thiện và thích nhảy vút lên khỏi mặt nước để chào đón tàu thuyền! 🐬"
+      },
+      {
+        question: "Bác Rùa Biển 🐢 mang trên lưng vật gì cứng cáp để tự bảo vệ mình?",
+        options: [
+          "Một chiếc mai rùa cứng cáp như chiếc khiên",
+          "Một bộ lông xù",
+          "Một chiếc nón lá",
+          "Đôi cánh bay lượn"
+        ],
+        correctAnswer: 0,
+        explanation: "Chiếc mai rùa cứng cáp bảo vệ bác Rùa khỏi những va đập và kẻ thù dưới biển sâu! 🐢"
+      },
+      {
+        question: "Bạn Bạch Tuộc 🐙 có bao nhiêu chiếc xúc tua uyển chuyển để bơi lặn?",
+        options: [
+          "2 xúc tua",
+          "4 xúc tua",
+          "8 xúc tua",
+          "100 xúc tua"
+        ],
+        correctAnswer: 2,
+        explanation: "Bạch Tuộc có đúng 8 chiếc xúc tua mềm dẻo với các giác hút tròn xoe! 🐙"
+      }
+    ]
+  },
+
+  // --- CẤP ĐỘ 2: LỚP 1–2 (6–8 TUỔI) - TẬP ĐÁNH VẦN CÙNG CÔ LAN ANH (VTV7) ---
+  {
+    id: "act_vq_g12_01_spell_b",
+    title: "Tập đánh vần cùng cô Lan Anh: Âm B và Dấu Thanh 🔤👩‍🏫",
+    titleEn: "Phonics with Teacher Lan Anh: Letter B & Tones",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=bicX1RNzHos",
+      thumbnail: "https://img.youtube.com/vi/bicX1RNzHos/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 môn Tiếng Việt lớp 1: Nhận diện phụ âm B, ghép âm B với nguyên âm và các dấu thanh (huyền, sắc, hỏi, ngã, nặng) để tạo tiếng chuẩn xác.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Khi ghép âm 'B' với âm 'A' và thêm dấu 'Huyền' (`), ta được tiếng nào?",
+        options: [
+          "Bá",
+          "Bà",
+          "Bả",
+          "Bạ"
+        ],
+        correctAnswer: 1,
+        explanation: "Bờ - a - ba - huyền - Bà! Đúng quy tắc ghép vần tiếng Việt của cô Lan Anh VTV7!"
+      },
+      {
+        question: "Từ nào sau đây có tiếng bắt đầu bằng âm 'B'?",
+        options: [
+          "Quả Bí ngô 🎃",
+          "Cái Kẹo 🍬",
+          "Con Gà 🐔",
+          "Dòng Sông 🌊"
+        ],
+        correctAnswer: 0,
+        explanation: "Bí ngô: tiếng 'Bí' bắt đầu bằng phụ âm B (b-i-bi-sắc-bí)!"
+      },
+      {
+        question: "Cô Lan Anh hướng dẫn phát âm chữ 'B' (Bờ) như thế nào?",
+        options: [
+          "Hai môi khép nhẹ rồi bật luồng hơi ra ngoài",
+          "Há to miệng tròn xoe như chữ O",
+          "Thè lưỡi chạm vào răng cửa",
+          "Hít sâu không phát thành tiếng"
+        ],
+        correctAnswer: 0,
+        explanation: "Âm 'B' là âm môi-môi: hai môi khép kín lại rồi bật luồng hơi ra tạo thành tiếng 'Bờ'!"
+      }
+    ]
+  },
+  {
+    id: "act_vq_g12_02_spell_c",
+    title: "Học vần cùng cô Lan Anh: Âm C và Tiếng Có Nghĩa 🐟🦀",
+    titleEn: "Phonics with Teacher Lan Anh: Letter C & Words",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=uP9Ri14I28o",
+      thumbnail: "https://img.youtube.com/vi/uP9Ri14I28o/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt lớp 1: Nắm vững quy tắc chính tả của âm C (cờ) khi đi với các nguyên âm a, o, ô, ơ, u, ư.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Trong quy tắc chính tả tiếng Việt, chữ 'C' đứng trước những nguyên âm nào?",
+        options: [
+          "Chỉ đứng trước e, ê, i",
+          "Đứng trước a, o, ô, ơ, u, ư",
+          "Chỉ đứng trước chữ y",
+          "Không đứng trước nguyên âm nào"
+        ],
+        correctAnswer: 1,
+        explanation: "Quy tắc chính tả: C đứng trước a, o, ô, ơ, u, ư (ví dụ: ca, cô, cư). Còn trước e, ê, i thì viết bằng chữ K!"
+      },
+      {
+        question: "Đánh vần đúng từ 'Con Cá' 🐟 như thế nào?",
+        options: [
+          "C-on-con, c-a-ca-sắc-cá",
+          "C-an-can, c-o-co-sắc-có",
+          "K-on-kon, k-a-ka-sắc-ká",
+          "B-on-bon, b-a-ba"
+        ],
+        correctAnswer: 0,
+        explanation: "Cờ - on - con, cờ - a - ca - sắc - cá: Con Cá! 🐟"
+      },
+      {
+        question: "Tìm từ có tiếng bắt đầu bằng âm 'C' chỉ đồ vật dùng để uống nước:",
+        options: [
+          "Cái Ca / Cái Cốc 🥛",
+          "Cái Ghế 🪑",
+          "Cái Thìa 🥄",
+          "Cái Đĩa 🍽️"
+        ],
+        correctAnswer: 0,
+        explanation: "Cái Ca (c-a-ca) và Cái Cốc (c-ôc-côc-sắc-cốc) đều bắt đầu bằng chữ C!"
+      }
+    ]
+  },
+  {
+    id: "act_vq_g12_03_spell_d_dd",
+    title: "Phân biệt D và Đ cùng cô Lan Anh: Con Dê và Đàn Gà 🐐🐔",
+    titleEn: "Distinguish D and Đ with Teacher Lan Anh",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=4c7ApUvxNKk",
+      thumbnail: "https://img.youtube.com/vi/4c7ApUvxNKk/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt lớp 1: Phân biệt rõ ràng hình dáng chữ viết và phát âm chuẩn xác giữa hai phụ âm D (dờ) và Đ (đờ).",
+    difficulty: 2,
+    content: [
+      {
+        question: "Điểm khác biệt dễ thấy nhất giữa chữ 'D' (dờ) và chữ 'Đ' (đờ) là gì?",
+        options: [
+          "Chữ Đ có thêm nét gạch ngang ở đầu cổ chữ",
+          "Chữ D có chấm tròn ở trên đầu",
+          "Chữ Đ viết bằng vòng tròn",
+          "Hai chữ giống hệt nhau không khác gì"
+        ],
+        correctAnswer: 0,
+        explanation: "Chữ Đ có thêm nét gạch ngang phía trên thân chữ, phát âm là 'Đờ'!"
+      },
+      {
+        question: "Từ nào dưới đây bắt đầu bằng chữ 'Đ' (đờ)?",
+        options: [
+          "Con Dê 🐐",
+          "Quả Đu đủ 🍈",
+          "Quả Dưa 🍉",
+          "Cái Dù ☂️"
+        ],
+        correctAnswer: 1,
+        explanation: "Quả Đu đủ: cả hai tiếng 'Đu' và 'Đủ' đều bắt đầu bằng chữ Đ!"
+      },
+      {
+        question: "Chọn từ đúng chính tả điền vào chỗ trống: 'Bé ... học đúng giờ'",
+        options: [
+          "đi (đ-i-đi)",
+          "di (d-i-di)",
+          "bi (b-i-bi)",
+          "ci (c-i-ci)"
+        ],
+        correctAnswer: 0,
+        explanation: "Đi học: đ-i-đi! Chữ 'Đ' ghép với âm 'i' thành tiếng 'Đi'."
+      }
+    ]
+  },
+  {
+    id: "act_vq_g12_04_spell_ai_ay",
+    title: "Bí quyết ghép vần đôi 'AI' và 'AY' cùng cô Lan Anh 🌾👋",
+    titleEn: "Mastering Rhymes AI and AY with Teacher Lan Anh",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=YLM9IUypgqQ",
+      thumbnail: "https://img.youtube.com/vi/YLM9IUypgqQ/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Tiếng Việt lớp 1: Nhận biết, phát âm và phân biệt hai nguyên âm đôi gần âm AI (a - i ngắn) và AY (a - y dài) trong từ vựng.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Vần 'AI' trong từ 'Hoa Mai' 🌼 được ghép từ hai chữ cái nào?",
+        options: [
+          "Chữ A và chữ I ngắn (a - i)",
+          "Chữ A và chữ Y dài (a - y)",
+          "Chữ O và chữ I",
+          "Chữ E và chữ I"
+        ],
+        correctAnswer: 0,
+        explanation: "A - i - ai: vần AI có âm cuối là chữ 'i' ngắn (hoa mai, củ khoai)!"
+      },
+      {
+        question: "Từ nào sau đây chứa vần 'AY' (a - y dài)?",
+        options: [
+          "Bàn Tay 👋",
+          "Cái Tai 👂",
+          "Củ Khoai 🥔",
+          "Quả Xoài 🥭"
+        ],
+        correctAnswer: 0,
+        explanation: "Bàn Tay: t-ay-tay! Tiếng 'Tay' có vần AY (a-y dài). Còn 'Tai' là vần AI (a-i ngắn)."
+      },
+      {
+        question: "Điền vần thích hợp vào câu: 'Đôi bàn t... khéo léo'",
+        options: [
+          "ay (bàn tay)",
+          "ai (bàn tai)",
+          "oi (bàn toi)",
+          "ui (bàn tui)"
+        ],
+        correctAnswer: 0,
+        explanation: "Đôi bàn tay (vần ay) giúp bé viết bài, vẽ tranh và tự xúc cơm ngoan ngoãn!"
+      }
+    ]
+  },
+
+  // --- CẤP ĐỘ 3: LỚP 3–5 (8–11 TUỔI) - KHÁM PHÁ VŨ TRỤ & HỆ MẶT TRỜ ---
+  {
+    id: "act_vq_g35_01_solar_system",
+    title: "Hành trình kỳ vĩ khám phá Hệ Mặt Trời 🪐🚀",
+    titleEn: "Grand Journey Across the Solar System",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=libKVRa074Q",
+      thumbnail: "https://img.youtube.com/vi/libKVRa074Q/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Khoa học & Tự nhiên xã hội: Trình bày được vị trí của Trái Đất trong Hệ Mặt Trời; gọi tên và so sánh đặc điểm cơ bản của các hành tinh quanh Mặt Trời.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Mặt Trời là thiên thể trung tâm của Hệ Mặt Trời, thuộc loại thiên thể nào?",
+        options: [
+          "Một ngôi sao tự phát sáng và tỏa nhiệt khổng lồ",
+          "Một hành tinh bằng đất đá nguội lạnh",
+          "Một vệ tinh quay quanh Trái Đất",
+          "Một sao chổi băng tuyết"
+        ],
+        correctAnswer: 0,
+        explanation: "Mặt Trời là một ngôi sao (ngôi sao lùn vàng) có khối lượng khổng lồ, tự phát ra năng lượng ánh sáng và nhiệt sưởi ấm toàn bộ các hành tinh!"
+      },
+      {
+        question: "Hành tinh nào trong Hệ Mặt Trời có kích thước lớn nhất và được mệnh danh là 'Vua của các hành tinh'?",
+        options: [
+          "Sao Mộc (Jupiter) 🪐",
+          "Sao Hỏa (Mars) 🔴",
+          "Sao Kim (Venus) ✨",
+          "Trái Đất (Earth) 🌍"
+        ],
+        correctAnswer: 0,
+        explanation: "Sao Mộc là hành tinh khí khổng lồ lớn nhất Hệ Mặt Trời, có thể chứa hơn 1.300 Trái Đất bên trong!"
+      },
+      {
+        question: "Trái Đất xinh đẹp của chúng ta nằm ở vị trí thứ mấy tính theo thứ tự khoảng cách từ Mặt Trời ra ngoài?",
+        options: [
+          "Vị trí thứ 1 (gần nhất)",
+          "Vị trí thứ 3",
+          "Vị trí thứ 5",
+          "Vị trí thứ 8 (xa nhất)"
+        ],
+        correctAnswer: 1,
+        explanation: "Thứ tự lần lượt từ gần đến xa: Sao Thủy (1), Sao Kim (2), Trái Đất (3), Sao Hỏa (4). Vị trí thứ 3 có nhiệt độ lý tưởng cho sự sống phát triển!"
+      }
+    ]
+  },
+  {
+    id: "act_vq_g35_02_earth_moon",
+    title: "Trái Đất và Mặt Trăng: Điệu vũ ngày và đêm 🌍🌙",
+    titleEn: "Earth and Moon: Cosmic Dance of Day and Night",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=f08p2A_7g14",
+      thumbnail: "https://img.youtube.com/vi/f08p2A_7g14/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 Địa lí & Khoa học: Giải thích được hiện tượng ngày và đêm luân phiên do Trái Đất tự quay quanh trục; nhận biết chu kỳ Mặt Trăng quanh Trái Đất.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Hiện tượng ngày và đêm luân phiên xuất hiện trên Trái Đất là do nguyên nhân chính nào?",
+        options: [
+          "Trái Đất tự quay quanh trục tưởng tượng từ Tây sang Đông",
+          "Mặt Trời tự tắt ánh sáng khi về đêm",
+          "Mặt Trăng che khuất Mặt Trời",
+          "Mây đen che kín bầu trời"
+        ],
+        correctAnswer: 0,
+        explanation: "Do Trái Đất hình cầu và tự quay quanh trục liên tục (khoảng 24 giờ / 1 vòng), phần hướng về Mặt Trời là ban ngày, phần khuất bóng là ban đêm!"
+      },
+      {
+        question: "Mặt Trăng có tự phát sáng được như Mặt Trời không?",
+        options: [
+          "Không, Mặt Trăng chỉ phản chiếu lại ánh sáng từ Mặt Trời",
+          "Có, Mặt Trăng phát sáng nhờ than đá bên trong",
+          "Có, Mặt Trăng là một bóng đèn lớn",
+          "Không, ánh sáng là do Trái Đất chiếu lên"
+        ],
+        correctAnswer: 0,
+        explanation: "Mặt Trăng là vệ tinh tự nhiên bằng đất đá nguội, nó chỉ phản chiếu lại ánh sáng của Mặt Trời chiếu vào bề mặt của nó."
+      },
+      {
+        question: "Mất bao nhiêu thời gian để Trái Đất hoàn thành một vòng quay trọn vẹn quanh Mặt Trời?",
+        options: [
+          "1 ngày (24 giờ)",
+          "1 tháng (30 ngày)",
+          "1 năm (khoảng 365 ngày và 6 giờ)",
+          "10 năm"
+        ],
+        correctAnswer: 2,
+        explanation: "Trái Đất mất khoảng 365 ngày 6 giờ (1 năm) để đi hết một vòng quỹ đạo quanh Mặt Trời, tạo nên 4 mùa Xuân - Hạ - Thu - Đông kỳ diệu!"
+      }
+    ]
+  },
+  {
+    id: "act_vq_g35_03_space_travel",
+    title: "Chinh phục không gian: Bước chân con người lên Mặt Trăng 👨‍🚀🚀",
+    titleEn: "Space Exploration: Humans on the Moon",
     ageTier: "grade3_5",
     subject: "science",
     type: "video_quiz",
@@ -787,134 +1243,41 @@ const ACTIVITIES_DATA = [
       url: "https://www.youtube.com/watch?v=al-do-HGuIk",
       thumbnail: "https://img.youtube.com/vi/al-do-HGuIk/hqdefault.jpg"
     },
-    learningObjective: "CT GDPT 2018 môn Khoa học lớp 4: Nêu được sự chuyển thể của nước; giải thích được vòng tuần hoàn của nước trong tự nhiên.",
-    difficulty: 3,
+    learningObjective: "CT GDPT 2018: Bồi dưỡng niềm đam mê khoa học, hiểu biết về các thành tựu công nghệ vũ trụ và môi trường không trọng lực.",
+    difficulty: 4,
     content: [
       {
-        question: "Dưới ánh nắng mặt trời, nước ở ao hồ, sông biển biến đổi như thế nào?",
+        question: "Khi ở trên trạm vũ trụ không gian, tại sao các nhà du hành vũ trụ lại có thể lơ lửng bay trong không khí?",
         options: [
-          "Nước đóng băng lại thành tảng đá",
-          "Nước nóng lên và bay hơi thành thể khí bay lên cao",
-          "Nước biến thành đất cát",
-          "Nước không có biến đổi gì"
-        ],
-        correctAnswer: 1,
-        explanation: "Nhiệt độ mặt trời làm nóng bề mặt nước, nước chuyển từ thể lỏng sang thể khí (bay hơi) và bay lên bầu khí quyển."
-      },
-      {
-        question: "Khi hơi nước bốc lên cao gặp không khí lạnh thì điều gì sẽ xảy ra?",
-        options: [
-          "Ngưng tụ thành những hạt nước li ti tạo thành mây",
-          "Biến mất hoàn toàn vào không gian vũ trụ",
-          "Rơi ngay lập tức xuống đất thành than",
-          "Cháy sáng rực rỡ"
+          "Do ở trạng thái không trọng lượng (vi trọng lực)",
+          "Do có đôi cánh thần kỳ",
+          "Do có quạt gió khổng lồ thổi từ dưới lên",
+          "Do mặc áo bay đặc biệt"
         ],
         correctAnswer: 0,
-        explanation: "Càng lên cao nhiệt độ càng giảm, hơi nước ngưng tụ thành muôn vàn hạt nước nhỏ li ti tụ lại thành từng đám mây bồng bềnh."
-      }
-    ]
-  },
-  {
-    id: "act_std_skill_01",
-    title: "Bé qua đường an toàn cùng bạn Thỏ 🚦🐇",
-    titleEn: "Safe Road Crossing with Bunny",
-    ageTier: "preschool",
-    subject: "skills",
-    type: "interactive_story",
-    mediaSource: {
-      type: "image_set",
-      url: "img/traffic_safety.png",
-      thumbnail: "img/traffic_safety_thumb.png"
-    },
-    learningObjective: "CT GD Mầm non & GDPT 2018: Nhận biết tín hiệu đèn giao thông và kỹ năng nắm tay người lớn an toàn khi qua đường.",
-    difficulty: 1,
-    content: [
-      {
-        question: "Khi nhìn thấy đèn tín hiệu giao thông chuyển sang màu ĐỎ 🔴, bé và bạn Thỏ phải làm gì?",
-        options: [
-          "Chạy thật nhanh qua đường",
-          "Dừng lại trên vỉa hè và kiên nhẫn chờ đợi",
-          "Nhảy múa giữa lòng đường"
-        ],
-        correctAnswer: 1,
-        explanation: "Đèn đỏ báo hiệu tất cả mọi người phải dừng lại để đảm bảo an toàn tính mạng nhé bé ơi! 🔴"
+        explanation: "Trong quỹ đạo quay quanh Trái Đất, lực hấp dẫn cân bằng với lực ly tâm tạo ra trạng thái vi trọng lượng, khiến mọi đồ vật và con người đều lơ lửng bay tự do!"
       },
       {
-        question: "Khi đèn dành cho người đi bộ chuyển sang màu XANH 🟢, bé nên qua đường như thế nào?",
+        question: "Tại sao khi bước ra ngoài không gian vũ trụ hoặc trên Mặt Trăng, phi hành gia bắt buộc phải mặc bộ đồ phi hành gia (spacesuit)?",
         options: [
-          "Nắm chặt tay bố mẹ, quan sát hai bên và đi trên vạch kẻ trắng",
-          "Vừa chạy vừa đá bóng qua đường",
-          "Nhắm mắt lại và tự đi một mình"
+          "Để cung cấp khí Oxy để thở, giữ nhiệt độ và áp suất cơ thể an toàn",
+          "Để nhìn cho thật đẹp và chụp ảnh kỷ niệm",
+          "Để bay nhanh hơn phi thuyền",
+          "Để không bị ướt mưa"
         ],
         correctAnswer: 0,
-        explanation: "Luôn luôn nắm chặt tay người lớn, quan sát xe cộ hai bên và bước đi trên vạch kẻ đường dành cho người đi bộ! 🟢"
-      }
-    ]
-  },
-  {
-    id: "act_std_math_01",
-    title: "Chiếc cân thăng bằng bí ẩn ⚖️🍎🍐",
-    titleEn: "The Mystery Balance Scale",
-    ageTier: "grade1_2",
-    subject: "math",
-    type: "logic_puzzle",
-    mediaSource: {
-      type: "image_set",
-      url: "img/balance_scale.png",
-      thumbnail: "img/balance_scale_thumb.png"
-    },
-    learningObjective: "CT GDPT 2018 môn Toán lớp 2: Hình thành tư duy đại số sơ khởi thông qua quan hệ bằng nhau và suy luận logic tương đương.",
-    difficulty: 2,
-    content: [
-      {
-        question: "Cân 1: 1 quả Táo 🍎 nặng bằng 2 quả Mận 🫐. Cân 2: 1 quả Lê 🍐 nặng bằng 1 quả Táo 🍎. Hỏi 1 quả Lê 🍐 nặng bằng mấy quả Mận 🫐?",
-        options: [
-          "1 quả Mận 🫐",
-          "2 quả Mận 🫐",
-          "3 quả Mận 🫐",
-          "4 quả Mận 🫐"
-        ],
-        correctAnswer: 1,
-        explanation: "Vì 1 quả Lê = 1 quả Táo, mà 1 quả Táo = 2 quả Mận, nên 1 quả Lê cũng nặng bằng đúng 2 quả Mận! ⚖️"
-      }
-    ]
-  },
-  {
-    id: "act_std_vie_01",
-    title: "Thám tử tìm vần: Phân biệt AN và AT 🔍📝",
-    titleEn: "Phonics Detective: Sound AN vs AT",
-    ageTier: "grade1_2",
-    subject: "vietnamese",
-    type: "phonics_game",
-    mediaSource: {
-      type: "local_mp4",
-      url: "audio/vtv7_phonics_an_at.mp3",
-      thumbnail: "img/phonics_thumb.png"
-    },
-    learningObjective: "CT GDPT 2018 môn Tiếng Việt lớp 1: Nhận diện và phân biệt được các vần có âm cuối tương đồng (vần mở/đóng: an - at), đọc trơn và hiểu nghĩa từ.",
-    difficulty: 2,
-    content: [
-      {
-        question: "Từ nào dưới đây chứa vần 'AN' (a-n-an)?",
-        options: [
-          "Cái Bát 🥣",
-          "Cái Bàn 🪵",
-          "Con Hát 🎤",
-          "Mặt Trời ☀️"
-        ],
-        correctAnswer: 1,
-        explanation: "Cái Bàn: b-an-ban-huyền-bàn. Tiếng 'Bàn' chứa vần 'AN'!"
+        explanation: "Vũ trụ là môi trường chân không không có không khí để thở, nhiệt độ cực kỳ khắc nghiệt và có bức xạ nguy hiểm, nên bộ đồ vũ trụ bảo vệ tính mạng phi hành gia!"
       },
       {
-        question: "Từ nào dưới đây chứa vần 'AT' (a-t-at)?",
+        question: "Con người đã đưa các thiết bị công nghệ hiện đại nào lên không gian để chụp ảnh các thiên hà xa xôi hàng triệu năm ánh sáng?",
         options: [
-          "Bãi Cát 🏖️",
-          "Hoa Lan 🌸",
-          "Cái Căn 🏠",
-          "Đàn Gà 🐔"
+          "Kính viễn vọng không gian (như Hubble, James Webb) 🔭",
+          "Máy ảnh điện thoại thông thường",
+          "Flycam bay bằng cánh quạt",
+          "Bóng bay khí cầu"
         ],
         correctAnswer: 0,
-        explanation: "Bãi Cát: c-at-cat-sắc-cát. Tiếng 'Cát' chứa vần 'AT'!"
+        explanation: "Kính viễn vọng không gian như Hubble và James Webb hoạt động ngoài khí quyển Trái Đất, chụp được những bức ảnh vũ trụ sâu vô cùng rõ nét và kỳ ảo!"
       }
     ]
   }

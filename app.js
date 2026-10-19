@@ -1435,6 +1435,9 @@ async function playActivity(actId){
     tierActivities();
     return;
   }
+  if(!currentPlayingAct || currentPlayingAct.id !== actId){
+    window.__actCurrentStep = 0;
+  }
   currentPlayingAct = act;
   actAnswered = false;
   currentActAttempts = 0;
@@ -1647,6 +1650,32 @@ window.__actChoose = function(chosenId, btn){
     btn.classList.add("good");
     const sp = btn.querySelector("span");
     if(sp) sp.textContent = "✔";
+
+    const isArrayContent = Array.isArray(act.content);
+    const currentStep = window.__actCurrentStep || 0;
+
+    if(isArrayContent && currentStep + 1 < act.content.length){
+      actAnswered = true;
+      sfxOk();
+      catSet("happy");
+      const fbDiv = document.getElementById("actFeedback");
+      const ctrlsDiv = document.getElementById("actCtrls");
+      if(fbDiv){
+        fbDiv.className = "act-feedback-card good";
+        fbDiv.innerHTML = `🎉 <b>${T("Chính xác!", "Correct!")}</b><br>${T(act.feedback.correct, act.feedback.correct)}`;
+      }
+      if(ctrlsDiv){
+        ctrlsDiv.style.display = "flex";
+        ctrlsDiv.innerHTML = `
+          <button class="cg-btn-replay" onclick="window.__actNextStep()">
+            ${T(`Câu tiếp theo (${currentStep + 2}/${act.content.length}) ➡️`, `Next Question (${currentStep + 2}/${act.content.length}) ➡️`)}
+          </button>
+        `;
+      }
+      say("Chính xác! " + act.feedback.correct, "Correct!");
+      return;
+    }
+
     const earnedStars = currentActAttempts === 0 ? 3 : (currentActAttempts === 1 ? 2 : 1);
     __completeActSuccess(act, earnedStars);
   } else {
@@ -1828,7 +1857,17 @@ window.__checkSortResult = function(){
   }
 };
 
+window.__actNextStep = function(){
+  window.__actCurrentStep = (window.__actCurrentStep || 0) + 1;
+  actAnswered = false;
+  currentActAttempts = 0;
+  if(currentPlayingAct) playActivity(currentPlayingAct.id);
+};
+
 window.__nextAct = function(){
+  window.__actCurrentStep = 0;
+  actAnswered = false;
+  currentActAttempts = 0;
   if(!currentPlayingAct) { tierActivities(); return; }
   const allActs = getActivitiesByTier(currentPlayingAct.ageTier);
   const currIdx = allActs.findIndex(a => a.id === currentPlayingAct.id);
