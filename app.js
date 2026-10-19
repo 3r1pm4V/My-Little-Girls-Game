@@ -1803,7 +1803,6 @@ async function playActivity(actId){
       </div>
       ${cornerTipBtnHtml}
     `;
-    say("Bé xem video cùng cô rồi bấm Bắt đầu làm bài tập nhé", "Watch the video and tap Start Quiz!");
     catSet("happy");
     return;
   }

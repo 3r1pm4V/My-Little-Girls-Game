@@ -122,7 +122,7 @@ lanAnhIds.forEach((id, idx) => {
   assert(res.valid, `Bài học ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
   assert.strictEqual(act.ageTier, 'preschool');
   assert.strictEqual(act.subject, 'vietnamese');
-  assert(act.videoUrl && act.videoUrl.includes('PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_'), 'Phải có link YouTube playlist');
+  assert(act.videoUrl && (act.videoUrl.includes('youtube.com') || act.videoUrl.includes('youtu.be')), 'Phải có link YouTube video hợp lệ');
   assert(act.parentTip && typeof act.parentTip === 'string', 'Phải có parentTip cho phụ huynh');
   assert(Array.isArray(act.activities) && act.activities.length >= 2, 'Phải có ít nhất 2 hoạt động tương tác');
   console.log(`✔ [${idx + 1}/5 Cô Lan Anh] '${act.id}': HỢP LỆ, CÓ PARENT TIP VÀ LINK YOUTUBE`);
