@@ -770,10 +770,231 @@ const ACTIVITIES_DATA = [
       wrong: "Bé đọc kỹ câu: 'Rùa Vàng nổi lên mặt nước đòi lại thanh gươm thần mà Long Quân đã cho mượn' nhé!"
     },
     reward: { stars: 3 }
+  },
+
+  // ========================================================
+  // BÀI HỌC MẪU THEO CHUẨN JSON SCHEMA MỚI (GDPT 2018)
+  // ========================================================
+  {
+    id: "act_std_sci_01",
+    title: "Vòng tuần hoàn kỳ thú của Nước 🌧️☀️",
+    titleEn: "The Wonder Water Cycle",
+    ageTier: "grade3_5",
+    subject: "science",
+    type: "video_quiz",
+    mediaSource: {
+      type: "youtube",
+      url: "https://www.youtube.com/watch?v=al-do-HGuIk",
+      thumbnail: "https://img.youtube.com/vi/al-do-HGuIk/hqdefault.jpg"
+    },
+    learningObjective: "CT GDPT 2018 môn Khoa học lớp 4: Nêu được sự chuyển thể của nước; giải thích được vòng tuần hoàn của nước trong tự nhiên.",
+    difficulty: 3,
+    content: [
+      {
+        question: "Dưới ánh nắng mặt trời, nước ở ao hồ, sông biển biến đổi như thế nào?",
+        options: [
+          "Nước đóng băng lại thành tảng đá",
+          "Nước nóng lên và bay hơi thành thể khí bay lên cao",
+          "Nước biến thành đất cát",
+          "Nước không có biến đổi gì"
+        ],
+        correctAnswer: 1,
+        explanation: "Nhiệt độ mặt trời làm nóng bề mặt nước, nước chuyển từ thể lỏng sang thể khí (bay hơi) và bay lên bầu khí quyển."
+      },
+      {
+        question: "Khi hơi nước bốc lên cao gặp không khí lạnh thì điều gì sẽ xảy ra?",
+        options: [
+          "Ngưng tụ thành những hạt nước li ti tạo thành mây",
+          "Biến mất hoàn toàn vào không gian vũ trụ",
+          "Rơi ngay lập tức xuống đất thành than",
+          "Cháy sáng rực rỡ"
+        ],
+        correctAnswer: 0,
+        explanation: "Càng lên cao nhiệt độ càng giảm, hơi nước ngưng tụ thành muôn vàn hạt nước nhỏ li ti tụ lại thành từng đám mây bồng bềnh."
+      }
+    ]
+  },
+  {
+    id: "act_std_skill_01",
+    title: "Bé qua đường an toàn cùng bạn Thỏ 🚦🐇",
+    titleEn: "Safe Road Crossing with Bunny",
+    ageTier: "preschool",
+    subject: "skills",
+    type: "interactive_story",
+    mediaSource: {
+      type: "image_set",
+      url: "img/traffic_safety.png",
+      thumbnail: "img/traffic_safety_thumb.png"
+    },
+    learningObjective: "CT GD Mầm non & GDPT 2018: Nhận biết tín hiệu đèn giao thông và kỹ năng nắm tay người lớn an toàn khi qua đường.",
+    difficulty: 1,
+    content: [
+      {
+        question: "Khi nhìn thấy đèn tín hiệu giao thông chuyển sang màu ĐỎ 🔴, bé và bạn Thỏ phải làm gì?",
+        options: [
+          "Chạy thật nhanh qua đường",
+          "Dừng lại trên vỉa hè và kiên nhẫn chờ đợi",
+          "Nhảy múa giữa lòng đường"
+        ],
+        correctAnswer: 1,
+        explanation: "Đèn đỏ báo hiệu tất cả mọi người phải dừng lại để đảm bảo an toàn tính mạng nhé bé ơi! 🔴"
+      },
+      {
+        question: "Khi đèn dành cho người đi bộ chuyển sang màu XANH 🟢, bé nên qua đường như thế nào?",
+        options: [
+          "Nắm chặt tay bố mẹ, quan sát hai bên và đi trên vạch kẻ trắng",
+          "Vừa chạy vừa đá bóng qua đường",
+          "Nhắm mắt lại và tự đi một mình"
+        ],
+        correctAnswer: 0,
+        explanation: "Luôn luôn nắm chặt tay người lớn, quan sát xe cộ hai bên và bước đi trên vạch kẻ đường dành cho người đi bộ! 🟢"
+      }
+    ]
+  },
+  {
+    id: "act_std_math_01",
+    title: "Chiếc cân thăng bằng bí ẩn ⚖️🍎🍐",
+    titleEn: "The Mystery Balance Scale",
+    ageTier: "grade1_2",
+    subject: "math",
+    type: "logic_puzzle",
+    mediaSource: {
+      type: "image_set",
+      url: "img/balance_scale.png",
+      thumbnail: "img/balance_scale_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Toán lớp 2: Hình thành tư duy đại số sơ khởi thông qua quan hệ bằng nhau và suy luận logic tương đương.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Cân 1: 1 quả Táo 🍎 nặng bằng 2 quả Mận 🫐. Cân 2: 1 quả Lê 🍐 nặng bằng 1 quả Táo 🍎. Hỏi 1 quả Lê 🍐 nặng bằng mấy quả Mận 🫐?",
+        options: [
+          "1 quả Mận 🫐",
+          "2 quả Mận 🫐",
+          "3 quả Mận 🫐",
+          "4 quả Mận 🫐"
+        ],
+        correctAnswer: 1,
+        explanation: "Vì 1 quả Lê = 1 quả Táo, mà 1 quả Táo = 2 quả Mận, nên 1 quả Lê cũng nặng bằng đúng 2 quả Mận! ⚖️"
+      }
+    ]
+  },
+  {
+    id: "act_std_vie_01",
+    title: "Thám tử tìm vần: Phân biệt AN và AT 🔍📝",
+    titleEn: "Phonics Detective: Sound AN vs AT",
+    ageTier: "grade1_2",
+    subject: "vietnamese",
+    type: "phonics_game",
+    mediaSource: {
+      type: "local_mp4",
+      url: "audio/vtv7_phonics_an_at.mp3",
+      thumbnail: "img/phonics_thumb.png"
+    },
+    learningObjective: "CT GDPT 2018 môn Tiếng Việt lớp 1: Nhận diện và phân biệt được các vần có âm cuối tương đồng (vần mở/đóng: an - at), đọc trơn và hiểu nghĩa từ.",
+    difficulty: 2,
+    content: [
+      {
+        question: "Từ nào dưới đây chứa vần 'AN' (a-n-an)?",
+        options: [
+          "Cái Bát 🥣",
+          "Cái Bàn 🪵",
+          "Con Hát 🎤",
+          "Mặt Trời ☀️"
+        ],
+        correctAnswer: 1,
+        explanation: "Cái Bàn: b-an-ban-huyền-bàn. Tiếng 'Bàn' chứa vần 'AN'!"
+      },
+      {
+        question: "Từ nào dưới đây chứa vần 'AT' (a-t-at)?",
+        options: [
+          "Bãi Cát 🏖️",
+          "Hoa Lan 🌸",
+          "Cái Căn 🏠",
+          "Đàn Gà 🐔"
+        ],
+        correctAnswer: 0,
+        explanation: "Bãi Cát: c-at-cat-sắc-cát. Tiếng 'Cát' chứa vần 'AT'!"
+      }
+    ]
   }
 ];
 
-// Helper lấy danh sách bài học theo nhóm tuổi
+// Định nghĩa JSON Schema chuẩn
+const ACTIVITY_SCHEMA = {
+  $id: "https://behocvui.vn/schemas/activity.schema.json",
+  type: "object",
+  required: [
+    "id", "title", "titleEn", "ageTier", "subject",
+    "type", "mediaSource", "learningObjective", "difficulty", "content"
+  ],
+  properties: {
+    id: { type: "string" },
+    title: { type: "string" },
+    titleEn: { type: "string" },
+    ageTier: { enum: ["preschool", "grade1_2", "grade3_5"] },
+    subject: { enum: ["vietnamese", "math", "english", "science", "skills"] },
+    type: { enum: ["video_quiz", "interactive_story", "logic_puzzle", "phonics_game"] },
+    mediaSource: {
+      type: "object",
+      required: ["type", "url", "thumbnail"],
+      properties: {
+        type: { enum: ["youtube", "local_mp4", "image_set"] },
+        url: { type: "string" },
+        thumbnail: { type: "string" }
+      }
+    },
+    learningObjective: { type: "string" },
+    difficulty: { type: "integer", minimum: 1, maximum: 5 },
+    content: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        required: ["question", "options", "correctAnswer", "explanation"],
+        properties: {
+          question: { type: "string" },
+          options: { type: "array", minItems: 2 },
+          correctAnswer: { type: ["string", "number"] },
+          explanation: { type: "string" }
+        }
+      }
+    }
+  }
+};
+
+// Hàm kiểm tra tính hợp lệ của bài học theo Schema
+function validateActivity(act) {
+  const errors = [];
+  if (!act || typeof act !== "object") return { valid: false, errors: ["Activity must be an object"] };
+  if (!act.id || typeof act.id !== "string") errors.push("Missing or invalid 'id'");
+  if (!act.title || typeof act.title !== "string") errors.push("Missing or invalid 'title'");
+  if (!act.titleEn || typeof act.titleEn !== "string") errors.push("Missing or invalid 'titleEn'");
+  if (!["preschool", "grade1_2", "grade3_5"].includes(act.ageTier)) errors.push("Invalid 'ageTier'");
+  if (!["vietnamese", "math", "english", "science", "skills", "reading", "logic"].includes(act.subject)) errors.push("Invalid 'subject'");
+  if (!act.mediaSource || typeof act.mediaSource !== "object") {
+    errors.push("Missing 'mediaSource'");
+  } else {
+    if (!["youtube", "local_mp4", "image_set"].includes(act.mediaSource.type)) errors.push("Invalid 'mediaSource.type'");
+    if (typeof act.mediaSource.url !== "string") errors.push("Invalid 'mediaSource.url'");
+    if (typeof act.mediaSource.thumbnail !== "string") errors.push("Invalid 'mediaSource.thumbnail'");
+  }
+  if (!act.learningObjective && !act.skill) errors.push("Missing 'learningObjective'");
+  if (typeof act.difficulty !== "number" || act.difficulty < 1 || act.difficulty > 5) errors.push("Invalid 'difficulty' (must be 1-5)");
+  if (!Array.isArray(act.content) || act.content.length === 0) {
+    errors.push("'content' must be a non-empty array");
+  } else {
+    act.content.forEach((item, idx) => {
+      if (!item.question || typeof item.question !== "string") errors.push(`Item ${idx}: missing 'question'`);
+      if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Item ${idx}: 'options' must have at least 2 items`);
+      if (item.correctAnswer === undefined) errors.push(`Item ${idx}: missing 'correctAnswer'`);
+      if (!item.explanation || typeof item.explanation !== "string") errors.push(`Item ${idx}: missing 'explanation'`);
+    });
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+// Helper lấy danh sách bài học theo nhóm tuổi (Tương thích 100% với code hiện có)
 function getActivitiesByTier(tierId) {
   return ACTIVITIES_DATA.filter(a => a.ageTier === tierId);
 }
@@ -791,10 +1012,20 @@ function getActivitiesBySubject(tierId, subject) {
 if (typeof window !== "undefined") {
   window.AGE_TIERS = AGE_TIERS;
   window.ACTIVITIES_DATA = ACTIVITIES_DATA;
+  window.ACTIVITY_SCHEMA = ACTIVITY_SCHEMA;
+  window.validateActivity = validateActivity;
   window.getActivitiesByTier = getActivitiesByTier;
   window.getActivityById = getActivityById;
   window.getActivitiesBySubject = getActivitiesBySubject;
 }
 
 export default ACTIVITIES_DATA;
-export { AGE_TIERS, ACTIVITIES_DATA, getActivitiesByTier, getActivityById, getActivitiesBySubject };
+export {
+  AGE_TIERS,
+  ACTIVITIES_DATA,
+  ACTIVITY_SCHEMA,
+  validateActivity,
+  getActivitiesByTier,
+  getActivityById,
+  getActivitiesBySubject
+};

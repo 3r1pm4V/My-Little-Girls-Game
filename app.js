@@ -1311,6 +1311,8 @@ async function tierActivities(filterSubject){
     vietnamese: { vi: "Tiếng Việt", en: "Vietnamese", icon: "🔤", cls: "vietnamese" },
     reading: { vi: "Đọc hiểu", en: "Reading", icon: "📖", cls: "reading" },
     english: { vi: "Tiếng Anh", en: "English", icon: "🇬🇧", cls: "english" },
+    science: { vi: "Khoa học", en: "Science", icon: "🔬", cls: "science" },
+    skills: { vi: "Kỹ năng sống", en: "Life Skills", icon: "🌱", cls: "skills" },
     logic: { vi: "Tư duy", en: "Logic", icon: "💡", cls: "logic" }
   };
 
@@ -1321,9 +1323,11 @@ async function tierActivities(filterSubject){
 
   const filters = [
     { id: "all", vi: "Tất cả", en: "All" },
-    { id: "math", vi: "Toán học 📐", en: "Math" },
     { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
+    { id: "math", vi: "Toán học 📐", en: "Math" },
     { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
+    { id: "science", vi: "Khoa học 🔬", en: "Science" },
+    { id: "skills", vi: "Kỹ năng 🌱", en: "Life Skills" },
     { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
     { id: "logic", vi: "Tư duy 💡", en: "Logic" }
   ];
@@ -1355,11 +1359,11 @@ async function tierActivities(filterSubject){
             <div class="act-card-icon">${sInfo.icon}</div>
             <div class="act-card-body">
               <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
-              <div class="act-card-skill">🎯 ${act.skill}</div>
+              <div class="act-card-skill">🎯 ${act.learningObjective || act.skill || ""}</div>
               <div class="act-card-meta">
                 <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
-                <span class="act-badge reward">⭐ +${act.reward.stars} sao</span>
-                <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(act.difficulty).fill("★").join("")}</span>
+                <span class="act-badge reward">⭐ +${(act.reward && act.reward.stars) || act.difficulty || 3} sao</span>
+                <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(Math.min(5, Math.max(1, act.difficulty || 1))).fill("★").join("")}</span>
               </div>
             </div>
             <div style="font-size:24px;color:var(--acc)">➔</div>
@@ -1443,10 +1447,46 @@ async function playActivity(actId){
     {t:T(act.title, act.titleEn || act.title), i:"✨"}
   ]);
 
-  const mediaHtml = act.content.media ? `
-    <div class="act-media">${act.content.media}</div>
-  ` : "";
+  // Chuẩn hóa content: Hỗ trợ cả Schema mới (content dạng Array) lẫn cấu trúc cũ
+  const isArrayContent = Array.isArray(act.content);
+  const currentStep = window.__actCurrentStep || 0;
+  const currentItem = isArrayContent ? (act.content[currentStep] || act.content[0]) : act.content;
 
+  if(isArrayContent && currentItem){
+    act.contentQuestion = currentItem.question;
+    act.contentQuestionEn = currentItem.questionEn || currentItem.question;
+    act.options = (currentItem.options || []).map((opt, i) => (typeof opt === "string" ? { id: i, text: opt } : opt));
+    act.correctAnswer = currentItem.correctAnswer !== undefined ? currentItem.correctAnswer : act.correctAnswer;
+    act.feedback = {
+      correct: currentItem.explanation || "Chính xác! Bé làm rất tốt! 🌟",
+      wrong: currentItem.hint || "Bé thử đọc kỹ và chọn lại đáp án nhé!"
+    };
+    act.reward = act.reward || { stars: Math.min(5, Math.max(1, act.difficulty || 3)) };
+    act.skill = act.learningObjective || act.skill;
+  }
+
+  let mediaHtml = "";
+  if(act.mediaSource && act.mediaSource.url){
+    if(act.mediaSource.type === "youtube"){
+      const ytId = act.mediaSource.url.includes("v=") ? act.mediaSource.url.split("v=")[1].split("&")[0] : act.mediaSource.url.split("/").pop();
+      mediaHtml = `<div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;margin-bottom:12px;background:#000">
+        <iframe src="https://www.youtube-nocookie.com/embed/${ytId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>`;
+    } else if(act.mediaSource.type === "local_mp4"){
+      mediaHtml = `<div class="act-video-wrap" style="margin-bottom:12px;text-align:center">
+        <video controls poster="${act.mediaSource.thumbnail || ''}" src="${act.mediaSource.url}" style="max-width:100%;max-height:260px;border-radius:14px"></video>
+      </div>`;
+    } else if(act.mediaSource.type === "image_set"){
+      mediaHtml = `<div class="act-media" style="margin-bottom:12px;text-align:center">
+        <img src="${act.mediaSource.thumbnail || act.mediaSource.url}" alt="${act.title}" style="max-width:100%;max-height:220px;border-radius:12px;object-fit:cover">
+      </div>`;
+    }
+  } else if(act.content && act.content.media){
+    mediaHtml = `<div class="act-media">${act.content.media}</div>`;
+  }
+
+  const actQText = act.contentQuestion || (act.content && act.content.question) || act.title;
+  const actQTextEn = act.contentQuestionEn || (act.content && act.content.questionEn) || actQText;
   const escSay = s => String(s||"").replace(/'/g, "\\'").replace(/"/g, "&quot;");
   let bodyHtml = "";
 
@@ -1547,8 +1587,8 @@ async function playActivity(actId){
     `).join("");
     bodyHtml = `
       ${mediaHtml}
-      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(act.content.question)}', '${escSay(act.content.questionEn || act.content.question)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
-        🔊 ${T(act.content.question, act.content.questionEn || act.content.question)}
+      <div class="act-question" id="actQTitle" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()" onclick="say('${escSay(actQText)}', '${escSay(actQTextEn)}')" title="${T("Bấm để nghe lại","Tap to listen")}" aria-label="${T("Bấm để nghe lại câu hỏi","Tap to listen to question")}">
+        🔊 ${T(actQText, actQTextEn)}
       </div>
       <div class="act-options">${optsHtml}</div>
     `;
@@ -1574,7 +1614,7 @@ async function playActivity(actId){
     </div>
   `;
 
-  say(act.content.question, act.content.questionEn || act.content.question);
+  say(actQText, actQTextEn);
   catSet("thinking");
 }
 
