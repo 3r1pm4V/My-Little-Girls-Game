@@ -123,25 +123,34 @@ function sfxNo(){haptic(35);if(!SFX())return;tone(280,.2);tone(220,.25,.12)}
 function sfxFanfare(){haptic([40,50,80]);if(!SFX())return;[[523.25,.12,0],[659.25,.12,.1],[783.99,.12,.2],[1046.50,.35,.3],[880.00,.15,.55],[1046.50,.5,.7]].forEach(([f,d,t])=>tone(f,d,t))}
 document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.k-bc-back,.badge-btn,.story-page-btn,.ob");if(b&&!b.disabled)sfxTap()},{passive:true});
 
+function goHome(){
+  if(cur==="home")return;
+  stk=[{s:"home"}];
+  try{history.replaceState({i:0,s:"home"},"")}catch(e){}
+  show("home",undefined,true);
+}
+window.goHome=goHome;
+
 function goBack(){
+  if(cur==="home")return;
   if(stk.length>1){
     stk.pop();
     const prev=stk[stk.length-1];
+    try{history.replaceState({i:stk.length-1,s:prev.s,a:prev.a},"")}catch(e){}
     show(prev.s,prev.a,true);
   } else {
-    show("home",undefined,true);
+    goHome();
   }
 }
 window.goBack=goBack;
 
 function kbc(crumbs,actionHtml=""){
-  const backHtml=(crumbs.length>1)?`<button class="k-bc-back" onclick="goBack()" aria-label="${T("Quay lại","Back")}">🔙 ${T("Quay lại","Back")}</button>`:"";
   const items=crumbs.map((c,idx)=>{
     if(idx===crumbs.length-1)return`<span class="k-bc-cur">${c.i?c.i+" ":""}${c.t}</span>`;
-    const fn=c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`;
+    const fn=(c.s==="home")?"goHome()":(c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`);
     return`<button class="k-bc-btn" onclick="${fn}">${c.i?c.i+" ":""}${c.t}</button><span class="k-bc-sep">›</span>`;
   }).join("");
-  return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${backHtml}${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
+  return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
 }
 
 /* ========================================================
@@ -483,7 +492,7 @@ function head(){
 function toggleLang(){const next=lang==="vi"?"en":"vi";setLang(next);if(typeof cur!=="undefined"&&cur)go(cur);}
 window.toggleLang=toggleLang;
 document.getElementById("hb").innerHTML=im("btn_home");
-document.getElementById("hb").onclick=()=>{if(cur==="home")return;show("home",undefined,true);};
+document.getElementById("hb").onclick=()=>{if(cur==="home")return;goHome();};
 document.getElementById("sp").onclick=()=>{RATE=RATE<.5?.6:RATE<.7?.85:.4;ls.set("rate2",RATE);head();say("Bé nghe nhé","Listen")};
 function fx(){if(rmOn())return;const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
 const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
@@ -674,24 +683,40 @@ function show(s,a,isBack=false){
   m.scrollTop=0;
 }
 function go(s,a){
-  const n=stk.length-1,top=stk[n],rep=()=>{stk[n]={s,a};try{history.replaceState({i:n,s,a},"")}catch(e){}show(s,a,false)};
-  if(top.s===s){rep();return}
-  let k=-1;for(let j=n-1;j>=0;j--)if(stk[j].s===s){k=j;break}
-  if(k>=0){
-    const b=n-k;
-    stk.length=k+1;
-    pend=setTimeout(()=>{if(pend){pend=0;show(s,a,true)}},300);
-    try{history.go(-b)}catch(e){clearTimeout(pend);pend=0;show(s,a,true)}
+  if(s==="home"){
+    goHome();
     return;
   }
-  if(top.s==="gate"){rep();return}
+  const n=stk.length-1,top=stk[n];
+  if(top&&top.s===s&&top.a===a)return;
+  if(top&&(top.s===s||top.s==="gate")){
+    stk[n]={s,a};
+    try{history.replaceState({i:n,s,a},"")}catch(e){}
+    show(s,a,false);
+    return;
+  }
+  let k=-1;
+  for(let j=n-1;j>=0;j--){
+    if(stk[j].s===s){k=j;break}
+  }
+  if(k>=0){
+    stk.length=k+1;
+    stk[k]={s,a};
+    try{history.replaceState({i:k,s,a},"")}catch(e){}
+    show(s,a,true);
+    return;
+  }
   stk.push({s,a});
-  try{history.pushState({i:n+1,s,a},"")}catch(e){}
+  try{history.pushState({i:stk.length-1,s,a},"")}catch(e){}
   show(s,a,false);
 }
 addEventListener("popstate",e=>{
-  if(pend){clearTimeout(pend);pend=0}
   const st=e.state||{i:0,s:"home"};
+  if(st.s==="home"){
+    stk=[{s:"home"}];
+    show("home",undefined,true);
+    return;
+  }
   const isBack=(st.i<stk.length-1);
   while(stk.length<=st.i)stk.push({s:"home"});
   stk.length=st.i+1;
