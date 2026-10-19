@@ -31,7 +31,7 @@ let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
 const sayAs=(l,vi,en)=>{const o=ql;ql=l;say(vi,en);ql=o};
 const exLD=L=>{const v=exL(L,"vi"),e=exL(L,"en");return lang==="vi"?(v.length?v.slice(0,3):e.slice(0,2)):lang==="en"?e.slice(0,3):[...v.slice(0,2),...e.slice(0,2)]};
 const COUNT="apple,ball,star,flower,cat,dog,donut,egg,grape,orange,mango,frog,gift,sun,moon,tree".split(",");
-let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
+let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",2);const MX=()=>[5,10,15][lvl-1];
 const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
 function toggleSoundMaster(){
   const nxt=SOUND_ON()?"0":"1";
@@ -102,7 +102,7 @@ const throttledResize = throttle(e => {
 }, 150);
 
 window.addEventListener("resize", throttledResize, { passive: true });
-const AGE_TIERS = {
+var AGE_TIERS = (typeof window !== "undefined" && window.AGE_TIERS) ? window.AGE_TIERS : {
   preschool: {
     id: "preschool",
     nameVi: "Tiền tiểu học",
@@ -174,6 +174,8 @@ async function loadStories() {
 }
 window.loadStories = loadStories;
 
+function esc(s){ return String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function escSay(s){ return String(s||"").replace(/'/g, "\\'").replace(/"/g, "&quot;"); }
 let currentTier=ls.get("ageTier",lvl===1?"preschool":(lvl===3?"grade3_5":"grade1_2"));
 function setAgeTier(tierId){if(typeof AGE_TIERS==="undefined"||!AGE_TIERS[tierId])tierId="preschool";currentTier=tierId;ls.set("ageTier",currentTier);if(tierId==="preschool")lvl=1;else if(tierId==="grade1_2")lvl=2;else if(tierId==="grade3_5")lvl=3;ls.set("lvl",lvl);home();if(typeof AGE_TIERS!=="undefined"){sayPrompt("tier_"+tierId,AGE_TIERS[tierId].nameVi+". "+AGE_TIERS[tierId].descVi,AGE_TIERS[tierId].nameEn,60000);}}window.setAgeTier=setAgeTier;
 function setLang(l){lang=l;ls.set("lang",l);ql=null;head();if(cur==="parent")parent();}window.setLang=setLang;
@@ -329,6 +331,7 @@ function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
 
 const getAudio=ak=>{
   if(!ak)return null;
+  if(/^(audio\/|blob:|data:|https?:\/\/)/i.test(ak) || /\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/i.test(ak)) return ak;
   const raw=ak.replace(/^(vi|en)\|/i,"").trim();
   if(REC[ak]||REC[raw])return REC[ak]||REC[raw];
   if(!window.AUDIO_MAP)return null;
@@ -384,14 +387,17 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   const nk=typeof window.__normAudioKey==="function"?window.__normAudioKey(rawText):rawText.toLowerCase().trim();
   const cleanKey=nk.replace(/^(vi|en)\|/,"");
 
-  // BƯỚC 1: Kiểm tra window.AUDIO_MAP[text] (File MP3 local tải sẵn)
-  const mapPath=getAudio(rawText)||(window.AUDIO_MAP&&(
-    window.AUDIO_MAP[rawText]||
-    window.AUDIO_MAP[nk]||
-    window.AUDIO_MAP[cleanKey]||
-    window.AUDIO_MAP["vi|"+cleanKey]||
-    window.AUDIO_MAP["en|"+cleanKey]
-  ));
+  // BƯỚC 1: Kiểm tra file đường dẫn trực tiếp hoặc trong window.AUDIO_MAP
+  const isDirectPath = /^(audio\/|blob:|data:|https?:\/\/)/i.test(rawText) || /\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/i.test(rawText);
+  const mapPath = isDirectPath ? rawText : (
+    getAudio(rawText) || (window.AUDIO_MAP && (
+      window.AUDIO_MAP[rawText] ||
+      window.AUDIO_MAP[nk] ||
+      window.AUDIO_MAP[cleanKey] ||
+      window.AUDIO_MAP["vi|" + cleanKey] ||
+      window.AUDIO_MAP["en|" + cleanKey]
+    ))
+  );
 
   if(mapPath){
     console.log(`[Audio:Source] 🎵 Phát từ Map (MP3 Local): "${rawText}" -> ${mapPath}`);
@@ -570,6 +576,8 @@ function sfxOk(){haptic([25,30,40]);if(!SFX())return;[523.25,659.25,783.99,1046.
 function sfxTingTing(){haptic([30,50]);if(!SFX())return;tone(1046.50,.18,0);tone(1318.51,.25,.1);tone(1567.98,.3,.2);}
 function sfxNo(){haptic(35);if(!SFX())return;tone(280,.2);tone(220,.25,.12)}
 function sfxFanfare(){haptic([40,50,80]);if(!SFX())return;[[523.25,.12,0],[659.25,.12,.1],[783.99,.12,.2],[1046.50,.35,.3],[880.00,.15,.55],[1046.50,.5,.7]].forEach(([f,d,t])=>tone(f,d,t))}
+function sfxPop(){haptic(20);if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain(),now=AC.currentTime;o.type="sine";o.frequency.setValueAtTime(750,now);o.frequency.exponentialRampToValueAtTime(140,now+0.07);g.setValueAtTime(0.35,now);g.exponentialRampToValueAtTime(0.001,now+0.07);o.connect(g);g.connect(AC.destination);o.start(now);o.stop(now+0.07)}catch(e){}}
+function sfxDeflate(){haptic([15,20]);if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain(),now=AC.currentTime;o.type="sawtooth";o.frequency.setValueAtTime(320,now);o.frequency.linearRampToValueAtTime(120,now+0.18);g.setValueAtTime(0.18,now);g.exponentialRampToValueAtTime(0.001,now+0.18);o.connect(g);g.connect(AC.destination);o.start(now);o.stop(now+0.18)}catch(e){}}
 document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.k-bc-back,.badge-btn,.story-page-btn,.ob");if(b&&!b.disabled)sfxTap()},{passive:true});
 
 window.__showParentTipModal = function(title, tip){
@@ -1289,6 +1297,7 @@ function home(){
   let cardsHtml = "";
   if(currentTier === "preschool"){
     cardsHtml = `
+      ${card("tierActLanAnh", "<b>👩‍🏫 🎬</b>", "Bé học Cô Lan Anh", "Teacher Lan Anh", "vietnamese")}
       ${card("letL", imL("A")+imL("B"), "Chữ cái", "Letters", "vietnamese")}
       ${card("numL", "<b>1 2 3</b>", "Học số", "Numbers", "math")}
       ${card("countGame", "<b>🍎 3 ⭐</b>", "Đếm hình chọn số", "Count & Match", "game")}
@@ -1340,7 +1349,17 @@ async function tierActivities(filterSubject){
   }
   const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : { nameVi: "Bài học", nameEn: "Activities", badge: "🎯" };
   const allActs = typeof getActivitiesByTier === "function" ? getActivitiesByTier(currentTier) : [];
-  const acts = (filterSubject && filterSubject !== "all") ? allActs.filter(a => a.subject === filterSubject) : allActs;
+  const isPreschool = currentTier === "preschool";
+
+  let acts = allActs;
+  if(filterSubject === "lananh"){
+    acts = allActs.filter(a => a.id.startsWith("pre_lananh") || (a.title && a.title.includes("Lan Anh")) || a.id.startsWith("pre_vi_"));
+  } else if(filterSubject && filterSubject !== "all"){
+    acts = allActs.filter(a => a.subject === filterSubject);
+  }
+  if(isPreschool){
+    acts = [...acts].sort((a, b) => (b.id.startsWith("pre_lananh") ? 1 : 0) - (a.id.startsWith("pre_lananh") ? 1 : 0));
+  }
 
   const subjectBadges = {
     math: { vi: "Toán học", en: "Math", icon: "📐", cls: "math" },
@@ -1357,7 +1376,17 @@ async function tierActivities(filterSubject){
     {t:T(tInfo.nameVi, tInfo.nameEn), i:tInfo.badge || "🎒"}
   ]);
 
-  const filters = [
+  const filters = isPreschool ? [
+    { id: "all", vi: "Tất cả", en: "All" },
+    { id: "lananh", vi: "Cô Lan Anh 👩‍🏫", en: "Teacher Lan Anh" },
+    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
+    { id: "math", vi: "Toán học 📐", en: "Math" },
+    { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
+    { id: "science", vi: "Khoa học 🔬", en: "Science" },
+    { id: "skills", vi: "Kỹ năng 🌱", en: "Life Skills" },
+    { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
+    { id: "logic", vi: "Tư duy 💡", en: "Logic" }
+  ] : [
     { id: "all", vi: "Tất cả", en: "All" },
     { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
     { id: "math", vi: "Toán học 📐", en: "Math" },
@@ -1381,7 +1410,6 @@ async function tierActivities(filterSubject){
     <div class="act-list-wrap"></div>
   `;
 
-  const isPreschool = tierId === "preschool";
   const listWrap = m.querySelector(".act-list-wrap");
   if(listWrap){
     if(!acts.length){
@@ -1449,6 +1477,15 @@ async function tierActivities(filterSubject){
   }
 }
 
+function tierActLanAnh(){
+  if(currentTier !== "preschool"){
+    currentTier = "preschool";
+    ls.set("ageTier", "preschool");
+    lvl = 1;
+    ls.set("lvl", 1);
+  }
+  tierActivities("lananh");
+}
 function tierActMath(){ tierActivities("math"); }
 function tierActWord(){ tierActivities("vietnamese"); }
 function tierActRead(){ tierActivities("reading"); }
@@ -1495,7 +1532,7 @@ function __completeActSuccess(act, earnedStars){
   if(ctrlsDiv){
     ctrlsDiv.style.display = "flex";
   }
-  say(`Chính xác! Thưởng bé ${earnedStars} sao! ` + act.feedback.correct, `Correct! You earned ${earnedStars} stars!`);
+  say(earnedStars === 3 ? "Bé giỏi lắm!" : "Đúng rồi!", "Well done!");
 }
 
 async function playActivity(actId){
@@ -1510,6 +1547,7 @@ async function playActivity(actId){
   }
   if(!currentPlayingAct || currentPlayingAct.id !== actId){
     window.__actCurrentStep = 0;
+    window.__actQuizStarted = false;
   }
   currentPlayingAct = act;
   actAnswered = false;
@@ -1523,17 +1561,17 @@ async function playActivity(actId){
     {t:T(act.title, act.titleEn || act.title), i:"✨"}
   ]);
 
-  // Chuẩn hóa content: Hỗ trợ cả Schema mới (content dạng Array), activities, lẫn cấu trúc cũ
-  const isActivitiesArray = Array.isArray(act.activities);
-  if (isActivitiesArray && !act.content) {
-    act.content = act.activities.map(actItem => ({
-      question: actItem.question,
-      questionEn: actItem.questionEn || actItem.question,
-      options: (actItem.options || []).map(opt => typeof opt === "object" ? `${opt.icon ? opt.icon + " " : ""}${opt.text}` : opt),
-      correctAnswer: typeof actItem.correctAnswer === "string" 
-        ? actItem.options.findIndex(opt => (typeof opt === "object" ? opt.text : opt) === actItem.correctAnswer)
-        : actItem.correctAnswer,
-      explanation: actItem.audioHint || "Chính xác! Bé làm rất giỏi! 🌟"
+  // Chuẩn hóa content: Hỗ trợ cả Schema mới (content dạng Array), activities, exercises, lẫn cấu trúc cũ
+  const rawList = Array.isArray(act.exercises) ? act.exercises : (Array.isArray(act.activities) ? act.activities : null);
+  if (rawList && !act.content) {
+    act.content = rawList.map(item => ({
+      question: item.question,
+      questionEn: item.questionEn || item.question,
+      options: (item.options || []).map(opt => typeof opt === "object" ? `${opt.icon ? opt.icon + " " : ""}${opt.text}` : opt),
+      correctAnswer: typeof item.correctAnswer === "string" 
+        ? item.options.findIndex(opt => (typeof opt === "object" ? opt.text : opt) === item.correctAnswer)
+        : item.correctAnswer,
+      explanation: item.audioHint || item.explanation || "Chính xác! Bé làm rất giỏi! 🌟"
     }));
   }
 
@@ -1566,9 +1604,36 @@ async function playActivity(actId){
   if(act.mediaSource && act.mediaSource.url){
     if(act.mediaSource.type === "youtube"){
       const ytId = act.mediaSource.url.includes("v=") ? act.mediaSource.url.split("v=")[1].split("&")[0] : act.mediaSource.url.split("/").pop();
-      mediaHtml = `<div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:18px;margin-bottom:14px;background:#000;box-shadow:0 6px 16px rgba(0,0,0,0.18)">
-        <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&autoplay=1&mute=1&playsinline=1&enablejsapi=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>`;
+      const isFile = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
+      const ytThumb = act.mediaSource.thumbnail || `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      const ytDirectUrl = `https://www.youtube.com/watch?v=${ytId}`;
+
+      if(isFile){
+        mediaHtml = `
+          <div class="act-video-wrap" style="position:relative;border-radius:18px;margin-bottom:14px;overflow:hidden;background:#0f172a;box-shadow:0 6px 16px rgba(0,0,0,0.18);text-align:center">
+            <div style="position:relative;padding-bottom:56.25%;height:0;background:#000">
+              <img src="${ytThumb}" alt="${esc(act.title)}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.85">
+              <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;z-index:2">
+                <div style="width:68px;height:68px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;box-shadow:0 6px 20px rgba(220,38,38,0.5);transition:transform .15s">▶</div>
+                <span style="background:rgba(0,0,0,0.78);color:#fff;padding:6px 16px;border-radius:20px;font-size:14px;font-weight:800">Xem video trên YouTube ↗</span>
+              </a>
+            </div>
+            <div style="padding:10px 14px;background:#fef3c7;border-top:2px solid #fde68a;font-size:13px;color:#92400e;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <span>💡 <b>Lưu ý:</b> Khi mở file trực tiếp (file://), YouTube chặn nhúng video (Lỗi 153). Bố mẹ bấm nút trên để xem, hoặc mở file <b>run-local.bat</b> để xem video trực tiếp tại đây!</span>
+              <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" class="pill on" style="font-size:12px;padding:4px 10px;background:#ea580c;color:#fff;white-space:nowrap;text-decoration:none">Mở YouTube</a>
+            </div>
+          </div>
+        `;
+      } else {
+        mediaHtml = `
+          <div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:18px;margin-bottom:14px;background:#000;box-shadow:0 6px 16px rgba(0,0,0,0.18)">
+            <iframe src="https://www.youtube.com/embed/${ytId}?rel=0&autoplay=1&mute=1&playsinline=1" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div style="text-align:right;margin:-8px 0 10px">
+            <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" style="font-size:12.5px;color:#64748b;text-decoration:none;font-weight:700">↗ Xem trực tiếp trên YouTube</a>
+          </div>
+        `;
+      }
     } else if(act.mediaSource.type === "local_mp4"){
       mediaHtml = `<div class="act-video-wrap" style="margin-bottom:12px;text-align:center">
         <video controls poster="${act.mediaSource.thumbnail || ''}" src="${act.mediaSource.url}" style="max-width:100%;max-height:260px;border-radius:14px"></video>
@@ -1704,14 +1769,54 @@ async function playActivity(actId){
     </button>
   ` : "";
 
+  const isPreschool = act.ageTier === "preschool";
+  const totalSteps = isArrayContent ? act.content.length : 1;
+  const progressPercent = Math.min(100, Math.round(((currentStep + (actAnswered ? 1 : 0)) / totalSteps) * 100));
+
+  const progressBarHtml = `
+    <div class="act-progress-track" title="${T(`Tiến trình: ${currentStep + 1}/${totalSteps}`, `Progress: ${currentStep + 1}/${totalSteps}`)}">
+      <div class="act-progress-fill" style="width:${progressPercent}%"></div>
+    </div>
+  `;
+
+  // Chế độ 'Xem & Học' cho bé 4 tuổi: Nếu có video và đang ở bước đầu tiên và chưa bấm 'Bắt đầu làm bài'
+  const hasVideo = act.mediaSource && act.mediaSource.type === "youtube";
+  const isWatchMode = isPreschool && hasVideo && !window.__actQuizStarted && currentStep === 0;
+
+  if (isWatchMode) {
+    m.innerHTML = `
+      ${bcHtml}
+      ${progressBarHtml}
+      <div class="act-watch-box">
+        <h2 style="font-family:'Baloo 2',sans-serif;font-size:clamp(22px,5.5vw,30px);color:var(--ink);margin:0 0 10px">
+          ${T(act.title, act.titleEn || act.title)}
+        </h2>
+        <div style="font-size:15px;color:#475569;margin-bottom:14px;font-weight:700">
+          🎯 ${act.learningGoal || act.learningObjective || act.skill || ""}
+        </div>
+        ${mediaHtml}
+        <div style="text-align:center;margin-top:14px">
+          <button class="act-start-btn" onclick="window.__startPreschoolQuiz()">
+            <span>✏️</span> ${T("Bé bắt đầu làm bài tập nào! 🚀", "Start Quiz Now! 🚀")}
+          </button>
+        </div>
+      </div>
+      ${cornerTipBtnHtml}
+    `;
+    say("Bé xem video cùng cô rồi bấm Bắt đầu làm bài tập nhé", "Watch the video and tap Start Quiz!");
+    catSet("happy");
+    return;
+  }
+
+  // Khi bé đang làm bài tập (hoặc các lớp khác)
   m.innerHTML = `
     ${bcHtml}
-    <div class="act-player-box">
+    ${progressBarHtml}
+    <div class="act-player-box ${window.__actJustStarted ? 'act-quiz-slideup' : ''}">
       <div class="act-meta-row">
         <span>🎯 ${act.skill}</span>
         <button class="pill act-read-all-btn" onclick="window.__readActAloud()" aria-label="${T("Đọc to toàn bộ câu hỏi và đáp án","Read question and options aloud")}">🔊 ${T("Đọc to cả bài","Read all aloud")}</button>
       </div>
-      ${parentTipHtml}
       ${bodyHtml}
       <div id="actFeedback"></div>
       <div class="act-ctrl-row" id="actCtrls" style="display:none">
@@ -1725,10 +1830,20 @@ async function playActivity(actId){
     </div>
     ${cornerTipBtnHtml}
   `;
+  window.__actJustStarted = false;
 
   say(actQText, actQTextEn);
   catSet("thinking");
 }
+
+window.__startPreschoolQuiz = function(){
+  window.__actQuizStarted = true;
+  window.__actJustStarted = true;
+  sfxTingTing();
+  if (currentPlayingAct) {
+    playActivity(currentPlayingAct.id);
+  }
+};
 
 window.__readActAloud = function(){
   if(!currentPlayingAct) return;
@@ -1783,7 +1898,7 @@ window.__actChoose = function(chosenId, btn){
           </button>
         `;
       }
-      say("Con giỏi lắm! " + act.feedback.correct, "Well done! " + act.feedback.correct);
+      say("Bé giỏi lắm!", "Well done!");
       return;
     }
 
@@ -1801,7 +1916,7 @@ window.__actChoose = function(chosenId, btn){
       fbDiv.className = "act-feedback-card bad";
       fbDiv.innerHTML = `💡 <b>${T("Cố lên con yêu, thử lại nhé! 💖", "Try again, sweetheart!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}`;
     }
-    say("Cố lên con yêu, thử lại nhé! " + (act.feedback.wrong || ""), "Try again, sweetheart!");
+    say("Không sao, bé thử lại nhé", "Try again, sweetheart!");
     setTimeout(() => { catSet("thinking"); }, 900);
   }
 };
@@ -2060,7 +2175,7 @@ function win(wr,next,vi,en){
   adv(rd.n>=(RL[cur]||ROUND)?result:next);
 }
 const bk=(curT,parentS="games",parentT=T("Trò chơi","Games"),action="")=>kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:parentS,t:parentT,i:parentS==="games"?"🎮":"📚"},...(curT?[{t:curT,i:"✨"}]:[])],action);
-function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory","logic")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice","trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}</div>`;sayPrompt("games","Bé chọn trò chơi nhé","Pick a game",180000)}
+function games(){m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi","Games"),i:"🎮"}])}<h2>${T("Trò chơi","Games")}</h2><div class="cards">${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}${card("mem",im("cat")+im("cat"),"Lật thẻ","Memory","logic")}${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice","trace")}${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}</div>`;sayPrompt("games","Bé chọn trò chơi nhé","Pick a game",180000)}
 
 /* ========================================================
    TRÒ CHƠI HỌC TẬP TIỀN TIỂU HỌC: ĐẾM HÌNH CHỌN SỐ (COUNT GAME)
@@ -2349,15 +2464,557 @@ function renderCountResult(){
     `Hooray! You got ${NE[score]} out of ${NE[total]}. You earned ${NE[starCount]} stars!`
   );
 }
+
+/* ========================================================
+   TRÒ CHƠI HỌC TẬP TIỀN TIỂU HỌC: BẮT BÓNG CHỮ (BUBBLE POP LETTERS)
+   ======================================================== */
+const BUBBLE_THEMES = [
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(254,205,211,0.65) 45%, rgba(244,63,94,0.7) 100%)", border: "#f43f5e", color: "#881337" },
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(186,230,253,0.65) 45%, rgba(14,165,233,0.7) 100%)", border: "#0284c7", color: "#075985" },
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(187,247,208,0.65) 45%, rgba(34,197,94,0.7) 100%)", border: "#16a34a", color: "#14532d" },
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(254,240,138,0.65) 45%, rgba(234,179,8,0.75) 100%)", border: "#ca8a04", color: "#713f12" },
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(233,213,255,0.65) 45%, rgba(168,85,247,0.7) 100%)", border: "#9333ea", color: "#581c87" },
+  { bg: "radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92) 0%, rgba(254,215,170,0.65) 45%, rgba(249,115,22,0.75) 100%)", border: "#ea580c", color: "#7c2d12" }
+];
+
+let bgActiveAnim = null;
+
+function bubbleGame(isReplay) {
+  if (bgActiveAnim) {
+    cancelAnimationFrame(bgActiveAnim);
+    bgActiveAnim = null;
+  }
+
+  const l = ql = qL();
+  const pool = (l === "vi" ? LET_VI : LET_EN).slice();
+  const TARGET_SCORE = 10;
+  let score = 0;
+  let targetLetter = pick(pool);
+  let baseSpeed = 1.35;
+  let spawnCounter = 0;
+  let spawnInterval = 80;
+  let frameCount = 0;
+  let bubbleUid = 0;
+  const bubbles = [];
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Bắt bóng chữ","Bubble Pop"), i:"🫧"}
+  ]);
+
+  m.innerHTML = `
+    ${bcHtml}
+    <div class="bubble-game-wrap" id="bgWrap">
+      <div class="bubble-target-bar">
+        <div class="bubble-target-box">
+          <span style="font-weight:800;font-size:clamp(15px,3.8vw,18px);color:#334155">
+            🎯 ${T("Bắt chữ:","Pop:")}
+          </span>
+          <span class="bubble-target-letter" id="bgTargetLetter">${targetLetter}</span>
+          <button class="pill" onclick="window.__bgReplayAudio()" style="font-size:13.5px;padding:3px 10px;min-height:36px;border-radius:18px">
+            🔊 ${T("Nghe lại","Listen")}
+          </button>
+        </div>
+        <div class="bubble-score-badge">
+          ⭐ <span id="bgScore">0</span> / ${TARGET_SCORE}
+        </div>
+      </div>
+      <div class="bubble-sky" id="bubbleSky"></div>
+    </div>
+  `;
+
+  const skyEl = m.querySelector("#bubbleSky");
+  const targetLetterEl = m.querySelector("#bgTargetLetter");
+  const scoreEl = m.querySelector("#bgScore");
+
+  function announceTarget() {
+    sayAs(l, `Bé hãy bắt bóng chữ ${targetLetter}`, `Pop the bubble with letter ${targetLetter}`);
+  }
+
+  window.__bgReplayAudio = function() {
+    announceTarget();
+    if (targetLetterEl) {
+      targetLetterEl.style.animation = "none";
+      void targetLetterEl.offsetWidth;
+      targetLetterEl.style.animation = "pop .35s ease";
+    }
+  };
+
+  announceTarget();
+  catSet("happy");
+
+  function setTargetLetter(newLetter) {
+    targetLetter = newLetter;
+    if (targetLetterEl) {
+      targetLetterEl.textContent = targetLetter;
+      targetLetterEl.style.animation = "none";
+      void targetLetterEl.offsetWidth;
+      targetLetterEl.style.animation = "pop .35s ease";
+    }
+    announceTarget();
+  }
+
+  function spawnBubble() {
+    if (!skyEl || bubbles.filter(b => b.state === "floating").length >= 5) return;
+    const skyRect = skyEl.getBoundingClientRect();
+    const skyWidth = skyRect.width || 360;
+    const skyHeight = skyRect.height || 420;
+
+    const isTarget = Math.random() < 0.45 || !bubbles.some(b => b.letter === targetLetter && b.state === "floating");
+    const letter = isTarget ? targetLetter : pick(pool.filter(ch => ch !== targetLetter));
+    const theme = pick(BUBBLE_THEMES);
+
+    const bEl = document.createElement("div");
+    bEl.className = "bubble-item";
+    bEl.innerHTML = `
+      <div class="bubble-body" style="background:${theme.bg};border-color:${theme.border}">
+        <div class="bubble-shine"></div>
+        <span class="bubble-char" style="color:${theme.color}">${letter}</span>
+      </div>
+    `;
+
+    const bubbleRadius = 40;
+    const spawnX = bubbleRadius + Math.random() * Math.max(60, skyWidth - bubbleRadius * 2);
+    const spawnY = skyHeight + 50;
+
+    const bubbleObj = {
+      id: ++bubbleUid,
+      letter,
+      x: spawnX,
+      y: spawnY,
+      speed: baseSpeed + Math.random() * 0.35,
+      wobbleSpeed: 0.028 + Math.random() * 0.025,
+      wobbleAmp: 12 + Math.random() * 14,
+      wobbleOffset: Math.random() * 10,
+      state: "floating",
+      el: bEl
+    };
+
+    function onBubbleTap(e) {
+      if (bubbleObj.state !== "floating") return;
+      if (e.cancelable) e.preventDefault();
+
+      if (bubbleObj.letter === targetLetter) {
+        bubbleObj.state = "popping";
+        sfxPop();
+        score++;
+        if (scoreEl) scoreEl.textContent = score;
+
+        const floatEl = document.createElement("div");
+        floatEl.className = "bubble-float-text";
+        floatEl.textContent = "+1 ⭐";
+        floatEl.style.left = `${bubbleObj.x}px`;
+        floatEl.style.top = `${bubbleObj.y - 20}px`;
+        skyEl.appendChild(floatEl);
+        setTimeout(() => floatEl.remove(), 850);
+
+        bEl.classList.add("bubble-popping");
+        setTimeout(() => {
+          bEl.remove();
+          const idx = bubbles.indexOf(bubbleObj);
+          if (idx !== -1) bubbles.splice(idx, 1);
+        }, 320);
+
+        baseSpeed = Math.min(2.5, 1.35 + score * 0.1);
+        spawnInterval = Math.max(50, 80 - score * 3);
+
+        if (score < TARGET_SCORE) {
+          if (score % 2 === 0) {
+            const nextL = pick(pool.filter(c => c !== targetLetter));
+            setTargetLetter(nextL);
+          }
+        } else {
+          cancelAnimationFrame(bgActiveAnim);
+          bgActiveAnim = null;
+          sfxTingTing();
+          fx();
+          catSet("celebrate");
+          setTimeout(() => {
+            renderBubbleWin(score, TARGET_SCORE);
+          }, 600);
+        }
+      } else {
+        bubbleObj.state = "deflating";
+        sfxDeflate();
+        bEl.classList.add("bubble-deflating");
+
+        say(`Bé tìm chữ ${targetLetter} nhé`, `Look for letter ${targetLetter}`);
+
+        if (targetLetterEl) {
+          targetLetterEl.style.animation = "shake .4s ease-in-out";
+          setTimeout(() => {
+            if (targetLetterEl) targetLetterEl.style.animation = "";
+          }, 450);
+        }
+
+        setTimeout(() => {
+          bEl.remove();
+          const idx = bubbles.indexOf(bubbleObj);
+          if (idx !== -1) bubbles.splice(idx, 1);
+        }, 380);
+      }
+    }
+
+    bEl.addEventListener("touchstart", onBubbleTap, { passive: false });
+    bEl.addEventListener("mousedown", onBubbleTap);
+
+    skyEl.appendChild(bEl);
+    bubbles.push(bubbleObj);
+  }
+
+  function gameLoop() {
+    if (!document.getElementById("bubbleSky")) {
+      bgActiveAnim = null;
+      return;
+    }
+
+    frameCount++;
+    spawnCounter++;
+
+    if (spawnCounter >= spawnInterval) {
+      spawnCounter = 0;
+      spawnBubble();
+    }
+
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i];
+      if (b.state === "floating") {
+        b.y -= b.speed;
+        const wobbleX = Math.sin(frameCount * b.wobbleSpeed + b.wobbleOffset) * b.wobbleAmp;
+        b.el.style.transform = `translate(${b.x + wobbleX}px, ${b.y}px)`;
+
+        if (b.y < -70) {
+          b.el.remove();
+          bubbles.splice(i, 1);
+        }
+      }
+    }
+
+    bgActiveAnim = requestAnimationFrame(gameLoop);
+  }
+
+  spawnBubble();
+  setTimeout(spawnBubble, 450);
+  bgActiveAnim = requestAnimationFrame(gameLoop);
+}
+
+function renderBubbleWin(score, total) {
+  const starCount = 3;
+  const starsHtml = Array.from({length: 3}, (_, i) => im("gstar").replace("<img", `<img style="width:56px;${i < starCount ? "" : "filter:grayscale(1);opacity:.35"}"`)).join("");
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Kết quả","Results"), i:"🏆"}
+  ]);
+
+  m.innerHTML = `${bcHtml}
+  <div class="cg-wrap">
+    <div class="cg-result-card">
+      <div class="cg-result-trophy">🫧 🏆</div>
+      <h2>${T("Bé bắt bóng siêu quá!","Bubble Pop Champion!")}</h2>
+      <div class="cg-result-stars">${starsHtml}</div>
+      <div class="cg-result-score">${T(`Bé đã bắt đúng ${score} bong bóng chữ!`, `You popped ${score} letter bubbles!`)}</div>
+      <p class="cg-result-msg">${T("Bé phản xạ chữ cái rất nhanh và cừ khôi! Thưởng bé 3 sao vàng! 🌟", "Awesome reflexes! You earned 3 stars! 🌟")}</p>
+      <div class="cg-result-btns">
+        <button class="cg-btn-replay" onclick="bubbleGame(true)" style="background:#0284c7;border-color:#0369a1">
+          🔄 ${T("Bắt bóng tiếp nào!","Play Again")}
+        </button>
+        <button class="cg-btn-back" onclick="go('games')">
+          🔙 ${T("Quay lại trò chơi","Back to Games")}
+        </button>
+      </div>
+    </div>
+  </div>`;
+
+  sfxFanfare();
+  fx();
+  catSet("celebrate");
+  say("Hoan hô bé! Bé bắt bóng chữ rất siêu! Thưởng bé ba sao vàng!", "Hooray! You are a bubble popping champion! You earned three stars!");
+}
+
 function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
  quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
 function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
  quiz(T("Chọn dấu đúng","Pick the right sign"),"Chọn dấu đúng","Pick the right sign",`<div class="stage" style="gap:6px">${g(a,o1)}<span style="font-size:70px;font-weight:800;color:var(--acc)">?</span>${g(b,o2)}</div>`,[">","=","<"].map(v=>({k:v,h:`<span class="ans">${v==">"?"&gt;":v=="<"?"&lt;":"="}</span>`})),s,cmpS,()=>[`<div class="eq">${a} ${s} ${b}</div>`,...(a==b?[`${NV[a]} bằng ${NV[b]}`,`${NE[a]} equals ${NE[b]}`]:[`${NV[a]} ${a>b?"nhiều":"ít"} hơn ${NV[b]}`,`${NE[a]} is ${a>b?"more":"fewer"} than ${NE[b]}`])])}
-function match(){const l=ql=qL(),Ls=shuf(exPL(l)).slice(0,3),ks=Ls.map(L=>pick(exPK(l,L)));let sel=null,left=3,wr=0;
- m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Ghép chữ & hình","Match"),i:"🧩"}])+`<h2>${T("Ghép chữ với hình","Match the letter and picture")}</h2><div class="opts">${shuf(ks).map(k=>`<button class="opt" data-p="${k}">${im(EXA[k].img)}</button>`).join("")}</div><div class="opts">${shuf(Ls).map(L=>`<button class="opt" data-l="${L}">${imL(L)}</button>`).join("")}</div>`;
- say("Ghép chữ với hình nhé","Match the letter and picture");catSet("thinking");
- m.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{if(b.disabled)return;m.querySelectorAll("[data-p]").forEach(x=>x.style.borderColor="");sel=b;b.style.borderColor="var(--acc)";const k=b.dataset.p;say(EXA[k].t,EXA[k].t)});
- m.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(!sel||b.disabled)return;if(EXA[sel.dataset.p].L===b.dataset.l){[sel,b].forEach(x=>{x.disabled=true;x.style.borderColor="";x.classList.add("good")});sfxOk();sel=null;if(!--left)win(wr,match,"","")}else{wr++;sfxNo();catSet("sad");say("Thử lại nhé","Try again");setTimeout(()=>catSet("thinking"),900)}})}
+function match(){
+  const l = ql = qL();
+  const allLetters = exPL(l);
+  const Ls = shuf(allLetters).slice(0, 3);
+  const items = Ls.map(L => {
+    const k = pick(exPK(l, L));
+    return { L, k, ex: EXA[k] };
+  });
+
+  const leftCards = shuf(items.map(it => ({ L: it.L })));
+  const rightCards = shuf(items.map(it => ({ L: it.L, k: it.k, ex: it.ex })));
+
+  let remaining = items.length;
+  let wr = 0;
+  const connectedPairs = [];
+  const WIRE_COLORS = ["#10b981", "#3b82f6", "#f59e0b", "#8b5cf6", "#ec4899"];
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Ghép chữ & hình","Match"), i:"🧩"}
+  ]);
+
+  m.innerHTML = `
+    ${bcHtml}
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+      <h2 style="margin:0;font-size:clamp(20px,5vw,26px);color:var(--ink)">
+        ${T("Nối chữ với hình đúng", "Connect letter to picture")}
+      </h2>
+      <button class="pill" onclick="say('Ghép chữ với hình nhé. Bé chạm vào chữ cái rồi kéo dây sang hình tương ứng nhé!','Match letter and picture. Touch and drag a line to connect them!')" style="font-size:14px;padding:4px 12px;min-height:38px">
+        🔊 ${T("Hướng dẫn", "Help")}
+      </button>
+    </div>
+    <div style="text-align:center;font-size:15px;color:#64748b;font-weight:700;margin-bottom:12px">
+      👉 ${T("Bé chạm vào chữ cái rồi kéo dây sang hình tương ứng nhé!", "Touch a letter and drag a wire to the matching picture!")}
+    </div>
+
+    <div class="drag-connect-wrap" id="dragWrap">
+      <svg class="drag-connect-svg" id="dragSvg">
+        <path id="dragActivePath" class="drag-wire-active" style="display:none"></path>
+      </svg>
+      <div class="drag-connect-cols">
+        <div class="drag-connect-col left">
+          ${leftCards.map(c => `
+            <div class="drag-card left" data-side="left" data-l="${c.L}" tabindex="0" role="button" aria-label="${T('Chữ cái ' + c.L, 'Letter ' + c.L)}">
+              <span class="drag-card-letter">${c.L}</span>
+              <div class="drag-card-dot" aria-hidden="true"></div>
+            </div>
+          `).join("")}
+        </div>
+        <div class="drag-connect-col right">
+          ${rightCards.map(c => `
+            <div class="drag-card right" data-side="right" data-p="${c.k}" data-p-letter="${c.L}" data-t="${c.ex.t}" tabindex="0" role="button" aria-label="${T(c.ex.t, c.ex.t)}">
+              <div class="drag-card-dot" aria-hidden="true"></div>
+              <div class="drag-card-pic">
+                ${im(c.ex.img)}
+                <span>${c.ex.t}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  say("Ghép chữ với hình nhé. Bé chạm vào chữ cái rồi kéo dây sang hình tương ứng nhé!", "Match letter and picture. Touch and drag a line to connect them!");
+  catSet("thinking");
+
+  const wrapEl = m.querySelector("#dragWrap");
+  const svgEl = m.querySelector("#dragSvg");
+  const activePath = m.querySelector("#dragActivePath");
+  if (!wrapEl || !svgEl || !activePath) return;
+
+  function getDotCenter(cardEl) {
+    const wrapRect = wrapEl.getBoundingClientRect();
+    const dot = cardEl.querySelector(".drag-card-dot") || cardEl;
+    const r = dot.getBoundingClientRect();
+    return {
+      x: (r.left + r.width / 2) - wrapRect.left,
+      y: (r.top + r.height / 2) - wrapRect.top
+    };
+  }
+
+  function makeCurve(x1, y1, x2, y2, isFromLeft) {
+    const dx = Math.max(30, Math.abs(x2 - x1) * 0.5);
+    const cx1 = isFromLeft ? x1 + dx : x1 - dx;
+    const cx2 = isFromLeft ? x2 - dx : x2 + dx;
+    return `M ${x1} ${y1} C ${cx1} ${y1}, ${cx2} ${y2}, ${x2} ${y2}`;
+  }
+
+  function redrawFixedWires() {
+    if (!document.getElementById("dragWrap")) return;
+    svgEl.querySelectorAll(".drag-wire-fixed").forEach(el => el.remove());
+    connectedPairs.forEach(p => {
+      const p1 = getDotCenter(p.leftEl);
+      const p2 = getDotCenter(p.rightEl);
+      const d = makeCurve(p1.x, p1.y, p2.x, p2.y, true);
+      const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathEl.setAttribute("class", "drag-wire-fixed");
+      pathEl.setAttribute("stroke", p.color);
+      pathEl.setAttribute("d", d);
+      svgEl.appendChild(pathEl);
+    });
+  }
+
+  window.addEventListener("resize", redrawFixedWires, { passive: true });
+
+  let currentDrag = null;
+
+  function findTargetCard(clientX, clientY, sourceSide) {
+    const targetSide = sourceSide === "left" ? "right" : "left";
+    const candidates = Array.from(wrapEl.querySelectorAll(`.drag-card[data-side="${targetSide}"]:not(.matched)`));
+    if (!candidates.length) return null;
+
+    const hitEl = document.elementFromPoint(clientX, clientY);
+    if (hitEl) {
+      const card = hitEl.closest(`.drag-card[data-side="${targetSide}"]:not(.matched)`);
+      if (card) return card;
+    }
+
+    let bestCard = null;
+    let minD = 999999;
+    candidates.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const d = Math.hypot(clientX - cx, clientY - cy);
+      const insidePadded = (
+        clientX >= r.left - 30 &&
+        clientX <= r.right + 30 &&
+        clientY >= r.top - 30 &&
+        clientY <= r.bottom + 30
+      );
+      if ((insidePadded || d < 65) && d < minD) {
+        minD = d;
+        bestCard = card;
+      }
+    });
+
+    return bestCard;
+  }
+
+  function handleStart(e, cardEl) {
+    if (cardEl.classList.contains("matched")) return;
+    if (e.cancelable && e.type.startsWith("touch")) e.preventDefault();
+    const isTouch = Boolean(e.touches);
+    const point = isTouch ? e.touches[0] : e;
+    const dotPos = getDotCenter(cardEl);
+
+    currentDrag = {
+      sourceEl: cardEl,
+      sourceSide: cardEl.dataset.side,
+      startX: dotPos.x,
+      startY: dotPos.y
+    };
+
+    cardEl.classList.add("dragging");
+
+    if (cardEl.dataset.side === "left") {
+      sayAs(l, cardEl.dataset.l, cardEl.dataset.l);
+    } else {
+      say(cardEl.dataset.t, cardEl.dataset.t);
+    }
+
+    activePath.setAttribute("class", "drag-wire-active");
+    activePath.setAttribute("d", `M ${dotPos.x} ${dotPos.y} L ${dotPos.x} ${dotPos.y}`);
+    activePath.style.display = "block";
+  }
+
+  function handleMove(e) {
+    if (!currentDrag || !document.getElementById("dragWrap")) return;
+    if (e.cancelable) e.preventDefault();
+    const isTouch = Boolean(e.touches);
+    const point = isTouch ? e.touches[0] : e;
+    const wrapRect = wrapEl.getBoundingClientRect();
+    const curX = point.clientX - wrapRect.left;
+    const curY = point.clientY - wrapRect.top;
+
+    const d = makeCurve(
+      currentDrag.startX,
+      currentDrag.startY,
+      curX,
+      curY,
+      currentDrag.sourceSide === "left"
+    );
+    activePath.setAttribute("d", d);
+
+    wrapEl.querySelectorAll(".drag-card.hover-target").forEach(el => el.classList.remove("hover-target"));
+    const hoverCard = findTargetCard(point.clientX, point.clientY, currentDrag.sourceSide);
+    if (hoverCard) {
+      hoverCard.classList.add("hover-target");
+    }
+  }
+
+  function handleEnd(e) {
+    if (!currentDrag || !document.getElementById("dragWrap")) return;
+    const isTouch = Boolean(e.changedTouches);
+    const point = isTouch ? e.changedTouches[0] : (e.touches ? e.touches[0] : e);
+    const clientX = point ? point.clientX : 0;
+    const clientY = point ? point.clientY : 0;
+
+    const sourceEl = currentDrag.sourceEl;
+    sourceEl.classList.remove("dragging");
+    wrapEl.querySelectorAll(".drag-card.hover-target").forEach(el => el.classList.remove("hover-target"));
+
+    const targetCard = findTargetCard(clientX, clientY, currentDrag.sourceSide);
+    const dragData = currentDrag;
+    currentDrag = null;
+
+    if (targetCard) {
+      const leftEl = dragData.sourceSide === "left" ? sourceEl : targetCard;
+      const rightEl = dragData.sourceSide === "left" ? targetCard : sourceEl;
+
+      const isMatch = (leftEl.dataset.l === rightEl.dataset.pLetter);
+
+      if (isMatch) {
+        activePath.style.display = "none";
+        leftEl.classList.add("good", "matched");
+        rightEl.classList.add("good", "matched");
+
+        const color = WIRE_COLORS[connectedPairs.length % WIRE_COLORS.length];
+        connectedPairs.push({ leftEl, rightEl, color });
+
+        sfxTingTing();
+        fx();
+        say(rightEl.dataset.t, rightEl.dataset.t);
+
+        redrawFixedWires();
+
+        remaining--;
+        if (remaining === 0) {
+          window.removeEventListener("resize", redrawFixedWires);
+          cleanupEvents();
+          setTimeout(() => {
+            win(wr, match, "", "");
+          }, 800);
+        }
+      } else {
+        wr++;
+        sfxNo();
+        activePath.setAttribute("class", "drag-wire-wrong");
+        sourceEl.classList.add("bad");
+        targetCard.classList.add("bad");
+
+        say("Không sao, bé thử lại nhé", "Try again, sweetheart!");
+
+        setTimeout(() => {
+          activePath.style.display = "none";
+          activePath.setAttribute("class", "drag-wire-active");
+          sourceEl.classList.remove("bad");
+          targetCard.classList.remove("bad");
+        }, 380);
+      }
+    } else {
+      activePath.style.display = "none";
+    }
+  }
+
+  function cleanupEvents() {
+    document.removeEventListener("touchmove", handleMove);
+    document.removeEventListener("mousemove", handleMove);
+    document.removeEventListener("touchend", handleEnd);
+    document.removeEventListener("touchcancel", handleEnd);
+    document.removeEventListener("mouseup", handleEnd);
+  }
+
+  wrapEl.querySelectorAll(".drag-card").forEach(card => {
+    card.addEventListener("touchstart", (e) => handleStart(e, card), { passive: false });
+    card.addEventListener("mousedown", (e) => handleStart(e, card));
+  });
+
+  document.addEventListener("touchmove", handleMove, { passive: false });
+  document.addEventListener("mousemove", handleMove);
+  document.addEventListener("touchend", handleEnd, { passive: false });
+  document.addEventListener("touchcancel", handleEnd, { passive: false });
+  document.addEventListener("mouseup", handleEnd);
+}
 function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
  m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Lật thẻ trí nhớ","Memory"),i:"🃏"}])+`<h2>${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
  say("Tìm hai hình giống nhau","Find two that are the same");catSet("thinking");
@@ -2365,11 +3022,88 @@ function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks])
   if(!a){a=b;return}
   if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
   else{miss++;lock=true;sfxNo();const p=a;a=null;setTimeout(()=>{p.innerHTML=b.innerHTML=im("gstar");lock=false},1200)}})}
+function sayTrace(item, type = "letter"){
+  if(!SOUND_ON()) return;
+  if(type === "letter"){
+    const l = String(item || "").toLowerCase();
+    const alphaMap = {
+      "a": "audio/alpha_vi_a.mp3",
+      "ă": "audio/alpha_vi_aw.mp3",
+      "â": "audio/alpha_vi_aa.mp3",
+      "b": "audio/alpha_vi_b.mp3",
+      "c": "audio/alpha_vi_c.mp3",
+      "d": "audio/alpha_vi_d.mp3",
+      "đ": "audio/alpha_vi_dd.mp3",
+      "e": "audio/alpha_vi_e.mp3",
+      "ê": "audio/alpha_vi_ee.mp3",
+      "g": "audio/alpha_vi_g.mp3",
+      "h": "audio/alpha_vi_h.mp3",
+      "i": "audio/alpha_vi_i.mp3",
+      "k": "audio/alpha_vi_k.mp3",
+      "l": "audio/alpha_vi_l.mp3",
+      "m": "audio/alpha_vi_m.mp3",
+      "n": "audio/alpha_vi_n.mp3",
+      "o": "audio/alpha_vi_o.mp3",
+      "ô": "audio/alpha_vi_oo.mp3",
+      "ơ": "audio/alpha_vi_ow.mp3",
+      "p": "audio/alpha_vi_p.mp3",
+      "q": "audio/alpha_vi_q.mp3",
+      "r": "audio/alpha_vi_r.mp3",
+      "s": "audio/alpha_vi_s.mp3",
+      "t": "audio/alpha_vi_t.mp3",
+      "u": "audio/alpha_vi_u.mp3",
+      "ư": "audio/alpha_vi_uw.mp3",
+      "v": "audio/alpha_vi_v.mp3",
+      "x": "audio/alpha_vi_x.mp3",
+      "y": "audio/alpha_vi_y.mp3"
+    };
+    const file = alphaMap[l];
+    if(file){
+      playSafeAudio(file, "Tưởng Vy");
+      return;
+    }
+    const target = (window.AUDIO_MAP && (window.AUDIO_MAP[l] || window.AUDIO_MAP["chữ " + l])) || l;
+    playSafeAudio(target, "Tưởng Vy");
+  } else if(type === "number"){
+    const n = String(item);
+    const numMap = {
+      "0": "audio/vi_khong_1othrk.mp3",
+      "1": "audio/vi_mot_7ht4.mp3",
+      "2": "audio/vi_hai_27io.mp3",
+      "3": "audio/syl_b_a_0.mp3",
+      "4": "audio/vi_bon_79gf.mp3",
+      "5": "audio/vi_nam_2fug.mp3",
+      "6": "audio/vi_sau_2iqv.mp3",
+      "7": "audio/vi_bay_78d4.mp3",
+      "8": "audio/vi_tam_2jhc.mp3",
+      "9": "audio/vi_chin_1tikm.mp3",
+      "10": "audio/vi_muoi_2bqz3.mp3"
+    };
+    if(numMap[n]){
+      playSafeAudio(numMap[n], "Tưởng Vy");
+      return;
+    }
+    sayN(+n);
+  } else if(type === "stroke"){
+    const s = VN_STROKES.find(k => k.id === item);
+    if(s){
+      const strokeKey = s.name.toLowerCase();
+      const strokeAudio = window.AUDIO_MAP && (window.AUDIO_MAP[strokeKey] || window.AUDIO_MAP["vi|" + strokeKey]);
+      if(strokeAudio){
+        playSafeAudio(strokeAudio, "Tưởng Vy");
+      } else {
+        say(s.name, s.en);
+      }
+    }
+  }
+}
 let trm=ls.get("trm","up"),lastTr="";
-const TR={up:{items:()=>LET_ALL(),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayL(x)},
- lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayL(x.toUpperCase())},
- nu:{items:()=>[...Array(10).keys()].map(String),vi:x=>`Tập viết số ${x}`,en:x=>`Trace number ${x}`,say:x=>sayN(+x)},
- net:{items:()=>VN_STROKES.map(s=>s.id),vi:x=>`Tập viết ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>{const s=VN_STROKES.find(k=>k.id===x);say(s.name,s.en)}}};
+const TR={
+  up:{items:()=>LET_ALL(),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayTrace(x,"letter")},
+  lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayTrace(x,"letter")},
+  nu:{items:()=>[...Array(10).keys()].map(String),vi:x=>`Tập viết số ${x}`,en:x=>`Trace number ${x}`,say:x=>sayTrace(x,"number")},
+  net:{items:()=>VN_STROKES.map(s=>s.id),vi:x=>`Tập viết ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>sayTrace(x,"stroke")}
+};
 function trace(selItem){const md=TR[trm]||TR.up;
  const pool=md.items();let it=(selItem&&pool.includes(selItem))?selItem:null;
  if(!it){do{it=pick(pool)}while(it===lastTr&&pool.length>1)}lastTr=it;let col="#6b21a8",dn=false;
@@ -2927,7 +3661,9 @@ async function importAudio(list){let ok=0;const bad=[];
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
 let curTone = 0;
 function playConsonant(c, r){
-  playSafeAudio(r, "Tưởng Vy");
+  const consKey = "cons_" + (c === "đ" ? "dd" : c);
+  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[consKey] || window.AUDIO_MAP["cons_" + c] || window.AUDIO_MAP[r])) || r;
+  playSafeAudio(target, "Tưởng Vy");
 }
 function playVowel(v){
   playSafeAudio(v, "Tưởng Vy");
@@ -2955,7 +3691,8 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
   const my = ++tok;
   busy = true;
 
-  // Đọc trọn câu đánh vần tự nhiên như hiển thị: ví dụ "bờ a ba huyền bà" hoặc "bờ a ba"
+  // Đọc trọn câu đánh vần: Ưu tiên audio mẫu Cô Lan Anh nếu có, hoặc VieNeu
+  const lananhKey = `lananh_spell_${c}_${v}_${toneIdx}`;
   const spoken = spellText.replace(/\s*-\s*/g, " ").trim();
   const subEl = document.querySelector(".spell-sub");
   if(subEl){
@@ -2969,7 +3706,8 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
     }
   };
 
-  playSafeAudio(spoken, "Tưởng Vy", fin);
+  const targetAudio = (window.AUDIO_MAP && window.AUDIO_MAP[lananhKey]) || spoken;
+  playSafeAudio(targetAudio, "Tưởng Vy", fin);
 }
 function pickConsonant(c, r){
   curC = c;
@@ -3140,8 +3878,18 @@ function readL(tab){
     </div>`;
     say(S.title, S.title);
   }
+  const lanAnhBanner = `
+    <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:8px 14px;margin:8px auto 12px;max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div style="font-size:13.5px;font-weight:700;color:#92400e;text-align:left">
+        👩‍🏫 <b>5 Bài học Tiền tiểu học Cô Lan Anh (A, Ă, Â, B, C)</b><br>
+        <span style="font-size:12px;color:#b45309;font-weight:500">Video sinh động, bài tập trắc nghiệm kèm Mẹo bố mẹ</span>
+      </div>
+      <button class="pill on" onclick="go('tierActLanAnh')" style="font-size:13px;padding:6px 14px;background:#ea580c;color:#fff;border:0;flex-shrink:0">Học ngay ▶</button>
+    </div>
+  `;
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Đánh vần & Luyện đọc","Reading & Phonics"),i:"📚"}])}
   <h2>${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
+  ${lanAnhBanner}
   <div class="chips" style="margin-bottom:10px">${tabs.map(([k,vi,en])=>`<button class="pill${readTab===k?" on":""}" onclick="readL('${k}')">${T(vi,en)}</button>`).join("")}</div>
   ${body}`;
 }
@@ -3164,7 +3912,6 @@ function math10(){
   const visual=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto">${grp(a)}<b style="font-size:44px;color:var(--acc)">${op}</b>${grp(b)}<b style="font-size:44px;color:var(--acc)">= ?</b></div>`;
   quiz(T(`${a} ${op} ${b} = ?`,`${a} ${op} ${b} = ?`),qVi,qEn,visual,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),res,math10,()=>[`<div class="eq">${a} ${op} ${b} = ${res}</div>`,`${qVi.replace("bằng mấy?","bằng")} ${NV[res]}!`,`${qEn.replace("What is ","").replace("?"," equals")} ${NE[res]}!`]);
 }
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
 let curCat="vn",curStorySearch="",readingStory=null,storyPlay=false;
 const STORY_BATCH_SIZE=14;
@@ -3457,7 +4204,7 @@ async function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,tierActivities,tierActMath,tierActWord,tierActRead,playActivity};
+const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActMath,tierActWord,tierActRead,playActivity};
 const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
 async function need(k){
   if(window["__"+k])return true;

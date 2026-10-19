@@ -128,6 +128,31 @@ lanAnhIds.forEach((id, idx) => {
   console.log(`✔ [${idx + 1}/5 Cô Lan Anh] '${act.id}': HỢP LỆ, CÓ PARENT TIP VÀ LINK YOUTUBE`);
 });
 
+// 3.4. Kiểm tra Module Tiền tiểu học - Tiếng Việt (Playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL)
+console.log('\n--- TEST 3.4: Kiểm tra Module Tiền tiểu học - Tiếng Việt (pre_vi_*) ---');
+const preViIds = [
+  'pre_vi_a',
+  'pre_vi_aw',
+  'pre_vi_aa',
+  'pre_vi_b',
+  'pre_vi_c',
+  'pre_vi_d',
+  'pre_vi_dd'
+];
+
+preViIds.forEach((id, idx) => {
+  const act = ACTIVITIES_DATA.find(a => a.id === id);
+  assert(act, `Không tìm thấy bài học '${id}' trong ACTIVITIES_DATA`);
+  const res = validateActivity(act);
+  assert(res.valid, `Bài học ${act.id} phải hợp lệ. Lỗi: ${res.errors.join(', ')}`);
+  assert.strictEqual(act.ageTier, 'preschool');
+  assert.strictEqual(act.subject, 'vietnamese');
+  assert(act.videoUrl && act.videoUrl.includes('PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL'), 'Phải có link YouTube playlist PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL');
+  assert(Array.isArray(act.exercises) && act.exercises.length >= 2, 'Phải có ít nhất 2 câu hỏi exercises');
+  assert(act.parentTip && typeof act.parentTip === 'string', 'Phải có parentTip');
+  console.log(`✔ [${idx + 1}/7 pre_vi] '${act.id}': HỢP LỆ VÀ ĐỦ TIÊU CHUẨN`);
+});
+
 // 4. Kiểm tra tính tương thích của getActivitiesByTier
 console.log('\n--- TEST 4: Kiểm tra tính tương thích của getActivitiesByTier() ---');
 const tiers = ['preschool', 'grade1_2', 'grade3_5'];

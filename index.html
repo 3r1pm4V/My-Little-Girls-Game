@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="font-vn.ttf" as="font" type="font/ttf" crossorigin>
@@ -359,6 +360,16 @@ button:active,.card:active,.opt:active,.chip:active,.pill:active,.syl-btn:active
 .parent-tip-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .2s}
 .parent-tip-modal{background:#fff;border:5px solid #f59e0b;border-radius:32px;max-width:500px;width:100%;padding:22px;box-shadow:0 12px 30px rgba(0,0,0,0.25);position:relative;animation:popIn .25s cubic-bezier(0.34,1.56,0.64,1)}
 
+/* PRESCHOOL WATCH & LEARN MODE & PROGRESS BAR */
+.act-progress-track{width:100%;max-width:560px;height:12px;background:#e2e8f0;border-radius:10px;margin:6px auto 14px;overflow:hidden;border:2px solid #cbd5e1;position:relative}
+.act-progress-fill{height:100%;background:linear-gradient(90deg,#ff7aa8,#ffb347);border-radius:8px;transition:width .4s cubic-bezier(0.34,1.56,0.64,1)}
+.act-watch-box{background:var(--card);border:4.5px solid var(--acc2);border-radius:28px;padding:16px;box-shadow:0 8px 0 #0002;max-width:640px;margin:8px auto;text-align:center;animation:fadeIn .3s ease}
+.act-start-btn{background:linear-gradient(135deg,#ff7aa8,#ff4d8d);color:#fff;border:4px solid #db2777;border-radius:30px;padding:16px 32px;font-family:"Baloo 2",sans-serif;font-size:clamp(20px,5vw,26px);font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 8px 0 #9d174d,0 12px 24px rgba(255,77,141,0.35);transition:transform .15s cubic-bezier(0.34,1.56,0.64,1),box-shadow .15s;min-height:70px;margin-top:10px;width:100%;max-width:440px}
+.act-start-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 11px 0 #9d174d,0 16px 30px rgba(255,77,141,0.45)}
+.act-start-btn:active{transform:translateY(4px) scale(.98);box-shadow:0 4px 0 #9d174d}
+.act-quiz-slideup{animation:slideUp .35s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes slideUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+
 /* ACTIVITY PLAYER & TEMPLATES */
 .act-player-box{max-width:620px;margin:10px auto;background:var(--card);border:4px solid var(--acc);border-radius:30px;padding:18px 14px;box-shadow:0 8px 0 #0002}
 .act-meta-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:13px;font-weight:800;color:#64748b}
@@ -499,6 +510,316 @@ html.rm .confetti-cv, html.rm .fx {
 .act-opt-audio:hover{background:#bae6fd}
 .act-opt-audio:active{transform:scale(0.92)}
 .act-read-all-btn{background:#eff6ff;border:2.5px solid #93c5fd;color:#1e40af;font-weight:800;font-size:13.5px;padding:4px 12px;min-height:38px;border-radius:18px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 0 #0001}
+
+/* GAME: KÉO THẢ NỐI DÂY (DRAG-TO-CONNECT) */
+.drag-connect-wrap {
+  position: relative;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  max-width: 580px;
+  margin: 10px auto;
+  padding: 10px 4px;
+}
+.drag-connect-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+.drag-connect-cols {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: clamp(36px, 10vw, 90px);
+  position: relative;
+  z-index: 3;
+}
+.drag-connect-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+.drag-card {
+  position: relative;
+  background: var(--card);
+  border: 4px solid var(--acc2);
+  border-radius: 24px;
+  padding: 8px 12px;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 0 #0002;
+  cursor: grab;
+  touch-action: none;
+  transition: transform .15s, border-color .15s, background .15s, box-shadow .15s;
+  box-sizing: border-box;
+}
+.drag-card:active, .drag-card.dragging {
+  cursor: grabbing;
+  transform: scale(1.04);
+  border-color: #f43f5e!important;
+  box-shadow: 0 8px 18px rgba(244,63,94,0.3);
+}
+.drag-card.hover-target {
+  border-color: #38bdf8!important;
+  background: #f0f9ff!important;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px #bae6fd, 0 6px 14px rgba(0,0,0,0.1);
+}
+.drag-card.matched {
+  border-color: var(--ok)!important;
+  background: #dcfce7!important;
+  box-shadow: 0 4px 0 #15803d44;
+  cursor: default;
+  pointer-events: none;
+  transform: none;
+}
+.drag-card.matched .drag-card-dot {
+  background: #10b981!important;
+  border-color: #fff!important;
+  box-shadow: 0 0 0 3px #10b981;
+}
+.drag-card.bad {
+  border-color: var(--bad)!important;
+  background: #fee2e2!important;
+  animation: shake .4s ease-in-out;
+}
+.drag-card-letter {
+  font-size: clamp(34px, 8.5vw, 46px);
+  font-weight: 900;
+  color: var(--acc);
+  line-height: 1;
+  font-family: "Baloo 2", cursive, sans-serif;
+}
+.drag-card-pic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+.drag-card-pic img {
+  height: clamp(48px, 11vw, 64px);
+  width: auto;
+  object-fit: contain;
+}
+.drag-card-pic span {
+  font-size: clamp(13px, 3.2vw, 16px);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
+  text-align: center;
+}
+.drag-card-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ff6b00;
+  border: 3.5px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  pointer-events: none;
+  transition: transform .15s, background .15s;
+}
+.drag-card.left .drag-card-dot {
+  right: -13px;
+}
+.drag-card.right .drag-card-dot {
+  left: -13px;
+}
+.drag-card:hover .drag-card-dot, .drag-card.dragging .drag-card-dot {
+  transform: translateY(-50%) scale(1.25);
+  background: #f43f5e;
+}
+.drag-wire-active {
+  stroke: #f43f5e;
+  stroke-width: 7px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 2px 5px rgba(244,63,94,0.45));
+}
+.drag-wire-fixed {
+  stroke-width: 6.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+}
+.drag-wire-wrong {
+  stroke: #ef4444;
+  stroke-width: 7px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* GAME: BẮT BÓNG CHỮ (BUBBLE POP LETTERS) */
+.bubble-game-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  height: clamp(430px, 68vh, 550px);
+  margin: 8px auto;
+  background: radial-gradient(circle at 50% 25%, #f0f9ff 0%, #e0f2fe 45%, #bae6fd 100%);
+  border-radius: 30px;
+  border: 4px solid #38bdf8;
+  box-shadow: 0 10px 28px rgba(14,165,233,0.25), inset 0 2px 6px rgba(255,255,255,0.7);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+.bubble-target-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid #7dd3fc;
+  position: relative;
+  z-index: 10;
+  gap: 8px;
+}
+.bubble-target-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bubble-target-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  color: #fff;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(244,63,94,0.35);
+  animation: pop .35s ease;
+}
+.bubble-score-badge {
+  font-family: "Baloo 2", sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 2.5px solid #38bdf8;
+  padding: 3px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.bubble-sky {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+}
+.bubble-item {
+  position: absolute;
+  width: clamp(74px, 19vw, 88px);
+  height: clamp(74px, 19vw, 88px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+.bubble-body {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: inset 0 -6px 14px rgba(0,0,0,0.08), 0 6px 18px rgba(14,165,233,0.32);
+  border: 3px solid rgba(255,255,255,0.75);
+  transition: transform .08s;
+}
+.bubble-item:active .bubble-body {
+  transform: scale(0.92);
+}
+.bubble-shine {
+  position: absolute;
+  top: 13%;
+  left: 20%;
+  width: 26%;
+  height: 18%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  transform: rotate(-35deg);
+  pointer-events: none;
+}
+.bubble-char {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-size: clamp(34px, 9vw, 44px);
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.9);
+  pointer-events: none;
+}
+.bubble-popping {
+  animation: bubblePopAnim .32s forwards ease-out;
+  pointer-events: none;
+}
+@keyframes bubblePopAnim {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.85; filter: brightness(1.3); }
+  100% { transform: translate(-50%, -50%) scale(0.15); opacity: 0; }
+}
+.bubble-deflating {
+  animation: bubbleDeflateAnim .38s forwards ease-in;
+  pointer-events: none;
+}
+@keyframes bubbleDeflateAnim {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+  25% { transform: translate(-50%, -50%) scale(0.7, 1.3) rotate(-15deg); filter: grayscale(0.5); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.2, 0.65) rotate(15deg); }
+  75% { transform: translate(-50%, -50%) scale(0.55) rotate(-10deg); opacity: 0.45; }
+  100% { transform: translate(-50%, -50%) scale(0.15); opacity: 0; }
+}
+.bubble-float-text {
+  position: absolute;
+  font-family: "Baloo 2", sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #16a34a;
+  text-shadow: 0 2px 6px rgba(255,255,255,0.95);
+  pointer-events: none;
+  animation: bubbleFloatUp 0.85s forwards ease-out;
+  z-index: 25;
+}
+@keyframes bubbleFloatUp {
+  0% { transform: translate(-50%, 0) scale(0.8); opacity: 1; }
+  50% { transform: translate(-50%, -30px) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -65px) scale(1); opacity: 0; }
+}
 </style></head><body>
 <div id="app"><header><button class="hb" id="hb" aria-label="Trang chủ"></button><button class="k-bc-back" id="backBtn" onclick="goBack()" style="display:none;min-height:48px;padding:6px 14px;border-radius:24px;margin-left:4px" aria-label="Quay lại">🔙 <span class="bk-lbl">Quay lại</span></button><span class="sp"></span><button class="streak-btn" id="streakBadge" onclick="showBadges()" title="Chuỗi ngày học liên tiếp" aria-label="Chuỗi ngày học liên tiếp">🔥 <span id="streakCount">0</span></button><button class="badge-btn" id="badgeBtn" onclick="showBadges()" title="Huy hiệu & Cấp độ của bé" aria-label="Bộ sưu tập huy hiệu">🏆 <span id="badgeCount">0</span></button><button class="pill" id="langBtn" onclick="toggleLang()" style="margin:0 4px;font-size:16px;font-weight:800;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap" aria-label="Đổi ngôn ngữ"></button><span class="stars" id="stars" onclick="showBadges()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')showBadges()" style="cursor:pointer" title="Điểm sao & Tiến độ của bé" aria-label="Xem điểm sao và cấp độ"></span><button class="pill sound-btn" id="soundBtn" onclick="toggleSoundMaster()" title="Bật hoặc tắt âm thanh" aria-label="Bật hoặc tắt âm thanh">🔊</button><button class="lg" id="sp" aria-label="Tốc độ đọc giọng nói"></button></header><main id="m"></main></div>
 <div id="celebOverlay" class="celeb-overlay" style="display:none" onclick="if(event.target===this)closeCeleb()">
@@ -526,6 +847,7 @@ html.rm .confetti-cv, html.rm .fx {
 <img id="cat" alt="Chú mèo bạn đồng hành của bé">
 <script src="img-core.js"></script>
 <script src="data-vn.js"></script>
+<script src="activities-data.js"></script>
 <script src="audio-map.js"></script>
 <script src="app.js"></script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body></html>

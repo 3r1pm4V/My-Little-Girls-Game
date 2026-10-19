@@ -1,3 +1,4 @@
+(function () {
 // ========================================================
 // MÔ HÌNH DỮ LIỆU BÀI HỌC & PHÂN TẦNG ĐỘ TUỔI (AGE TIERS & ACTIVITIES)
 // ========================================================
@@ -1979,6 +1980,291 @@ const ACTIVITIES_DATA = [
         audioHint: "C - Củ Cà rốt màu cam giàu vitamin cho đôi mắt sáng ngời!"
       }
     ]
+  },
+
+  // ==========================================================================
+  // MODULE: TIỀN TIỂU HỌC - TIẾNG VIỆT (PLAYLIST CÔ LAN ANH)
+  // https://www.youtube.com/playlist?list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL
+  // ==========================================================================
+  {
+    id: "pre_vi_a",
+    title: "Học chữ A cùng cô Lan Anh",
+    titleEn: "Learn Letter A with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=1",
+    learningGoal: "Nhận diện mặt chữ A và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'A' giống cái gì bé nhỉ? 🍎",
+        options: [
+          { "text": "Chiếc thang đứng vững", "icon": "🪜" },
+          { "text": "Quả bóng tròn", "icon": "⚽" }
+        ],
+        correctAnswer: "Chiếc thang đứng vững",
+        audioHint: "Chữ A có hai chân thẳng đứng và nét gạch ngang giống chiếc thang!"
+      },
+      {
+        question: "Tìm chữ 'A' trong các từ dưới đây nào:",
+        options: [
+          { "text": "Anh Đào", "icon": "🍒" },
+          { "text": "Bắp ngô", "icon": "🌽" }
+        ],
+        correctAnswer: "Anh Đào",
+        audioHint: "A - Quả Anh Đào mọng nước thơm ngon!"
+      },
+      {
+        question: "Chữ A có trong từ chỉ trang phục nào bé mặc mỗi ngày?",
+        options: [
+          { "text": "Cái Áo", "icon": "👕" },
+          { "text": "Đôi Giày", "icon": "👟" }
+        ],
+        correctAnswer: "Cái Áo",
+        audioHint: "A - Cái Áo xinh xắn bé mặc đi học!"
+      }
+    ],
+    parentTip: "Ba mẹ cho bé mở to miệng phát âm 'Aaaa', liên tưởng chữ A với chiếc thang đứng hoặc mái nhà nhọn."
+  },
+  {
+    id: "pre_vi_aw",
+    title: "Học chữ Ă cùng cô Lan Anh",
+    titleEn: "Learn Letter Ă with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=2",
+    learningGoal: "Nhận diện mặt chữ Ă (Á) và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'Ă' đội chiếc mũ gì trên đầu bé ơi?",
+        options: [
+          { "text": "Trăng khuyết ngửa lên trời", "icon": "🌙" },
+          { "text": "Chiếc ô tròn xoe", "icon": "☂️" }
+        ],
+        correctAnswer: "Trăng khuyết ngửa lên trời",
+        audioHint: "Chữ Ă có chiếc nón trăng khuyết cong cong ngửa lên trời đón trăng!"
+      },
+      {
+        question: "Chữ 'Ă' (Á) xuất hiện trong vật dụng nào bé dùng lau mặt?",
+        options: [
+          { "text": "Khăn mặt", "icon": "🧣" },
+          { "text": "Gương soi", "icon": "🪞" }
+        ],
+        correctAnswer: "Khăn mặt",
+        audioHint: "Khăn mặt mềm mại giúp bé rửa mặt sạch tinh mỗi sáng!"
+      },
+      {
+        question: "Tìm hình ảnh vầng sáng trên bầu trời đêm có chữ 'Ă':",
+        options: [
+          { "text": "Mặt trăng", "icon": "🌙" },
+          { "text": "Ngôi sao", "icon": "⭐" }
+        ],
+        correctAnswer: "Mặt trăng",
+        audioHint: "Mờ - Ăn - Măng - Nặng - Mặt trăng sáng soi ban đêm!"
+      }
+    ],
+    parentTip: "Mẹo vui: Đố bé nón ngửa hay nón úp. Ba mẹ uốn ngón tay làm hình vầng trăng khuyết cho bé bắt chước."
+  },
+  {
+    id: "pre_vi_aa",
+    title: "Học chữ Â cùng cô Lan Anh",
+    titleEn: "Learn Letter Â with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=3",
+    learningGoal: "Nhận diện mặt chữ Â (Ớ) và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'Â' giống hình ảnh quen thuộc nào che mưa nắng?",
+        options: [
+          { "text": "Chiếc nón lá úp", "icon": "🛖" },
+          { "text": "Bát nước đầy", "icon": "🥣" }
+        ],
+        correctAnswer: "Chiếc nón lá úp",
+        audioHint: "Chữ Â đội chiếc nón lá úp xuống như mái nhà che mưa nắng!"
+      },
+      {
+        question: "Đồ vật ấm áp dùng để pha trà mời ông bà có chữ 'Â' là gì?",
+        options: [
+          { "text": "Ấm trà", "icon": "🫖" },
+          { "text": "Bình nước", "icon": "🍶" }
+        ],
+        correctAnswer: "Ấm trà",
+        audioHint: "Ấm trà thơm ngát của ông bà có chữ Â!"
+      },
+      {
+        question: "Tìm chữ 'Â' trong thế giới âm thanh vui vẻ:",
+        options: [
+          { "text": "Âm nhạc", "icon": "🎵" },
+          { "text": "Trò chơi", "icon": "🎲" }
+        ],
+        correctAnswer: "Âm nhạc",
+        audioHint: "Âm nhạc rộn ràng cho bé múa hát reo vui!"
+      }
+    ],
+    parentTip: "Ba mẹ chụm 2 bàn tay lên đầu bé hình chóp nón, dạy bé phân biệt 'Nón ngửa là Ă, nón úp là Â'."
+  },
+  {
+    id: "pre_vi_b",
+    title: "Học chữ B cùng cô Lan Anh",
+    titleEn: "Learn Letter B with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=4",
+    learningGoal: "Nhận diện mặt chữ B và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'B' (Bờ) có đặc điểm ngộ nghĩnh gì nào?",
+        options: [
+          { "text": "Bụng to tròn bự", "icon": "🤰" },
+          { "text": "Miệng hở sang phải", "icon": "👄" }
+        ],
+        correctAnswer: "Bụng to tròn bự",
+        audioHint: "Chữ B có nét thẳng đứng và hai chiếc bụng tròn bự bên phải!"
+      },
+      {
+        question: "Đồ chơi bé thích đá tung tăng trên sân cỏ bắt đầu bằng chữ 'B':",
+        options: [
+          { "text": "Quả Bóng", "icon": "⚽" },
+          { "text": "Máy bay", "icon": "✈️" }
+        ],
+        correctAnswer: "Quả Bóng",
+        audioHint: "B - Quả Bóng tròn xoe lăn trên bãi cỏ xanh!"
+      },
+      {
+        question: "Bạn đồ chơi búp bê dễ thương bắt đầu bằng chữ cái nào?",
+        options: [
+          { "text": "Búp bê", "icon": "🪆" },
+          { "text": "Ô tô", "icon": "🚗" }
+        ],
+        correctAnswer: "Búp bê",
+        audioHint: "B - Búp bê tóc mây má hồng hào đáng yêu!"
+      }
+    ],
+    parentTip: "Dạy bé mím môi bật hơi 'Bờ - Bụng bự', vừa xoa bụng vừa phát âm để tạo phản xạ ngôn ngữ sinh động."
+  },
+  {
+    id: "pre_vi_c",
+    title: "Học chữ C cùng cô Lan Anh",
+    titleEn: "Learn Letter C with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=5",
+    learningGoal: "Nhận diện mặt chữ C và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'C' (Cờ) có nét vẽ giống hình ảnh nào?",
+        options: [
+          { "text": "Miệng cười mở rộng", "icon": "😊" },
+          { "text": "Hình vuông vắn", "icon": "🔲" }
+        ],
+        correctAnswer: "Miệng cười mở rộng",
+        audioHint: "Chữ C là nét cong tròn hở một bên như khuôn miệng bé đang cười tươi!"
+      },
+      {
+        question: "Bạn nhỏ tung tăng bơi lội dưới nước bắt đầu bằng chữ 'C':",
+        options: [
+          { "text": "Chú Cá", "icon": "🐟" },
+          { "text": "Gà trống", "icon": "🐓" }
+        ],
+        correctAnswer: "Chú Cá",
+        audioHint: "C - Con Cá bơi lượn trong làn nước trong vắt!"
+      },
+      {
+        question: "Củ gì màu cam ngọt mát bạn thỏ mê tít có chữ 'C'?",
+        options: [
+          { "text": "Cà rốt", "icon": "🥕" },
+          { "text": "Quả dưa", "icon": "🍈" }
+        ],
+        correctAnswer: "Cà rốt",
+        audioHint: "C - Củ Cà rốt màu cam giòn ngọt chú thỏ rất thích ăn!"
+      }
+    ],
+    parentTip: "Ba mẹ uốn bàn tay thành hình chữ C, hướng dẫn bé há miệng tròn phát âm 'Cờ' dứt khoát và rõ ràng."
+  },
+  {
+    id: "pre_vi_d",
+    title: "Học chữ D cùng cô Lan Anh",
+    titleEn: "Learn Letter D with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=6",
+    learningGoal: "Nhận diện mặt chữ D (Dờ) và phát âm chuẩn",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'D' có một nét thẳng và một bụng cong to phía trước giống cái gì?",
+        options: [
+          { "text": "Cánh buồm no gió", "icon": "⛵" },
+          { "text": "Bánh xe tròn", "icon": "🛞" }
+        ],
+        correctAnswer: "Cánh buồm no gió",
+        audioHint: "Chữ D có nét thẳng và chiếc bụng cong phồng như cánh buồm lướt sóng!"
+      },
+      {
+        question: "Loại quả màu đỏ ruột ngọt mát giải khát ngày hè có chữ 'D':",
+        options: [
+          { "text": "Dưa hấu", "icon": "🍉" },
+          { "text": "Quả ổi", "icon": "🍐" }
+        ],
+        correctAnswer: "Dưa hấu",
+        audioHint: "D - Dưa hấu đỏ tươi ngọt mát ngày hè!"
+      },
+      {
+        question: "Tìm chữ 'D' trong món đồ uống thơm lừng của xứ dừa:",
+        options: [
+          { "text": "Quả Dừa", "icon": "🥥" },
+          { "text": "Quả Cam", "icon": "🍊" }
+        ],
+        correctAnswer: "Quả Dừa",
+        audioHint: "D - Quả Dừa mát rượi ngọt lịm!"
+      }
+    ],
+    parentTip: "Ba mẹ chỉ vào quả dưa hấu, dạy bé đặt lưỡi chạm chân răng trên để bật âm 'Dờ' chuẩn xác."
+  },
+  {
+    id: "pre_vi_dd",
+    title: "Học chữ Đ cùng cô Lan Anh",
+    titleEn: "Learn Letter Đ with Teacher Lan Anh",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PL8bUH3S0Jon487GmOHnzpOlfQUumC9SIL&index=7",
+    learningGoal: "Nhận diện mặt chữ Đ (Đờ) và phân biệt với chữ D",
+    difficulty: 1,
+    exercises: [
+      {
+        question: "Chữ 'Đ' khác chữ 'D' ở điểm kỳ diệu nào bé nhỉ?",
+        options: [
+          { "text": "Có chiếc thắt lưng gạch ngang", "icon": "➖" },
+          { "text": "Có chiếc nón nhọn", "icon": "👒" }
+        ],
+        correctAnswer: "Có chiếc thắt lưng gạch ngang",
+        audioHint: "Chữ Đ giống chữ D nhưng có thêm chiếc thắt lưng gạch ngang nhỏ xinh trên đầu!"
+      },
+      {
+        question: "Món đồ chơi rực rỡ đêm rằm Trung thu bắt đầu bằng chữ 'Đ':",
+        options: [
+          { "text": "Đèn ông sao", "icon": "🏮" },
+          { "text": "Ngọn nến", "icon": "🕯️" }
+        ],
+        correctAnswer: "Đèn ông sao",
+        audioHint: "Đ - Đèn ông sao năm cánh lung linh đêm rằm!"
+      },
+      {
+        question: "Tìm loại quả khi chín vỏ vàng ươm thơm lừng có chữ 'Đ':",
+        options: [
+          { "text": "Đu đủ", "icon": "🥭" },
+          { "text": "Quả na", "icon": "🍏" }
+        ],
+        correctAnswer: "Đu đủ",
+        audioHint: "Đ - Đu đủ chín thơm ngọt ngào giàu vitamin!"
+      }
+    ],
+    parentTip: "Ba mẹ lấy que tính hoặc bút chì đặt ngang lên thân chữ D để bé ghi nhớ: 'D thêm gạch ngang là biến thành Đờ'."
   }
 ];
 
@@ -2064,6 +2350,13 @@ function validateActivity(act) {
       if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Activity ${idx}: 'options' must have at least 2 items`);
       if (item.correctAnswer === undefined) errors.push(`Activity ${idx}: missing 'correctAnswer'`);
     });
+  } else if (Array.isArray(act.exercises)) {
+    if (act.exercises.length === 0) errors.push("'exercises' array cannot be empty");
+    act.exercises.forEach((item, idx) => {
+      if (!item.question || typeof item.question !== "string") errors.push(`Exercise ${idx}: missing 'question'`);
+      if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Exercise ${idx}: 'options' must have at least 2 items`);
+      if (item.correctAnswer === undefined) errors.push(`Exercise ${idx}: missing 'correctAnswer'`);
+    });
   } else if (act.content && typeof act.content === "object") {
     if (act.type === "drag_drop") {
       if (!Array.isArray(act.content.tokens) || act.content.tokens.length < 2) errors.push("drag_drop: 'tokens' must have at least 2 items");
@@ -2072,7 +2365,7 @@ function validateActivity(act) {
       errors.push("Missing question or storyText in content object");
     }
   } else {
-    errors.push("Invalid 'content': must be an array, activities array, or content object");
+    errors.push("Invalid 'content': must be an array, activities/exercises array, or content object");
   }
   return { valid: errors.length === 0, errors };
 }
@@ -2102,13 +2395,16 @@ if (typeof window !== "undefined") {
   window.getActivitiesBySubject = getActivitiesBySubject;
 }
 
-export default ACTIVITIES_DATA;
-export {
-  AGE_TIERS,
-  ACTIVITIES_DATA,
-  ACTIVITY_SCHEMA,
-  validateActivity,
-  getActivitiesByTier,
-  getActivityById,
-  getActivitiesBySubject
-};
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    default: ACTIVITIES_DATA,
+    AGE_TIERS,
+    ACTIVITIES_DATA,
+    ACTIVITY_SCHEMA,
+    validateActivity,
+    getActivitiesByTier,
+    getActivityById,
+    getActivitiesBySubject
+  };
+}
+})();
