@@ -307,7 +307,7 @@ async function evictLRUIfNeeded(db,incomingSize){
 }
 
 function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
-  console.log("[Audio] Fallback to Web Speech:", text);
+  console.log(`[Audio:Source] 🤖 Fallback sang Web Speech API: "${text}" (${langCode})`);
   if(!text||!SOUND_ON()){if(onEnd)onEnd();return}
   if(!SS){if(onEnd)onEnd();return}
   try{
@@ -384,7 +384,7 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   const nk=typeof window.__normAudioKey==="function"?window.__normAudioKey(rawText):rawText.toLowerCase().trim();
   const cleanKey=nk.replace(/^(vi|en)\|/,"");
 
-  // BƯỚC 1: Kiểm tra window.AUDIO_MAP[text]
+  // BƯỚC 1: Kiểm tra window.AUDIO_MAP[text] (File MP3 local tải sẵn)
   const mapPath=getAudio(rawText)||(window.AUDIO_MAP&&(
     window.AUDIO_MAP[rawText]||
     window.AUDIO_MAP[nk]||
@@ -394,13 +394,13 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   ));
 
   if(mapPath){
-    console.log("[Audio] Found in Map:", mapPath);
+    console.log(`[Audio:Source] 🎵 Phát từ Map (MP3 Local): "${rawText}" -> ${mapPath}`);
     try{
       A.pause();
       if(SS){try{SS.cancel()}catch(e){}}
       A.onended=finishOnce;
       A.onerror=()=>{
-        console.warn("[Audio] Lỗi phát file từ Map, chuyển Web Speech:", mapPath);
+        console.warn(`[Audio:Source] ⚠️ Lỗi đọc file local "${mapPath}", chuyển Fallback Web Speech`);
         fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
       };
       A.src=mapPath;
@@ -409,17 +409,17 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
     }catch(e){
       if(e&&e.name==="AbortError")return;
       if(e&&(e.name==="NotAllowedError"||e.name==="SecurityError")){
-        console.warn("[Audio] Autoplay bị chặn bởi chính sách trình duyệt. Chờ bé chạm màn hình để phát:", mapPath);
+        console.warn("[Audio] Autoplay bị chặn bởi trình duyệt. Chờ tương tác người dùng:", mapPath);
         pendingAutoplayAudio={src:mapPath,key:cleanKey,finishOnce};
         return;
       }
-      console.warn("[Audio] Play map audio error:", e);
+      console.warn(`[Audio:Source] ⚠️ Play error cho "${mapPath}", chuyển Fallback Web Speech`);
       fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
       return;
     }
   }
 
-  // BƯỚC 2: Kiểm tra IndexedDB (store 'audios')
+  // BƯỚC 2: Kiểm tra IndexedDB cache (store 'audios')
   const dbKey="tts:"+cleanKey;
   let cachedBlobUrl=await getCachedAudio(dbKey);
   if(!cachedBlobUrl){
@@ -427,7 +427,7 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   }
 
   if(cachedBlobUrl){
-    console.log("[Audio] Found in DB:", rawText);
+    console.log(`[Audio:Source] 💾 Phát từ IndexedDB Cache: "${rawText}"`);
     try{
       A.pause();
       if(SS){try{SS.cancel()}catch(e){}}
@@ -453,7 +453,7 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
   }
 
   // BƯỚC 3: Gọi API TTS (/api/tts hoặc Netlify Function) với debounce 300ms
-  console.log("[Audio] Fetching from API:", rawText);
+  console.log(`[Audio:Source] 🌐 Gọi API TTS VieNeu cho: "${rawText}" (Debounce 300ms)`);
 
   if(ttsDebounceTimers.has(cleanKey)){
     clearTimeout(ttsDebounceTimers.get(cleanKey));
@@ -567,9 +567,45 @@ function haptic(ms=25){if(navigator.vibrate){try{navigator.vibrate(ms)}catch(e){
 function tone(f,d,t=0){if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="triangle";o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(.25,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
 function sfxTap(){haptic(15);if(!SFX())return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type="sine";const s=AC.currentTime;o.frequency.setValueAtTime(540,s);o.frequency.exponentialRampToValueAtTime(240,s+.06);g.gain.setValueAtTime(.22,s);g.gain.exponentialRampToValueAtTime(.001,s+.06);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.06)}catch(e){}}
 function sfxOk(){haptic([25,30,40]);if(!SFX())return;[523.25,659.25,783.99,1046.50,1318.51].forEach((f,i)=>tone(f,.22,i*.07))}
+function sfxTingTing(){haptic([30,50]);if(!SFX())return;tone(1046.50,.18,0);tone(1318.51,.25,.1);tone(1567.98,.3,.2);}
 function sfxNo(){haptic(35);if(!SFX())return;tone(280,.2);tone(220,.25,.12)}
 function sfxFanfare(){haptic([40,50,80]);if(!SFX())return;[[523.25,.12,0],[659.25,.12,.1],[783.99,.12,.2],[1046.50,.35,.3],[880.00,.15,.55],[1046.50,.5,.7]].forEach(([f,d,t])=>tone(f,d,t))}
 document.addEventListener("pointerdown",e=>{const b=e.target.closest("button,.card,.opt,.chip,.pill,.syl-btn,.word-btn,.rhyme-chip,.story-item,.trace-sample-card,.story-line,.story-p,.k-bc-btn,.k-bc-back,.badge-btn,.story-page-btn,.ob");if(b&&!b.disabled)sfxTap()},{passive:true});
+
+window.__showParentTipModal = function(title, tip){
+  let modal = document.getElementById("parentTipModalOverlay");
+  if(!modal){
+    modal = document.createElement("div");
+    modal.id = "parentTipModalOverlay";
+    modal.className = "parent-tip-modal-overlay";
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div class="parent-tip-modal">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h3 style="margin:0;color:#b45309;font-size:22px;display:flex;align-items:center;gap:8px">
+          <span>💡</span> Mẹo Dạy Học Cho Ba Mẹ
+        </h3>
+        <button onclick="window.__closeParentTipModal()" style="background:#f1f5f9;border:0;border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer">✖</button>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:#1e293b;margin-bottom:8px">📖 ${title}</div>
+      <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 14px;border-radius:10px;font-size:15px;line-height:1.55;color:#92400e;margin-bottom:18px">
+        ${tip}
+      </div>
+      <div style="text-align:right">
+        <button class="pill on" onclick="window.__closeParentTipModal()" style="font-size:16px;padding:8px 20px;border-radius:20px">
+          Đã hiểu rồi 👍
+        </button>
+      </div>
+    </div>
+  `;
+  modal.style.display = "flex";
+};
+
+window.__closeParentTipModal = function(){
+  const modal = document.getElementById("parentTipModalOverlay");
+  if(modal) modal.style.display = "none";
+};
 
 function goHome(){
   if(cur==="home")return;
@@ -1345,6 +1381,7 @@ async function tierActivities(filterSubject){
     <div class="act-list-wrap"></div>
   `;
 
+  const isPreschool = tierId === "preschool";
   const listWrap = m.querySelector(".act-list-wrap");
   if(listWrap){
     if(!acts.length){
@@ -1352,24 +1389,60 @@ async function tierActivities(filterSubject){
     } else {
       const frag = document.createDocumentFragment();
       const template = document.createElement("template");
-      template.innerHTML = acts.map(act => {
-        const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
-        return `
-          <div class="act-card" onclick="go('playActivity', '${act.id}')">
-            <div class="act-card-icon">${sInfo.icon}</div>
-            <div class="act-card-body">
-              <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
-              <div class="act-card-skill">🎯 ${act.learningObjective || act.skill || ""}</div>
-              <div class="act-card-meta">
-                <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
-                <span class="act-badge reward">⭐ +${(act.reward && act.reward.stars) || act.difficulty || 3} sao</span>
-                <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(Math.min(5, Math.max(1, act.difficulty || 1))).fill("★").join("")}</span>
+      if(isPreschool){
+        listWrap.className = "act-list-wrap act-list-preschool";
+        template.innerHTML = acts.map(act => {
+          const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
+          let thumbSrc = "";
+          if (act.mediaSource && act.mediaSource.thumbnail) {
+            thumbSrc = act.mediaSource.thumbnail;
+          } else if (act.videoUrl) {
+            const ytId = act.videoUrl.includes("v=") ? act.videoUrl.split("v=")[1].split("&")[0] : act.videoUrl.split("/").pop();
+            thumbSrc = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+          }
+          const thumbHtml = thumbSrc 
+            ? `<img src="${thumbSrc}" alt="${esc(act.title)}" loading="lazy">` 
+            : `<div style="font-size:64px;display:flex;align-items:center;justify-content:center;height:100%">${sInfo.icon}</div>`;
+          return `
+            <div class="act-card-pre" onclick="go('playActivity', '${act.id}')">
+              <div class="act-card-pre-thumb">
+                ${thumbHtml}
+                <div class="act-card-pre-play">▶</div>
+              </div>
+              <div class="act-card-pre-body">
+                <div>
+                  <div class="act-card-pre-title">${T(act.title, act.titleEn || act.title)}</div>
+                  <div class="act-card-pre-goal">🎯 ${act.learningGoal || act.learningObjective || act.skill || ""}</div>
+                </div>
+                <div class="act-card-meta" style="margin-top:8px">
+                  <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
+                  <span class="act-badge reward">⭐ +${(act.reward && act.reward.stars) || act.difficulty || 3}</span>
+                  ${act.parentTip ? `<span class="act-badge" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a" onclick="event.stopPropagation();window.__showParentTipModal('${escSay(act.title)}', '${escSay(act.parentTip)}')">💡 Mẹo bố mẹ</span>` : ""}
+                </div>
               </div>
             </div>
-            <div style="font-size:24px;color:var(--acc)">➔</div>
-          </div>
-        `;
-      }).join("");
+          `;
+        }).join("");
+      } else {
+        template.innerHTML = acts.map(act => {
+          const sInfo = subjectBadges[act.subject] || { vi: act.subject, en: act.subject, icon: "⭐", cls: "math" };
+          return `
+            <div class="act-card" onclick="go('playActivity', '${act.id}')">
+              <div class="act-card-icon">${sInfo.icon}</div>
+              <div class="act-card-body">
+                <div class="act-card-title">${T(act.title, act.titleEn || act.title)}</div>
+                <div class="act-card-skill">🎯 ${act.learningObjective || act.skill || ""}</div>
+                <div class="act-card-meta">
+                  <span class="act-badge ${sInfo.cls}">${T(sInfo.vi, sInfo.en)}</span>
+                  <span class="act-badge reward">⭐ +${(act.reward && act.reward.stars) || act.difficulty || 3} sao</span>
+                  <span style="font-size:12px;color:#94a3b8">Độ khó: ${Array(Math.min(5, Math.max(1, act.difficulty || 1))).fill("★").join("")}</span>
+                </div>
+              </div>
+              <div style="font-size:24px;color:var(--acc)">➔</div>
+            </div>
+          `;
+        }).join("");
+      }
       frag.appendChild(template.content);
       listWrap.appendChild(frag);
     }
@@ -1450,7 +1523,28 @@ async function playActivity(actId){
     {t:T(act.title, act.titleEn || act.title), i:"✨"}
   ]);
 
-  // Chuẩn hóa content: Hỗ trợ cả Schema mới (content dạng Array) lẫn cấu trúc cũ
+  // Chuẩn hóa content: Hỗ trợ cả Schema mới (content dạng Array), activities, lẫn cấu trúc cũ
+  const isActivitiesArray = Array.isArray(act.activities);
+  if (isActivitiesArray && !act.content) {
+    act.content = act.activities.map(actItem => ({
+      question: actItem.question,
+      questionEn: actItem.questionEn || actItem.question,
+      options: (actItem.options || []).map(opt => typeof opt === "object" ? `${opt.icon ? opt.icon + " " : ""}${opt.text}` : opt),
+      correctAnswer: typeof actItem.correctAnswer === "string" 
+        ? actItem.options.findIndex(opt => (typeof opt === "object" ? opt.text : opt) === actItem.correctAnswer)
+        : actItem.correctAnswer,
+      explanation: actItem.audioHint || "Chính xác! Bé làm rất giỏi! 🌟"
+    }));
+  }
+
+  if (act.videoUrl && !act.mediaSource) {
+    act.mediaSource = {
+      type: "youtube",
+      url: act.videoUrl,
+      thumbnail: `https://img.youtube.com/vi/${act.videoUrl.includes("v=") ? act.videoUrl.split("v=")[1].split("&")[0] : act.videoUrl.split("/").pop()}/hqdefault.jpg`
+    };
+  }
+
   const isArrayContent = Array.isArray(act.content);
   const currentStep = window.__actCurrentStep || 0;
   const currentItem = isArrayContent ? (act.content[currentStep] || act.content[0]) : act.content;
@@ -1465,15 +1559,15 @@ async function playActivity(actId){
       wrong: currentItem.hint || "Bé thử đọc kỹ và chọn lại đáp án nhé!"
     };
     act.reward = act.reward || { stars: Math.min(5, Math.max(1, act.difficulty || 3)) };
-    act.skill = act.learningObjective || act.skill;
+    act.skill = act.learningObjective || act.learningGoal || act.skill;
   }
 
   let mediaHtml = "";
   if(act.mediaSource && act.mediaSource.url){
     if(act.mediaSource.type === "youtube"){
       const ytId = act.mediaSource.url.includes("v=") ? act.mediaSource.url.split("v=")[1].split("&")[0] : act.mediaSource.url.split("/").pop();
-      mediaHtml = `<div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;margin-bottom:12px;background:#000">
-        <iframe src="https://www.youtube-nocookie.com/embed/${ytId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      mediaHtml = `<div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:18px;margin-bottom:14px;background:#000;box-shadow:0 6px 16px rgba(0,0,0,0.18)">
+        <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&autoplay=1&mute=1&playsinline=1&enablejsapi=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>`;
     } else if(act.mediaSource.type === "local_mp4"){
       mediaHtml = `<div class="act-video-wrap" style="margin-bottom:12px;text-align:center">
@@ -1597,6 +1691,19 @@ async function playActivity(actId){
     `;
   }
 
+  const parentTipHtml = act.parentTip ? `
+    <div class="act-parent-tip" style="background:#fef3c7;border-left:4px solid #f59e0b;padding:8px 12px;border-radius:8px;margin-bottom:12px;font-size:13.5px;color:#92400e;display:flex;align-items:flex-start;gap:8px">
+      <span style="font-size:18px">💡</span>
+      <div><b>${T("Gợi ý cho bố mẹ:","Parent Tip:")}</b> ${act.parentTip}</div>
+    </div>
+  ` : "";
+
+  const cornerTipBtnHtml = act.parentTip ? `
+    <button class="parent-tip-corner-btn" onclick="window.__showParentTipModal('${escSay(act.title)}', '${escSay(act.parentTip)}')" aria-label="Mẹo dạy học cho bố mẹ">
+      <span>💡</span> <b>${T("Mẹo dạy bé","Parent Tip")}</b>
+    </button>
+  ` : "";
+
   m.innerHTML = `
     ${bcHtml}
     <div class="act-player-box">
@@ -1604,6 +1711,7 @@ async function playActivity(actId){
         <span>🎯 ${act.skill}</span>
         <button class="pill act-read-all-btn" onclick="window.__readActAloud()" aria-label="${T("Đọc to toàn bộ câu hỏi và đáp án","Read question and options aloud")}">🔊 ${T("Đọc to cả bài","Read all aloud")}</button>
       </div>
+      ${parentTipHtml}
       ${bodyHtml}
       <div id="actFeedback"></div>
       <div class="act-ctrl-row" id="actCtrls" style="display:none">
@@ -1615,6 +1723,7 @@ async function playActivity(actId){
         </button>
       </div>
     </div>
+    ${cornerTipBtnHtml}
   `;
 
   say(actQText, actQTextEn);
@@ -1651,28 +1760,30 @@ window.__actChoose = function(chosenId, btn){
     const sp = btn.querySelector("span");
     if(sp) sp.textContent = "✔";
 
+    // Âm thanh "Ting ting" vui tai + Hiệu ứng pháo hoa
+    sfxTingTing();
+    fx();
+
     const isArrayContent = Array.isArray(act.content);
     const currentStep = window.__actCurrentStep || 0;
 
     if(isArrayContent && currentStep + 1 < act.content.length){
       actAnswered = true;
-      sfxOk();
-      catSet("happy");
-      const fbDiv = document.getElementById("actFeedback");
+      catSet("celebrate");
       const ctrlsDiv = document.getElementById("actCtrls");
       if(fbDiv){
         fbDiv.className = "act-feedback-card good";
-        fbDiv.innerHTML = `🎉 <b>${T("Chính xác!", "Correct!")}</b><br>${T(act.feedback.correct, act.feedback.correct)}`;
+        fbDiv.innerHTML = `🎉 <b>${T("Con giỏi lắm! ⭐", "Well done!")}</b><br>${T(act.feedback.correct, act.feedback.correct)}`;
       }
       if(ctrlsDiv){
         ctrlsDiv.style.display = "flex";
         ctrlsDiv.innerHTML = `
-          <button class="cg-btn-replay" onclick="window.__actNextStep()">
+          <button class="cg-btn-replay" onclick="window.__actNextStep()" style="font-size:20px;padding:12px 24px;border-radius:28px">
             ${T(`Câu tiếp theo (${currentStep + 2}/${act.content.length}) ➡️`, `Next Question (${currentStep + 2}/${act.content.length}) ➡️`)}
           </button>
         `;
       }
-      say("Chính xác! " + act.feedback.correct, "Correct!");
+      say("Con giỏi lắm! " + act.feedback.correct, "Well done! " + act.feedback.correct);
       return;
     }
 
@@ -1688,9 +1799,9 @@ window.__actChoose = function(chosenId, btn){
     catSet("sad");
     if(fbDiv){
       fbDiv.className = "act-feedback-card bad";
-      fbDiv.innerHTML = `💡 <b>${T("Chưa chính xác!", "Not quite!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}`;
+      fbDiv.innerHTML = `💡 <b>${T("Cố lên con yêu, thử lại nhé! 💖", "Try again, sweetheart!")}</b><br>${T(act.feedback.wrong, act.feedback.wrong)}${act.feedback.hint ? `<br><i>Gợi ý: ${act.feedback.hint}</i>` : ""}`;
     }
-    say(act.feedback.wrong, act.feedback.wrong);
+    say("Cố lên con yêu, thử lại nhé! " + (act.feedback.wrong || ""), "Try again, sweetheart!");
     setTimeout(() => { catSet("thinking"); }, 900);
   }
 };

@@ -1775,6 +1775,210 @@ const ACTIVITIES_DATA = [
         explanation: "Wonderful! Khi bay đi hút mật hoa, bướm mang theo phấn hoa giúp cây cối thụ phấn ('pollinate flowers') để kết trái."
       }
     ]
+  },
+
+  // ==========================================================================
+  // 5 BÀI HỌC TIỀN TIỂU HỌC (4 TUỔI) - ĐÁNH VẦN CÔ LAN ANH (A, Ă, Â, B, C)
+  // ==========================================================================
+  {
+    id: "pre_lananh_01_letter_a",
+    title: "Làm quen chữ A tươi cười 🍎",
+    titleEn: "Letter A: Happy Open Mouth",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_&index=1",
+    learningGoal: "Bé nhận biết mặt chữ A, mở rộng khẩu hình miệng cười tươi và phát âm 'A' to, rõ ràng.",
+    parentTip: "Bố mẹ hướng dẫn bé mở to miệng như khi đi khám bác sĩ và nói 'Aaaa'. Cùng bé tìm các đồ vật quanh nhà có chữ A như Quả Táo, Cái Áo nhé!",
+    difficulty: 1,
+    activities: [
+      {
+        type: "listen_and_pick",
+        question: "Bé hãy chạm vào chữ 'A' có hai chân bước đều và nét ngang ở giữa nào:",
+        options: ["A", "O", "C", "B"],
+        correctAnswer: "A",
+        audioHint: "Chữ A mở miệng cười thật to: 'Aaaaa'! Bé chọn chữ A nhé!"
+      },
+      {
+        type: "image_match",
+        "question": "Chữ 'A' ngọt ngào xuất hiện trong loại quả đỏ mọng nào?",
+        options: [
+          { "text": "Anh đào", "icon": "🍒" },
+          { "text": "Bắp ngô", "icon": "🌽" }
+        ],
+        correctAnswer: "Anh đào",
+        audioHint: "A - Quả Anh Đào màu đỏ mọng ngọt thơm!"
+      },
+      {
+        type: "image_match",
+        question: "Món đồ mặc trên người nào bắt đầu bằng tiếng 'Áo' có chữ A?",
+        options: [
+          { "text": "Cái Áo", "icon": "👕" },
+          { "text": "Cái Nón", "icon": "👒" }
+        ],
+        correctAnswer: "Cái Áo",
+        audioHint: "A - Cái Áo xinh của bé mặc đi chơi!"
+      }
+    ]
+  },
+  {
+    id: "pre_lananh_02_letter_aw",
+    title: "Làm quen chữ Ă: Chiếc mũ trăng khuyết 🌙",
+    titleEn: "Letter Ă: Crescent Smile",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_&index=2",
+    learningGoal: "Bé nhận diện chữ Ă (Á), liên tưởng dấu á với vầng trăng khuyết ngửa lên trời.",
+    parentTip: "Mẹo Cô Lan Anh: Đố bé 'Chữ A đội trăng khuyết ngửa lên trời là chữ gì?'. Mẹ cong ngón tay làm hình vầng trăng để bé bắt chước theo.",
+    difficulty: 1,
+    activities: [
+      {
+        type: "listen_and_pick",
+        question: "Bé hãy tìm chữ 'Ă' (Á) có chiếc mũ cong ngửa lên trời đón trăng nào:",
+        options: ["A", "Ă", "Â", "E"],
+        correctAnswer: "Ă",
+        audioHint: "Chữ Ă chính là chữ A nhưng có vầng trăng khuyết cong cong ở trên đầu đấy!"
+      },
+      {
+        type: "image_match",
+        question: "Vật dụng lau mặt mềm mại mỗi sáng nào có chữ 'Ă' (Á)?",
+        options: [
+          { "text": "Khăn mặt", "icon": "🧣" },
+          { "text": "Bàn chải", "icon": "🪥" }
+        ],
+        correctAnswer: "Khăn mặt",
+        audioHint: "Khờ - Ăn - Khăn! Khăn mặt thơm tho giúp bé rửa mặt sạch tinh!"
+      },
+      {
+        type: "image_match",
+        question: "Hình ảnh vầng sáng dịu dàng ban đêm nào có chữ 'Ă'?",
+        options: [
+          { "text": "Mặt trăng", "icon": "🌙" },
+          { "text": "Mặt trời", "icon": "☀️" }
+        ],
+        correctAnswer: "Mặt trăng",
+        audioHint: "Mờ - Ăn - Măng - Nặng - Mặt trăng tròn sáng lung linh!"
+      }
+    ]
+  },
+  {
+    id: "pre_lananh_03_letter_aa",
+    title: "Làm quen chữ Â: Chiếc nón che mưa 🛖",
+    titleEn: "Letter Â: The Little Hat",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_&index=3",
+    learningGoal: "Bé phân biệt rõ ràng chữ Â (Ớ) với Ă nhờ chiếc nón úp nhọn đầu như mái nhà che mưa.",
+    parentTip: "Bố mẹ dùng hai bàn tay chụm lại hình chóp nón lên đầu bé và nói 'Â - Chiếc nón che mưa'. Hỏi lại bé: 'Nón ngửa là Ă, nón úp là chữ gì?'.",
+    difficulty: 1,
+    activities: [
+      {
+        type: "listen_and_pick",
+        question: "Bé chạm vào chữ 'Â' đang đội chiếc nón lá che nắng mưa nhé:",
+        options: ["Ă", "A", "Â", "O"],
+        correctAnswer: "Â",
+        audioHint: "Chữ Â có chiếc nón nhọn chóp úp xuống như mái nhà che mưa cho bé!"
+      },
+      {
+        type: "image_match",
+        question: "Đồ vật ấm áp dùng để pha trà mời ông bà nào bắt đầu bằng chữ 'Â'?",
+        options: [
+          { "text": "Ấm trà", "icon": "🫖" },
+          { "text": "Cốc nước", "icon": "🥛" }
+        ],
+        correctAnswer: "Ấm trà",
+        audioHint: "Â - Sắc - Ấm! Ấm trà nóng thơm của ông bà!"
+      },
+      {
+        type: "image_match",
+        question: "Giai điệu vui tươi rộn rã nào bắt đầu bằng chữ 'Â'?",
+        options: [
+          { "text": "Âm nhạc", "icon": "🎵" },
+          { "text": "Bức tranh", "icon": "🎨" }
+        ],
+        correctAnswer: "Âm nhạc",
+        audioHint: "Âm nhạc vui tươi rộn rã cho bé múa hát!"
+      }
+    ]
+  },
+  {
+    id: "pre_lananh_04_letter_b",
+    title: "Làm quen chữ B bụng bự ⚽",
+    titleEn: "Letter B: Big Round Bellies",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_&index=4",
+    learningGoal: "Nhận biết phụ âm B, mím hai môi bật hơi phát âm chuẩn 'Bờ' và tìm chữ B trong đồ chơi quen thuộc.",
+    parentTip: "Bố mẹ dạy bé xoa bụng tròn và nói 'Bờ - Bụng bự'. Sau đó cho bé chơi bóng và đố: 'Quả bóng bắt đầu bằng chữ gì?'.",
+    difficulty: 1,
+    activities: [
+      {
+        type: "listen_and_pick",
+        question: "Tìm chữ 'B' (Bờ) có nét thẳng và chiếc bụng tròn bự nào bé ơi:",
+        options: ["D", "B", "C", "A"],
+        correctAnswer: "B",
+        audioHint: "Bé mím môi bật hơi nào: Bờ! Chữ B có hai chiếc bụng tròn no căng bên phải!"
+      },
+      {
+        type: "image_match",
+        question: "Đồ chơi tròn xoe bé thích đá trên sân cỏ bắt đầu bằng chữ 'B' là gì?",
+        options: [
+          { "text": "Quả Bóng", "icon": "⚽" },
+          { "text": "Chiếc Xe", "icon": "🚗" }
+        ],
+        correctAnswer: "Quả Bóng",
+        audioHint: "B - Quả Bóng lăn tròn trên sân cỏ!"
+      },
+      {
+        type: "image_match",
+        question: "Bạn búp bê xinh xắn trong góc đồ chơi bắt đầu bằng chữ gì?",
+        options: [
+          { "text": "Búp bê", "icon": "🪆" },
+          { "text": "Gấu bông", "icon": "🧸" }
+        ],
+        correctAnswer: "Búp bê",
+        audioHint: "B - Búp bê mắt tròn xoe má hồng dễ thương!"
+      }
+    ]
+  },
+  {
+    id: "pre_lananh_05_letter_c",
+    title: "Làm quen chữ C cong cong & Chú Cá nhỏ 🐟",
+    titleEn: "Letter C: Curved Crescent & Fish",
+    ageTier: "preschool",
+    subject: "vietnamese",
+    videoUrl: "https://www.youtube.com/watch?v=gi0OiKxQJjs&list=PLRgogD_xWvrSOTe-mUuXfR-LqDyEgmhQ_&index=5",
+    learningGoal: "Nhận biết chữ C với nét cong hở phải, phát âm 'Cờ' dứt khoát và làm quen ghép tiếng 'Cá'.",
+    parentTip: "Bố mẹ uốn cong bàn tay thành hình chữ C và bảo bé: 'Đây là miệng cười Cờ'. Cùng bé làm động tác cá bơi hai tay uốn lượn: 'Cờ - A - Ca - Sắc - Cá'.",
+    difficulty: 1,
+    activities: [
+      {
+        type: "listen_and_pick",
+        question: "Bé hãy chạm vào chữ 'C' (Cờ) cong tròn như chiếc miệng đang cười nhé:",
+        options: ["O", "C", "D", "B"],
+        correctAnswer: "C",
+        audioHint: "Chữ C là một nét cong tròn hở một bên phải giống vầng trăng khuyết!"
+      },
+      {
+        type: "image_match",
+        question: "Bạn nhỏ nào tung tăng bơi lội dưới nước bắt đầu bằng chữ 'C'?",
+        options: [
+          { "text": "Chú Cá", "icon": "🐟" },
+          { "text": "Vịt con", "icon": "🐥" }
+        ],
+        correctAnswer: "Chú Cá",
+        audioHint: "C - Con Cá bơi lội tung tăng trong làn nước mát!"
+      },
+      {
+        type: "image_match",
+        question: "Củ gì màu cam giòn ngọt mà chú thỏ rất thích ăn có chữ 'C'?",
+        options: [
+          { "text": "Cà rốt", "icon": "🥕" },
+          { "text": "Quả chuối", "icon": "🍌" }
+        ],
+        correctAnswer: "Cà rốt",
+        audioHint: "C - Củ Cà rốt màu cam giàu vitamin cho đôi mắt sáng ngời!"
+      }
+    ]
   }
 ];
 
@@ -1831,14 +2035,20 @@ function validateActivity(act) {
   if (!["preschool", "grade1_2", "grade3_5"].includes(act.ageTier)) errors.push("Invalid 'ageTier'");
   if (!["vietnamese", "math", "english", "science", "skills", "reading", "logic"].includes(act.subject)) errors.push("Invalid 'subject'");
   if (!act.mediaSource || typeof act.mediaSource !== "object") {
-    errors.push("Missing 'mediaSource'");
+    if (act.videoUrl && typeof act.videoUrl === "string") {
+      // videoUrl provided directly
+    } else {
+      errors.push("Missing 'mediaSource'");
+    }
   } else {
     if (!["youtube", "local_mp4", "image_set"].includes(act.mediaSource.type)) errors.push("Invalid 'mediaSource.type'");
     if (typeof act.mediaSource.url !== "string") errors.push("Invalid 'mediaSource.url'");
     if (typeof act.mediaSource.thumbnail !== "string") errors.push("Invalid 'mediaSource.thumbnail'");
   }
-  if (!act.learningObjective && !act.skill) errors.push("Missing 'learningObjective'");
-  if (typeof act.difficulty !== "number" || act.difficulty < 1 || act.difficulty > 5) errors.push("Invalid 'difficulty' (must be 1-5)");
+  if (!act.learningObjective && !act.skill && !act.learningGoal) errors.push("Missing 'learningObjective'");
+  if (act.difficulty !== undefined && (typeof act.difficulty !== "number" || act.difficulty < 1 || act.difficulty > 5)) {
+    errors.push("Invalid 'difficulty' (must be 1-5)");
+  }
   if (Array.isArray(act.content)) {
     if (act.content.length === 0) errors.push("'content' array cannot be empty");
     act.content.forEach((item, idx) => {
@@ -1846,6 +2056,13 @@ function validateActivity(act) {
       if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Item ${idx}: 'options' must have at least 2 items`);
       if (item.correctAnswer === undefined) errors.push(`Item ${idx}: missing 'correctAnswer'`);
       if (!item.explanation || typeof item.explanation !== "string") errors.push(`Item ${idx}: missing 'explanation'`);
+    });
+  } else if (Array.isArray(act.activities)) {
+    if (act.activities.length === 0) errors.push("'activities' array cannot be empty");
+    act.activities.forEach((item, idx) => {
+      if (!item.question || typeof item.question !== "string") errors.push(`Activity ${idx}: missing 'question'`);
+      if (!Array.isArray(item.options) || item.options.length < 2) errors.push(`Activity ${idx}: 'options' must have at least 2 items`);
+      if (item.correctAnswer === undefined) errors.push(`Activity ${idx}: missing 'correctAnswer'`);
     });
   } else if (act.content && typeof act.content === "object") {
     if (act.type === "drag_drop") {
@@ -1855,7 +2072,7 @@ function validateActivity(act) {
       errors.push("Missing question or storyText in content object");
     }
   } else {
-    errors.push("Invalid 'content': must be an array or content object");
+    errors.push("Invalid 'content': must be an array, activities array, or content object");
   }
   return { valid: errors.length === 0, errors };
 }
