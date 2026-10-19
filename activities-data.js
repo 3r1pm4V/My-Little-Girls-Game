@@ -795,3 +795,6 @@ if (typeof window !== "undefined") {
   window.getActivityById = getActivityById;
   window.getActivitiesBySubject = getActivitiesBySubject;
 }
+
+export default ACTIVITIES_DATA;
+export { AGE_TIERS, ACTIVITIES_DATA, getActivitiesByTier, getActivityById, getActivitiesBySubject };

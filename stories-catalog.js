@@ -2120,3 +2120,10 @@ const STORY_CATALOG = [
     "audio": "https://truyencotich.top/audio/stream/nghe-ke-chuyen-thieu-nhi-bi-mat-cua-may-nho.mp3"
   }
 ];
+
+if (typeof window !== "undefined") {
+  window.STORY_CATALOG = STORY_CATALOG;
+}
+
+export default STORY_CATALOG;
+export { STORY_CATALOG };

@@ -13,8 +13,17 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="font-vn.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="img-core.js" as="script">
+<link rel="preload" href="data-vn.js" as="script">
+<link rel="preload" href="app.js" as="script">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 <style>
+.loading-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 16px;min-height:220px;gap:16px}
+.spinner{width:48px;height:48px;border:5px solid #e0f2fe;border-top-color:#0284c7;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 @font-face{font-family:"AnjaVN";src:url("font-vn.ttf") format("truetype");font-display:swap}
 @font-face{font-family:"HPTapViet";src:url("font-tapviet.ttf") format("truetype");font-display:swap}
 @font-face{font-family:"HPCham";src:url("font-tapviet-cham.ttf") format("truetype");font-display:swap}
@@ -495,9 +504,6 @@ html.rm .confetti-cv, html.rm .fx {
 <img id="cat" alt="Chú mèo bạn đồng hành của bé">
 <script src="img-core.js"></script>
 <script src="data-vn.js"></script>
-<script src="activities-data.js"></script>
-<script src="stories-data.js"></script>
-<script src="stories-catalog.js"></script>
 <script src="audio-map.js"></script>
 <script src="app.js"></script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body></html>

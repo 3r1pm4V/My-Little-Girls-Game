@@ -440,3 +440,11 @@ const FAIRY_STORIES = [
     ]
   }
 ];
+
+if (typeof window !== "undefined") {
+  window.FAIRY_CATEGORIES = FAIRY_CATEGORIES;
+  window.FAIRY_STORIES = FAIRY_STORIES;
+}
+
+export default FAIRY_STORIES;
+export { FAIRY_CATEGORIES, FAIRY_STORIES };

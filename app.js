@@ -46,7 +46,78 @@ function toggleSoundMaster(){
   head();
   if(cur==="parent")parent();
 }
-window.toggleSoundMaster=toggleSoundMaster;
+const AGE_TIERS = {
+  preschool: {
+    id: "preschool",
+    nameVi: "Tiền tiểu học",
+    nameEn: "Preschool",
+    ageVi: "4–6 tuổi",
+    ageEn: "Ages 4–6",
+    badge: "🐣",
+    descVi: "Chữ cái, Học số, Đếm hình, Tiếng Anh & Đánh vần cơ bản",
+    descEn: "Letters, Numbers, Counting, English & Phonics"
+  },
+  grade1_2: {
+    id: "grade1_2",
+    nameVi: "Lớp 1–2",
+    nameEn: "Grade 1–2",
+    ageVi: "6–8 tuổi",
+    ageEn: "Ages 6–8",
+    badge: "🎒",
+    descVi: "Cộng/Trừ 20–100, Ghép vần, Tiếng Anh & Đọc hiểu",
+    descEn: "Addition/Subtraction to 100, Phonics, English & Reading"
+  },
+  grade3_5: {
+    id: "grade3_5",
+    nameVi: "Lớp 3–5",
+    nameEn: "Grade 3–5",
+    ageVi: "8–11 tuổi",
+    ageEn: "Ages 8–11",
+    badge: "🚀",
+    descVi: "Nhân/Chia, Phân số, Tiếng Anh giao tiếp & Đọc hiểu văn bản",
+    descEn: "Multiplication/Division, Fractions, English & Comprehension"
+  }
+};
+window.AGE_TIERS = AGE_TIERS;
+
+async function loadActivities() {
+  if (!window.ACTIVITIES_DATA) {
+    try {
+      const module = await import('./activities-data.js');
+      window.ACTIVITIES_DATA = module.default || module.ACTIVITIES_DATA;
+      if (module.getActivitiesByTier) window.getActivitiesByTier = module.getActivitiesByTier;
+      if (module.getActivityById) window.getActivityById = module.getActivityById;
+      if (module.getActivitiesBySubject) window.getActivitiesBySubject = module.getActivitiesBySubject;
+    } catch(e) {
+      console.error("Lỗi nạp activities-data.js:", e);
+    }
+  }
+  return window.ACTIVITIES_DATA;
+}
+window.loadActivities = loadActivities;
+
+async function loadStories() {
+  if (!window.FAIRY_STORIES) {
+    try {
+      const sModule = await import('./stories-data.js');
+      window.FAIRY_STORIES = sModule.default || sModule.FAIRY_STORIES;
+      if (sModule.FAIRY_CATEGORIES) window.FAIRY_CATEGORIES = sModule.FAIRY_CATEGORIES;
+    } catch(e) {
+      console.error("Lỗi nạp stories-data.js:", e);
+    }
+  }
+  if (!window.STORY_CATALOG) {
+    try {
+      const cModule = await import('./stories-catalog.js');
+      window.STORY_CATALOG = cModule.default || cModule.STORY_CATALOG;
+    } catch(e) {
+      console.error("Lỗi nạp stories-catalog.js:", e);
+    }
+  }
+  return window.FAIRY_STORIES;
+}
+window.loadStories = loadStories;
+
 let currentTier=ls.get("ageTier",lvl===1?"preschool":(lvl===3?"grade3_5":"grade1_2"));
 function setAgeTier(tierId){if(typeof AGE_TIERS==="undefined"||!AGE_TIERS[tierId])tierId="preschool";currentTier=tierId;ls.set("ageTier",currentTier);if(tierId==="preschool")lvl=1;else if(tierId==="grade1_2")lvl=2;else if(tierId==="grade3_5")lvl=3;ls.set("lvl",lvl);home();if(typeof AGE_TIERS!=="undefined"){sayPrompt("tier_"+tierId,AGE_TIERS[tierId].nameVi+". "+AGE_TIERS[tierId].descVi,AGE_TIERS[tierId].nameEn,60000);}}window.setAgeTier=setAgeTier;
 function setLang(l){lang=l;ls.set("lang",l);ql=null;head();if(cur==="parent")parent();}window.setLang=setLang;
@@ -849,7 +920,11 @@ function home(){
 /* ========================================================
    QUẢN LÝ BÀI TẬP PHÂN TẦNG (TIER ACTIVITIES & PLAYER)
    ======================================================== */
-function tierActivities(filterSubject){
+async function tierActivities(filterSubject){
+  if(!window.ACTIVITIES_DATA){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải bài học vui nhộn...","Loading fun activities...")}</p></div>`;
+    await loadActivities();
+  }
   const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : { nameVi: "Bài học", nameEn: "Activities", badge: "🎯" };
   const allActs = typeof getActivitiesByTier === "function" ? getActivitiesByTier(currentTier) : [];
   const acts = (filterSubject && filterSubject !== "all") ? allActs.filter(a => a.subject === filterSubject) : allActs;
@@ -960,7 +1035,11 @@ function __completeActSuccess(act, earnedStars){
   say(`Chính xác! Thưởng bé ${earnedStars} sao! ` + act.feedback.correct, `Correct! You earned ${earnedStars} stars!`);
 }
 
-function playActivity(actId){
+async function playActivity(actId){
+  if(!window.ACTIVITIES_DATA){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang chuẩn bị bài học...","Loading activity...")}</p></div>`;
+    await loadActivities();
+  }
   const act = typeof getActivityById === "function" ? getActivityById(actId) : null;
   if(!act){
     tierActivities();
@@ -2588,11 +2667,16 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
 let curCat="vn",curStoryPage=1,curStorySearch="",readingStory=null,storyPlay=false;
 
-function storyL(catId, page, search){
+async function storyL(catId, page, search){
   if(catId)curCat=catId;
   if(page!==undefined)curStoryPage=page;
   if(search!==undefined)curStorySearch=search;
   storyPlay=false;A.pause();if(SS)SS.cancel();
+
+  if(!window.FAIRY_STORIES || !window.STORY_CATALOG){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang mở kho truyện cổ tích...","Loading fairy tales...")}</p></div>`;
+    await loadStories();
+  }
 
   const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
@@ -2750,8 +2834,12 @@ function storyL(catId, page, search){
   renderStoryItems();
 }
 
-function storyDetail(id){
+async function storyDetail(id){
   storyPlay=false;A.pause();if(SS)SS.cancel();
+  if(!window.FAIRY_STORIES || !window.STORY_CATALOG){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải truyện...","Loading story...")}</p></div>`;
+    await loadStories();
+  }
   const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
   const s=catalog.find(x=>x.id===id);
   if(!s){storyL();return;}
@@ -2790,7 +2878,11 @@ function storyDetail(id){
   say(s.title,s.title);
 }
 
-function storyRead(id){
+async function storyRead(id){
+  if(!window.FAIRY_STORIES){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang chuẩn bị trang sách...","Preparing storybook...")}</p></div>`;
+    await loadStories();
+  }
   const s=FAIRY_STORIES.find(x=>x.id===id)||FAIRY_STORIES[0];
   ST.storyCount=(ST.storyCount||0)+1;svS();checkBadges();
   storyPlay=false;A.pause();if(SS)SS.cancel();
@@ -2852,9 +2944,22 @@ function storyRead(id){
   say(s.title, s.title);
 }
 const V={home,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,tierActivities,tierActMath,tierActWord,tierActRead,playActivity};
-const LAZY={s:"img-s.js",o:"img-o.js"},LP={};
-function need(k){if(window["__"+k])return Promise.resolve(true);if(LP[k])return LP[k];
- return LP[k]=new Promise(res=>{const s=document.createElement("script");s.src=LAZY[k];s.onload=()=>res(true);s.onerror=()=>{delete LP[k];s.remove();res(false)};document.head.appendChild(s)})}
+const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
+async function need(k){
+  if(window["__"+k])return true;
+  if(LP[k])return LP[k];
+  return LP[k]=(async()=>{
+    try{
+      await import(LAZY[k]);
+      window["__"+k]=true;
+      return true;
+    }catch(e){
+      console.warn("Failed to load "+LAZY[k],e);
+      delete LP[k];
+      return false;
+    }
+  })();
+}
 function upSpr(){m.querySelectorAll("img.spf").forEach(e=>{const k=e.dataset.sk;if(!I["s_"+k])return;const s=document.createElement("span");s.className="spr";s.style.cssText=`--z:${e.dataset.z};background-image:url(${I["s_"+k]})`;e.replaceWith(s)})}
 const SFX=()=>SOUND_ON()&&ls.get("sfx","1")!=="0";
 const rmOn=()=>{const p=ls.get("rm","auto");return p==="1"||(p==="auto"&&!!window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)};
