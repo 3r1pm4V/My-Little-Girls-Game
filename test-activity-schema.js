@@ -206,14 +206,14 @@ console.log(`✔ Toàn bộ ${excludedG12Ids.length} bài dời qua lớp 1 (gh�
 
 // 5.5 Kiểm tra getPreschoolJourneyActivities() trả về đúng 31 bài (10 preschool + 21 grade1_2)
 const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 43, `getPreschoolJourneyActivities() phải trả về đúng 43 bài (thực tế: ${journeyActs.length})`);
+assert.strictEqual(journeyActs.length, 53, `getPreschoolJourneyActivities() phải trả về đúng 53 bài (thực tế: ${journeyActs.length})`);
 journeyActs.forEach(act => {
   assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài ${act.id} trong lộ trình phải có stage từ 0 đến 5`);
 });
-console.log(`✔ getPreschoolJourneyActivities() trả về đúng 43 bài học làm quen trước lớp 1 cho bé 4–6 tuổi`);
+console.log(`✔ getPreschoolJourneyActivities() trả về đúng 53 bài học làm quen trước lớp 1 cho bé 4–6 tuổi`);
 
 // 5.6 Phân bố số lượng bài theo từng chặng theo docs/stage-map.md
-const expectedStageCounts = { 0: 3, 1: 20, 2: 6, 3: 8, 4: 6, 5: 0 };
+const expectedStageCounts = { 0: 3, 1: 24, 2: 12, 3: 8, 4: 6, 5: 0 };
 for (const [stg, count] of Object.entries(expectedStageCounts)) {
   const stageNum = parseInt(stg, 10);
   const actsInStage = getActivitiesByStage(stageNum);

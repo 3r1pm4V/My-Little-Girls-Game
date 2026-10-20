@@ -784,6 +784,398 @@ const ACTIVITIES_DATA = [
   },
 
   // ========================================================
+  // NÂNG CẤP TOÁN TIỀN TIỂU HỌC (BÉ TẬP LÀM TOÁN CHUẨN BỊ VÀO LỚP 1)
+  // CHẶNG 1: SỐ HỌC 1-5, HÌNH HỌC, ĐO LƯỜNG & TƯ DUY LOGIC (4 BÀI)
+  // CHẶNG 2: SỐ HỌC 6-10, PHÉP TÍNH CỘNG/TRỪ, ĐO LƯỜNG & QUY LUẬT (6 BÀI)
+  // ========================================================
+  {
+    id: "act_p3_math_shapes",
+    title: "Hình học: Bé nhận biết Hình vuông, Tròn, Tam giác 🔺⭕🟩",
+    titleEn: "Geometry: Shapes (Square, Circle, Triangle)",
+    ageTier: "preschool",
+    stage: 1,
+    minAge: 4,
+    subject: "math",
+    skill: "math.geometry.shapes",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Đố bé tìm hình tam giác có 3 góc nhọn màu đỏ ở đâu nào? 🔺",
+      "questionEn": "Where is the red triangle with 3 sharp corners? 🔺",
+      "media": "🔺  HÌNH TAM GIÁC"
+},
+    options: [
+      {
+            "id": "tam_giac",
+            "text": "Hình tam giác"
+      },
+      {
+            "id": "hinh_vuong",
+            "text": "Hình vuông"
+      },
+      {
+            "id": "hinh_tron",
+            "text": "Hình tròn"
+      }
+],
+    correctAnswer: "tam_giac",
+    feedback: {
+      "correct": "Hoan hô bé! Hình tam giác có 3 cạnh và 3 góc nhọn xinh xắn! 🔺🌟",
+      "wrong": "Bé nhìn kỹ nhé: Hình tam giác có 3 góc giống mái nhà nhọn! 🔺",
+      "hint": "Hình tam giác"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_compare_length",
+    title: "Đo lường: So sánh Dài hơn — Ngắn hơn 📏✏️",
+    titleEn: "Measurement: Longer vs Shorter",
+    ageTier: "preschool",
+    stage: 1,
+    minAge: 4,
+    subject: "math",
+    skill: "math.measure.length",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Bé quan sát cây thước kẻ và chiếc bút chì, vật nào dài hơn? 📏✏️",
+      "questionEn": "Looking at the ruler and pencil, which one is longer? 📏✏️",
+      "media": "📏 Cây thước (Dài)  và  ✏️ Bút chì (Ngắn)"
+},
+    options: [
+      {
+            "id": "thuoc",
+            "text": "Cây thước kẻ dài hơn 📏"
+      },
+      {
+            "id": "but",
+            "text": "Chiếc bút chì dài hơn ✏️"
+      },
+      {
+            "id": "bang",
+            "text": "Hai vật bằng nhau"
+      }
+],
+    correctAnswer: "thuoc",
+    feedback: {
+      "correct": "Chính xác! Cây thước kẻ dài hơn chiếc bút chì bé nhé! 📏👏",
+      "wrong": "Bé so sánh chiều dài nhé: Cây thước kẻ dài hơn đấy!",
+      "hint": "Cây thước kẻ dài hơn"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_next_number_5",
+    title: "Số học: Bé tìm số liền sau trong phạm vi 5 🔢",
+    titleEn: "Counting: Next Number within 5",
+    ageTier: "preschool",
+    stage: 1,
+    minAge: 4,
+    subject: "math",
+    skill: "math.sequence.successor",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé đếm: 1, 2, 3... Số đứng liền sau số 3 là số mấy bé nhỉ? ⛵",
+      "questionEn": "Counting 1, 2, 3... What number comes right after 3? ⛵",
+      "media": "1 ➔ 2 ➔ 3 ➔ [ ? ]",
+      "template": "Số liền sau số 3 là: [ ? ]"
+},
+    options: [
+      {
+            "id": "4",
+            "text": "Số 4"
+      },
+      {
+            "id": "2",
+            "text": "Số 2"
+      },
+      {
+            "id": "5",
+            "text": "Số 5"
+      }
+],
+    correctAnswer: "4",
+    feedback: {
+      "correct": "Giỏi quá! Đếm 1, 2, 3 rồi liền sau là 4! Số 4 giống cánh buồm! ⛵🌟",
+      "wrong": "Bé đếm ngón tay từ 1 đến 3 rồi thêm 1 nữa là mấy nhỉ? Là 4 nhé!",
+      "hint": "Số 4"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_fill_pattern_5",
+    title: "Tư duy logic: Điền số còn thiếu từ 1 đến 5 🚂",
+    titleEn: "Logic: Fill Missing Number 1 to 5",
+    ageTier: "preschool",
+    stage: 1,
+    minAge: 4,
+    subject: "logic",
+    skill: "math.logic.missing-number",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Đoàn tàu chở số: 1, 2, ___, 4, 5. Toa tàu số mấy đang bị thiếu? 🚂",
+      "questionEn": "Number train: 1, 2, ___, 4, 5. Which carriage is missing? 🚂",
+      "media": "🚂 [ 1 ] ➔ [ 2 ] ➔ [ ? ] ➔ [ 4 ] ➔ [ 5 ]",
+      "template": "Toa tàu còn thiếu số: [ ? ]"
+},
+    options: [
+      {
+            "id": "3",
+            "text": "Số 3"
+      },
+      {
+            "id": "1",
+            "text": "Số 1"
+      },
+      {
+            "id": "5",
+            "text": "Số 5"
+      }
+],
+    correctAnswer: "3",
+    feedback: {
+      "correct": "Xuất sắc! Đoàn tàu hoàn chỉnh: 1, 2, 3, 4, 5 xình xịch lên đường! 🚂🎉",
+      "wrong": "Đứng giữa số 2 và số 4 là số 3 bé ơi! Thử lại nào!",
+      "hint": "Số 3"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_count_10",
+    title: "Số học: Đếm số lượng ngôi sao trong phạm vi 10 ⭐",
+    titleEn: "Counting: Count Stars up to 10",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "math",
+    skill: "math.count.1-10",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Bé cùng đếm xem có tất cả bao nhiêu ngôi sao lấp lánh nào? ⭐",
+      "questionEn": "How many twinkling stars are there? ⭐",
+      "media": "⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐   (7 ngôi sao)"
+},
+    options: [
+      {
+            "id": "7",
+            "text": "7 ngôi sao"
+      },
+      {
+            "id": "5",
+            "text": "5 ngôi sao"
+      },
+      {
+            "id": "9",
+            "text": "9 ngôi sao"
+      }
+],
+    correctAnswer: "7",
+    feedback: {
+      "correct": "Chính xác! Bé đếm rất chuẩn: có tất cả 7 ngôi sao vàng lấp lánh! ⭐👏",
+      "wrong": "Bé chạm ngón tay vào từng ngôi sao đếm chậm từ 1 đến 7 nhé!",
+      "hint": "7 ngôi sao"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_prev_number_10",
+    title: "Số học: Bé tìm số liền trước trong phạm vi 10 🎈",
+    titleEn: "Counting: Preceding Number up to 10",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "math",
+    skill: "math.sequence.predecessor",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé suy nghĩ xem: Số đứng ngay liền trước số 8 là số mấy nhỉ? 🎈",
+      "questionEn": "What number comes right before 8? 🎈",
+      "media": "[ ? ] ➔ 8",
+      "template": "Số liền trước số 8 là: [ ? ]"
+},
+    options: [
+      {
+            "id": "7",
+            "text": "Số 7"
+      },
+      {
+            "id": "9",
+            "text": "Số 9"
+      },
+      {
+            "id": "6",
+            "text": "Số 6"
+      }
+],
+    correctAnswer: "7",
+    feedback: {
+      "correct": "Rất đúng! Đếm 7 rồi đến 8, nên số liền trước của 8 là 7! 🎈🌟",
+      "wrong": "Số bé hơn 8 một đơn vị là số mấy bé nhỉ? Là số 7 nhé!",
+      "hint": "Số 7"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_add_visual_10",
+    title: "Phép tính: Phép cộng trực quan bằng quả táo 🍎🍏",
+    titleEn: "Math: Visual Addition with Apples",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "math",
+    skill: "math.addsub.within10",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé có 3 quả táo đỏ 🍎, mẹ cho thêm 2 quả táo xanh 🍏. Bé có tất cả mấy quả táo?",
+      "questionEn": "You have 3 red apples 🍎, mom gives 2 green apples 🍏. How many in total?",
+      "media": "🍎 🍎 🍎  +  🍏 🍏  =  [ ? ]",
+      "template": "3 + 2 = [ ? ]"
+},
+    options: [
+      {
+            "id": "5",
+            "text": "5 quả táo"
+      },
+      {
+            "id": "4",
+            "text": "4 quả táo"
+      },
+      {
+            "id": "6",
+            "text": "6 quả táo"
+      }
+],
+    correctAnswer: "5",
+    feedback: {
+      "correct": "Hoan hô bé! 3 cộng 2 bằng 5 quả táo thơm ngon! (3 + 2 = 5) 🍎🎉",
+      "wrong": "Bé đếm gộp tất cả quả táo nhé: 1, 2, 3... 4, 5 quả táo!",
+      "hint": "5 quả táo"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_sub_visual_10",
+    title: "Phép tính: Phép trừ trực quan bằng đàn cá 🐟🌊",
+    titleEn: "Math: Visual Subtraction with Fish",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "math",
+    skill: "math.addsub.within10",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Trong bể có 6 chú cá 🐟, 2 chú bơi đi chơi mất. Hỏi trong bể còn lại mấy chú cá?",
+      "questionEn": "There were 6 fish 🐟, 2 swam away. How many fish are left?",
+      "media": "🐟 🐟 🐟 🐟 🐟 🐟  bớt đi  🐟 🐟  còn  [ ? ]",
+      "template": "6 - 2 = [ ? ]"
+},
+    options: [
+      {
+            "id": "4",
+            "text": "4 chú cá"
+      },
+      {
+            "id": "3",
+            "text": "3 chú cá"
+      },
+      {
+            "id": "5",
+            "text": "5 chú cá"
+      }
+],
+    correctAnswer: "4",
+    feedback: {
+      "correct": "Xuất sắc! 6 bớt 2 còn 4 chú cá! (6 - 2 = 4) 🐟🌊",
+      "wrong": "Bé lấy 6 ngón tay gập bớt 2 ngón xem còn mấy ngón nhé? Còn 4!",
+      "hint": "4 chú cá"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_compare_weight",
+    title: "Đo lường: So sánh Nặng hơn — Nhẹ hơn ⚖️🐘🐭",
+    titleEn: "Measurement: Heavier vs Lighter",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "math",
+    skill: "math.measure.weight",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Trên chiếc bập bênh bập bùng, bác Voi 🐘 và chú Chuột 🐭, ai nặng hơn?",
+      "questionEn": "On the seesaw, Elephant 🐘 and Mouse 🐭, who is heavier?",
+      "media": "⚖️  Bác Voi 🐘 (Nặng)  và  Chú Chuột 🐭 (Nhẹ)"
+},
+    options: [
+      {
+            "id": "voi",
+            "text": "Bác Voi nặng hơn 🐘"
+      },
+      {
+            "id": "chuot",
+            "text": "Chú Chuột nặng hơn 🐭"
+      },
+      {
+            "id": "bang",
+            "text": "Hai bạn nặng bằng nhau"
+      }
+],
+    correctAnswer: "voi",
+    feedback: {
+      "correct": "Đúng rồi! Bác Voi to lớn nặng hơn rất nhiều so với chú Chuột tí hon! 🐘⚖️",
+      "wrong": "Bác Voi khổng lồ làm bập bênh trĩu xuống, bác Voi nặng hơn bé ơi!",
+      "hint": "Bác Voi nặng hơn"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p3_math_pattern_skip2",
+    title: "Tư duy logic: Tìm quy luật dãy số 2, 4, 6, [?] 🐰🥕",
+    titleEn: "Logic: Number Pattern 2, 4, 6, [?]",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "logic",
+    skill: "math.logic.number-pattern",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Thỏ con nhảy bước đôi: 2, 4, 6... Đố bé bước nhảy tiếp theo là số mấy? 🐰",
+      "questionEn": "Bunny hops by 2s: 2, 4, 6... What is the next hop? 🐰",
+      "media": "2  ➔  4  ➔  6  ➔  [ ? ]",
+      "template": "2, 4, 6, [ ? ]"
+},
+    options: [
+      {
+            "id": "8",
+            "text": "Số 8"
+      },
+      {
+            "id": "7",
+            "text": "Số 7"
+      },
+      {
+            "id": "9",
+            "text": "Số 9"
+      }
+],
+    correctAnswer: "8",
+    feedback: {
+      "correct": "Thần đồng toán học! Cứ mỗi bước cộng thêm 2: 2, 4, 6 rồi đến 8! 🐰🥕👏",
+      "wrong": "Bé đếm cách 2 nhé: 2 thêm 2 là 4, 4 thêm 2 là 6, 6 thêm 2 là 8!",
+      "hint": "Số 8"
+},
+    reward: { stars: 3 }
+  },
+
+  // ========================================================
   // NHÓM 2: LỚP 1–2 (6–8 TUỔI) - 9 HOẠT ĐỘNG
   // ========================================================
   {

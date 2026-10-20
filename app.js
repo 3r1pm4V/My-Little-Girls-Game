@@ -1489,15 +1489,13 @@ async function todayLearning(stageNum){
     `;
   } else {
     actsHtml = `<div class="stage-acts-grid">` + acts.map(act => {
-      const icon = act.subject === "math" ? "📐" : (act.subject === "vietnamese" ? "🔤" : (act.subject === "reading" ? "📖" : (act.subject === "english" ? "🇬🇧" : (act.subject === "science" ? "🔬" : "🌱"))));
+      const icon = act.subject === "math" ? "🔢" : (act.subject === "logic" ? "🧩" : (act.subject === "vietnamese" ? "🔤" : (act.subject === "reading" ? "📖" : (act.subject === "english" ? "🇬🇧" : (act.subject === "science" ? "🔬" : "🌱")))));
       const titleVi = act.title || "";
       const titleEn = act.titleEn || act.title || "";
-      const qCount = act.content ? act.content.length : 3;
+      const qCount = act.content ? (Array.isArray(act.content) ? act.content.length : 1) : 3;
       return `
         <button class="stage-act-card" 
           onclick="playActivity('${act.id}')"
-          \\'")}', '${titleEn.replace(/'/g, "\\'")}')"
-          \\'")}', '${titleEn.replace(/'/g, "\\'")}')"
           aria-label="${T(titleVi, titleEn)}">
           <div class="stage-act-icon">${icon}</div>
           <div class="stage-act-info">

@@ -167,14 +167,14 @@ const stage4Acts = getActivitiesByStage(4);
 const stage5Acts = getActivitiesByStage(5);
 
 assert.strictEqual(stage0Acts.length, 3, 'Chặng 0 phải có 3 bài học');
-assert.strictEqual(stage1Acts.length, 20, 'Chặng 1 phải có 20 bài học');
-assert.strictEqual(stage2Acts.length, 6, 'Chặng 2 phải có 6 bài học');
+assert.strictEqual(stage1Acts.length, 24, 'Chặng 1 phải có 24 bài học');
+assert.strictEqual(stage2Acts.length, 12, 'Chặng 2 phải có 12 bài học');
 assert.strictEqual(stage3Acts.length, 8, 'Chặng 3 phải có 8 bài học');
 assert.strictEqual(stage4Acts.length, 6, 'Chặng 4 phải có 6 bài học');
 assert.strictEqual(stage5Acts.length, 0, 'Chặng 5 hiện tại có 0 bài học');
 
 const totalJourneyActs = stage0Acts.length + stage1Acts.length + stage2Acts.length + stage3Acts.length + stage4Acts.length + stage5Acts.length;
-assert.strictEqual(totalJourneyActs, 43, 'Tổng số bài qua 6 chặng phải là 43 bài làm quen cho bé 4–6 tuổi');
+assert.strictEqual(totalJourneyActs, 53, 'Tổng số bài qua 6 chặng phải là 53 bài làm quen cho bé 4–6 tuổi');
 
 console.log(`✔ Dữ liệu 6 chặng kết nối chính xác: Chặng 0 (${stage0Acts.length}), Chặng 1 (${stage1Acts.length}), Chặng 2 (${stage2Acts.length}), Chặng 3 (${stage3Acts.length}), Chặng 4 (${stage4Acts.length}), Chặng 5 (${stage5Acts.length})!`);
 
