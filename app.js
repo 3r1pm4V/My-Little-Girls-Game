@@ -2543,291 +2543,41 @@ function games(){
 
 /* ========================================================
    TRÒ CHƠI HỌC TẬP TIỀN TIỂU HỌC: ĐẾM HÌNH CHỌN SỐ (COUNT GAME)
+   Logic đã được tách thành module độc lập: games/count-game.js
+   (Tự đọc say(viPrompt, enPrompt), phần tử #cgPrompt)
    ======================================================== */
-const COUNT_ITEMS_POOL = [
-  { emoji: "🍎", nameVi: "quả táo", nameEn: "apples" },
-  { emoji: "🐱", nameVi: "chú mèo", nameEn: "cats" },
-  { emoji: "🚗", nameVi: "ô tô", nameEn: "cars" },
-  { emoji: "⭐", nameVi: "ngôi sao", nameEn: "stars" },
-  { emoji: "🎈", nameVi: "bóng bay", nameEn: "balloons" },
-  { emoji: "🐥", nameVi: "gà con", nameEn: "chicks" },
-  { emoji: "🍓", nameVi: "dâu tây", nameEn: "strawberries" },
-  { emoji: "🐰", nameVi: "chú thỏ", nameEn: "bunnies" },
-  { emoji: "🍦", nameVi: "cây kem", nameEn: "ice creams" },
-  { emoji: "🍉", nameVi: "miếng dưa", nameEn: "watermelons" },
-  { emoji: "🐻", nameVi: "chú gấu", nameEn: "teddy bears" },
-  { emoji: "🚀", nameVi: "tên lửa", nameEn: "rockets" }
-];
+let countGameModule = null;
 
-let cgState = {
-  qIndex: 0,
-  score: 0,
-  total: 5,
-  questions: [],
-  answered: false,
-  countedItems: new Set()
-};
-
-function initCountGame(){
-  const pool = shuf([...COUNT_ITEMS_POOL]);
-  const nums = shuf([1, 2, 3, 4, 5, 6, 7]).slice(0, 5);
-  const questions = [];
-  for(let i = 0; i < 5; i++){
-    const item = pool[i % pool.length];
-    const target = nums[i];
-    const c = new Set([target]);
-    while(c.size < 3){
-      const offset = pick([-2, -1, 1, 2, 3]);
-      let cand = target + offset;
-      if(cand < 1) cand = target + R(1, 3);
-      if(cand > 9) cand = target - R(1, 3);
-      if(cand >= 1 && cand <= 9 && cand !== target) c.add(cand);
-    }
-    questions.push({
-      item,
-      target,
-      options: shuf([...c]),
-      attempted: false
-    });
-  }
-  cgState = {
-    qIndex: 0,
-    score: 0,
-    total: 5,
-    questions,
-    answered: false,
-    countedItems: new Set()
-  };
-}
-
-function countGame(isReplay){
-  if(isReplay || !cgState.questions || cgState.questions.length !== 5 || cgState.qIndex >= 5){
-    initCountGame();
-  }
-  renderCountQuestion();
-}
-
-function renderCountQuestion(){
-  const { qIndex, total, questions } = cgState;
-  if(qIndex >= total){
-    renderCountResult();
-    return;
-  }
-  cgState.answered = false;
-  cgState.countedItems = new Set();
-  const q = questions[qIndex];
-  const item = q.item;
-  const count = q.target;
-  const viPrompt = `Có bao nhiêu ${item.nameVi}?`;
-  const enPrompt = `How many ${item.nameEn}?`;
-
-  const bcHtml = kbc([
-    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
-    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
-    {t:T("Đếm hình chọn số","Count & Match"), i:"🍎"}
-  ]);
-
-  const dotsHtml = Array.from({length: total}, (_, i) => {
-    const cls = i < qIndex ? "done" : (i === qIndex ? "cur" : "");
-    return `<span class="cg-dot ${cls}"></span>`;
-  }).join("");
-
-  const itemsHtml = Array.from({length: count}, (_, i) => {
-    return `<button class="cg-item-btn" data-i="${i+1}" onclick="window.__cgCountTap(this, ${i+1})" aria-label="${i+1}">
-      ${item.emoji}
-      <span class="cg-badge">${i+1}</span>
-    </button>`;
-  }).join("");
-
-  const optsHtml = q.options.map(num => {
-    return `<button class="cg-opt-btn" data-n="${num}" onclick="window.__cgChoose(${num}, this)">
-      <span class="cg-opt-num">${num}</span>
-    </button>`;
-  }).join("");
-
-  m.innerHTML = `${bcHtml}
-  <div class="cg-wrap">
-    <div class="cg-progress">
-      <span>${T(`Câu ${qIndex + 1} / ${total}`, `Question ${qIndex + 1} / ${total}`)}</span>
-      <div class="cg-progress-bar">
-        <div class="cg-progress-fill" style="width:${Math.round(((qIndex + 1) / total) * 100)}%"></div>
-      </div>
-      <div class="cg-dots">${dotsHtml}</div>
-    </div>
-
-    <div class="cg-stage">
-      <div class="cg-prompt" id="cgPrompt" onclick="say('${viPrompt}', '${enPrompt}')" title="${T("Bấm để nghe lại câu hỏi","Tap to listen again")}">
-        <span>🔊</span> ${T(viPrompt, enPrompt)}
-      </div>
-      <div class="cg-items-box">
-        ${itemsHtml}
-      </div>
-      <div class="cg-hint-text">${T("💡 Chạm vào từng hình để bé cùng đếm nhé!","💡 Tap each item to count together!")}</div>
-      
-      <div class="cg-opts">
-        ${optsHtml}
-      </div>
-
-      <div class="cg-feedback" id="cgFeedback"></div>
-    </div>
-  </div>`;
-
-  say(viPrompt, enPrompt);
-  catSet("thinking");
-}
-
-window.__cgCountTap = function(btn, num){
-  if(rmOn()) return;
-  sfxTap();
-  btn.classList.add("counted");
-  btn.style.animation = "pop .3s ease";
-  setTimeout(() => { btn.style.animation = ""; }, 300);
-  cgState.countedItems.add(num);
-  sayN(num);
-};
-
-window.__cgChoose = function(chosen, btn){
-  if(cgState.answered) return;
-  const q = cgState.questions[cgState.qIndex];
-  const fb = document.getElementById("cgFeedback");
-
-  if(chosen === q.target){
-    cgState.answered = true;
-    if(!q.attempted){
-      cgState.score++;
-    }
-    btn.classList.add("good");
-    sfxOk();
-    fx();
-    catSet("celebrate");
-    const praise = pick(PR);
-    if(fb){
-      fb.className = "cg-feedback good";
-      fb.innerHTML = `🎉 ${T(praise[0], praise[1])} ${T("Đúng rồi!", "That's right!")} ⭐`;
-    }
-    say(`${praise[0]} Có ${NV[q.target]} ${q.item.nameVi}.`, `${praise[1]} There are ${NE[q.target]} ${q.item.nameEn}.`);
-    
-    setTimeout(() => {
-      cgState.qIndex++;
-      renderCountQuestion();
-    }, 1250);
-  } else {
-    q.attempted = true;
-    btn.classList.add("bad");
-    btn.disabled = true;
-    sfxNo();
-    catSet("sad");
-    if(fb){
-      fb.className = "cg-feedback bad";
-      fb.innerHTML = `💡 ${T("Bé đếm lại cẩn thận rồi chọn nhé!","Count again carefully and try!")}`;
-    }
-    say("Bé thử đếm lại nhé", "Try counting again");
-    setTimeout(() => {
-      catSet("thinking");
-    }, 900);
-  }
-};
-
-function renderCountResult(){
-  const { score, total } = cgState;
-  // Tính sao 1-3 theo độ chính xác:
-  // 5/5 -> 3 sao, 3-4/5 -> 2 sao, 1-2/5 -> 1 sao
-  const starCount = score === 5 ? 3 : (score >= 3 ? 2 : 1);
-  stars += starCount;
-  ls.set("stars", stars);
-  recordDailyActivity();
-  head();
-  checkBadges();
-
-  const now = new Date();
-  const dateFormatted = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")} - ${now.getDate()}/${now.getMonth() + 1}`;
-  const saveObj = {
-    score,
-    total,
-    stars: starCount,
-    timestamp: Date.now(),
-    dateStr: dateFormatted
-  };
-  ls.set("kids_count_game_last", JSON.stringify(saveObj));
-
-  let lastRecordText = "";
-  try {
-    const raw = ls.get("kids_count_game_last", "");
-    if(raw){
-      const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
-      if(parsed && parsed.score !== undefined){
-        lastRecordText = T(
-          `🕒 Lần chơi gần nhất: ${parsed.score}/${parsed.total} câu đúng (${parsed.dateStr})`,
-          `🕒 Last played: ${parsed.score}/${parsed.total} correct (${parsed.dateStr})`
-        );
+async function countGame(isReplay){
+  if(!countGameModule){
+    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải trò chơi...","Loading game...")}</p></div>`;
+    const isFileProto = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
+    if (isFileProto) {
+      await loadScriptTag("games/count-game.js");
+      countGameModule = window.CountGame;
+    } else {
+      try {
+        const mod = await import('./games/count-game.js');
+        countGameModule = mod.default || mod || window.CountGame;
+      } catch(e) {
+        await loadScriptTag("games/count-game.js");
+        countGameModule = window.CountGame;
       }
     }
-  } catch(e){}
-
-  const starsHtml = Array.from({length: 3}, (_, i) => {
-    return i < starCount ? `<span>⭐</span>` : `<span style="opacity:0.25;filter:grayscale(1)">⭐</span>`;
-  }).join("");
-
-  let msgVi = "Bé rất chăm chỉ và đáng khen!";
-  let msgEn = "Great effort! Keep practicing!";
-  if(score === 5){
-    msgVi = "Xuất sắc! Bé là thiên tài đếm số! 🌟";
-    msgEn = "Outstanding! You are a counting master! 🌟";
-  } else if(score >= 4){
-    msgVi = "Rất giỏi! Bé đếm số rất cừ khôi! 👏";
-    msgEn = "Awesome job! You did so well! 👏";
-  } else if(score >= 3){
-    msgVi = "Tốt lắm! Cùng luyện tập để đạt điểm tuyệt đối nhé! 💪";
-    msgEn = "Good job! Play again to get 3/3 stars! 💪";
   }
 
-  triggerCelebration(
-    T("Hoàn thành trò chơi đếm!","Counting Game Complete!"),
-    T(`Bé làm đúng ${score}/${total} câu và nhận được ${starCount} sao!`,`You got ${score}/${total} right and earned ${starCount} stars!`),
-    "🏆",
-    Array(starCount).fill("⭐").join("")
-  );
-
-  const bcHtml = kbc([
-    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
-    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
-    {t:T("Kết quả","Results"), i:"🏆"}
-  ]);
-
-  m.innerHTML = `${bcHtml}
-  <div class="cg-wrap">
-    <div class="cg-result-card">
-      <div class="cg-result-trophy">🏆</div>
-      <h2>${T("Hoàn thành vòng chơi!","Game Complete!")}</h2>
-      <div class="cg-result-stars">${starsHtml}</div>
-      <div class="cg-result-score">${T(`Bé làm đúng ${score} / ${total} câu`, `You got ${score} / ${total} right`)}</div>
-      <p class="cg-result-msg">${T(msgVi, msgEn)}</p>
-      ${lastRecordText ? `<div class="cg-result-last">${lastRecordText}</div>` : ""}
-      <div class="cg-result-btns">
-        <button class="cg-btn-replay" onclick="countGame(true)">
-          🔄 ${T("Chơi lại","Play Again")}
-        </button>
-        <button class="cg-btn-back" onclick="go('games')">
-          🔙 ${T("Quay lại","Back to Games")}
-        </button>
-      </div>
-    </div>
-  </div>`;
-
-  sfxFanfare();
-  fx();
-  catSet("celebrate");
-  triggerCelebration(
-    T("Hoàn thành xuất sắc!", "All Done!"),
-    T(`Bé làm đúng ${score} / ${total} câu! Nhận được ${starCount} sao!`, `You got ${score}/${total} right and earned ${starCount} stars!`),
-    "🏆",
-    Array(starCount).fill("⭐").join("")
-  );
-  say(
-    `Hoan hô bé! Bé làm đúng ${NV[score]} trên ${NV[total]} câu. Nhận được ${NV[starCount]} sao vàng!`,
-    `Hooray! You got ${NE[score]} out of ${NE[total]}. You earned ${NE[starCount]} stars!`
-  );
+  if(countGameModule){
+    countGameModule.init(m);
+    countGameModule.render(isReplay);
+  } else {
+    m.innerHTML = `${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Đếm hình chọn số","Count & Match"),i:"🍎"}])}
+      <div style="text-align:center;padding:40px 20px">
+        <h3>${T("Chưa tải được trò chơi","Could not load game")}</h3>
+        <button class="pill on" onclick="countGame(true)" style="margin-top:12px">🔄 ${T("Thử lại","Try Again")}</button>
+      </div>`;
+  }
 }
+window.countGame = countGame;
 
 /* ========================================================
    TRÒ CHƠI HỌC TẬP TIỀN TIỂU HỌC: BẮT BÓNG CHỮ (BUBBLE POP LETTERS)

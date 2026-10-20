@@ -27,9 +27,10 @@ assert(appJs.includes('id="actQTitle"'), 'playActivity phải có phần tử c�
 assert(appJs.includes('say(act.title, act.titleEn || act.title)'), 'isWatchMode phải tự đọc tiêu đề bài học khi vào');
 assert(appJs.includes('id="actWatchTitle"'), 'isWatchMode phải có #actWatchTitle có nút 🔊');
 
-// 1.3 Kiểm tra countGame
-assert(appJs.includes('say(viPrompt, enPrompt)'), 'countGame phải tự đọc đề khi vào câu hỏi mới');
-assert(appJs.includes('id="cgPrompt"'), 'countGame phải có nút nghe lại #cgPrompt');
+// 1.3 Kiểm tra countGame (hỗ trợ cả module games/count-game.js)
+const cgCode = fs.existsSync('games/count-game.js') ? fs.readFileSync('games/count-game.js', 'utf8') : '';
+assert(appJs.includes('say(viPrompt, enPrompt)') || cgCode.includes('say(viPrompt, enPrompt)'), 'countGame phải tự đọc đề khi vào câu hỏi mới');
+assert(appJs.includes('id="cgPrompt"') || cgCode.includes('id="cgPrompt"'), 'countGame phải có nút nghe lại #cgPrompt');
 
 // 1.4 Kiểm tra bubbleGame
 assert(appJs.includes('announceTarget()'), 'bubbleGame phải tự đọc chữ cái cần bắt');

@@ -7,6 +7,13 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **refactor(P2-06: Modularize countGame into games/count-game.js)**:
+  - Tách toàn bộ logic trò chơi Đếm hình chọn số từ `app.js` (dòng 2544–2830) sang module độc lập `games/count-game.js`.
+  - Module `games/count-game.js` xuất khẩu đúng chuẩn các hàm `init(container)` và `render(isReplay)`, đồng thời hỗ trợ cả Universal JS (`window.CountGame`) và ES module (`export { init, render }`).
+  - Cập nhật `countGame()` trong `app.js` để nạp động module `games/count-game.js` bằng dynamic `import()` kèm cơ chế nạp dự phòng `loadScriptTag` an toàn cho môi trường `file://`.
+  - Bổ sung `games/count-game.js` vào danh sách nạp lười `OPT` trong `sw.js`; chạy `node test-sw-precache.js --fix` tự động cập nhật mã băm và bump cache lên `bhv-v51`.
+  - Viết mới bộ kiểm thử `test-count-game-module.js`: kiểm tra 100% hợp đồng API của module (`init`, `render`, cấu trúc DOM).
+  - Toàn bộ 18 test suites đạt chuẩn PASS 100%.
 - **feat(P2-07b: Batch VieNeu Audio Generation & Full Stage 0–1 Precache)**:
   - Sinh tự động thành công 100% (157/157 file) âm thanh VieNeu TTS (giọng cô giáo Tưởng Vy #11) cho toàn bộ các đáp án lựa chọn bài học con vật Mầm non Chặng 0, bài chữ cái VTV7 Chặng 1, ghép thẻ số lượng táo và hướng dẫn Cổng PIN phụ huynh:
     - Loại trừ an toàn 3 từ tiếng Anh mầm non (để dùng audio bản ngữ chuẩn) và 4 câu tiếng kêu con vật (để tải nguồn Google chuẩn).

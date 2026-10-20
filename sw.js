@@ -1,6 +1,6 @@
-// asset-hash: 0bd86b76cd53bec3
+// asset-hash: 2b2592e7e1ab6160
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v50";
+const C = "bhv-v51";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [
@@ -12,7 +12,7 @@ const CORE = [
 ];
 
 // Nạp lười bằng import() trong app.js: tải cố gắng hết sức lúc cài, thiếu file KHÔNG làm hỏng việc cài SW.
-const OPT = ["stories-data.js", "stories-catalog.js", "img-s.js", "img-o.js"];
+const OPT = ["stories-data.js", "stories-catalog.js", "img-s.js", "img-o.js", "games/count-game.js"];
 
 // Gói âm thanh offline bé 4 tuổi (Home + Chặng 0 & 1, ~11.85 MB)
 const OPT_AUDIO = [
