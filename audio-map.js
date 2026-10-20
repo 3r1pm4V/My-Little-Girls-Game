@@ -32253,7 +32253,68 @@
   "vi|Chữ D (Không có nét gạch) 🐐": "audio/alpha_vi_d.mp3",
   "Mái nhà cao ⛺": "audio/ui_today_pick.mp3",
   "vi|Mái nhà cao ⛺": "audio/ui_today_pick.mp3",
+
+  // UI Prompts, Rest Modal & App Audios
+  "Bé hãy chạm vào 1 ô bên trái trước nhé!": "audio/ui_tap_left_first.mp3",
+  "vi|Bé hãy chạm vào 1 ô bên trái trước nhé!": "audio/ui_tap_left_first.mp3",
+  "Bé hãy chạm vào một ô bên trái trước nhé!": "audio/ui_tap_left_first.mp3",
+  "vi|Bé hãy chạm vào một ô bên trái trước nhé!": "audio/ui_tap_left_first.mp3",
+  "Bé chọn một trò chơi nhé": "audio/vi_be_chon_tro_choi_nhe_vb1jqv.mp3",
+  "vi|Bé chọn một trò chơi nhé": "audio/vi_be_chon_tro_choi_nhe_vb1jqv.mp3",
+  "Bé chọn trò chơi nhé": "audio/vi_be_chon_tro_choi_nhe_vb1jqv.mp3",
+  "vi|Bé chọn trò chơi nhé": "audio/vi_be_chon_tro_choi_nhe_vb1jqv.mp3",
+  "Bé học giỏi lắm! Hôm nay bé đã rất chăm chỉ, mình cùng nghỉ ngơi giữ gìn đôi mắt sáng nhé!": "audio/ui_rest_modal_cat_say.mp3",
+  "vi|Bé học giỏi lắm! Hôm nay bé đã rất chăm chỉ, mình cùng nghỉ ngơi giữ gìn đôi mắt sáng nhé!": "audio/ui_rest_modal_cat_say.mp3",
+  "Đánh vần và luyện đọc": "audio/ui_reading_prompt.mp3",
+  "vi|Đánh vần và luyện đọc": "audio/ui_reading_prompt.mp3",
+  "Bé chọn 14 nét viết cơ bản, bảng chữ cái, hoặc tập đánh vần nhé!": "audio/ui_home_btn_letters.mp3",
+  "vi|Bé chọn 14 nét viết cơ bản, bảng chữ cái, hoặc tập đánh vần nhé!": "audio/ui_home_btn_letters.mp3",
+  "Chào bé! Bé chọn Học chữ, Học số, Trò chơi, hay nghe Truyện nào?": "audio/vi_chao_be_minh_cung_ho_j63sgh.mp3",
+  "vi|Chào bé! Bé chọn Học chữ, Học số, Trò chơi, hay nghe Truyện nào?": "audio/vi_chao_be_minh_cung_ho_j63sgh.mp3",
+  "Chặng này đang được khóa. Bé nhờ bố mẹ mở khóa trong khu phụ huynh nhé!": "audio/ui_pin_gate_prompt.mp3",
+  "vi|Chặng này đang được khóa. Bé nhờ bố mẹ mở khóa trong khu phụ huynh nhé!": "audio/ui_pin_gate_prompt.mp3",
+
+  // Badge Name Audios
+  "Bé Chăm Chỉ": "audio/badge_unlock_1.mp3",
+  "vi|Bé Chăm Chỉ": "audio/badge_unlock_1.mp3",
+  "Ngôi Sao Sáng": "audio/badge_unlock_2.mp3",
+  "vi|Ngôi Sao Sáng": "audio/badge_unlock_2.mp3",
+  "Vua Học Vui": "audio/badge_unlock_3.mp3",
+  "vi|Vua Học Vui": "audio/badge_unlock_3.mp3",
+  "Siêu Sao Vô Địch": "audio/badge_unlock_3.mp3",
+  "vi|Siêu Sao Vô Địch": "audio/badge_unlock_3.mp3",
+  "Bác Học Chữ Cái": "audio/badge_unlock_4.mp3",
+  "vi|Bác Học Chữ Cái": "audio/badge_unlock_4.mp3",
+  "Siêu Sao Đếm Số": "audio/badge_unlock_5.mp3",
+  "vi|Siêu Sao Đếm Số": "audio/badge_unlock_5.mp3",
+  "Thần Đồng Toán": "audio/badge_unlock_5.mp3",
+  "vi|Thần Đồng Toán": "audio/badge_unlock_5.mp3",
+  "Bút Chì Vàng": "audio/badge_unlock_7.mp3",
+  "vi|Bút Chì Vàng": "audio/badge_unlock_7.mp3",
+  "Mọt Sách Nhỏ": "audio/badge_unlock_8.mp3",
+  "vi|Mọt Sách Nhỏ": "audio/badge_unlock_8.mp3",
+  "Tay Đua Bất Bại": "audio/badge_unlock_9.mp3",
+  "vi|Tay Đua Bất Bại": "audio/badge_unlock_9.mp3",
+  "Chăm Chỉ 3 Ngày": "audio/badge_unlock_1.mp3",
+  "vi|Chăm Chỉ 3 Ngày": "audio/badge_unlock_1.mp3",
+  "Kiên Trì 7 Ngày": "audio/badge_unlock_8.mp3",
+  "vi|Kiên Trì 7 Ngày": "audio/badge_unlock_8.mp3"
 };
+
+  // Tạo chỉ mục chuẩn hóa O(1) để tra cứu bất chấp hoa/thường, dấu câu, emoji
+  const NORM_INDEX = Object.create(null);
+  for (const k in RAW_MAP) {
+    const v = RAW_MAP[k];
+    const nk = normKey(k);
+    if (nk && !NORM_INDEX[nk]) NORM_INDEX[nk] = v;
+    const rawK = nk.replace(/^(vi|en)\|/, "");
+    if (rawK && !NORM_INDEX[rawK]) NORM_INDEX[rawK] = v;
+    const viK = "vi|" + rawK;
+    if (viK && !NORM_INDEX[viK]) NORM_INDEX[viK] = v;
+    const noVs = rawK.replace(/[\uFE0E-\uFE0F]/g, "");
+    if (noVs && !NORM_INDEX[noVs]) NORM_INDEX[noVs] = v;
+    if (noVs && !NORM_INDEX["vi|" + noVs]) NORM_INDEX["vi|" + noVs] = v;
+  }
 
   // Hỗ trợ tra cứu linh hoạt qua Proxy (chấp nhận cả chuỗi có dấu câu, chữ hoa, v.v.)
   window.AUDIO_MAP = new Proxy(RAW_MAP, {
@@ -32262,24 +32323,34 @@
       if (prop in target) return target[prop];
       const nk = normKey(prop);
       if (nk in target) return target[nk];
+      if (nk in NORM_INDEX) return NORM_INDEX[nk];
       const rawK = nk.replace(/^(vi|en)\|/, "");
       if (rawK in target) return target[rawK];
+      if (rawK in NORM_INDEX) return NORM_INDEX[rawK];
       const viK = "vi|" + rawK;
       if (viK in target) return target[viK];
+      if (viK in NORM_INDEX) return NORM_INDEX[viK];
       const noVs = rawK.replace(/[\uFE0E-\uFE0F]/g, "");
       if (noVs in target) return target[noVs];
+      if (noVs in NORM_INDEX) return NORM_INDEX[noVs];
       if (("vi|" + noVs) in target) return target["vi|" + noVs];
+      if (("vi|" + noVs) in NORM_INDEX) return NORM_INDEX["vi|" + noVs];
       const withVs = noVs + "\uFE0F";
       if (withVs in target) return target[withVs];
+      if (withVs in NORM_INDEX) return NORM_INDEX[withVs];
       if (("vi|" + withVs) in target) return target["vi|" + withVs];
+      if (("vi|" + withVs) in NORM_INDEX) return NORM_INDEX["vi|" + withVs];
       return undefined;
     },
     has(target, prop) {
       if (typeof prop !== "string") return prop in target;
+      if (prop in target) return true;
       const nk = normKey(prop);
+      if (nk in target || nk in NORM_INDEX) return true;
       const rawK = nk.replace(/^(vi|en)\|/, "");
+      if (rawK in target || rawK in NORM_INDEX) return true;
       const noVs = rawK.replace(/[\uFE0E-\uFE0F]/g, "");
-      return (prop in target) || (nk in target) || (rawK in target) || (("vi|" + rawK) in target) || (noVs in target) || (("vi|" + noVs) in target);
+      return (noVs in target) || (noVs in NORM_INDEX) || (("vi|" + noVs) in target) || (("vi|" + noVs) in NORM_INDEX);
     }
   });
 })();

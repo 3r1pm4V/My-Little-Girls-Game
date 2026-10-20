@@ -1819,7 +1819,7 @@ function home(){
     </p>
   `;
   if(isKidPreschoolMode){
-    sayPrompt("home", "Chào bé! Bé chọn Học chữ, Học số, Trò chơi, hay nghe Truyện nào?", "Hello! Pick Letters, Numbers, Games, or Stories!", 300000);
+    sayPrompt("home", "Chào bé! Mình cùng học nhé", "Hello! Let\'s learn together", 300000);
   } else {
     sayPrompt("home", "Chào bé! Mình cùng học nhé", "Hello! Let's learn together", 300000);
   }
@@ -2546,7 +2546,7 @@ window.__matchTapRight = function(pairId, btn){
   if(window.__matchState.matchedIds.has(pairId)) return;
   const sel = window.__matchState.selLeft;
   if(!sel){
-    say("Bé hãy chạm vào 1 ô bên trái trước nhé!", "Tap an item on the left first!");
+    say("Bé hãy chạm vào một ô bên trái trước nhé!", "Tap an item on the left first!");
     return;
   }
   const leftBtn = document.getElementById("match-l-" + sel);
@@ -2763,7 +2763,7 @@ function games(){
     ${card("mem",im("cat")+im("cat"),"Lật thẻ ghi nhớ","Memory","game")}
     ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
   </div>`;
-  sayPrompt("games","Bé chọn một trò chơi nhé","Pick a game to play",180000);
+  sayPrompt("games","Bé chọn trò chơi nhé","Pick a game to play",180000);
 }
 
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
@@ -4083,13 +4083,20 @@ setInterval(() => {
 let limitModalDismissedUntil = 0;
 function checkDailyTimeLimit(mins){
   const limitVal = parseInt(ls.get("daily_limit_minutes", "15"), 10);
-  const limit = Number.isNaN(limitVal) ? 15 : limitVal;
-  if(limit > 0 && mins >= limit){
-    if(Date.now() > limitModalDismissedUntil){
+  const baseLimit = Number.isNaN(limitVal) ? 15 : limitVal;
+  if(baseLimit <= 0) return; // Không giới hạn
+
+  const today = getLocalDateStr();
+  const extensionMins = parseInt(ls.get("time_limit_extension_" + today, "0"), 10) || 0;
+  const totalAllowed = baseLimit + extensionMins;
+
+  if(mins >= totalAllowed){
+    const dismissedUntil = parseInt(ls.get("limit_dismissed_until", "0"), 10) || limitModalDismissedUntil || 0;
+    if(Date.now() > dismissedUntil){
       const modal = document.getElementById("timeLimitModal");
       if(modal && modal.style.display !== "flex"){
         modal.style.display = "flex";
-        say("Bé học giỏi lắm! Hôm nay bé đã rất chăm chỉ, mình cùng nghỉ ngơi giữ gìn đôi mắt sáng nhé!", "Great job today! Time to rest your bright eyes!");
+        say("Bé học giỏi lắm! Hôm nay bé đã rất chăm chỉ, mình cùng nghỉ ngơi giữ gìn đôi mắt sáng nhé! Hẹn gặp lại bé ngày mai!", "Great job today! Time to rest your bright eyes!");
         catSet("happy");
       }
     }
@@ -4100,12 +4107,25 @@ window.__unlockTimeLimit = function(){
   openParentPinModal({
     purpose: "unlock_time",
     onSuccess: () => {
-      limitModalDismissedUntil = Date.now() + 15 * 60 * 1000;
+      const today = getLocalDateStr();
+      const currentExt = parseInt(ls.get("time_limit_extension_" + today, "0"), 10) || 0;
+      ls.set("time_limit_extension_" + today, currentExt + 15);
+      const dismissTime = Date.now() + 15 * 60 * 1000;
+      limitModalDismissedUntil = dismissTime;
+      ls.set("limit_dismissed_until", dismissTime);
       const modal = document.getElementById("timeLimitModal");
       if (modal) modal.style.display = "none";
-      alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học!" : "✅ Extended 15 more minutes!");
+      alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học cho hôm nay!" : "✅ Extended 15 more minutes of study time for today!");
     }
   });
+};
+
+window.__dismissTimeLimitModal = function(){
+  const modal = document.getElementById("timeLimitModal");
+  if (modal) modal.style.display = "none";
+  const dismissTime = Date.now() + 5 * 60 * 1000;
+  limitModalDismissedUntil = dismissTime;
+  ls.set("limit_dismissed_until", dismissTime);
 };
 
 function setDailyLimit(mins){
@@ -5645,7 +5665,7 @@ function readL(tab){
     </div>
   `;
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Đánh vần & Luyện đọc","Reading & Phonics"),i:"📚"}])}
-  <h2 id="readLQ" role="button" tabindex="0" onclick="say('Đánh vần và luyện đọc','Reading and phonics')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
+  <h2 id="readLQ" role="button" tabindex="0" onclick="say('Đánh vần và luyện đọc nhé','Reading and phonics')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
   ${lanAnhBanner}
   <div class="chips" style="margin-bottom:10px">${tabs.map(([k,vi,en])=>`<button class="pill${readTab===k?" on":""}" onclick="readL('${k}')">${T(vi,en)}</button>`).join("")}</div>
   ${body}`;
