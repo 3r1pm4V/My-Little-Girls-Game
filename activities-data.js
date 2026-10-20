@@ -4129,6 +4129,11 @@ function validateActivity(act) {
       errors.push("Invalid 'stage' (must be integer 0-5 or null)");
     }
   }
+  if (act.skills !== undefined && act.skills !== null) {
+    if (!Array.isArray(act.skills) && typeof act.skills !== "string") {
+      errors.push("Invalid 'skills' (must be array or string)");
+    }
+  }
   if (act.minAge !== undefined && act.minAge !== null) {
     if (!Number.isInteger(act.minAge) || act.minAge < 3 || act.minAge > 12) {
       errors.push("Invalid 'minAge' (must be integer 3-12)");
@@ -4208,6 +4213,31 @@ function getActivitiesByStage(stage) {
 // Helper lấy tất cả bài học thuộc lộ trình Chuẩn bị vào Lớp 1 (5–6 tuổi)
 
 // Helper lấy danh sách bài học kỹ năng sống sẵn sàng đến trường (life_skills)
+// Đảm bảo trường skills đồng bộ với schema cho mọi activity
+ACTIVITIES_DATA.forEach(act => {
+  if (!act.skills) {
+    if (act.skill) {
+      act.skills = [act.skill];
+    } else if (act.id.startsWith("g1_vtv7_")) {
+      act.skills = ["vi.letters.alphabet"];
+    } else if (act.id.startsWith("g1_lananh_")) {
+      act.skills = ["vi.phonics.lananh"];
+    } else if (act.id.startsWith("act_vq_pre_")) {
+      act.skills = ["life.observation"];
+    } else if (act.id.startsWith("act_vq_g12_")) {
+      act.skills = ["vi.phonics.blend"];
+    } else if (act.id.startsWith("act_vq_g35_")) {
+      act.skills = ["sci.space.discovery"];
+    } else if (act.id.startsWith("act_g3_math_")) {
+      act.skills = ["math.operations.advanced"];
+    } else if (act.id.startsWith("act_g35_sci_")) {
+      act.skills = ["sci.biology.lifecycle"];
+    } else {
+      act.skills = [act.subject || "general"];
+    }
+  }
+});
+
 function getLifeSkillsActivities() {
   return ACTIVITIES_DATA.filter(a => a.stage === 5 || (a.skill && a.skill.startsWith("life.")));
 }

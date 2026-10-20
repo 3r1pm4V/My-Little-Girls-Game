@@ -257,7 +257,9 @@ assert.strictEqual(validateActivity({ ...sampleAct, minAge: 15 }).valid, false, 
 assert.strictEqual(validateActivity({ ...sampleAct, minAge: "4" }).valid, false, 'validateActivity từ chối minAge dạng string');
 console.log('✔ Trường tùy chọn minAge hợp lệ theo chuẩn schema!');
 
-console.log('✔ Negative test: Đã bắt thành công mọi trường hợp thiếu hoặc sai stage!');
+assert.strictEqual(validateActivity({ ...sampleAct, skills: 12345 }).valid, false, 'validateActivity phải từ chối skills dạng số');
+assert.strictEqual(validateActivity({ ...sampleAct, skills: true }).valid, false, 'validateActivity phải từ chối skills dạng boolean');
+console.log('✔ Negative test: Đã bắt thành công mọi trường hợp thiếu hoặc sai stage & skills!');
 
 console.log('\n================================================================');
 console.log('  TẤT CẢ TEST SCHEMA VÀ LỘ TRÌNH CHẶNG ĐẠT CHUẨN 100% THÀNH CÔNG! ');

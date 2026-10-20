@@ -14,7 +14,9 @@
     "mediaSource",
     "learningObjective",
     "difficulty",
-    "content"
+    "content",
+    "stage",
+    "skills"
   ],
   "properties": {
     "id": {
@@ -37,11 +39,26 @@
     "ageTier": {
       "type": "string",
       "description": "Phân tầng độ tuổi phù hợp",
-      "enum": ["preschool", "grade1_2", "grade3_5"]
+      "enum": [
+        "preschool",
+        "grade1_2",
+        "grade3_5"
+      ]
     },
     "stage": {
-      "type": ["integer", "null"],
-      "enum": [0, 1, 2, 3, 4, 5, null],
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        null
+      ],
       "description": "Chặng học từ 0 đến 5 cho lộ trình làm quen và chuẩn bị vào lớp 1 (4–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
     },
     "minAge": {
@@ -53,21 +70,46 @@
     "subject": {
       "type": "string",
       "description": "Môn học hoặc lĩnh vực phát triển",
-      "enum": ["vietnamese", "math", "english", "science", "skills"]
+      "enum": [
+        "vietnamese",
+        "math",
+        "english",
+        "science",
+        "skills"
+      ]
     },
     "type": {
       "type": "string",
       "description": "Định dạng trải nghiệm hoạt động tương tác",
-      "enum": ["video_quiz", "interactive_story", "logic_puzzle", "phonics_game", "story_listen", "reading_passage", "image_quiz", "fill_blank", "matching", "drag_drop"]
+      "enum": [
+        "video_quiz",
+        "interactive_story",
+        "logic_puzzle",
+        "phonics_game",
+        "story_listen",
+        "reading_passage",
+        "image_quiz",
+        "fill_blank",
+        "matching",
+        "drag_drop"
+      ]
     },
     "mediaSource": {
       "type": "object",
       "description": "Nguồn tài nguyên đa phương tiện (Video, Hình ảnh) đi kèm bài học",
-      "required": ["type", "url", "thumbnail"],
+      "required": [
+        "type",
+        "url",
+        "thumbnail"
+      ],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["youtube", "local_mp4", "image_set"]
+          "enum": [
+            "youtube",
+            "local_mp4",
+            "image_set"
+          ]
         },
         "url": {
           "type": "string",
@@ -101,7 +143,12 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["question", "options", "correctAnswer", "explanation"],
+        "required": [
+          "question",
+          "options",
+          "correctAnswer",
+          "explanation"
+        ],
         "properties": {
           "question": {
             "type": "string",
@@ -127,19 +174,37 @@
                 },
                 {
                   "type": "object",
-                  "required": ["id", "text"],
+                  "required": [
+                    "id",
+                    "text"
+                  ],
                   "properties": {
-                    "id": { "type": ["string", "number"] },
-                    "text": { "type": "string" },
-                    "textEn": { "type": "string" },
-                    "image": { "type": "string" }
+                    "id": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "textEn": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
                   }
                 }
               ]
             }
           },
           "correctAnswer": {
-            "type": ["string", "number", "array"],
+            "type": [
+              "string",
+              "number",
+              "array"
+            ],
             "description": "Giá trị đáp án đúng (index số 0-indexed, ID đáp án, hoặc chuỗi text)"
           },
           "explanation": {
@@ -168,7 +233,19 @@
     "tags": {
       "type": "array",
       "description": "Từ khóa tìm kiếm hoặc kỹ năng chi tiết (tùy chọn)",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "skills": {
+      "type": [
+        "array",
+        "string"
+      ],
+      "description": "Mã định danh kỹ năng hoặc danh sách kỹ năng trọng tâm của bài học",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": true
