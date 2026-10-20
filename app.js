@@ -2208,11 +2208,35 @@ window.__readActAloud = function(){
   say(qVi, qEn);
 };
 
+// Ghi nhận tiến độ kỹ năng sau mỗi câu trả lời của bé trong hoạt động (progress.js)
+function recordActivityProgress(isCorrect, act = currentPlayingAct) {
+  if (!act) return;
+  const skillId = act.skillId || act.skill || act.id;
+  if (!skillId) return;
+  const updateFn = (typeof updateProgress === "function")
+    ? updateProgress
+    : (typeof window !== "undefined" && typeof window.updateProgress === "function"
+        ? window.updateProgress
+        : null);
+  if (updateFn) {
+    try {
+      updateFn(skillId, isCorrect);
+      if (act.id && act.id !== skillId) {
+        updateFn(act.id, isCorrect);
+      }
+    } catch (e) {
+      console.warn("Lỗi ghi nhận tiến độ:", e);
+    }
+  }
+}
+window.recordActivityProgress = recordActivityProgress;
+
 window.__actChoose = function(chosenId, btn){
   if(actAnswered || !currentPlayingAct) return;
   const act = currentPlayingAct;
   const isRight = String(chosenId) === String(act.correctAnswer);
   if(window.Analytics) Analytics.answerActivity(isRight, chosenId);
+  recordActivityProgress(isRight, act);
   const fbDiv = document.getElementById("actFeedback");
 
   if(isRight){
@@ -2271,6 +2295,7 @@ window.__actChooseBlank = function(chosenId, optText, btn){
   const act = currentPlayingAct;
   const isRight = String(chosenId) === String(act.correctAnswer);
   if(window.Analytics) Analytics.answerActivity(isRight, chosenId);
+  recordActivityProgress(isRight, act);
   const slot = document.getElementById("actBlankSlot");
   const fbDiv = document.getElementById("actFeedback");
 
@@ -2326,6 +2351,7 @@ window.__matchTapRight = function(pairId, btn){
   const leftBtn = document.getElementById("match-l-" + sel);
   if(sel === pairId){
     if(window.Analytics) Analytics.answerActivity(true, pairId);
+    recordActivityProgress(true, currentPlayingAct);
     window.__matchState.matchedIds.add(pairId);
     window.__matchState.selLeft = null;
     if(leftBtn){ leftBtn.classList.remove("sel"); leftBtn.classList.add("matched"); leftBtn.innerHTML += " ✔"; }
@@ -2342,6 +2368,7 @@ window.__matchTapRight = function(pairId, btn){
   } else {
     currentActAttempts++;
     if(window.Analytics) Analytics.answerActivity(false, pairId);
+    recordActivityProgress(false, currentPlayingAct);
     if(leftBtn) leftBtn.classList.add("bad");
     btn.classList.add("bad");
     sfxNo();
@@ -2405,6 +2432,7 @@ window.__checkSortResult = function(){
   const expected = window.__sortState.sequence;
   const isMatch = currentTexts.length === expected.length && currentTexts.every((t, i) => t.trim().toLowerCase() === expected[i].trim().toLowerCase());
   if(window.Analytics) Analytics.answerActivity(isMatch, currentTexts.join(" "));
+  recordActivityProgress(isMatch, act);
 
   if(isMatch){
     document.querySelectorAll(".act-slot").forEach(s => { s.className = "act-slot good"; });
