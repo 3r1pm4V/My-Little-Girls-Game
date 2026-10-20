@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Bé học vui · Fun Learning",
+  "name": "Bé học vui · 5–6 tuổi, chuẩn bị vào lớp 1",
   "short_name": "Bé học vui",
-  "description": "Ứng dụng học chữ cái, số đếm, ghép vần, tập viết và đọc truyện cổ tích cho bé",
+  "description": "Ứng dụng học chữ cái, số đếm, ghép vần, tập viết và đọc truyện cho bé 5–6 tuổi, chuẩn bị vào lớp 1",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

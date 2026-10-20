@@ -28,35 +28,33 @@ assert.strictEqual(calculateAccuracy(0, 0), 0, "Chưa làm câu nào phải là 
 assert.strictEqual(calculateAccuracy(1, 3), 33, "1/3 câu đúng làm tròn là 33%");
 console.log("✔ Test 2: Công thức tỷ lệ chính xác PASSED");
 
-// 3. Test logic chuỗi ngày học streak
-function calculateNextStreak(currentStreak, lastDateStr, todayStr, yesterdayStr) {
+// 3. Test logic chuỗi ngày học streak (Streak nhẹ nhàng: "Bé đã học N ngày", không reset gây buồn)
+function calculateNextStreak(currentStreak, lastDateStr, todayStr) {
   if (lastDateStr === todayStr) {
     return { streak: currentStreak, updated: false };
   }
-  if (lastDateStr === yesterdayStr) {
-    return { streak: currentStreak + 1, updated: true };
-  }
-  return { streak: 1, updated: true };
+  // Bé học thêm ngày mới: tích lũy thêm 1 ngày, không bao giờ reset về 1
+  return { streak: currentStreak + 1, updated: true };
 }
 
 assert.deepStrictEqual(
-  calculateNextStreak(3, "2026-10-19", "2026-10-19", "2026-10-18"),
+  calculateNextStreak(3, "2026-10-19", "2026-10-19"),
   { streak: 3, updated: false },
   "Cùng ngày học lại không được cộng dồn streak"
 );
 
 assert.deepStrictEqual(
-  calculateNextStreak(3, "2026-10-18", "2026-10-19", "2026-10-18"),
+  calculateNextStreak(3, "2026-10-18", "2026-10-19"),
   { streak: 4, updated: true },
-  "Học liên tiếp ngày hôm sau phải tăng streak lên 4"
+  "Học liên tiếp ngày hôm sau phải tăng lên 4 ngày"
 );
 
 assert.deepStrictEqual(
-  calculateNextStreak(5, "2026-10-10", "2026-10-19", "2026-10-18"),
-  { streak: 1, updated: true },
-  "Nghỉ nhiều ngày bị reset về 1"
+  calculateNextStreak(5, "2026-10-10", "2026-10-19"),
+  { streak: 6, updated: true },
+  "Nghỉ nhiều ngày quay lại học: không reset về 1, tích lũy thành 6 ngày (bỏ cảm giác mất chuỗi)"
 );
-console.log("✔ Test 3: Logic tính chuỗi ngày streak PASSED");
+console.log("✔ Test 3: Logic tính chuỗi ngày streak nhẹ nhàng (không reset gây buồn) PASSED");
 
 // 4. Test logic thống kê theo môn học
 function recordSubjectStat(stats, subject) {
