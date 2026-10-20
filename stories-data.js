@@ -446,5 +446,6 @@ if (typeof window !== "undefined") {
   window.FAIRY_STORIES = FAIRY_STORIES;
 }
 
-export default FAIRY_STORIES;
-export { FAIRY_CATEGORIES, FAIRY_STORIES };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { FAIRY_CATEGORIES, FAIRY_STORIES };
+}

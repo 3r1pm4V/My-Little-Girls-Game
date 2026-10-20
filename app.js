@@ -166,22 +166,51 @@ async function loadActivities() {
 }
 window.loadActivities = loadActivities;
 
+function loadScriptTag(src) {
+  return new Promise((resolve) => {
+    if (typeof document === "undefined") return resolve(false);
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) return resolve(true);
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = () => resolve(true);
+    s.onerror = (e) => {
+      console.warn("Lỗi loadScriptTag cho " + src, e);
+      resolve(false);
+    };
+    document.head.appendChild(s);
+  });
+}
+
 async function loadStories() {
+  if (window.FAIRY_STORIES && window.STORY_CATALOG) {
+    return window.FAIRY_STORIES;
+  }
+  const isFileProto = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
+
   if (!window.FAIRY_STORIES) {
-    try {
-      const sModule = await import('./stories-data.js');
-      window.FAIRY_STORIES = sModule.default || sModule.FAIRY_STORIES;
-      if (sModule.FAIRY_CATEGORIES) window.FAIRY_CATEGORIES = sModule.FAIRY_CATEGORIES;
-    } catch(e) {
-      console.error("Lỗi nạp stories-data.js:", e);
+    if (isFileProto) {
+      await loadScriptTag("stories-data.js");
+    } else {
+      try {
+        const sModule = await import('./stories-data.js');
+        window.FAIRY_STORIES = sModule.default || sModule.FAIRY_STORIES || window.FAIRY_STORIES;
+        if (sModule.FAIRY_CATEGORIES) window.FAIRY_CATEGORIES = sModule.FAIRY_CATEGORIES || window.FAIRY_CATEGORIES;
+      } catch(e) {
+        await loadScriptTag("stories-data.js");
+      }
     }
   }
   if (!window.STORY_CATALOG) {
-    try {
-      const cModule = await import('./stories-catalog.js');
-      window.STORY_CATALOG = cModule.default || cModule.STORY_CATALOG;
-    } catch(e) {
-      console.error("Lỗi nạp stories-catalog.js:", e);
+    if (isFileProto) {
+      await loadScriptTag("stories-catalog.js");
+    } else {
+      try {
+        const cModule = await import('./stories-catalog.js');
+        window.STORY_CATALOG = cModule.default || cModule.STORY_CATALOG || window.STORY_CATALOG;
+      } catch(e) {
+        await loadScriptTag("stories-catalog.js");
+      }
     }
   }
   return window.FAIRY_STORIES;
@@ -630,7 +659,7 @@ window.__closeParentTipModal = function(){
 };
 
 function goHome(){
-  if(cur==="home")return;
+
   stk=[{s:"home"}];
   try{history.replaceState({i:0,s:"home"},"")}catch(e){}
   show("home",undefined,true);
@@ -638,7 +667,7 @@ function goHome(){
 window.goHome=goHome;
 
 function goBack(){
-  if(cur==="home")return;
+
   if(stk.length>1){
     stk.pop();
     const prev=stk[stk.length-1];
@@ -766,6 +795,7 @@ function getCurrentLevel(){
 
 let currentAchieveTab = "badges";
 function showBadges(tab = currentAchieveTab){
+  if (cur !== "badges") { go("badges", tab); return; }
   currentAchieveTab = tab;
   const curLv=getCurrentLevel();
   const nextLv=LEVELS.find(l=>l.lv===curLv.lv+1);
@@ -1008,7 +1038,7 @@ window.setSpeechRate = setSpeechRate;
 const hbEl = document.getElementById("hb");
 if(hbEl){
   hbEl.innerHTML = im("btn_home");
-  hbEl.onclick = () => { if(cur === "home") return; goHome(); };
+  hbEl.onclick = () => goHome();
 }
 const spEl = document.getElementById("sp");
 if(spEl){
@@ -5536,7 +5566,22 @@ async function storyL(catId, page, search){
     await loadStories();
   }
 
-  const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
+  const catalog = (typeof STORY_CATALOG !== "undefined" && Array.isArray(STORY_CATALOG) && STORY_CATALOG.length)
+    ? STORY_CATALOG
+    : (typeof FAIRY_STORIES !== "undefined" && Array.isArray(FAIRY_STORIES) ? FAIRY_STORIES : []);
+
+  if (!catalog.length) {
+    m.innerHTML = `${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kho truyện cổ tích","Stories"),i:"📖"}])}
+      <div style="text-align:center;padding:40px 20px">
+        <div style="font-size:64px;margin-bottom:12px">📖</div>
+        <h3 style="color:var(--ink);margin-bottom:8px">${T("Chưa tải được kho truyện cổ tích","Could not load fairy tales")}</h3>
+        <p style="color:#64748b;font-size:16px;max-width:480px;margin:0 auto 20px">
+          ${T("Bé hoặc bố mẹ vui lòng kiểm tra kết nối mạng hoặc bấm nút Thử tải lại bên dưới nhé!","Please check network or tap Reload below!")}
+        </p>
+        <button class="pill on" onclick="storyL('${curCat}')" style="font-size:16px;padding:8px 24px">🔄 ${T("Thử tải lại","Try Again")}</button>
+      </div>`;
+    return;
+  }
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
 
   window.debouncedStorySearch = debounce(function(val){
@@ -5681,7 +5726,9 @@ async function storyDetail(id){
     m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải truyện...","Loading story...")}</p></div>`;
     await loadStories();
   }
-  const catalog=(typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.length)?STORY_CATALOG:FAIRY_STORIES;
+  const catalog = (typeof STORY_CATALOG !== "undefined" && Array.isArray(STORY_CATALOG) && STORY_CATALOG.length)
+    ? STORY_CATALOG
+    : (typeof FAIRY_STORIES !== "undefined" && Array.isArray(FAIRY_STORIES) ? FAIRY_STORIES : []);
   const s=catalog.find(x=>x.id===id);
   if(!s){storyL();return;}
 
@@ -5768,7 +5815,7 @@ async function storyRead(id){
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;color:var(--ink);font-size:17px;margin-bottom:8px">
           <span>🎧</span><span>Audio kể chuyện gốc từ truyencotich.top:</span>
         </div>
-        <audio controls preload="metadata" src="${tctMatch.audio}" style="width:100%;max-width:540px;height:44px;outline:none" onplay="window.__stopStory()"></audio>
+        <audio controls preload="metadata" src="${tctMatch.audio}" style="width:100%;max-width:540px;height:44px;outline:none" onplay="window.__stopStory()" onerror="this.insertAdjacentHTML('afterend', '<div style=\'color:#e11d48;font-size:14px;margin-top:6px;font-weight:700\'>⚠️ Audio online từ truyencotich.top cần kết nối mạng. Bé bấm nút \'Kể truyện (Nghe đọc)\' bên dưới để nghe đọc offline nhé!</div>'); this.style.display='none';"></audio>
       </div>
     `:""}
     <div class="story-ctrls">
@@ -5790,11 +5837,20 @@ async function need(k){
   if(window["__"+k])return true;
   if(LP[k])return LP[k];
   return LP[k]=(async()=>{
+    const isFileProto = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
+    if (isFileProto) {
+      const ok = await loadScriptTag(LAZY[k].replace(/^\.\//, ""));
+      if(ok) { window["__"+k]=true; return true; }
+      delete LP[k];
+      return false;
+    }
     try{
       await import(LAZY[k]);
       window["__"+k]=true;
       return true;
     }catch(e){
+      const ok = await loadScriptTag(LAZY[k].replace(/^\.\//, ""));
+      if(ok) { window["__"+k]=true; return true; }
       console.warn("Failed to load "+LAZY[k],e);
       delete LP[k];
       return false;

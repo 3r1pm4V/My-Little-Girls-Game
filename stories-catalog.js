@@ -2125,5 +2125,6 @@ if (typeof window !== "undefined") {
   window.STORY_CATALOG = STORY_CATALOG;
 }
 
-export default STORY_CATALOG;
-export { STORY_CATALOG };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { STORY_CATALOG };
+}

@@ -11,7 +11,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(self), geolocation=(), payment=()"
-    Content-Security-Policy = "default-src 'self' blob: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.ytimg.com https://img.youtube.com; media-src 'self' blob: data: https://api.viettelgroup.ai https://vieneu.com; font-src 'self' data:; connect-src 'self' https://api.viettelgroup.ai https://vieneu.com https://*.youtube.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self';"
+    Content-Security-Policy = "default-src 'self' blob: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.ytimg.com https://img.youtube.com; media-src 'self' blob: data: https://api.viettelgroup.ai https://vieneu.com https://truyencotich.top; font-src 'self' data:; connect-src 'self' https://api.viettelgroup.ai https://vieneu.com https://*.youtube.com https://truyencotich.top; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com; object-src 'none'; base-uri 'self';"
 
 # Service worker must NOT be cached
 [[headers]]
