@@ -1,6 +1,6 @@
-// asset-hash: 46d61b2de7d6572e
+// asset-hash: 40607b6d683ae3c8
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v46";
+const C = "bhv-v47";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [
@@ -208,6 +208,11 @@ const OPT_AUDIO = [
   "audio/badge_unlock_7.mp3",
   "audio/badge_unlock_8.mp3",
   "audio/badge_unlock_9.mp3",
+  "audio/syl_b_a_0.mp3",
+  "audio/syl_b_a_1.mp3",
+  "audio/syl_b_a_2.mp3",
+  "audio/syl_b_a_3.mp3",
+  "audio/syl_b_a_5.mp3",
   "audio/ui_be_nghe_nhe.mp3",
   "audio/ui_bubble_win_3stars.mp3",
   "audio/ui_count_retry.mp3",
@@ -257,7 +262,28 @@ const OPT_AUDIO = [
   "audio/ui_streak_day_8.mp3",
   "audio/ui_streak_day_9.mp3",
   "audio/ui_tap_left_first.mp3",
-  "audio/ui_xin_chao_be.mp3"
+  "audio/ui_xin_chao_be.mp3",
+  "audio/vi_bay_78d4.mp3",
+  "audio/vi_bon_79gf.mp3",
+  "audio/vi_chao_be_minh_cung_ho_j63sgh.mp3",
+  "audio/vi_chin_1tikm.mp3",
+  "audio/vi_hai_27io.mp3",
+  "audio/vi_hai_muoi_3d644l.mp3",
+  "audio/vi_khong_1othrk.mp3",
+  "audio/vi_mot_7ht4.mp3",
+  "audio/vi_muoi_2bqz3.mp3",
+  "audio/vi_muoi_ba_7auf8w.mp3",
+  "audio/vi_muoi_bay_d9043r.mp3",
+  "audio/vi_muoi_bon_d90572.mp3",
+  "audio/vi_muoi_chin_fjzhc9.mp3",
+  "audio/vi_muoi_hai_d8v39b.mp3",
+  "audio/vi_muoi_lam_d8va3p.mp3",
+  "audio/vi_muoi_mot_d90djr.mp3",
+  "audio/vi_muoi_sau_d8vehi.mp3",
+  "audio/vi_muoi_tam_d8vf7z.mp3",
+  "audio/vi_nam_2fug.mp3",
+  "audio/vi_sau_2iqv.mp3",
+  "audio/vi_tam_2jhc.mp3"
 ];
 
 function shouldCache(req, res) {

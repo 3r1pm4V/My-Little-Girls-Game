@@ -7,6 +7,15 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **fix(P2-07: Precache Number Audio 0–20 & Stage 0–1 Complements)**:
+  - Bổ sung đầy đủ 26 file âm thanh cục bộ vào danh sách OPT_AUDIO trong sw.js (dòng 208–288) theo thứ tự alphabet:
+    - 11 file số 0–10 dùng trực tiếp trong numMap (app.js dòng 3469–3481): vi_khong_1othrk.mp3, vi_mot_7ht4.mp3, vi_hai_27io.mp3, syl_b_a_0.mp3, vi_bon_79gf.mp3, vi_nam_2fug.mp3, vi_sau_2iqv.mp3, vi_bay_78d4.mp3, vi_tam_2jhc.mp3, vi_chin_1tikm.mp3, vi_muoi_2bqz3.mp3 (tổng 119,151 bytes ~ 116.36 KB).
+    - 10 file số đếm 11–20 dùng trong sayN() / numL() từ audio-map.js: vi_muoi_mot_d90djr.mp3, vi_muoi_hai_d8v39b.mp3, vi_muoi_ba_7auf8w.mp3, vi_muoi_bon_d90572.mp3, vi_muoi_lam_d8va3p.mp3, vi_muoi_sau_d8vehi.mp3, vi_muoi_bay_d9043r.mp3, vi_muoi_tam_d8vf7z.mp3, vi_muoi_chin_fjzhc9.mp3, vi_hai_muoi_3d644l.mp3 (tổng 146,754 bytes ~ 143.31 KB).
+    - 4 file âm tiết phát âm dấu thanh bài Chữ A VTV7 (g1_vtv7_04_letter_a trong activities-data.js): syl_b_a_1.mp3 (bà), syl_b_a_2.mp3 (bá), syl_b_a_3.mp3 (bả), syl_b_a_5.mp3 (bạ) (tổng 46,644 bytes ~ 45.55 KB).
+    - 1 file lời chào chú mèo tại Trang chủ (home() trong app.js): vi_chao_be_minh_cung_ho_j63sgh.mp3 (38,829 bytes ~ 37.92 KB).
+  - Nâng tổng số file trong OPT_AUDIO từ 242 lên 268 file; tổng dung lượng đo thực tế 12,774,752 bytes (~12.18 MB), đảm bảo nằm an toàn dưới ngưỡng MAX_OPT_AUDIO_BYTES (13 MB).
+  - Chạy node test-sw-precache.js --fix: tự động cập nhật mã băm asset-hash: 40607b6d683ae3c8 và tăng phiên bản Service Worker từ bhv-v46 lên bhv-v47 (sw.js dòng 1–3).
+  - Bộ kiểm tra test-sw-precache.js đạt PASS 100%, sạch hoàn toàn cảnh báo WARN về audio hardcoded trong app.js.
 - **test(P2-07: Hardened Audio Precache Verification)**:
   - Cập nhật tiêu đề và mô tả trong `test-sw-precache.js` dòng 1–6 phản ánh đầy đủ các điều kiện kiểm tra mới.
   - Thêm kiểm tra nghiêm ngặt sự tồn tại của 100% tệp trong `OPT_AUDIO` trên đĩa (dòng 46): nếu thiếu bất kỳ file nào trong 242 file thì báo lỗi FAIL ngay lập tức.
