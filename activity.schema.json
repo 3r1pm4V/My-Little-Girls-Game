@@ -39,6 +39,11 @@
       "description": "Phân tầng độ tuổi phù hợp",
       "enum": ["preschool", "grade1_2", "grade3_5"]
     },
+    "stage": {
+      "type": ["integer", "null"],
+      "enum": [0, 1, 2, 3, 4, 5, null],
+      "description": "Chặng học từ 0 đến 5 cho lộ trình chuẩn bị vào lớp 1 (5–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
+    },
     "subject": {
       "type": "string",
       "description": "Môn học hoặc lĩnh vực phát triển",

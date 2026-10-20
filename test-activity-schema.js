@@ -28,12 +28,22 @@ const requiredFields = [
 requiredFields.forEach(f => {
   assert(schema.required.includes(f), `Schema phải yêu cầu trường '${f}'`);
 });
-console.log('✔ activity.schema.json hợp lệ và đầy đủ 10 trường theo yêu cầu!');
+assert(schema.properties.stage, "Schema phải có định nghĩa trường 'stage'");
+assert(Array.isArray(schema.properties.stage.enum), "'stage.enum' phải là một mảng");
+assert.deepStrictEqual(schema.properties.stage.enum, [0, 1, 2, 3, 4, 5, null], "'stage.enum' phải gồm [0, 1, 2, 3, 4, 5, null]");
+console.log('✔ activity.schema.json hợp lệ và đầy đủ trường stage theo yêu cầu!');
 
 // 2. Kiểm tra hàm validateActivity và 10 Video Quiz
 console.log('\n--- TEST 2: Kiểm tra 10 bài học Video Quiz chuẩn GDPT 2018 ---');
 const activitiesDataModule = require('./activities-data.js');
-const { ACTIVITIES_DATA, validateActivity, getActivitiesByTier, getActivitiesBySubject } = activitiesDataModule;
+const {
+  ACTIVITIES_DATA,
+  validateActivity,
+  getActivitiesByTier,
+  getActivitiesBySubject,
+  getActivitiesByStage,
+  getPreschoolJourneyActivities
+} = activitiesDataModule;
 
 assert(Array.isArray(ACTIVITIES_DATA), 'ACTIVITIES_DATA phải là mảng');
 assert(typeof validateActivity === 'function', 'validateActivity phải là hàm');
@@ -152,6 +162,88 @@ tiers.forEach(tier => {
   console.log(`✔ getActivitiesByTier('${tier}'): Trả về ${acts.length} bài học`);
 });
 
+// 5. Kiểm tra trường 'stage' (0-5) cho lộ trình Chuẩn bị vào Lớp 1 (Task P1-00)
+console.log('\n--- TEST 5: Kiểm tra trường stage (0–5) cho lộ trình Chuẩn bị vào Lớp 1 ---');
+
+// 5.1 Kiểm tra các hàm helper theo chặng
+assert(typeof getActivitiesByStage === 'function', 'getActivitiesByStage phải là hàm');
+assert(typeof getPreschoolJourneyActivities === 'function', 'getPreschoolJourneyActivities phải là hàm');
+
+// 5.2 Mọi bài preschool phải có stage hợp lệ (0-5)
+const preschoolActs = ACTIVITIES_DATA.filter(a => a.ageTier === 'preschool');
+assert(preschoolActs.length > 0, 'Phải có danh sách bài preschool');
+preschoolActs.forEach(act => {
+  assert(act.stage !== undefined && act.stage !== null, `Bài mầm non ${act.id} phải có trường 'stage' xác định`);
+  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài mầm non ${act.id} có stage không hợp lệ: ${act.stage}`);
+});
+console.log(`✔ Toàn bộ ${preschoolActs.length} bài preschool đều có stage hợp lệ (0-5)`);
+
+// 5.3 Mọi bài grade1_2 dùng cho bé (Cô Lan Anh, VTV7, Video Quiz đánh vần, v.v.) phải có stage hợp lệ (0-5)
+const journeyG12Acts = ACTIVITIES_DATA.filter(a => a.ageTier === 'grade1_2' && a.stage !== null);
+assert(journeyG12Acts.length === 41, `Phải có đúng 41 bài grade1_2 dùng cho lộ trình bé 5–6 tuổi (thực tế: ${journeyG12Acts.length})`);
+journeyG12Acts.forEach(act => {
+  assert(act.stage !== undefined, `Bài grade1_2 dùng cho bé ${act.id} không được để undefined`);
+  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài grade1_2 ${act.id} có stage không hợp lệ: ${act.stage}`);
+});
+console.log(`✔ Toàn bộ 41 bài grade1_2 phục vụ bé 5-6 tuổi (Cô Lan Anh, VTV7, v.v.) có stage hợp lệ`);
+
+// 5.4 Hai bài grade1_2 quá khó cho bé 5-6 tuổi (8+7, cách đều 5) phải có stage = null
+const excludedG12Ids = ['act_g12_math_01', 'act_g12_math_02'];
+excludedG12Ids.forEach(id => {
+  const act = ACTIVITIES_DATA.find(a => a.id === id);
+  assert(act, `Không tìm thấy ${id}`);
+  assert.strictEqual(act.stage, null, `Bài quá khó ${id} phải có stage = null`);
+});
+console.log('✔ Hai bài Toán lớp 1-2 quá khó (8+7, cách đều 5) có stage: null đúng thiết kế');
+
+// 5.5 Kiểm tra getPreschoolJourneyActivities() trả về đủ 53 bài (12 preschool + 41 grade1_2)
+const journeyActs = getPreschoolJourneyActivities();
+assert.strictEqual(journeyActs.length, 53, `getPreschoolJourneyActivities() phải trả về đúng 53 bài (thực tế: ${journeyActs.length})`);
+journeyActs.forEach(act => {
+  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài ${act.id} trong lộ trình phải có stage từ 0 đến 5`);
+});
+console.log(`✔ getPreschoolJourneyActivities() trả về đúng 53 bài học chuẩn bị vào lớp 1`);
+
+// 5.6 Phân bố số lượng bài theo từng chặng theo docs/stage-map.md
+const expectedStageCounts = { 0: 3, 1: 22, 2: 20, 3: 5, 4: 3, 5: 0 };
+for (const [stg, count] of Object.entries(expectedStageCounts)) {
+  const stageNum = parseInt(stg, 10);
+  const actsInStage = getActivitiesByStage(stageNum);
+  assert.strictEqual(actsInStage.length, count, `Chặng ${stageNum} phải có đúng ${count} bài (thực tế: ${actsInStage.length})`);
+  console.log(`✔ Chặng ${stageNum}: ${actsInStage.length} bài học`);
+}
+
+// 5.7 Test bắt trường hợp thiếu hoặc sai stage (Negative tests)
+const sampleAct = ACTIVITIES_DATA.find(a => a.id.startsWith('act_vq_'));
+
+// Hàm kiểm tra bài học lộ trình bắt buộc phải có stage (0-5)
+function validateJourneyStage(act) {
+  if (act.stage === undefined || act.stage === null) {
+    return { valid: false, error: "Missing required 'stage' for journey activity" };
+  }
+  if (!Number.isInteger(act.stage) || act.stage < 0 || act.stage > 5) {
+    return { valid: false, error: "Invalid 'stage' (must be integer 0-5)" };
+  }
+  return { valid: true };
+}
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: undefined }).valid, false, 'Phải bắt lỗi khi thiếu stage');
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: null }).valid, false, 'Phải bắt lỗi khi stage là null đối với bài lộ trình');
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: 9 }).valid, false, 'Phải bắt lỗi khi stage ngoài khoảng 0-5');
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: -1 }).valid, false, 'Phải bắt lỗi khi stage < 0');
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: 1.5 }).valid, false, 'Phải bắt lỗi khi stage là số thập phân');
+assert.strictEqual(validateJourneyStage({ ...sampleAct, stage: "1" }).valid, false, 'Phải bắt lỗi khi stage là chuỗi ký tự');
+
+// Kiểm tra hàm validateActivity chuẩn của activities-data.js
+assert.strictEqual(validateActivity({ ...sampleAct, stage: 9 }).valid, false, 'validateActivity phải từ chối stage > 5');
+assert.strictEqual(validateActivity({ ...sampleAct, stage: -1 }).valid, false, 'validateActivity phải từ chối stage < 0');
+assert.strictEqual(validateActivity({ ...sampleAct, stage: 'stage1' }).valid, false, 'validateActivity phải từ chối stage dạng string');
+assert.strictEqual(validateActivity({ ...sampleAct, stage: null }).valid, true, 'validateActivity chấp nhận stage: null');
+assert.strictEqual(validateActivity({ ...sampleAct, stage: 0 }).valid, true, 'validateActivity chấp nhận stage: 0');
+assert.strictEqual(validateActivity({ ...sampleAct, stage: 5 }).valid, true, 'validateActivity chấp nhận stage: 5');
+
+console.log('✔ Negative test: Đã bắt thành công mọi trường hợp thiếu hoặc sai stage!');
+
 console.log('\n================================================================');
-console.log('  TẤT CẢ 10 BÀI HỌC VIDEO QUIZ ĐẠT CHUẨN 100% THÀNH CÔNG! ');
+console.log('  TẤT CẢ TEST SCHEMA VÀ LỘ TRÌNH CHẶNG ĐẠT CHUẨN 100% THÀNH CÔNG! ');
 console.log('================================================================');
+
