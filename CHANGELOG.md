@@ -7,6 +7,12 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **docs(P2-07: Audio Precache Sizing Plan)**:
+  - Khảo sát và đo lường thực tế toàn bộ 3,197 file âm thanh trong thư mục `audio/` (tổng 68,796,273 bytes ~ 65.61 MB).
+  - Phân loại rõ ràng 6 nhóm tài nguyên: Giao diện UI (50 file, 2.34 MB), Chữ cái (40 file, 0.39 MB), Số học & đếm (200 file, 5.02 MB), Bài học cốt lõi (195 file, 12.21 MB), Vần & âm ghép (2,277 file, 36.67 MB), Từ vựng & khác (435 file, 8.97 MB).
+  - Xác định danh mục âm thanh trọng tâm cho bé 4 tuổi ở Trang chủ & Chặng 0–1 (242 file, 12,423,374 bytes ~ 11.85 MB).
+  - So sánh chi tiết 3 phương án precache: (a) Cực gọn 2.73 MB, (b) Cân bằng 11.85 MB (khuyên dùng), (c) Tối đa 65.61 MB; phân tích rủi ro timeout kết nối và hạn mức lưu trữ quota trên máy yếu.
+  - Soạn thảo tài liệu hoàn chỉnh tại `docs/audio-precache-plan.md` kèm câu hỏi làm rõ nhu cầu sử dụng thực tế của gia đình.
 - **feat(P2-03, P0-13, P2-07: Self-host Font Baloo 2 & SW Precache)**:
   - **Tự host font Baloo 2 cục bộ (P2-03)**:
     - Tải và subset font Baloo 2 (weights 600 SemiBold và 800 ExtraBold) sang định dạng WOFF2 chỉ giữ lại các bảng mã Latin, Latin-Ext và Tiếng Việt:
