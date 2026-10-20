@@ -1334,11 +1334,11 @@ function card(f,vis,vi,en,subject="default"){
    TASK P1-04: LỘ TRÌNH 6 CHẶNG & HỌC HÔM NAY DÀNH CHO BÉ
    ======================================================== */
 const STAGE_META = [
-  { stage: 0, icon: "🐣", nameVi: "Chặng 0: Khám phá", nameEn: "Stage 0: Explore", titleVi: "Làm quen & Tự tin", titleEn: "Getting Started" },
-  { stage: 1, icon: "🔤", nameVi: "Chặng 1: Chữ & Số 1–5", nameEn: "Stage 1: Letters & 1–5", titleVi: "Chữ cái đầu & Số 1–5", titleEn: "First Letters & 1–5" },
-  { stage: 2, icon: "🔢", nameVi: "Chặng 2: Bảng chữ & Số 6–10", nameEn: "Stage 2: Full ABC & 6–10", titleVi: "Chữ cái còn lại & Số 6–10", titleEn: "Remaining Letters & 6–10" },
-  { stage: 3, icon: "🧩", nameVi: "Chặng 3: Ghép vần & Phép tính", nameEn: "Stage 3: Phonics & Math", titleVi: "Ghép vần & Phép tính trong 10", titleEn: "Phonics & Math within 10" },
-  { stage: 4, icon: "📖", nameVi: "Chặng 4: Đọc câu & Tư duy", nameEn: "Stage 4: Sentences & Logic", titleVi: "Đọc câu ngắn & Tư duy logic", titleEn: "Short Sentences & Logic" },
+  { stage: 0, icon: "🐣", nameVi: "Chặng 0: Khám phá", nameEn: "Stage 0: Explore", titleVi: "Nét bút & Trường lớp", titleEn: "Strokes & School Life" },
+  { stage: 1, icon: "🔤", nameVi: "Chặng 1: Chữ cái & Số đếm", nameEn: "Stage 1: Letters & Numbers", titleVi: "Chữ cái & Số đếm", titleEn: "Letters & Numbers 1–5" },
+  { stage: 2, icon: "📖", nameVi: "Chặng 2: Ghép vần cơ bản", nameEn: "Stage 2: Basic Phonics", titleVi: "Ghép vần cơ bản", titleEn: "Basic Phonics & Tones" },
+  { stage: 3, icon: "🔢", nameVi: "Chặng 3: Toán tư duy", nameEn: "Stage 3: Logic Math", titleVi: "Toán tư duy", titleEn: "Logic Math & Shapes" },
+  { stage: 4, icon: "📚", nameVi: "Chặng 4: Đọc câu & Tư duy", nameEn: "Stage 4: Sentences & Logic", titleVi: "Đọc câu ngắn & Tư duy logic", titleEn: "Short Sentences & Logic" },
   { stage: 5, icon: "🎓", nameVi: "Chặng 5: Vào Lớp 1", nameEn: "Stage 5: Ready for Grade 1", titleVi: "Tự tin bước vào Lớp 1", titleEn: "Confident for Grade 1" }
 ];
 window.STAGE_META = STAGE_META;
@@ -1489,7 +1489,7 @@ async function todayLearning(stageNum){
     `;
   } else {
     actsHtml = `<div class="stage-acts-grid">` + acts.map(act => {
-      const icon = act.subject === "math" ? "🔢" : (act.subject === "logic" ? "🧩" : (act.subject === "vietnamese" ? "🔤" : (act.subject === "reading" ? "📖" : (act.subject === "english" ? "🇬🇧" : (act.subject === "science" ? "🔬" : "🌱")))));
+      const icon = act.icon || (act.subject === "math" ? "🔢" : (act.subject === "logic" ? "🧩" : (act.subject === "vietnamese" ? "🔤" : (act.subject === "reading" ? "📖" : (act.subject === "english" ? "🇬🇧" : (act.subject === "science" ? "🔬" : "🌱"))))));
       const titleVi = act.title || "";
       const titleEn = act.titleEn || act.title || "";
       const qCount = act.content ? (Array.isArray(act.content) ? act.content.length : 1) : 3;

@@ -57,30 +57,32 @@ const ACTIVITIES_DATA = [
   // ========================================================
   {
     id: "act_pre_let_01",
-    title: "Chữ cái đầu tiên: Quả Táo 🍎",
-    titleEn: "Starting Letter: Apple",
+    title: "Tập viết: Bé tập tô nét thẳng và nét cong ✏️",
+    titleEn: "Tracing: Straight and Curved Strokes",
+    icon: "✏️",
     ageTier: "preschool",
     stage: 1,
     minAge: 4,
     subject: "vietnamese",
-    skill: "Nhận biết âm đầu chữ cái tiếng Việt",
+    skill: "Tập tô nét cơ bản (thẳng, cong)",
+    skills: ["vi.trace.strokes"],
     type: "image_quiz",
     difficulty: 1,
     content: {
-      question: "Quả 🍎 Táo bắt đầu bằng chữ cái nào bé nhỉ?",
-      questionEn: "What letter does 'Apple' (Táo) start with?",
-      media: "🍎"
+      question: "Bé chọn nét nào là nét thẳng đứng kéo từ trên xuống dưới? ✏️",
+      questionEn: "Which stroke is a straight vertical line?",
+      media: "✏️ | ⭕ ➖"
     },
     options: [
-      { id: "T", text: "Chữ T (Tờ)" },
-      { id: "B", text: "Chữ B (Bờ)" },
-      { id: "C", text: "Chữ C (Cờ)" }
+      { id: "opt_line", text: "Nét thẳng đứng | ✏️" },
+      { id: "opt_circle", text: "Nét cong tròn O ⭕" },
+      { id: "opt_curve", text: "Nét cong hở C 🌙" }
     ],
-    correctAnswer: "T",
+    correctAnswer: "opt_line",
     feedback: {
-      correct: "Đúng rồi! T - Quả Táo đỏ mọng thơm ngon! 🍎",
-      wrong: "Bé nghe lại nhé: Tờ - Táo! Bé thử lại nào!",
-      hint: "Tờ - Táo"
+      correct: "Đúng rồi! Nét thẳng đứng được kéo từ trên xuống dưới theo ô ly! ✏️✨",
+      wrong: "Bé chọn nét sổ thẳng từ trên xuống nhé!",
+      hint: "Nét thẳng đứng |"
     },
     reward: { stars: 3 }
   },
@@ -143,6 +145,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_pre_num_01",
+    icon: "🔢",
     title: "Bé tìm chữ số 4 ⛵",
     titleEn: "Find Number 4",
     ageTier: "preschool",
@@ -171,6 +174,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_pre_num_02",
+    icon: "🔢",
     title: "Sắp xếp số từ bé đến lớn: 1, 2, 3 🔢",
     titleEn: "Sort Numbers: 1, 2, 3",
     ageTier: "preschool",
@@ -200,33 +204,38 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_pre_num_03",
-    title: "Nối số với số lượng quả táo 🍎",
-    titleEn: "Match Number with Apple Count",
+    title: "Đếm số lượng đồ dùng học tập: Bút, Thước, Vở 🎒✏️📏",
+    titleEn: "Counting: Pens, Rulers, and Notebooks",
+    icon: "🔢",
     ageTier: "preschool",
     stage: 1,
     minAge: 4,
     subject: "math",
-    skill: "Đếm tương ứng số lượng 1-1",
-    type: "matching",
-    difficulty: 2,
+    skill: "Đếm số lượng đồ dùng học tập 1-5",
+    skills: ["math.count.stationery"],
+    type: "image_quiz",
+    difficulty: 1,
     content: {
-      question: "Bé chạm vào số rồi chạm vào đĩa táo có số lượng tương ứng nhé!",
-      questionEn: "Match the number with the correct count of apples!",
-      media: "🍎 🍏 🍎",
-      pairs: [
-        { id: "m1", left: "Số 1", right: "🍎 (1 quả)" },
-        { id: "m2", left: "Số 2", right: "🍎 🍎 (2 quả)" },
-        { id: "m3", left: "Số 3", right: "🍎 🍎 🍎 (3 quả)" }
-      ]
+      question: "Bé đếm xem bạn Thỏ có mấy cây bút chì màu: ✏️ ✏️ ✏️ ?",
+      questionEn: "How many colored pencils does Bunny have: ✏️ ✏️ ✏️ ?",
+      media: "✏️ ✏️ ✏️"
     },
+    options: [
+      { id: "opt_3", text: "3 cây bút chì ✏️" },
+      { id: "opt_2", text: "2 cây bút chì ✏️" },
+      { id: "opt_4", text: "4 cây bút chì ✏️" }
+    ],
+    correctAnswer: "opt_3",
     feedback: {
-      correct: "Giỏi quá! Bé đếm số lượng quả táo rất cừ khôi! 🍎",
-      wrong: "Bé đếm ngón tay từ 1 đến 3 để tìm đĩa táo đúng nhé!"
+      correct: "Chính xác! 1, 2, 3 cây bút chì màu xinh xắn! 🌟",
+      wrong: "Bé đếm lại cùng Thỏ nhé: 1, 2, 3!",
+      hint: "Có 3 cây bút chì"
     },
     reward: { stars: 3 }
   },
   {
     id: "act_pre_eng_01",
+    icon: "🇬🇧",
     title: "Colors: Màu sắc mặt trời ☀️",
     titleEn: "Colors: Sun Color",
     ageTier: "preschool",
@@ -255,6 +264,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_pre_eng_02",
+    icon: "🇬🇧",
     title: "Animals: Ghép con vật tiếng Anh 🐶🐱",
     titleEn: "Match Animal Words",
     ageTier: "preschool",
@@ -282,6 +292,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_pre_read_01",
+    icon: "📚",
     title: "Đọc hiểu: Chú Thỏ Trắng ngoan ngoãn 🐰",
     titleEn: "Story: The Good Bunny",
     ageTier: "preschool",
@@ -317,10 +328,11 @@ const ACTIVITIES_DATA = [
   // ========================================================
   {
     id: "act_p2_spell_ba_tones",
+    icon: "🔤",
     title: "Ghép vần đơn: b + a + thanh điệu 👵",
     titleEn: "Phonics: b + a + tones",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.phonics.onset-rhyme",
@@ -356,10 +368,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_vocab_be_ba",
+    icon: "🔤",
     title: "Từ ứng dụng: Bé và Bà 👧👵",
     titleEn: "Key Words: Bé and Bà",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.vocab.sight-words",
@@ -394,10 +407,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_spell_ca_sac",
+    icon: "🔤",
     title: "Ghép vần đơn: c + a + sắc = cá 🐟",
     titleEn: "Phonics: c + a + acute accent",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.phonics.onset-rhyme",
@@ -433,10 +447,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_spell_bo_huyen",
+    icon: "🔤",
     title: "Ghép vần đơn: b + o + huyền = bò 🐮",
     titleEn: "Phonics: b + o + grave accent",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.phonics.onset-rhyme",
@@ -472,10 +487,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_rhyme_an",
+    icon: "🔤",
     title: "Học vần ghép: Vần AN & Cái Bàn 🪑",
     titleEn: "Rhyme AN: The Table",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.phonics.rhymes",
@@ -511,10 +527,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_vocab_cai_ban",
+    icon: "🔤",
     title: "Từ ứng dụng vần AN: Cái Bàn 🪑",
     titleEn: "Application Words: Cái Bàn",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.vocab.sight-words",
@@ -549,10 +566,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_rhyme_on",
+    icon: "🔤",
     title: "Học vần ghép: Vần ON & Con Cá 🐟",
     titleEn: "Rhyme ON: Little Fish",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.phonics.rhymes",
@@ -588,10 +606,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_vocab_con_ca",
+    icon: "🔤",
     title: "Từ ứng dụng vần ON: Con Cá 🐟",
     titleEn: "Application Words: Con Cá",
     ageTier: "preschool",
-    stage: 3,
+    stage: 2,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.vocab.sight-words",
@@ -630,6 +649,7 @@ const ACTIVITIES_DATA = [
   // ========================================================
   {
     id: "act_p2_sen_ban_nho",
+    icon: "📖",
     title: "Đọc câu ngắn: Bé có cái bàn nhỏ 🪑",
     titleEn: "Short Sentence: The Small Desk",
     ageTier: "preschool",
@@ -668,6 +688,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_sen_dan_ga",
+    icon: "📖",
     title: "Đọc câu ngắn: Đàn gà lon ton 🐥",
     titleEn: "Short Sentence: Chicks Running",
     ageTier: "preschool",
@@ -707,6 +728,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_sen_bo_xe_tai",
+    icon: "📖",
     title: "Đọc câu ngắn: Bố lái xe tải 🚚",
     titleEn: "Short Sentence: Dad Drives Truck",
     ageTier: "preschool",
@@ -745,6 +767,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p2_sen_be_yeu_ba",
+    icon: "📖",
     title: "Đọc câu ngắn: Bé yêu bà 👵💖",
     titleEn: "Short Sentence: Baby Loves Grandma",
     ageTier: "preschool",
@@ -790,10 +813,11 @@ const ACTIVITIES_DATA = [
   // ========================================================
   {
     id: "act_p3_math_shapes",
+    icon: "🔺",
     title: "Hình học: Bé nhận biết Hình vuông, Tròn, Tam giác 🔺⭕🟩",
     titleEn: "Geometry: Shapes (Square, Circle, Triangle)",
     ageTier: "preschool",
-    stage: 1,
+    stage: 3,
     minAge: 4,
     subject: "math",
     skill: "math.geometry.shapes",
@@ -828,10 +852,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_compare_length",
+    icon: "📏",
     title: "Đo lường: So sánh Dài hơn — Ngắn hơn 📏✏️",
     titleEn: "Measurement: Longer vs Shorter",
     ageTier: "preschool",
-    stage: 1,
+    stage: 3,
     minAge: 4,
     subject: "math",
     skill: "math.measure.length",
@@ -866,6 +891,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_next_number_5",
+    icon: "🔢",
     title: "Số học: Bé tìm số liền sau trong phạm vi 5 🔢",
     titleEn: "Counting: Next Number within 5",
     ageTier: "preschool",
@@ -905,6 +931,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_fill_pattern_5",
+    icon: "🧩",
     title: "Tư duy logic: Điền số còn thiếu từ 1 đến 5 🚂",
     titleEn: "Logic: Fill Missing Number 1 to 5",
     ageTier: "preschool",
@@ -944,10 +971,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_count_10",
+    icon: "🔢",
     title: "Số học: Đếm số lượng ngôi sao trong phạm vi 10 ⭐",
     titleEn: "Counting: Count Stars up to 10",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "math",
     skill: "math.count.1-10",
@@ -982,10 +1010,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_prev_number_10",
+    icon: "🔢",
     title: "Số học: Bé tìm số liền trước trong phạm vi 10 🎈",
     titleEn: "Counting: Preceding Number up to 10",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "math",
     skill: "math.sequence.predecessor",
@@ -1021,10 +1050,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_add_visual_10",
+    icon: "🔢",
     title: "Phép tính: Phép cộng trực quan bằng quả táo 🍎🍏",
     titleEn: "Math: Visual Addition with Apples",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "math",
     skill: "math.addsub.within10",
@@ -1060,10 +1090,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_sub_visual_10",
+    icon: "🔢",
     title: "Phép tính: Phép trừ trực quan bằng đàn cá 🐟🌊",
     titleEn: "Math: Visual Subtraction with Fish",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "math",
     skill: "math.addsub.within10",
@@ -1099,10 +1130,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_compare_weight",
+    icon: "⚖️",
     title: "Đo lường: So sánh Nặng hơn — Nhẹ hơn ⚖️🐘🐭",
     titleEn: "Measurement: Heavier vs Lighter",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "math",
     skill: "math.measure.weight",
@@ -1137,10 +1169,11 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_p3_math_pattern_skip2",
+    icon: "🧩",
     title: "Tư duy logic: Tìm quy luật dãy số 2, 4, 6, [?] 🐰🥕",
     titleEn: "Logic: Number Pattern 2, 4, 6, [?]",
     ageTier: "preschool",
-    stage: 2,
+    stage: 3,
     minAge: 5,
     subject: "logic",
     skill: "math.logic.number-pattern",
@@ -1181,6 +1214,7 @@ const ACTIVITIES_DATA = [
   // ========================================================
   {
     id: "act_ls_01_study_corner",
+    icon: "🌱",
     title: "Góc học tập: Sắp xếp sách vở, bút thước gọn gàng 📚✏️",
     titleEn: "Study Corner: Organize Books and Stationery",
     ageTier: "preschool",
@@ -1220,6 +1254,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_ls_02_schedule_study",
+    icon: "🌱",
     title: "Thời gian biểu: Nhận biết giờ ngồi vào bàn học ⏰📖",
     titleEn: "Schedule: Time to Study by Clock",
     ageTier: "preschool",
@@ -1259,6 +1294,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_ls_03_bedtime_clock",
+    icon: "🌱",
     title: "Thời gian biểu: Giờ ngủ ngoan để sớm mai đến trường ⏰🌙",
     titleEn: "Schedule: Bedtime to Wake Up Early",
     ageTier: "preschool",
@@ -1298,6 +1334,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_ls_04_school_manners",
+    icon: "🌱",
     title: "Ứng xử: Lễ phép chào cô và xin phép ra vào lớp 🏫👋",
     titleEn: "School Manners: Greet Teacher & Ask Permission",
     ageTier: "preschool",
@@ -1337,6 +1374,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_ls_05_school_safety",
+    icon: "🌱",
     title: "An toàn: Đội mũ bảo hiểm và không đi theo người lạ 🪖🛑",
     titleEn: "Safety: Helmet & Stranger Danger",
     ageTier: "preschool",
@@ -1607,6 +1645,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "act_g12_read_01",
+    icon: "📚",
     title: "Đọc hiểu: Chuyện Rùa và Thỏ chạy thi 🐢🐇",
     titleEn: "Story: The Tortoise and The Hare",
     ageTier: "grade1_2",
@@ -1890,162 +1929,160 @@ const ACTIVITIES_DATA = [
   // --- CẤP ĐỘ 1: MẦM NON (4–6 TUỔI) - NHẬN BIẾT CON VẬT ---
   {
     id: "act_vq_pre_01_pets",
-    title: "Bé làm quen thú cưng đáng yêu trong nhà 🐶🐱🐹",
-    titleEn: "Meet Cute Household Pets",
+    icon: "🎒",
+    title: "Làm quen với trường lớp: Nhận biết cặp sách & Đồ dùng đi học 🎒",
+    titleEn: "School Life: Backpack & School Supplies",
+    icon: "🎒",
     ageTier: "preschool",
     stage: 0,
     minAge: 4,
     subject: "skills",
+    skills: ["life.school_supplies"],
     type: "video_quiz",
     mediaSource: {
       type: "youtube",
       url: "https://www.youtube.com/watch?v=kdrjFqjp9NY",
-      thumbnail: "https://img.youtube.com/vi/kdrjFqjp9NY/hqdefault.jpg"
+      thumbnail: "img/backpack_thumb.png"
     },
-    learningObjective: "CT GD Mầm non: Nhận biết tên gọi, tiếng kêu và đặc điểm nổi bật của các loài vật nuôi quen thuộc gần gũi trong gia đình.",
+    learningObjective: "Chuẩn Tiền tiểu học: Nhận biết chiếc cặp sách đi học, cách phân loại sách vở, hộp bút và chuẩn bị đồ dùng ngăn nắp trước khi đến trường.",
     difficulty: 1,
     content: [
       {
-        question: "Bạn nhỏ nào trong video có bộ lông mềm mượt và kêu 'Meo meo'? 🐱",
+        question: "Bé chuẩn bị đi học lớp 1, đồ dùng nào dưới đây dùng để đựng sách vở và hộp bút?",
         options: [
-          "Bạn Chó 🐶",
-          "Bạn Mèo 🐱",
-          "Bạn Cá vàng 🐟",
-          "Bạn Vịt 🦆"
-        ],
-        correctAnswer: 1,
-        explanation: "Bạn Mèo kêu 'Meo meo' và rất thích cuộn tròn ngủ nướng ấm áp! 🐱"
-      },
-      {
-        question: "Bạn Chó 🐶 giúp gia đình chúng mình làm nhiệm vụ quan trọng gì?",
-        options: [
-          "Trông giữ nhà và làm bạn thân thiết",
-          "Bắt chuột trên mái nhà",
-          "Bay lên trời đón mặt trời",
-          "Bơi lặn dưới đáy sông"
+          "Chiếc cặp sách xinh xắn 🎒",
+          "Chiếc rổ đựng rau 🧺",
+          "Chiếc chảo rán 🍳"
         ],
         correctAnswer: 0,
-        explanation: "Bạn Chó rất trung thành, sủa 'Gâu gâu' báo tin khi có khách và luôn bảo vệ ngôi nhà của bé! 🐶"
+        explanation: "Chiếc cặp sách (ba lô) là bạn đồng hành giúp bé đựng sách vở, bút thước ngăn nắp khi đến trường! 🎒✨"
       },
       {
-        question: "Bạn Thỏ trắng 🐇 thích ăn củ màu cam giòn ngọt nào nhất trong vườn?",
+        question: "Trong cặp sách đi học, bé nên để những món đồ nào sau đây?",
         options: [
-          "Củ Cà rốt 🥕",
-          "Thịt cá rán",
-          "Kẹo sô-cô-la",
-          "Xương hầm"
+          "Sách vở, hộp bút và bình nước cá nhân 📚✏️💧",
+          "Đồ chơi sắc nhọn và kéo to ✂️",
+          "Bánh kẹo ăn dở bừa bãi 🍬"
         ],
         correctAnswer: 0,
-        explanation: "Bạn Thỏ có đôi tai dài xinh xắn, thích nhất là gặm củ cà rốt giòn ngọt giàu vitamin! 🥕"
+        explanation: "Sách vở, hộp bút và bình nước là những đồ dùng học tập thiết yếu cần có trong cặp sách của bé!"
+      },
+      {
+        question: "Buổi tối trước khi đi ngủ, bé nên làm gì với cặp sách của mình?",
+        options: [
+          "Soạn đủ sách vở theo thời khóa biểu và kéo khóa cẩn thận 🎒✨",
+          "Vứt cặp sách dưới sàn nhà 🛋️",
+          "Chờ sáng mai bố mẹ soạn hộ ⏰"
+        ],
+        correctAnswer: 0,
+        explanation: "Bé tự lập soạn trước sách vở vào cặp giúp buổi sáng đến trường đúng giờ và không bị quên đồ dùng!"
       }
     ]
   },
   {
     id: "act_vq_pre_02_wildlife",
-    title: "Những người bạn khổng lồ nơi rừng xanh 🐘🦒🦁",
-    titleEn: "Giant Friends in the Wild Jungle",
+    icon: "👩‍🏫",
+    title: "Làm quen với trường lớp: Làm quen cô giáo và bạn bè mới 🏫",
+    titleEn: "School Life: Getting to Know Teacher and Friends",
+    icon: "👩‍🏫",
     ageTier: "preschool",
     stage: 0,
     minAge: 4,
-    subject: "science",
+    subject: "skills",
+    skills: ["life.school_manners"],
     type: "video_quiz",
     mediaSource: {
       type: "youtube",
       url: "https://www.youtube.com/watch?v=czZBOWlGlaE",
-      thumbnail: "https://img.youtube.com/vi/czZBOWlGlaE/hqdefault.jpg"
+      thumbnail: "img/teacher_thumb.png"
     },
-    learningObjective: "CT GD Mầm non & GDPT 2018: Nhận biết thế giới động vật hoang dã to lớn, nhận diện các bộ phận cơ thể đặc trưng (vòi dài, cổ cao, bờm to).",
+    learningObjective: "Chuẩn Tiền tiểu học: Xây dựng tâm lý tự tin, lễ phép khi gặp cô giáo, kỹ năng kết bạn và nề nếp giơ tay phát biểu trong lớp học.",
     difficulty: 1,
     content: [
       {
-        question: "Con vật nào có chiếc vòi dài khéo léo dùng để hút nước và lấy thức ăn? 🐘",
+        question: "Ngày đầu tiên bước vào lớp học, khi gặp cô giáo, bé nên làm gì?",
         options: [
-          "Chú Hươu cao cổ 🦒",
-          "Bác Voi to lớn 🐘",
-          "Bác Gấu đen 🐻",
-          "Chú Khỉ nâu 🐒"
-        ],
-        correctAnswer: 1,
-        explanation: "Bác Voi có chiếc vòi dài đặc biệt như cánh tay, vừa để hút nước tắm mát vừa bẻ lá cây ăn! 🐘"
-      },
-      {
-        question: "Nhờ có chiếc cổ thật dài, bạn Hươu cao cổ 🦒 có thể làm được điều gì?",
-        options: [
-          "Bơi lặn sâu dưới nước",
-          "Vươn lên ăn lá non trên ngọn cây cao",
-          "Đào hang sâu dưới lòng đất",
-          "Bay lượn trên mây"
-        ],
-        correctAnswer: 1,
-        explanation: "Cổ cao giúp bạn Hươu với tới những chiếc lá non tươi ngon nhất trên đỉnh cây cao! 🦒"
-      },
-      {
-        question: "Chúa sơn lâm Sư tử 🦁 có đặc điểm nhận diện nổi bật nào quanh cổ?",
-        options: [
-          "Một chiếc bờm dày dặn oai phong",
-          "Một đôi cánh sặc sỡ",
-          "Đôi tai nhọn dài",
-          "Bộ vảy lấp lánh"
+          "Khoanh tay cúi đầu: Con chào cô ạ! 👧👋",
+          "Chạy trốn sau lưng bố mẹ 🙈",
+          "Không nói gì và quay mặt đi 😐"
         ],
         correctAnswer: 0,
-        explanation: "Sư tử đực có chiếc bờm dày rực rỡ quanh đầu cổ, trông thật dũng mãnh và uy nghi! 🦁"
+        explanation: "Khoanh tay chào cô giáo lễ phép là hành vi đẹp của một bạn nhỏ ngoan ngoãn tự tin vào lớp 1! 🏫✨"
+      },
+      {
+        question: "Khi muốn làm quen với một bạn mới cùng bàn, bé sẽ nói thế nào?",
+        options: [
+          "Chào bạn, chúng mình cùng làm quen nhé! 🤝😊",
+          "Bạn tránh ra cho mình ngồi! 😠",
+          "Mình không thích chơi với bạn 🙅"
+        ],
+        correctAnswer: 0,
+        explanation: "Lời chào và nụ cười thân thiện sẽ giúp bé nhanh chóng có thêm nhiều bạn tốt ở trường tiểu học!"
+      },
+      {
+        question: "Trong giờ học, khi muốn phát biểu hoặc xin phép cô ra ngoài, bé cần làm gì?",
+        options: [
+          "Giơ tay ngay ngắn chờ cô gọi 🙋‍♀️",
+          "Hét to thật lớn trong lớp 📢",
+          "Tự ý đứng dậy chạy ra khỏi lớp 🏃"
+        ],
+        correctAnswer: 0,
+        explanation: "Giơ tay trật tự và chờ cô cho phép là nề nếp học tập chuẩn mực của học sinh lớp 1!"
       }
     ]
   },
   {
     id: "act_vq_pre_03_ocean",
-    title: "Chuyến du hành dưới đáy đại dương bao la 🐬🐢🐙",
-    titleEn: "Ocean Journey: Friendly Sea Creatures",
+    icon: "📚",
+    title: "Làm quen với trường lớp: Sắp xếp bàn học ngăn nắp 📚✏️",
+    titleEn: "School Life: Tidying Your Study Desk",
+    icon: "📚",
     ageTier: "preschool",
     stage: 0,
     minAge: 4,
-    subject: "science",
+    subject: "skills",
+    skills: ["life.study_desk"],
     type: "video_quiz",
     mediaSource: {
       type: "youtube",
       url: "https://www.youtube.com/watch?v=ww5wazKT7Ck",
-      thumbnail: "https://img.youtube.com/vi/ww5wazKT7Ck/hqdefault.jpg"
+      thumbnail: "img/study_desk_thumb.png"
     },
-    learningObjective: "CT GD Mầm non: Nhận biết thế giới động vật dưới biển, nhận diện sinh vật biển thông minh và bồi dưỡng tình yêu thiên nhiên đại dương.",
+    learningObjective: "Chuẩn Tiền tiểu học: Rèn luyện tư thế ngồi học đúng, bảo vệ mắt và cột sống; hình thành thói quen cất bút thước và giữ bàn học sạch đẹp.",
     difficulty: 1,
     content: [
       {
-        question: "Bạn Cá Heo 🐬 dưới biển thường biểu diễn hành động đẹp mắt nào trên mặt nước?",
+        question: "Khi ngồi vào bàn học ở lớp hoặc ở nhà, tư thế ngồi học đúng của bé là gì?",
         options: [
-          "Nhảy vút lên không trung nhào lộn vui vẻ",
-          "Leo trèo lên cây dừa",
-          "Đi bộ trên bờ cát",
-          "Chạy thi cùng thỏ rừng"
+          "Lưng thẳng, hai chân chạm sàn, mắt cách bàn khoảng 25-30cm 🪑✨",
+          "Nằm bò ra bàn để viết 🛌",
+          "Ngồi vẹo sang một bên 🪑"
         ],
         correctAnswer: 0,
-        explanation: "Cá Heo rất thông minh, thân thiện và thích nhảy vút lên khỏi mặt nước để chào đón tàu thuyền! 🐬"
+        explanation: "Ngồi thẳng lưng, mắt cách vở khoảng 25-30cm giúp bé bảo vệ cột sống và giữ cho đôi mắt luôn sáng khỏe!"
       },
       {
-        question: "Bác Rùa Biển 🐢 mang trên lưng vật gì cứng cáp để tự bảo vệ mình?",
+        question: "Sau khi làm bài tập xong, bút chì và thước kẻ nên để ở đâu?",
         options: [
-          "Một chiếc mai rùa cứng cáp như chiếc khiên",
-          "Một bộ lông xù",
-          "Một chiếc nón lá",
-          "Đôi cánh bay lượn"
+          "Cất gọn vào trong hộp bút ✏️📏",
+          "Để lăn lóc trên mặt bàn 🛋️",
+          "Vứt xuống sàn nhà 🧹"
         ],
         correctAnswer: 0,
-        explanation: "Chiếc mai rùa cứng cáp bảo vệ bác Rùa khỏi những va đập và kẻ thù dưới biển sâu! 🐢"
+        explanation: "Cất bút thước vào hộp bút giúp đồ dùng không bị rơi gãy ngòi và luôn sẵn sàng cho buổi học sau!"
       },
       {
-        question: "Bạn Bạch Tuộc 🐙 có bao nhiêu chiếc xúc tua uyển chuyển để bơi lặn?",
+        question: "Để bàn học luôn sạch đẹp và có cảm hứng học tập, bé cần lưu ý điều gì?",
         options: [
-          "2 xúc tua",
-          "4 xúc tua",
-          "8 xúc tua",
-          "100 xúc tua"
+          "Không vẽ bậy lên bàn, giữ mặt bàn luôn sạch sẽ, gọn gàng ✨📚",
+          "Vẽ mực lung tung lên mặt bàn 🖍️",
+          "Để vỏ bánh kẹo bừa bãi trên bàn 🍬"
         ],
-        correctAnswer: 2,
-        explanation: "Bạch Tuộc có đúng 8 chiếc xúc tua mềm dẻo với các giác hút tròn xoe! 🐙"
+        correctAnswer: 0,
+        explanation: "Giữ bàn học sạch đẹp, ngăn nắp thể hiện nếp sống văn minh và giúp bé học tập tập trung, hiệu quả hơn!"
       }
     ]
   },
-
-  // --- CẤP ĐỘ 2: LỚP 1–2 (6–8 TUỔI) - TẬP ĐÁNH VẦN CÙNG CÔ LAN ANH (VTV7) ---
   {
     id: "act_vq_g12_01_spell_b",
     title: "Tập đánh vần cùng cô Lan Anh: Âm B và Dấu Thanh 🔤👩‍🏫",
@@ -2920,6 +2957,7 @@ const ACTIVITIES_DATA = [
   // ==========================================================================
   {
     id: "g1_lananh_01_letter_a",
+    icon: "🔤",
     title: "Học chữ A cùng cô Lan Anh: Chữ A tươi cười 🍎",
     titleEn: "Letter A: Happy Open Mouth with Teacher Lan Anh",
     ageTier: "grade1_2",
@@ -2962,6 +3000,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_lananh_02_letter_aw",
+    icon: "🔤",
     title: "Học chữ Ă cùng cô Lan Anh: Chiếc mũ trăng khuyết 🌙",
     titleEn: "Letter Ă: Crescent Smile with Teacher Lan Anh",
     ageTier: "grade1_2",
@@ -3004,6 +3043,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_lananh_03_letter_aa",
+    icon: "🔤",
     title: "Học chữ Â cùng cô Lan Anh: Chiếc nón che mưa 🛖",
     titleEn: "Letter Â: The Little Hat with Teacher Lan Anh",
     ageTier: "grade1_2",
@@ -3046,6 +3086,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_lananh_04_letter_b",
+    icon: "🔤",
     title: "Học chữ B cùng cô Lan Anh: Chữ B bụng bự ⚽",
     titleEn: "Letter B: Big Round Bellies with Teacher Lan Anh",
     ageTier: "grade1_2",
@@ -3088,6 +3129,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_lananh_05_letter_c",
+    icon: "🔤",
     title: "Học chữ C cùng cô Lan Anh: Chữ C cong cong & Chú Cá nhỏ 🐟",
     titleEn: "Letter C: Curved Crescent with Teacher Lan Anh",
     ageTier: "grade1_2",
@@ -3136,6 +3178,7 @@ const ACTIVITIES_DATA = [
   // ==========================================================================
   {
     id: "g1_vtv7_01_letter_o",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ O tròn xoe ⭕ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter O",
     ageTier: "grade1_2",
@@ -3173,6 +3216,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_02_letter_oo",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Ô đội mũ 🧢 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ô",
     ageTier: "grade1_2",
@@ -3210,6 +3254,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_03_letter_ow",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Ơ có râu 🐱 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ơ",
     ageTier: "grade1_2",
@@ -3247,6 +3292,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_04_letter_a",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ A & Đánh vần chữ A 🍎 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter A",
     ageTier: "grade1_2",
@@ -3284,6 +3330,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_05_letter_aw",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Ă: Vầng trăng khuyết 🌙 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ă",
     ageTier: "grade1_2",
@@ -3321,6 +3368,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_06_letter_aa",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Â: Chiếc nón che mưa 🛖 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Â",
     ageTier: "grade1_2",
@@ -3358,6 +3406,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_07_letter_u",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ U & Tiếng có âm U 🥣 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter U",
     ageTier: "grade1_2",
@@ -3395,6 +3444,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_08_letter_uw",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Ư & Phân biệt U/Ư 🍇 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ư",
     ageTier: "grade1_2",
@@ -3432,6 +3482,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_09_letter_e",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ E & Tiếng có âm E 🐑 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter E",
     ageTier: "grade1_2",
@@ -3469,6 +3520,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_10_letter_ee",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ Ê & Phân biệt E/Ê 🐐 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ê",
     ageTier: "grade1_2",
@@ -3506,6 +3558,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_11_letter_i",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học chữ I ngắn & Ghép tiếng ⚪ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter I",
     ageTier: "grade1_2",
@@ -3543,6 +3596,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_12_letter_c",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học phụ âm C & Quy tắc chính tả C/K 🐟 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter C & Orthography",
     ageTier: "grade1_2",
@@ -3580,6 +3634,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_13_letter_b",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học phụ âm B & Ghép dấu thanh ⚽ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter B & Tones",
     ageTier: "grade1_2",
@@ -3617,6 +3672,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_14_letter_d",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học phụ âm D (Dờ) & Tiếng có âm D 🐐 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter D",
     ageTier: "grade1_2",
@@ -3654,6 +3710,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_17_letter_dd",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Học phụ âm Đ & Phân biệt D/Đ 🏮 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Đ & Contrast D/Đ",
     ageTier: "grade1_2",
@@ -3691,6 +3748,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_31_letter_gh",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép GH & Quy tắc G/GH 🪑 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph GH",
     ageTier: "grade1_2",
@@ -3728,6 +3786,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_32_letter_ch",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép CH: Chú Chó, Quả Chanh 🐕 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph CH",
     ageTier: "grade1_2",
@@ -3765,6 +3824,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_33_letter_gi",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép GI: Cơn Gió, Giỏ Cá 💨 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph GI",
     ageTier: "grade1_2",
@@ -3802,6 +3862,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_34_letter_kh",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép KH: Chú Khỉ, Khăn Quàng 🐒 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph KH",
     ageTier: "grade1_2",
@@ -3839,6 +3900,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_35_letter_ng",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép NG & NGH: Con Ngựa, Nghé Con 🐎 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraphs NG & NGH",
     ageTier: "grade1_2",
@@ -3876,6 +3938,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_37_letter_ph",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép PH: Phố Phường, Bát Phở 🍜 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph PH",
     ageTier: "grade1_2",
@@ -3913,6 +3976,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_38_letter_tr",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép TR & Phân biệt TR/CH ☀️ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph TR & Contrast TR/CH",
     ageTier: "grade1_2",
@@ -3950,6 +4014,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_39_letter_nh",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép NH: Ngôi Nhà, Chùm Nho 🏠 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph NH",
     ageTier: "grade1_2",
@@ -3987,6 +4052,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_40_letter_th",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép TH: Thước Kẻ, Con Thỏ 🐇 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph TH",
     ageTier: "grade1_2",
@@ -4024,6 +4090,7 @@ const ACTIVITIES_DATA = [
   },
   {
     id: "g1_vtv7_41_letter_qu",
+    icon: "🔤",
     title: "VTV7 Lớp 1: Phụ âm ghép QU: Quả Quýt, Cái Quạt 🍊 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph QU",
     ageTier: "grade1_2",
@@ -4060,6 +4127,230 @@ const ACTIVITIES_DATA = [
     ]
   }
 
+,
+
+  // ========================================================
+  // STAGE 2: GHÉP VẦN CƠ BẢN (b-a-ba, m-e-me, DẤU HUYỀN / SẮC)
+  // ========================================================
+  {
+    id: "act_s2_spell_ba_ba",
+    icon: "🔤",
+    title: "Ghép vần cơ bản: Ghép âm b - a - ba 👵",
+    titleEn: "Basic Phonics: Blend b - a - ba",
+    icon: "🔤",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.blend.ba",
+    skills: ["vi.blend.ba"],
+    type: "image_quiz",
+    difficulty: 1,
+    mediaSource: {
+      type: "image_set",
+      url: "img/phonics_ba.png",
+      thumbnail: "img/phonics_ba_thumb.png"
+    },
+    learningObjective: "Chuẩn Tiền tiểu học: Ghép phụ âm đầu b với nguyên âm a và thanh điệu để tạo tiếng ba, bà, bé.",
+    content: [
+      {
+        question: "Khi ghép âm b đứng trước và âm a đứng sau, ta đọc thành tiếng gì? 🔤",
+        options: [
+          "b - a - ba 👵",
+          "b - o - bo 🐮",
+          "b - e - be 🐑"
+        ],
+        correctAnswer: 0,
+        explanation: "Âm b ghép với âm a đọc là: b - a - ba!"
+      },
+      {
+        question: "Tiếng ba thêm dấu huyền trên đầu chữ a đọc là gì? 👵",
+        options: [
+          "ba - huyền - bà 👵",
+          "ba - sắc - bá 👧",
+          "ba - hỏi - bả 🥣"
+        ],
+        correctAnswer: 0,
+        explanation: "Tiếng ba thêm dấu huyền thành bà - người bà kính yêu của bé!"
+      },
+      {
+        question: "Chọn từ đúng điền vào câu: Bé khoanh tay chào ___ ? 👨",
+        options: [
+          "ba 👨",
+          "cá 🐟",
+          "gà 🐔"
+        ],
+        correctAnswer: 0,
+        explanation: "Câu hoàn chỉnh: Bé khoanh tay chào ba!"
+      }
+    ],
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_s2_spell_me_me",
+    icon: "🔤",
+    title: "Ghép vần cơ bản: Ghép âm m - e - me 👩‍👧",
+    titleEn: "Basic Phonics: Blend m - e - me",
+    icon: "🔤",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.blend.me",
+    skills: ["vi.blend.me"],
+    type: "image_quiz",
+    difficulty: 1,
+    mediaSource: {
+      type: "image_set",
+      url: "img/phonics_me.png",
+      thumbnail: "img/phonics_me_thumb.png"
+    },
+    learningObjective: "Chuẩn Tiền tiểu học: Ghép phụ âm m với nguyên âm e và thanh nặng để tạo tiếng mẹ thân thương.",
+    content: [
+      {
+        question: "Khi ghép âm m đứng trước và âm e đứng sau, ta đọc được tiếng nào? 👩‍👧",
+        options: [
+          "m - e - me 👩‍👧",
+          "m - a - ma 👻",
+          "m - o - mo 🥣"
+        ],
+        correctAnswer: 0,
+        explanation: "Âm m ghép với âm e đọc là: m - e - me!"
+      },
+      {
+        question: "Tiếng me thêm dấu nặng ở dưới chữ e đọc là gì? ❤️",
+        options: [
+          "me - nặng - mẹ 👩‍👧❤️",
+          "me - sắc - mé 🌊",
+          "me - huyền - mè 🌾"
+        ],
+        correctAnswer: 0,
+        explanation: "Tiếng me thêm thanh nặng thành mẹ - mẹ yêu quý của chúng mình!"
+      },
+      {
+        question: "Chọn từ đúng để hoàn thành câu: Bé ngoan yêu thương ___ và ba 👩‍👧",
+        options: [
+          "mẹ 👩‍👧❤️",
+          "me 🌳",
+          "mè 🌾"
+        ],
+        correctAnswer: 0,
+        explanation: "Chính xác: Bé ngoan yêu thương mẹ và ba!"
+      }
+    ],
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_s2_tones_huyen_sac",
+    icon: "📖",
+    title: "Nhận biết dấu thanh: Dấu huyền và Dấu sắc ✍️✨",
+    titleEn: "Vietnamese Tones: Grave and Acute Accents",
+    icon: "📖",
+    ageTier: "preschool",
+    stage: 2,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.tones.huyen_sac",
+    skills: ["vi.tones.huyen_sac"],
+    type: "image_quiz",
+    difficulty: 1,
+    mediaSource: {
+      type: "image_set",
+      url: "img/tones_thumb.png",
+      thumbnail: "img/tones_thumb.png"
+    },
+    learningObjective: "Chuẩn Tiền tiểu học: Nhận diện hình dáng và phát âm đúng thanh huyền (dốc xuống) và thanh sắc (dốc lên).",
+    content: [
+      {
+        question: "Dấu huyền ( \\ ) có hình dáng giống như vật gì nào bé nhỉ? 🎢",
+        options: [
+          "Nét xiên từ trái xuống phải ( \\ ) giống chiếc cầu trượt đi xuống 🎢",
+          "Nét xiên từ dưới lên phải ( / ) như tên lửa 🚀",
+          "Dấu chấm tròn nhỏ dưới chân chữ ( . ) 💧"
+        ],
+        correctAnswer: 0,
+        explanation: "Dấu huyền là nét xiên từ trái sang phải, đọc giọng trầm xuống: bà, cà, bò!"
+      },
+      {
+        question: "Dấu sắc ( / ) có hình dáng giống như chuyển động nào? 🚀",
+        options: [
+          "Nét xiên từ dưới vút lên bên phải ( / ) như chiếc tên lửa bay lên 🚀",
+          "Nét nằm ngang phẳng lặng ( - ) ➖",
+          "Chiếc nón úp ngược ( ^ ) 🧢"
+        ],
+        correctAnswer: 0,
+        explanation: "Dấu sắc là nét xiên vút lên trên bên phải, đọc giọng cao vút: cá, bé, lá!"
+      },
+      {
+        question: "Trong hai từ cá 🐟 và cà 🍆, từ nào mang dấu sắc ( / )?",
+        options: [
+          "Từ cá mang dấu sắc 🐟",
+          "Từ cà mang dấu sắc 🍆",
+          "Cả hai từ đều không có dấu sắc ❌"
+        ],
+        correctAnswer: 0,
+        explanation: "Từ cá mang dấu sắc: c - a - ca - sắc - cá! 🐟"
+      }
+    ],
+    reward: { stars: 3 }
+  },
+  // ========================================================
+  // STAGE 3: TOÁN TƯ DUY - QUY LUẬT MÀU SẮC
+  // ========================================================
+  {
+    id: "act_s3_color_pattern",
+    icon: "🎨",
+    title: "Toán tư duy: Quy luật màu sắc 🔴🔵🔴🔵 [?] 🎨",
+    titleEn: "Logic Math: Color Pattern",
+    icon: "🎨",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "math",
+    skill: "math.pattern.color",
+    skills: ["math.pattern.color"],
+    type: "image_quiz",
+    difficulty: 1,
+    mediaSource: {
+      type: "image_set",
+      url: "img/pattern_color.png",
+      thumbnail: "img/pattern_color_thumb.png"
+    },
+    learningObjective: "Chuẩn Tiền tiểu học môn Toán: Phát hiện quy luật lặp lại của chuỗi màu sắc và dự đoán phần tử kế tiếp.",
+    content: [
+      {
+        question: "Bé quan sát chuỗi hạt màu: Đỏ 🔴, Xanh 🔵, Đỏ 🔴, Xanh 🔵, Đỏ 🔴, ... Hạt tiếp theo màu gì? 🎨",
+        options: [
+          "Hạt màu Xanh 🔵",
+          "Hạt màu Đỏ 🔴",
+          "Hạt màu Vàng 🟡"
+        ],
+        correctAnswer: 0,
+        explanation: "Quy luật lặp lại xen kẽ: Đỏ rồi đến Xanh, nên sau hạt Đỏ chắc chắn là hạt Xanh! 🔵"
+      },
+      {
+        question: "Đoàn tàu màu sắc: Vàng 🟡, Vàng 🟡, Đỏ 🔴, Vàng 🟡, Vàng 🟡, [?]. Toa tiếp theo màu gì?",
+        options: [
+          "Toa màu Đỏ 🔴",
+          "Toa màu Vàng 🟡",
+          "Toa màu Tím 🟣"
+        ],
+        correctAnswer: 0,
+        explanation: "Quy luật: Cứ 2 toa Vàng thì đến 1 toa Đỏ. Sau 2 toa Vàng tiếp theo sẽ là toa Đỏ! 🔴"
+      },
+      {
+        question: "Dãy hình: Hình tròn đỏ 🔴, Hình vuông xanh 🟦, Hình tròn đỏ 🔴, Hình vuông xanh 🟦, [?]. Hình tiếp theo là gì?",
+        options: [
+          "Hình tròn đỏ 🔴",
+          "Hình vuông xanh 🟦",
+          "Hình tam giác vàng 🔺"
+        ],
+        correctAnswer: 0,
+        explanation: "Quy luật lặp lại cặp (Tròn đỏ - Vuông xanh), sau Vuông xanh sẽ quay lại Tròn đỏ! 🔴"
+      }
+    ],
+    reward: { stars: 3 }
+  },
 ];
 
 // Định nghĩa JSON Schema chuẩn
