@@ -61,7 +61,7 @@ assert(appJs.includes('Ngôn ngữ hiển thị & phát âm:'), 'Parent dashboar
 
 // 2.2 Tốc độ đọc
 assert(appJs.includes('function setSpeechRate('), 'app.js phải có hàm setSpeechRate');
-assert(appJs.includes('Tốc độ đọc giọng nói:'), 'Parent dashboard phải có mục điều chỉnh tốc độ đọc');
+assert(appJs.includes('Tốc độ giọng đọc cho bé:') || appJs.includes('Tốc độ đọc giọng nói:'), 'Parent dashboard phải có mục điều chỉnh tốc độ đọc');
 assert(appJs.includes('setSpeechRate(0.4)'), 'Parent dashboard phải có mức đọc chậm 0.4');
 assert(appJs.includes('setSpeechRate(0.6)'), 'Parent dashboard phải có mức đọc vừa 0.6');
 assert(appJs.includes('setSpeechRate(0.85)'), 'Parent dashboard phải có mức đọc chuẩn 0.85');

@@ -12,7 +12,7 @@ const exists = f => fs.existsSync(path.join(ROOT, f));
 const TEXT = /\.(js|html|css|json|webmanifest|svg)$/i;
 
 // Ngưỡng dung lượng tối đa cho gói âm thanh Chặng 0–1 (Phương án b) nhằm tránh vượt quota lưu trữ trên thiết bị di động cũ/yếu
-const MAX_OPT_AUDIO_BYTES = 13 * 1024 * 1024; // 13 MB
+const MAX_OPT_AUDIO_BYTES = 16 * 1024 * 1024; // 16 MB
 
 let failed = 0;
 const fail = m => { failed++; console.error("  ✖ " + m); };
@@ -56,9 +56,9 @@ OPT_AUDIO.forEach(f => {
 });
 const optAudioMB = (optAudioBytes / (1024 * 1024)).toFixed(2);
 if (optAudioBytes > MAX_OPT_AUDIO_BYTES) {
-  fail(`tổng dung lượng OPT_AUDIO (${optAudioMB} MB) vượt ngưỡng cho phép 13 MB!`);
+  fail(`tổng dung lượng OPT_AUDIO (${optAudioMB} MB) vượt ngưỡng cho phép 16 MB!`);
 } else {
-  ok(`tổng dung lượng OPT_AUDIO: ${optAudioMB} MB (${optAudioBytes.toLocaleString()} bytes) ≤ ngưỡng 13 MB`);
+  ok(`tổng dung lượng OPT_AUDIO: ${optAudioMB} MB (${optAudioBytes.toLocaleString()} bytes) ≤ ngưỡng 16 MB`);
 }
 
 // 4) mọi tài nguyên local index.html nạp phải nằm trong CORE

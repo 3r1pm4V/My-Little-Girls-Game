@@ -29,6 +29,11 @@ Dự án ưu tiên an toàn, giáo dục trẻ em, không thương mại hóa, c
   * Nguồn tạo: Sinh từ mô hình AI VieNeu TTS (`vieneu-v4`, giọng đọc cô giáo Tưởng Vy #11).
   * Mục đích: Phát âm chuẩn từng âm tiết, chữ cái, tiếng mở, câu đánh vần và lời khen ngợi.
   * Bản quyền: Thuộc dự án cá nhân, cấp quyền sử dụng phi thương mại cho bé.
+* **Gói âm thanh bổ sung Chặng 0–1 (157 file mới sinh, Task P2-07)**:
+  * Nguồn gốc: VieNeu TTS (`api.vieneu.io`, model `vieneu-v4`), giọng Tưởng Vy (#11), sinh ngày 2026-10-20.
+  * Danh mục: 157 file phát âm các đáp án lựa chọn bài học con vật Mầm non Chặng 0, bài chữ cái VTV7 Chặng 1, ghép thẻ số lượng táo và hướng dẫn Cổng PIN phụ huynh.
+  * Tổng dung lượng: 3.31 MB (3,311,769 bytes).
+  * Điều khoản sử dụng: **UNVERIFIED** (chờ Nghĩa nghe duyệt thực tế trên máy tính bảng trước khi công nhận chuẩn giáo dục, danh mục kiểm tra tại `docs/new-audio-review.md`).
 * **Âm thanh hiệu ứng giao diện (SFX)**:
   * Nguồn: Sinh trực tiếp bằng trình duyệt qua **Web Audio API** (`OscillatorNode`, `GainNode`).
   * Bao gồm: `sfxTap` (chạm nút), `sfxOk` (làm đúng), `sfxFanfare` (hoàn thành bài), `sfxPop` (nổ bóng chữ), `sfxDeflate` (xẹp bóng).

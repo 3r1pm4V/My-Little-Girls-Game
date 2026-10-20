@@ -7,6 +7,17 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **feat(P2-07b: Batch VieNeu Audio Generation & Full Stage 0–1 Precache)**:
+  - Sinh tự động thành công 100% (157/157 file) âm thanh VieNeu TTS (giọng cô giáo Tưởng Vy #11) cho toàn bộ các đáp án lựa chọn bài học con vật Mầm non Chặng 0, bài chữ cái VTV7 Chặng 1, ghép thẻ số lượng táo và hướng dẫn Cổng PIN phụ huynh:
+    - Loại trừ an toàn 3 từ tiếng Anh mầm non (để dùng audio bản ngữ chuẩn) và 4 câu tiếng kêu con vật (để tải nguồn Google chuẩn).
+    - Tổng ký tự gửi VieNeu API: 2,374 ký tự, tổng dung lượng tạo mới: 3,311,769 bytes (~3.16 MB), 0 lỗi thất bại.
+    - Script thực thi an toàn `scripts/generate_stage01_audio.js` hỗ trợ cờ `--dry-run`, chia 8 lô nhỏ (20 file/lô), tự nghỉ giữa lô và tự xoay vòng 4 API keys an toàn trong `.env`.
+  - Cập nhật 304 cặp khóa (cả chuỗi text thô và tiền tố `vi|`) vào `RAW_MAP` trong `audio-map.js`, bảo vệ 100% logic IIFE và Proxy tra cứu linh hoạt.
+  - Viết mới test suite `test-required-audio.js`: xác thực 100% (157/157) chuỗi chốt đều tra cứu ra file âm thanh MP3 thực tế trên đĩa.
+  - Cập nhật `ASSETS.md` ghi nhận gói âm thanh mới ở trạng thái UNVERIFIED; lập bảng kiểm duyệt chi tiết tại `docs/new-audio-review.md` giữ các mục `TODO(parent-review)` để phụ huynh nghe duyệt.
+  - Nâng trần kiểm thử `MAX_OPT_AUDIO_BYTES` trong `test-sw-precache.js` lên 16 MB theo quyết định của chủ dự án; nạp toàn bộ 157 file mới vào `OPT_AUDIO` trong `sw.js` (tổng 433 file, 15.52 MB $\le$ 16 MB).
+  - Tự động bump phiên bản Service Worker lên `bhv-v49` với `asset-hash: 3d4f4216786292f8`.
+  - Toàn bộ 17 test suites đạt chuẩn PASS 100%.
 - **fix(P2-07: Emoji Stripping in normKey & Precache Group B Audio)**:
   - Sửa lỗi trượt Map do Emoji trong audio-map.js (dòng 8–15 & 27164–27178):
     - Bổ sung bộ lọc biểu tượng cảm xúc Unicode `\p{Extended_Pictographic}` và bộ chọn biến thể VS16 (`\uFE0E-\uFE0F`) vào hàm `normKey`.
