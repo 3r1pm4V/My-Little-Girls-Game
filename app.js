@@ -168,7 +168,7 @@ window.loadActivities = loadActivities;
 
 function loadScriptTag(src) {
   return new Promise((resolve) => {
-    if (typeof document === "undefined") return resolve(false);
+    if (typeof document === "undefined" || typeof document.querySelector !== "function") return resolve(false);
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) return resolve(true);
     const s = document.createElement("script");
@@ -1517,15 +1517,32 @@ function lockedActPrompt(actId) {
 }
 window.lockedActPrompt = lockedActPrompt;
 
+function getGroupForLetter(l){
+  const c = String(l || "").toLowerCase();
+  if(["c","o","ô","ơ","e","ê","x"].includes(c)) return "g1";
+  if(["a","ă","â","d","đ","q"].includes(c)) return "g2";
+  if(["i","u","ư","t","p","y","n","m","v","r","s"].includes(c)) return "g3";
+  if(["l","b","h","k"].includes(c)) return "g4";
+  if(["g","v"].includes(c)) return "g5";
+  return "lo";
+}
+window.getGroupForLetter = getGroupForLetter;
+
 let lastKidBtnSpeak = 0;
 function speakKidBtn(type){
   const now = Date.now();
   if(now - lastKidBtnSpeak < 600) return;
   lastKidBtnSpeak = now;
-  if(type === 'today'){
+  if(type === 'letters'){
+    say("Học chữ cái và tập tô nét nhé!", "Let's learn letters and trace!");
+  } else if(type === 'numbers'){
+    say("Học số và tập đếm nào!", "Let's learn numbers and counting!");
+  } else if(type === 'today'){
     playSafeAudio("audio/ui_home_btn_today.mp3", "Tưởng Vy");
   } else if(type === 'games'){
     playSafeAudio("audio/ui_home_btn_games.mp3", "Tưởng Vy");
+  } else if(type === 'stories'){
+    say("Cùng nghe đọc truyện cổ tích nào!", "Let's listen to fairy tales!");
   } else if(type === 'stickers'){
     playSafeAudio("audio/ui_home_btn_stickers.mp3", "Tưởng Vy");
   }
@@ -1615,6 +1632,74 @@ async function todayLearning(stageNum){
 }
 window.todayLearning = todayLearning;
 
+function lettersHome(){
+  m.innerHTML = `
+    ${kbc([
+      {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+      {t:T("Học chữ & Tập tô","Letters & Tracing"), i:"🔤"}
+    ])}
+    
+    <div style="text-align:center;margin:6px 0 16px">
+      <h2 style="font-size:24px;margin:0 0 4px">🔤 ${T("Học Chữ & Tập Tô Nét", "Learn Letters & Trace")}</h2>
+      <p style="font-size:14px;color:#64748b;margin:0">${T("Giáo trình Tiền tiểu học chuẩn · 14 Nét cơ bản & 29 Chữ cái", "Pre-primary Curriculum · 14 Strokes & 29 Letters")}</p>
+    </div>
+
+    <!-- 3 MỤC CHÍNH DỰA TRÊN GOOGLE DRIVE -->
+    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:760px;margin:0 auto 16px">
+      
+      <!-- 1. 14 NÉT VIẾT CƠ BẢN (các nét cơ bản.pdf) -->
+      <div class="card" onclick="window.__traceFrom='lettersHome';trm='net';ls.set('trm','net');trace()" style="cursor:pointer;border:3px solid #bae6fd;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
+        <div style="font-size:36px;margin-bottom:8px">✏️</div>
+        <div style="font-size:18px;font-weight:900;color:#0369a1;margin-bottom:4px">${T("14 Nét viết cơ bản", "14 Basic Strokes")}</div>
+        <div style="font-size:13px;color:#0284c7;line-height:1.4">${T("Nét thẳng, nét móc, nét cong, nét khuyết & nét thắt chuẩn ô ly", "Straight, hook, curve, loop & knot strokes on grid")}</div>
+        <div style="margin-top:12px;font-weight:800;color:#0284c7;display:flex;align-items:center;gap:4px">
+          <span>${T("Tập tô nét ngay 🚀", "Trace strokes 🚀")}</span>
+        </div>
+      </div>
+
+      <!-- 2. BẢNG CHỮ CÁI TIẾNG VIỆT (TIỀN TIỂU HỌC - Viết chữ.pdf & Sách luyện đọc.pdf) -->
+      <div class="card" onclick="go('letL')" style="cursor:pointer;border:3px solid #fed7aa;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
+        <div style="font-size:36px;margin-bottom:8px">🔤</div>
+        <div style="font-size:18px;font-weight:900;color:#c2410c;margin-bottom:4px">${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}</div>
+        <div style="font-size:13px;color:#ea580c;line-height:1.4">${T("29 chữ cái kèm hình ảnh, từ ví dụ & hướng dẫn tập tô từng nét", "29 letters with sounds, pictures, words & stroke guides")}</div>
+        <div style="margin-top:12px;font-weight:800;color:#ea580c;display:flex;align-items:center;gap:4px">
+          <span>${T("Xem bảng chữ cái 🔤", "Explore alphabet 🔤")}</span>
+        </div>
+      </div>
+
+      <!-- 3. BÉ TẬP ĐÁNH VẦN (Sách luyện đọc.pdf) -->
+      <div class="card" onclick="go('readL')" style="cursor:pointer;border:3px solid #bbf7d0;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
+        <div style="font-size:36px;margin-bottom:8px">📖</div>
+        <div style="font-size:18px;font-weight:900;color:#15803d;margin-bottom:4px">${T("Bé tập đánh vần", "Learn Phonics")}</div>
+        <div style="font-size:13px;color:#16a34a;line-height:1.4">${T("Ghép âm đầu + nguyên âm + 6 dấu thanh (b-a-ba, c-a-ca...)", "Spell onset + vowel + 6 tones with clear voice audio")}</div>
+        <div style="margin-top:12px;font-weight:800;color:#16a34a;display:flex;align-items:center;gap:4px">
+          <span>${T("Tập ghép vần 📖", "Start phonics 📖")}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hướng dẫn tư thế ngồi & cách cầm bút chuẩn (GIÁO ÁN HÀNH TRANG VÀO LỚP 1) -->
+    <div style="background:#fff;border:3px solid #e2e8f0;border-radius:24px;padding:16px 20px;max-width:760px;margin:0 auto 16px;text-align:left;box-shadow:0 4px 12px rgba(0,0,0,0.04)">
+      <div style="font-size:16px;font-weight:900;color:#1e293b;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+        <span>✏️</span> <span>${T("Lời dặn cô giáo: Tư thế ngồi & Cách cầm bút", "Teacher's Advice: Posture & Grip")}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:13.5px;color:#475569;line-height:1.45">
+        <div style="background:#f8fafc;padding:10px 14px;border-radius:16px;border-left:4px solid #38bdf8">
+          <b>🪑 1. Tư thế ngồi học:</b><br>
+          ${T("Lưng thẳng, không tì ngực vào bàn. Hai chân để vuông góc chạm đất, đầu hơi cúi cách vở 25–30cm.", "Sit straight, feet flat on the floor, head slightly tilted 25-30cm from paper.")}
+        </div>
+        <div style="background:#f8fafc;padding:10px 14px;border-radius:16px;border-left:4px solid #f43f5e">
+          <b>✍️ 2. Quy tắc 3 ngón tay:</b><br>
+          ${T("Cầm bút bằng 3 ngón: ngón cái, ngón trỏ và ngón giữa đỡ dưới thân bút. Không cầm bút quá chặt.", "Hold pencil with thumb and index finger, supported by middle finger.")}
+        </div>
+      </div>
+    </div>
+  `;
+  sayPrompt("letters_home", "Bé chọn 14 nét viết cơ bản, bảng chữ cái, hoặc tập đánh vần nhé!", "Choose basic strokes, alphabet, or phonics!", 180000);
+}
+window.lettersHome = lettersHome;
+
 function home(){
   const showTiers = isAgeTierSelectorEnabled();
   const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : {
@@ -1643,44 +1728,72 @@ function home(){
   const isKidPreschoolMode = !showTiers || currentTier === "preschool";
 
   if(isKidPreschoolMode){
-    const curStage = getKidCurrentStage();
-    const stageInfo = (typeof STAGE_META !== "undefined" && STAGE_META[curStage]) ? STAGE_META[curStage] : { nameVi: "Chặng 1", nameEn: "Stage 1", icon: "🔤" };
     contentHtml = `
       <div class="kid-home-menu">
-        <button class="kid-home-btn kid-btn-today" 
-          onclick="go('todayLearning')"
+        <!-- 1. HỌC CHỮ & TẬP TÔ -->
+        <button class="kid-home-btn kid-btn-today kid-btn-letters" 
+          onclick="go('lettersHome')"
           onpointerdown="speakKidBtn('today')"
-          aria-label="${T("Học hôm nay", "Today's Learning")}">
-          <div class="kid-btn-icon-wrap">🎒</div>
+          aria-label="${T("Học chữ & Tập tô", "Learn Letters & Trace")}">
+          <div class="kid-btn-icon-wrap">🔤</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Học hôm nay", "Today's Learning")}</div>
-            <div class="kid-btn-sub">${stageInfo.icon} ${T(stageInfo.nameVi, stageInfo.nameEn)} · ${T("Bài học mỗi ngày ✨", "Daily lessons ✨")}</div>
+            <div class="kid-btn-title">${T("Học chữ & Tập tô", "Letters & Tracing")}</div>
+            <div class="kid-btn-sub">${T("14 Nét viết cơ bản & 29 chữ cái ô ly ✍️", "14 Basic strokes & 29 letters ✍️")}</div>
           </div>
           <div class="kid-btn-arrow">➡️</div>
         </button>
 
+        <!-- 2. HỌC SỐ & ĐẾM -->
+        <button class="kid-home-btn kid-btn-numbers" 
+          onclick="go('numL')"
+          onpointerdown="speakKidBtn('numbers')"
+          aria-label="${T("Học số & Đếm", "Numbers & Counting")}">
+          <div class="kid-btn-icon-wrap">🔢</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title">${T("Học số & Đếm", "Numbers & Counting")}</div>
+            <div class="kid-btn-sub">${T("Số 1–20, đếm đồ vật sinh động 🍎", "Numbers 1–20 & counting objects 🍎")}</div>
+          </div>
+          <div class="kid-btn-arrow">➡️</div>
+        </button>
+
+        <!-- 3. TRÒ CHƠI -->
         <button class="kid-home-btn kid-btn-games" 
           onclick="go('games')"
           onpointerdown="speakKidBtn('games')"
-          aria-label="${T("Chơi tự do", "Free Play")}">
+          aria-label="${T("Trò chơi vui nhộn", "Fun Games")}">
           <div class="kid-btn-icon-wrap">🎮</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Chơi tự do", "Free Play")}</div>
-            <div class="kid-btn-sub">${T("Đếm hình, chữ cái, vẽ nét 🎨", "Count, alphabet, trace 🎨")}</div>
+            <div class="kid-btn-title">${T("Trò chơi vui nhộn", "Fun Games")}</div>
+            <div class="kid-btn-sub">${T("Bắt bóng chữ, đếm hình, lật thẻ 🎈", "Bubble pop, counting, card flip 🎈")}</div>
           </div>
           <div class="kid-btn-arrow">➡️</div>
         </button>
 
+        <!-- 4. TRUYỆN CỔ TÍCH -->
+        <button class="kid-home-btn kid-btn-stories" 
+          onclick="go('storyL')"
+          onpointerdown="speakKidBtn('stories')"
+          aria-label="${T("Truyện cổ tích", "Fairy Tales")}">
+          <div class="kid-btn-icon-wrap">📖</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title">${T("Truyện cổ tích", "Fairy Tales")}</div>
+            <div class="kid-btn-sub">${T("Giọng đọc ấm áp, tranh minh họa đẹp ✨", "Gentle voice & storybooks ✨")}</div>
+          </div>
+          <div class="kid-btn-arrow">➡️</div>
+        </button>
+      </div>
+
+      <div style="text-align:center;margin:4px 0 16px">
         <button class="kid-home-btn kid-btn-stickers" 
           onclick="showBadges('stickers')"
           onpointerdown="speakKidBtn('stickers')"
+          style="max-width:320px;margin:0 auto;min-height:56px;padding:8px 16px"
           aria-label="${T("Sticker của bé", "My Stickers")}">
-          <div class="kid-btn-icon-wrap">🏆</div>
+          <div class="kid-btn-icon-wrap" style="width:38px;height:38px;min-width:38px;min-height:38px;font-size:22px">🏆</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Sticker của bé", "My Stickers")}</div>
-            <div class="kid-btn-sub">${T("Huy hiệu & bộ sưu tập sao 🌟", "Badges & star collection 🌟")}</div>
+            <div class="kid-btn-title" style="font-size:15px">${T("Sticker của bé", "My Stickers")}</div>
+            <div class="kid-btn-sub" style="font-size:12px">${T("Bộ sưu tập sao & huy hiệu 🌟", "Stars & badges 🌟")}</div>
           </div>
-          <div class="kid-btn-arrow">➡️</div>
         </button>
       </div>
     `;
@@ -1721,15 +1834,14 @@ function home(){
     </p>
   `;
   if(isKidPreschoolMode){
-    sayPrompt("home", "Chào bé! Bé chọn Học hôm nay, Chơi tự do, hay xem Sticker nào?", "Hello! Pick Today's Learning, Free Play, or Stickers!", 300000);
+    sayPrompt("home", "Chào bé! Bé chọn Học chữ, Học số, Trò chơi, hay nghe Truyện nào?", "Hello! Pick Letters, Numbers, Games, or Stories!", 300000);
   } else {
     sayPrompt("home", "Chào bé! Mình cùng học nhé", "Hello! Let's learn together", 300000);
   }
+  need("s");
 }
+window.home = home;
 
-/* ========================================================
-   QUẢN LÝ BÀI TẬP PHÂN TẦNG (TIER ACTIVITIES & PLAYER)
-   ======================================================== */
 async function tierActivities(filterSubject){
   if(!window.ACTIVITIES_DATA){
     m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải bài học vui nhộn...","Loading fun activities...")}</p></div>`;
@@ -2586,13 +2698,13 @@ const sayN=n=>say(NV[n],NE[n]);
 function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
 function numL(n=1){const o=COUNT[n%COUNT.length];
  ST.numCount=(ST.numCount||0)+1;svS();checkBadges();
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;if(!isBackNav)sayN(n)}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='numL';trm='nu';ls.set('trm','nu');trace('${n}')" style="background:#0284c7;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(2,132,199,0.3);border-radius:24px">✍️ ${T("Bé tập tô số " + n, "Trace number " + n)}</button></div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;if(!isBackNav)sayN(n)}
 function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new Set([n]);while(c.size<3)c.add(R(1,MX()));
  quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
 function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2 id="letLQ" role="button" tabindex="0" onclick="say('Chạm vào chữ cái nhé','Tap a letter')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;sayPrompt("letL","Chạm vào chữ cái nhé","Tap a letter",180000);need("s")}
 function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
  ST.letCount=(ST.letCount||0)+1;svS();checkBadges();
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
+ m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='letD';trm=getGroupForLetter('${L}');ls.set('trm',trm);trace('${L.toLowerCase()}')" style="background:#ec4899;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(236,72,153,0.3);border-radius:24px">✍️ ${T("Bé tập tô chữ " + L, "Trace letter " + L)}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
 function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
  say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
@@ -5735,7 +5847,7 @@ async function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,todayLearning,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity};
+const V={home,lettersHome,todayLearning,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity};
 const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
 async function need(k){
   if(window["__"+k])return true;
