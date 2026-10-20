@@ -5,6 +5,7 @@ cd /d "%~dp0\.."
 
 echo === CHẠY TIẾP HÀNG ĐỢI ÂM THANH VIENEU ===
 node scripts\generate_spelling_vieneu.js >> "%~dp0vieneu_scheduler.log" 2>&1
+node scripts\generate_vocab_vieneu.js >> "%~dp0vieneu_scheduler.log" 2>&1
 
 echo === CẬP NHẬT SERVICE WORKER & ASSET HASH ===
 node test-sw-precache.js --fix >> "%~dp0vieneu_scheduler.log" 2>&1
