@@ -7,6 +7,8 @@ generate_spelling_audio.js
 regenerate_syllables.js
 api_keys.json
 temp_yt/
+audio_priority_plan.json
+generate_priority_audios.js
 scratch_*.js
 extract_*.js
 .env

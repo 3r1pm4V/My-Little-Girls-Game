@@ -25,6 +25,8 @@ console.log('================================================================\n'
 console.log('--- TEST 1: Kiểm tra cấu trúc <header> trong index.html ---');
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
+const stylesCss = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : '';
+const allCss = indexHtml + '\n' + stylesCss;
 
 // Trích xuất thẻ <header>...</header>
 const headerMatch = indexHtml.match(/<header>([\s\S]*?)<\/header>/);
@@ -127,12 +129,12 @@ try {
 console.log('\n--- TEST 4: Kiểm tra bố cục đáp ứng 360px và Tablet ngang ---');
 
 // Kiểm tra CSS header
-assert(indexHtml.includes('header{display:flex;align-items:center;gap:8px'), 'Header phải dùng flexbox với gap');
-assert(indexHtml.includes('header .sp{flex:1}'), 'Spacer .sp phải có flex:1 để đẩy 2 bên');
+assert(allCss.includes('header{display:flex;align-items:center;gap:8px'), 'Header phải dùng flexbox với gap');
+assert(allCss.includes('header .sp{flex:1}'), 'Spacer .sp phải có flex:1 để đẩy 2 bên');
 
 // Kích thước nút theo quy chuẩn (>= 48px touch target, >= 56px home)
-assert(indexHtml.includes('.hb{width:56px;height:56px;min-width:56px;min-height:56px'), 'Nút Home .hb đạt chuẩn 56px');
-assert(indexHtml.includes('min-height:48px') && indexHtml.includes('.stars{'), 'Các nút đạt chuẩn touch target touch >= 48px');
+assert(allCss.includes('.hb{width:56px;height:56px;min-width:56px;min-height:56px'), 'Nút Home .hb đạt chuẩn 56px');
+assert(allCss.includes('min-height:48px') && allCss.includes('.stars{'), 'Các nút đạt chuẩn touch target touch >= 48px');
 
 console.log('✔ Bố cục Header đáp ứng hoàn hảo:');
 console.log('  - Màn hình 360px (mobile hẹp): Home (56px) + Spacer + Stars (~80px) + Badges (~55px) = ~195px < 360px (rộng rãi, không tràn)');

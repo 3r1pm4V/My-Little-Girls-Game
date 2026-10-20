@@ -12,6 +12,7 @@ console.log('  CHẠY TEST SUITE: TASK P1-09 & P1-10');
 console.log('================================================================\n');
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
+const stylesCss = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : indexHtml;
 const appJs = fs.readFileSync('app.js', 'utf8');
 
 // ----------------------------------------------------------------------------
@@ -20,7 +21,7 @@ const appJs = fs.readFileSync('app.js', 'utf8');
 console.log('--- TEST 1: Kiểm tra P1-09 (Chế độ chạm nối dây & bắt bóng) ---');
 
 // 1.1 CSS tap-selected cho drag-card
-assert(indexHtml.includes('.drag-card.tap-selected'), 'index.html phải có class CSS .drag-card.tap-selected');
+assert(stylesCss.includes('.drag-card.tap-selected'), 'styles.css phải có class CSS .drag-card.tap-selected');
 console.log('✔ CSS .drag-card.tap-selected: Có hiệu ứng nổi bật khi bé chạm chọn thẻ!');
 
 // 1.2 Logic chạm-chọn trong hàm match()

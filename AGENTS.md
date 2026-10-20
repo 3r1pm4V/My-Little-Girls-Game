@@ -5,10 +5,11 @@
 
 ## 1. Sứ mệnh
 
-Web app học mà chơi cho **bé 5–6 tuổi chuẩn bị vào lớp 1** (người dùng cuối: con gái của chủ dự án; người dùng phụ: bố mẹ).
+Web app học mà chơi cho **bé 4–6 tuổi, làm quen trước lớp 1**. Hiện tại (2026-10) bé **4 tuổi, chưa rành chữ, đã đếm được 1–10**; dự kiến vào lớp 1 khoảng năm 2028. Người dùng cuối: con gái của chủ dự án; người dùng phụ: bố mẹ.
 Ưu tiên theo thứ tự: **An toàn cho bé > Bé thấy vui và tự dùng được > Học đúng, tiến bộ thật > Code gọn, dễ bảo trì**.
 
 Mục tiêu học: làm quen chữ cái + dấu thanh + ghép vần đơn giản, tập tô nét, số 1–20, cộng/trừ trong phạm vi 10 bằng hình, hình học/vị trí/quy luật, nghe hiểu truyện ngắn, tiếng Anh nhập môn, kỹ năng sống. Làm quen nhẹ nhàng, **không ép, không thi cử**.
+Ưu tiên hiện tại: **Tiếng Việt tiền đọc-viết** (nghe âm, vần, nhận mặt nguyên âm qua hình) và củng cố số 1–10 → làm quen 11–20. Chặng 3–5 để sau, mở theo mức thành thạo chứ không theo lịch.
 
 Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 
@@ -24,7 +25,13 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 - ❌ Viết lại từ đầu, đổi sang framework (React/Vue/...), thêm bundler/build step. Dự án là **vanilla JS + PWA, chạy trực tiếp không cần build**. Cải tiến từng bước trên code hiện có.
 - ❌ Xóa/đổi tên file hoặc đổi cấu trúc dữ liệu (`activities-data.js`, `data-vn.js`, `stories-*.js`, key `localStorage`) mà không có migration và không được xác nhận.
 - ❌ Thêm analytics, tracker, quảng cáo, đăng nhập, form thu thập thông tin cá nhân, gọi API bên thứ ba gửi dữ liệu của bé. **Dữ liệu của bé chỉ nằm trên thiết bị** (trừ khi chủ dự án chủ động bật tính năng khác bằng task rõ ràng).
-- ❌ Hardcode hoặc ghi giá trị secret/API key vào bất kỳ file nào trong repo, kể cả báo cáo kiểm toán, tài liệu markdown, commit message, code hay log. Không commit file `.env`. Khi nhắc đến secret trong văn bản hay báo cáo, chỉ dùng tên biến môi trường (ví dụ `process.env.VIENEU_API_KEY`) hoặc placeholder `<REDACTED>`.
+- ❌ Nhúng nội dung ngoài mà bé có thể bấm lạc sang (YouTube related videos, link ra ngoài, quảng cáo). Video: ưu tiên file local; nếu buộc dùng YouTube thì chỉ `youtube-nocookie.com` + `rel=0`, bọc sau cổng phụ huynh khi có link thoát.
+- ❌ Hardcode secret/API key vào repo, **kể cả "key dự phòng"/giá trị mặc định**. Không commit file `.env`. Repo này **public**: mọi thứ đã commit coi như lộ.
+- ❌ Chép secret/key/PIN thật vào bất kỳ file nào, kể cả báo cáo, `audit.md`, `CHANGELOG.md`, log, comment. Khi báo cáo chỉ ghi file + dòng + loại secret, **không ghi giá trị**. Phát hiện secret trong repo → dừng, báo chủ dự án ngay để thu hồi key.
+- ❌ Commit/sửa code không có task ID trong `todo.md` (kể cả "tiện tay chuyển nội dung giữa các tầng"). Thay đổi nội dung/cấu trúc ảnh hưởng lộ trình phải được xác nhận trước.
+- ❌ Đánh dấu `[x]` khi chưa có bằng chứng đúng loại. Ghi rõ cách xác minh: `(đọc code)`, `(test: tên test)`, hoặc `(thiết bị: tên máy)`. Việc cần chơi thử trên thiết bị của bé chỉ **chủ dự án** mới tick `[x]`; agent để `[~]`.
+- ❌ Ghi nguồn gốc/giấy phép trong `ASSETS.md` khi chưa có bằng chứng. Không rõ → ghi `UNVERIFIED`.
+- ❌ Hiển thị cho bé: điểm trừ, mặt buồn/âm thanh chê, đếm ngược gây áp lực, "mất chuỗi ngày", popup chặn màn hình khó tắt, nút mua/xin thêm.
 - ❌ Bỏ qua lỗi test. Không comment-out hoặc sửa test cho "xanh" mà không giải thích trong PR/commit.
 - ❌ Đoán nội dung giáo dục. Nếu không chắc chữ/dấu/phép tính/phát âm đúng hay sai → ghi `TODO(parent-review)` và hỏi.
 
@@ -39,13 +46,13 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 - Code mới: hàm nhỏ, tên rõ nghĩa, có JSDoc cho hàm công khai, bắt lỗi khi đọc/ghi `localStorage` (try/catch, mặc định an toàn khi dữ liệu hỏng/thiếu).
 - Mọi chuỗi hiển thị cho bé/phụ huynh nằm trong file dữ liệu hoặc từ điển i18n, không rải trong logic.
 
-## 5. Luật UX cho bé 5–6 tuổi (kiểm tra từng màn hình mới)
+## 5. Luật UX cho bé 4–6 tuổi (kiểm tra từng màn hình mới)
 
 1. **Không cần biết đọc để dùng được**: mỗi câu hỏi/nút quan trọng có icon/hình + **tự động đọc to** (tiếng Việt, `vi-VN` hoặc file audio trong `audio/`). Có nút 🔊 nghe lại.
 2. Vùng chạm tối thiểu **64×64 px**, khoảng cách giữa nút ≥ 12 px; chỉ 1 thao tác chính mỗi màn hình; ưu tiên chạm hơn kéo-thả (kéo-thả phải có chế độ chạm thay thế).
 3. Điều hướng cho bé: tối đa **3 lựa chọn chính trên Home**, thanh trên cùng chỉ có Home + sao. Cài đặt, ngôn ngữ, tốc độ đọc, giới hạn thời gian, báo cáo → **chỉ trong khu vực phụ huynh (có cổng PIN/phép tính)**.
 4. Sai không bị phạt: lần 1 → gợi ý nhẹ + đọc lại; lần 2 → làm nổi đáp án đúng; luôn kết thúc bằng khích lệ. Sao thưởng **chỉ tăng, không giảm**.
-5. Một phiên gợi ý **10–15 phút**, mỗi hoạt động **≤ 5 câu**. Hết phiên → màn hình nghỉ nhẹ nhàng, không hù dọa.
+5. Một phiên gợi ý **5–10 phút** khi bé 4 tuổi (tăng dần theo tuổi, phụ huynh chỉnh), mỗi hoạt động **≤ 4–5 câu**. Bé 4 tuổi: thao tác tô/viết/kéo-thả chính xác **không bao giờ là điều kiện để qua bài**; luôn có cách chạm thay thế và dung sai rộng. Hết phiên → màn hình nghỉ nhẹ nhàng, không hù dọa.
 6. Tôn trọng `prefers-reduced-motion`, tương phản đủ (WCAG AA), không nhấp nháy > 3 lần/giây, âm lượng mặc định vừa phải, có nút tắt tiếng.
 7. Chạy tốt trên **tablet + điện thoại, dọc và ngang**, không cuộn ngang, safe-area iOS.
 8. Văn phong: ấm áp, ngắn, xưng "bé", không so sánh với bạn khác.
@@ -56,6 +63,8 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 - Mỗi câu hỏi có: `question`, đáp án đúng, `explanation` ngắn bằng ngôn ngữ trẻ con, `hint`. Đáp án sai phải **hợp lý** (không gây hiểu nhầm), không quá 3–4 lựa chọn.
 - Chữ cái/vần/dấu thanh/từ vựng: kiểm tra chính tả + dấu, ví dụ phải là từ bé quen thuộc, hình minh họa không gây nhầm (ví dụ "ê" không minh họa bằng hình dễ gọi tên khác).
 - Giữ **trình tự học** theo `PLAN.md`: bài sau chỉ mở khi kỹ năng tiên quyết đạt ngưỡng (mastery), nhưng phụ huynh có thể mở khóa thủ công.
+- **Không dạy trước chương trình lớp 1** và không ép tô/viết chữ: ưu tiên flashcard, trò chơi, nghe kể chuyện tương tác, âm thanh–hình ảnh. Tô chữ chỉ là hoạt động **tùy chọn** (nét đứt, dung sai rộng), không tính vào mức thành thạo.
+- Mỗi hoạt động gắn **1 chủ đề** (`theme`) và **1 trụ cột** (`pillar`: cognition-language / fine-motor / readiness-habits), xem `PLAN.md` mục 4c. Việc chỉ làm được ngoài màn hình (vận động tinh, nề nếp, diễn đạt) thì app chỉ hiện **gợi ý hoạt động/câu hỏi mở cho bố mẹ**, không bắt bé làm trên màn hình.
 - Không nội dung bạo lực, đáng sợ, quảng cáo, thương hiệu, hình ảnh có bản quyền chưa rõ nguồn. Ghi nguồn/giấy phép tài nguyên vào `ASSETS.md`.
 
 ## 7. Dữ liệu & schema

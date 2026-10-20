@@ -1,4 +1,4 @@
-# PLAN.md — Bé học vui: kế hoạch cho bé 5–6 tuổi chuẩn bị vào lớp 1
+# PLAN.md — Bé học vui: kế hoạch cho bé 4–6 tuổi, làm quen trước lớp 1
 
 Phiên bản: 2026-10-19 · Repo: https://github.com/3r1pm4V/My-Little-Girls-Game
 
@@ -24,7 +24,7 @@ Phiên bản: 2026-10-19 · Repo: https://github.com/3r1pm4V/My-Little-Girls-Gam
 
 ## 2. Nguyên tắc thiết kế
 
-1. **Chơi trước, học trong chơi.** Mỗi phiên 10–15 phút, mỗi hoạt động ≤ 5 câu, kết thúc khi bé còn muốn chơi thêm.
+1. **Chơi trước, học trong chơi.** Mỗi phiên 5–10 phút (bé 4 tuổi), mỗi hoạt động ≤ 4–5 câu, kết thúc khi bé còn muốn chơi thêm.
 2. **Không cần biết đọc.** Hình + giọng đọc tự động; chữ chỉ là thứ bé đang học.
 3. **Không phạt.** Sai → gợi ý → hiện đáp án → khích lệ. Sao chỉ tăng.
 4. **Lộ trình rõ, mở dần.** Kỹ năng sau mở khi kỹ năng trước đã vững; bố mẹ có quyền mở tay.
@@ -60,7 +60,7 @@ Về chương trình: Hãy coi đây là *làm quen và tạo hứng thú*, khô
 
 ## 4. Lộ trình học cho bé (6 chặng)
 
-Mỗi chặng ~3–5 tuần nếu bé chơi 4–5 ngày/tuần. Không cứng nhắc: bé vững sớm thì sang chặng sau, chưa vững thì ở lại. Thứ tự chữ cái dưới đây là **đề xuất khởi điểm**, đổi theo sách của trường.
+Bé hiện 4 tuổi, vào lớp 1 dự kiến khoảng 2028 (còn ~2 năm), nên mỗi chặng ước chừng **3–4 tháng** nếu bé chơi 4–5 ngày/tuần (thay cho ước lượng 3–5 tuần ban đầu, vốn tính cho bé 5–6 tuổi). Không cứng nhắc: bé vững sớm thì sang chặng sau, chưa vững thì ở lại, không chạy theo lịch. Thứ tự chữ cái dưới đây là **đề xuất khởi điểm**, đổi theo sách của trường.
 
 | Chặng | Tên | Toán | Tiếng Việt | Khác |
 |-------|-----|------|------------|------|
@@ -77,6 +77,33 @@ Mỗi chặng ~3–5 tuần nếu bé chơi 4–5 ngày/tuần. Không cứng nh
 
 ---
 
+## 4b. Điều chỉnh cho bé 4 tuổi (cập nhật 2026-10-20)
+
+Thông tin từ chủ dự án: bé 4 tuổi, chưa rành chữ, đã biết đếm 1–10; trường dự kiến dùng bộ sách lớp 1 do chủ dự án cung cấp (chưa xác định tên bộ sách).
+
+- **Định vị:** "4–6 tuổi, làm quen trước lớp 1" thay cho "5–6 tuổi, chuẩn bị vào lớp 1". Cần đổi title/description/manifest/`AGE_TIERS` (task P1-12).
+- **Toán đi trước Tiếng Việt:** bé đã đếm 1–10, nên chặng 0–1 của Toán rút gọn (kiểm tra bé nhận mặt chữ số và đếm đúng số vật thật chưa, rồi mới quyết). Phần dày công là Tiếng Việt tiền đọc-viết: nghe âm đầu, bắt vần, nhận mặt nguyên âm qua hình.
+- **Bài đánh vần Cô Lan Anh/VTV7 (stage 1–2)** có thể quá sớm với bé 4 tuổi: giữ để bé xem quen, không dùng làm điều kiện thành thạo; cân nhắc trường `minAge`/`difficulty` (task P1-12).
+- **Vận động tinh:** bé 4 tuổi chưa tô chữ/kéo nối chính xác được. Mọi bài phải có cách chạm thay thế, dung sai rộng, không chấm điểm theo độ chính xác nét viết.
+- **Thời lượng:** phiên 5–10 phút; giới hạn ngày mặc định thấp, do phụ huynh chỉnh (nên tham khảo khuyến nghị về thời gian xem màn hình cho trẻ nhỏ của bác sĩ nhi/WHO/AAP, các nguồn thường khuyên không quá khoảng 1 giờ mỗi ngày cho trẻ 2–5 tuổi).
+- **Hồ sơ tuổi:** phụ huynh nhập tuổi/ngày sinh của bé để app tự đặt thời lượng, độ khó và chặng khởi điểm mặc định (task P3-10).
+
+---
+
+## 4c. Khung tham chiếu bổ sung từ Logic Lab (2026-10-20)
+
+Nguồn: bài "Giáo án tiền tiểu học" của Logic Lab (trung tâm tư nhân, cập nhật 2026). Đây là **tài liệu tham khảo thương mại, không phải chuẩn của Bộ GD&ĐT**, nhắm trẻ 5–6 tuổi và có phần quảng cáo. Giá trị nằm ở khung ý tưởng, mình lấy những gì khớp với bé 4 tuổi và với một app trên màn hình:
+
+- **3 trụ cột** (`pillar` trong dữ liệu): (1) nhận thức, tư duy logic, ngôn ngữ; (2) vận động tinh; (3) tâm lý sẵn sàng và nề nếp tự lập. App làm tốt trụ cột 1. Trụ cột 2 và 3 cần làm ngoài màn hình, nên app chỉ **gợi ý hoạt động cho bố mẹ** (tô màu, nặn đất, xâu hạt, vẽ chữ trên cát, đếm đồ vật khi đi siêu thị...).
+- **Tổ chức bài theo chủ đề** (`theme`): "Bản thân em", "Gia đình em", "Thế giới động vật quanh ta", "Trường tiểu học tương lai" (4 chủ đề của nguồn) + "Đồ vật và màu sắc quanh bé" (mình đề xuất thêm). Chủ đề giúp bé gặp lại từ vựng, và bố mẹ nối bài với đời sống.
+- **Toán, 3 mảng:** số đếm và lượng (nối chữ số với số vật thật); hình học 2D/3D và vị trí (trên–dưới, trước–sau, trái–phải); quy luật, phân loại, so sánh kích thước/màu sắc. Mình bổ sung kỹ năng `math.sort.classify`, `math.shape.3d`, `math.size.compare` vào mục 5.1.
+- **Tiếng Việt:** làm quen âm, ghép vần cơ bản bằng flashcard/trò chơi chứ không chỉ tô chữ; **diễn đạt** (trả lời câu hỏi mở, kể lại); nghe kể chuyện tương tác. Phần diễn đạt app không chấm được, nên làm dưới dạng **câu hỏi mở bố mẹ hỏi bé** (kỹ năng `vi.speak.express`).
+- **Nguyên tắc đáng giữ:** không dạy trước chương trình lớp 1; học qua trò chơi, trải nghiệm, đa giác quan; không bắt tô chữ nhàm chán.
+- **Khác với nguồn:** nguồn gợi ý chia hoạt động 15–20 phút cho lớp 5–6 tuổi. Với bé 4 tuổi chơi một mình trên màn hình, giữ phiên 5–10 phút. Thời gian biểu cả ngày của nguồn là cho lớp học, không áp dụng cho app.
+- **Nên đối chiếu thêm** chương trình giáo dục mầm non của Bộ GD&ĐT cho nhóm 4–5 tuổi (mẫu giáo nhỡ) và chủ đề tuần của lớp bé đang học (nếu có), để app đi cùng lớp chứ không lệch.
+
+---
+
 ## 5. Bộ máy học (learning engine)
 
 ### 5.1 Danh mục kỹ năng
@@ -86,7 +113,8 @@ Mỗi hoạt động gắn 1–3 `skill id`. Quy ước id: `<môn>.<nhóm>.<tê
 math.count.1-5        math.count.1-10      math.count.11-20
 math.compare.moreless math.order.numbers   math.addsub.within5
 math.addsub.within10  math.shape.basic     math.position.basic
-math.pattern.repeat
+math.pattern.repeat   math.sort.classify   math.shape.3d   math.size.compare
+vi.speak.express (bố mẹ hỏi–bé kể)   vi.rhyme.match
 vi.phonics.initial-sound   vi.letters.vowels    vi.letters.consonants
 vi.tones.six               vi.blend.simple      vi.read.word2
 vi.read.sentence-short     vi.trace.strokes     vi.trace.letters
@@ -105,6 +133,8 @@ Danh sách này là **nguồn chuẩn duy nhất** (`skills.js`); schema và UI 
   "titleEn": "Find the letter a",
   "ageTier": "preschool",
   "stage": 1,
+  "theme": "gia-dinh",
+  "pillar": "cognition-language",
   "template": "tap_choice",
   "skills": ["vi.letters.vowels"],
   "prerequisites": ["vi.phonics.initial-sound"],
@@ -138,7 +168,7 @@ profiles[childId].skills[skillId] = {
 - **Độ khó thích ứng:** 3 đúng liên tiếp → tăng 1 mức; 2 sai liên tiếp → giảm 1 mức + gợi ý. Sai không trừ sao.
 
 ### 5.4 "Học hôm nay"
-Mỗi ngày tự chọn 3 hoạt động (~10–15 phút): 1 bài ôn (đến hạn ôn), 1 bài mới (kỹ năng tiếp theo trong chặng), 1 trò chơi vui (bé chọn). Xong → sticker + nghỉ nhẹ nhàng.
+Mỗi ngày tự chọn 3 hoạt động (~5–10 phút khi bé 4 tuổi, tăng dần theo tuổi): 1 bài ôn (đến hạn ôn), 1 bài mới (kỹ năng tiếp theo trong chặng), 1 trò chơi vui (bé chọn). Xong → sticker + nghỉ nhẹ nhàng.
 
 ### 5.5 Khu phụ huynh
 - Cổng: PIN hoặc phép tính ngẫu nhiên (cho mọi thao tác nhạy cảm, kể cả mở thêm thời gian).

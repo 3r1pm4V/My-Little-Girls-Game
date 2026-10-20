@@ -42,7 +42,13 @@
     "stage": {
       "type": ["integer", "null"],
       "enum": [0, 1, 2, 3, 4, 5, null],
-      "description": "Chặng học từ 0 đến 5 cho lộ trình chuẩn bị vào lớp 1 (5–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
+      "description": "Chặng học từ 0 đến 5 cho lộ trình làm quen và chuẩn bị vào lớp 1 (4–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
+    },
+    "minAge": {
+      "type": "integer",
+      "minimum": 3,
+      "maximum": 12,
+      "description": "Độ tuổi tối thiểu đề xuất cho hoạt động (ví dụ: 4 cho bé mầm non làm quen, 5 cho tiền tiểu học, 6 cho lớp 1)"
     },
     "subject": {
       "type": "string",

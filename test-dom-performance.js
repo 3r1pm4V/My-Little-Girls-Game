@@ -14,18 +14,20 @@ console.log('  CHẠY TEST SUITE: DOM PERFORMANCE & EVENTS OPTIMIZATION ');
 console.log('================================================================\n');
 
 // ----------------------------------------------------------------------------
-// TEST 1: Kiểm tra CSS Containment trong index.html
+// TEST 1: Kiểm tra CSS Containment trong styles.css & index.html
 // ----------------------------------------------------------------------------
 console.log('--- TEST 1: CSS Containment (contain: content) ---');
 const indexHtml = fs.readFileSync('index.html', 'utf8');
+assert(indexHtml.includes('styles.css'), 'index.html phải liên kết tới styles.css');
+const stylesCss = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : indexHtml;
 
-assert(indexHtml.includes('.card{contain:content;'), '.card phải có style contain: content');
+assert(stylesCss.includes('.card{contain:content;'), '.card phải có style contain: content');
 console.log('✔ .card có contain: content');
 
-assert(indexHtml.includes('.story-item{contain:content;'), '.story-item phải có style contain: content');
+assert(stylesCss.includes('.story-item{contain:content;'), '.story-item phải có style contain: content');
 console.log('✔ .story-item có contain: content');
 
-assert(indexHtml.includes('.act-card{contain:content;'), '.act-card phải có style contain: content');
+assert(stylesCss.includes('.act-card{contain:content;'), '.act-card phải có style contain: content');
 console.log('✔ .act-card có contain: content');
 
 

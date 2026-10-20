@@ -107,11 +107,11 @@ var AGE_TIERS = (typeof window !== "undefined" && window.AGE_TIERS) ? window.AGE
     id: "preschool",
     nameVi: "Tiền tiểu học",
     nameEn: "Preschool",
-    ageVi: "5–6 tuổi",
-    ageEn: "Ages 5–6",
+    ageVi: "4–6 tuổi",
+    ageEn: "Ages 4–6",
     badge: "🐣",
-    descVi: "Chữ cái, Học số, Đếm hình, Tiếng Anh & Đánh vần cơ bản",
-    descEn: "Letters, Numbers, Counting, English & Phonics"
+    descVi: "Chữ cái, Học số, Đếm hình, Tiếng Anh & Làm quen trước lớp 1",
+    descEn: "Letters, Numbers, Counting, English & Grade 1 Prep"
   },
   grade1_2: {
     id: "grade1_2",
@@ -1088,7 +1088,7 @@ const Analytics = {
 
   getStats(){
     try {
-      return JSON.parse(ls.get("bhv_act_stats", "{}")) || {};
+      return JSON.parse(ls.get("bhv_act_stats", "bhv_offscreen_done", "blg_unlock_all", "blg_unlocked_stages", "{}")) || {};
     } catch(e) { return {}; }
   },
 
@@ -1326,18 +1326,91 @@ function setKidCurrentStage(st){
   }
 }
 window.setKidCurrentStage = setKidCurrentStage;
+/* ========================================================
+   TASK P5-06: MỞ KHÓA / BỎ QUA CHẶNG THỦ CÔNG
+   ======================================================== */
+
+function getUnlockedStages() {
+  const isUnlockAll = ls.get("blg_unlock_all", "0") === "1";
+  if (isUnlockAll) return [0, 1, 2, 3, 4, 5];
+
+  let list = [];
+  try {
+    list = JSON.parse(ls.get("blg_unlocked_stages", "[]"));
+  } catch(e) {
+    list = [];
+  }
+  if (!Array.isArray(list) || list.length === 0) {
+    list = [0, 1];
+  }
+  const cur = getKidCurrentStage();
+  if (!list.includes(cur)) list.push(cur);
+  list.sort((a, b) => a - b);
+  return list;
+}
+window.getUnlockedStages = getUnlockedStages;
+
+function isStageUnlocked(stageNum) {
+  if (ls.get("blg_unlock_all", "0") === "1") return true;
+  const s = parseInt(stageNum, 10);
+  return getUnlockedStages().includes(s);
+}
+window.isStageUnlocked = isStageUnlocked;
+
+function unlockStage(stageNum) {
+  const s = parseInt(stageNum, 10);
+  if (Number.isNaN(s) || s < 0 || s > 5) return;
+  const list = getUnlockedStages();
+  if (!list.includes(s)) {
+    list.push(s);
+    list.sort((a, b) => a - b);
+    ls.set("blg_unlocked_stages", JSON.stringify(list));
+  }
+}
+window.unlockStage = unlockStage;
+
+function lockStage(stageNum) {
+  const s = parseInt(stageNum, 10);
+  const cur = getKidCurrentStage();
+  if (s === cur || s === 0 || s === 1) {
+    alert(T("Không thể khóa chặng bé đang học hoặc chặng khởi đầu!", "Cannot lock active stage or starting stages!"));
+    return;
+  }
+  let list = getUnlockedStages().filter(x => x !== s);
+  ls.set("blg_unlocked_stages", JSON.stringify(list));
+  ls.set("blg_unlock_all", "0");
+}
+window.lockStage = lockStage;
+
+function toggleUnlockAllStages() {
+  const cur = ls.get("blg_unlock_all", "0") === "1";
+  ls.set("blg_unlock_all", cur ? "0" : "1");
+}
+window.toggleUnlockAllStages = toggleUnlockAllStages;
+
+function setStageByParent(st) {
+  setKidCurrentStage(st);
+  unlockStage(st);
+}
+window.setStageByParent = setStageByParent;
+
+function lockedStagePrompt(stageNum) {
+  say("Chặng này đang được khóa. Bé nhờ bố mẹ mở khóa trong khu phụ huynh nhé!", "This stage is locked. Ask parents to unlock in Parent Dashboard!");
+  alert(T("🔒 Chặng này đang tạm khóa!\nBố mẹ có thể vào Bảng điều khiển phụ huynh để mở khóa hoặc đặt chặng này cho bé học nhé.", "🔒 This stage is currently locked!\nParents can unlock it in Parent Dashboard."));
+}
+window.lockedStagePrompt = lockedStagePrompt;
 
 let lastKidBtnSpeak = 0;
 function speakKidBtn(type){
   const now = Date.now();
-  if(now - lastKidBtnSpeak < 750) return;
+  if(now - lastKidBtnSpeak < 600) return;
   lastKidBtnSpeak = now;
   if(type === 'today'){
-    say("Học hôm nay! Cùng học bài mới nào!", "Today's Learning! Let's learn!");
+    playSafeAudio("audio/ui_home_btn_today.mp3", "Tưởng Vy");
   } else if(type === 'games'){
-    say("Chơi tự do! Rất nhiều trò chơi vui!", "Free Play! Fun games for you!");
+    playSafeAudio("audio/ui_home_btn_games.mp3", "Tưởng Vy");
   } else if(type === 'stickers'){
-    say("Sticker của bé! Xem huy hiệu và sao nhé!", "My Stickers! Check out your rewards!");
+    playSafeAudio("audio/ui_home_btn_stickers.mp3", "Tưởng Vy");
   }
 }
 window.speakKidBtn = speakKidBtn;
@@ -1361,15 +1434,18 @@ async function todayLearning(stageNum){
     ? getActivitiesByStage(currentStage) 
     : (window.ACTIVITIES_DATA || []).filter(a => a.stage === currentStage);
 
-  const tabsHtml = STAGE_META.map(sm => `
-    <button class="stage-tab-btn ${sm.stage === currentStage ? "active" : ""}" 
-      onclick="todayLearning(${sm.stage})"
-      onpointerdown="say('${sm.nameVi}', '${sm.nameEn}')"
-      aria-label="${T(sm.nameVi, sm.nameEn)}">
-      <span>${sm.icon}</span>
-      <span>${T(sm.nameVi, sm.nameEn)}</span>
-    </button>
-  `).join("");
+  const tabsHtml = STAGE_META.map(sm => {
+    const isUnlocked = isStageUnlocked(sm.stage);
+    const isAct = sm.stage === currentStage;
+    return `
+      <button class="stage-tab-btn ${isAct ? "active" : ""} ${!isUnlocked ? "locked" : ""}" 
+        onclick="${isUnlocked ? `todayLearning(${sm.stage})` : `lockedStagePrompt(${sm.stage})`}"
+        aria-label="${T(sm.nameVi, sm.nameEn)} ${!isUnlocked ? '(Khóa)' : ''}">
+        <span>${isUnlocked ? sm.icon : "🔒"}</span>
+        <span>${T(sm.nameVi, sm.nameEn)}</span>
+      </button>
+    `;
+  }).join("");
 
   let actsHtml = "";
   if(acts.length === 0){
@@ -1390,8 +1466,8 @@ async function todayLearning(stageNum){
       return `
         <button class="stage-act-card" 
           onclick="playActivity('${act.id}')"
-          onpointerdown="say('${titleVi.replace(/'/g, "\\'")}', '${titleEn.replace(/'/g, "\\'")}')"
-          onmouseenter="say('${titleVi.replace(/'/g, "\\'")}', '${titleEn.replace(/'/g, "\\'")}')"
+          \\'")}', '${titleEn.replace(/'/g, "\\'")}')"
+          \\'")}', '${titleEn.replace(/'/g, "\\'")}')"
           aria-label="${T(titleVi, titleEn)}">
           <div class="stage-act-icon">${icon}</div>
           <div class="stage-act-info">
@@ -1426,7 +1502,7 @@ window.todayLearning = todayLearning;
 function home(){
   const showTiers = isAgeTierSelectorEnabled();
   const tInfo = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[currentTier]) ? AGE_TIERS[currentTier] : {
-    id: "preschool", nameVi: "Tiền tiểu học", nameEn: "Preschool", ageVi: "5–6 tuổi", ageEn: "Ages 5–6", badge: "🐣", descVi: "Chữ cái, Học số & Đếm hình", descEn: "Letters, Numbers & Counting"
+    id: "preschool", nameVi: "Tiền tiểu học", nameEn: "Preschool", ageVi: "4–6 tuổi", ageEn: "Ages 4–6", badge: "🐣", descVi: "Chữ cái, Học số & Đếm hình", descEn: "Letters, Numbers & Counting"
   };
 
   const tierSelectorHtml = showTiers ? `
@@ -1458,7 +1534,6 @@ function home(){
         <button class="kid-home-btn kid-btn-today" 
           onclick="go('todayLearning')"
           onpointerdown="speakKidBtn('today')"
-          onmouseenter="speakKidBtn('today')"
           aria-label="${T("Học hôm nay", "Today's Learning")}">
           <div class="kid-btn-icon-wrap">🎒</div>
           <div class="kid-btn-text">
@@ -1471,7 +1546,6 @@ function home(){
         <button class="kid-home-btn kid-btn-games" 
           onclick="go('games')"
           onpointerdown="speakKidBtn('games')"
-          onmouseenter="speakKidBtn('games')"
           aria-label="${T("Chơi tự do", "Free Play")}">
           <div class="kid-btn-icon-wrap">🎮</div>
           <div class="kid-btn-text">
@@ -1484,7 +1558,6 @@ function home(){
         <button class="kid-home-btn kid-btn-stickers" 
           onclick="showBadges('stickers')"
           onpointerdown="speakKidBtn('stickers')"
-          onmouseenter="speakKidBtn('stickers')"
           aria-label="${T("Sticker của bé", "My Stickers")}">
           <div class="kid-btn-icon-wrap">🏆</div>
           <div class="kid-btn-text">
@@ -1519,7 +1592,7 @@ function home(){
   }
 
   const subTitle = !showTiers 
-    ? T("5–6 tuổi · Chuẩn bị vào lớp 1", "Ages 5–6 · Grade 1 Prep")
+    ? T("4–6 tuổi · Làm quen trước lớp 1", "Ages 4–6 · Grade 1 Prep")
     : "Fun Learning";
 
   m.innerHTML = `
@@ -1857,24 +1930,24 @@ async function playActivity(actId){
           <div class="act-video-wrap" style="position:relative;border-radius:18px;margin-bottom:14px;overflow:hidden;background:#0f172a;box-shadow:0 6px 16px rgba(0,0,0,0.18);text-align:center">
             <div style="position:relative;padding-bottom:56.25%;height:0;background:#000">
               <img src="${ytThumb}" alt="${esc(act.title)}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.85">
-              <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;z-index:2">
+              <button type="button" onclick="openExternalLinkWithParentGate('${ytDirectUrl}', '${esc(act.title)}')" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:none;cursor:pointer;z-index:2" aria-label="Xem video trên YouTube">
                 <div style="width:68px;height:68px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;box-shadow:0 6px 20px rgba(220,38,38,0.5);transition:transform .15s">▶</div>
                 <span style="background:rgba(0,0,0,0.78);color:#fff;padding:6px 16px;border-radius:20px;font-size:14px;font-weight:800">Xem video trên YouTube ↗</span>
-              </a>
+              </button>
             </div>
             <div style="padding:10px 14px;background:#fef3c7;border-top:2px solid #fde68a;font-size:13px;color:#92400e;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px">
-              <span>💡 <b>Lưu ý:</b> Khi mở file trực tiếp (file://), YouTube chặn nhúng video (Lỗi 153). Bố mẹ bấm nút trên để xem, hoặc mở file <b>run-local.bat</b> để xem video trực tiếp tại đây!</span>
-              <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" class="pill on" style="font-size:12px;padding:4px 10px;background:#ea580c;color:#fff;white-space:nowrap;text-decoration:none">Mở YouTube</a>
+              <span>💡 <b>Lưu ý:</b> Khi mở file trực tiếp (file://), YouTube chặn nhúng video (Lỗi 153). Bố mẹ bấm nút để xem qua cổng xác nhận phụ huynh an toàn.</span>
+              <button type="button" onclick="openExternalLinkWithParentGate('${ytDirectUrl}', '${esc(act.title)}')" class="pill on" style="font-size:12px;padding:4px 10px;background:#ea580c;color:#fff;white-space:nowrap;border:none;cursor:pointer">Mở YouTube</button>
             </div>
           </div>
         `;
       } else {
         mediaHtml = `
           <div class="act-video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:18px;margin-bottom:14px;background:#000;box-shadow:0 6px 16px rgba(0,0,0,0.18)">
-            <iframe src="https://www.youtube.com/embed/${ytId}?rel=0&autoplay=1&mute=1&playsinline=1" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&controls=1&autoplay=1&mute=1&playsinline=1" title="${esc(act.title)}" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div style="text-align:right;margin:-8px 0 10px">
-            <a href="${ytDirectUrl}" target="_blank" rel="noopener noreferrer" style="font-size:12.5px;color:#64748b;text-decoration:none;font-weight:700">↗ Xem trực tiếp trên YouTube</a>
+            <button type="button" onclick="openExternalLinkWithParentGate('${ytDirectUrl}', '${esc(act.title)}')" style="background:none;border:none;cursor:pointer;font-size:12.5px;color:#64748b;font-weight:700">↗ Xem trực tiếp trên YouTube (Bố mẹ)</button>
           </div>
         `;
       }
@@ -3484,82 +3557,377 @@ const togAuto=()=>{ls.set("auto",ls.get("auto","1")=="1"?"0":"1");parent()};
 /* ========================================================
    KHÓA PHỤ HUYNH VỚI MÃ PIN & BẢNG ĐIỀU KHIỂN (PARENT DASHBOARD)
    ======================================================== */
-let enteredPin = "";
-function gate(){
-  enteredPin = "";
-  renderGatePin();
+const PIN_SALT_KEY = "parent_pin_salt";
+const PIN_HASH_KEY = "parent_pin_hash";
+
+function generatePinSalt() {
+  try {
+    const arr = new Uint8Array(16);
+    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+      crypto.getRandomValues(arr);
+      return Array.from(arr).map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+  } catch(e) {}
+  return Array.from({length: 32}, () => Math.floor(Math.random() * 16).toString(16)).join("");
 }
 
-function renderGatePin(errorMsg = ""){
-  const dotsHtml = [0, 1, 2, 3].map(i => {
-    return `<span class="pin-dot ${i < enteredPin.length ? 'filled' : ''}"></span>`;
-  }).join("");
-
-  const keysHtml = [1, 2, 3, 4, 5, 6, 7, 8, 9, "C", 0, "⌫"].map(k => {
-    return `<button class="pin-key" onclick="window.__pinPress('${k}')">${k}</button>`;
-  }).join("");
-
-  m.innerHTML = `
-    ${kbc([{s:"home", t:T("Trang chủ","Home"), i:"🏠"}, {t:T("Khóa phụ huynh","Parent Gate"), i:"🔒"}])}
-    <h2>👨‍👩‍👧 ${T("Dành cho phụ huynh","Parent Area")}</h2>
-    <div class="pin-box">
-      <div style="font-size:42px;line-height:1">🔒</div>
-      <h3 style="margin:8px 0 4px;font-size:20px">${T("Nhập mã PIN phụ huynh","Enter Parent PIN")}</h3>
-      <div class="pin-display">${dotsHtml}</div>
-      ${errorMsg ? `<div style="color:var(--bad);font-weight:800;font-size:14px;margin-bottom:8px;animation:shake .3s">${errorMsg}</div>` : ""}
-      <div class="pin-pad">${keysHtml}</div>
-      <p class="pin-msg">💡 ${T("Mã PIN mặc định là <b>1234</b>. Bố mẹ có thể đổi mã PIN bên trong bảng điều khiển.","Default PIN is <b>1234</b>. You can change it in the dashboard.")}</p>
-    </div>
-  `;
+async function hashPin(pin, salt) {
+  const str = `${salt}:${pin}`;
+  try {
+    if (typeof crypto !== "undefined" && crypto.subtle && crypto.subtle.digest) {
+      const enc = new TextEncoder();
+      const hashBuf = await crypto.subtle.digest("SHA-256", enc.encode(str));
+      const hashArr = Array.from(new Uint8Array(hashBuf));
+      return hashArr.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+  } catch(e) {}
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
 }
 
-window.__pinPress = function(k){
-  const correctPin = ls.get("parent_pin", "1234");
-  if(k === "C"){
-    enteredPin = "";
-    renderGatePin();
+function hasParentPin() {
+  try {
+    return !!(localStorage.getItem(PIN_HASH_KEY) && localStorage.getItem(PIN_SALT_KEY));
+  } catch(e) {
+    return false;
+  }
+}
+
+async function migrateLegacyPin() {
+  try {
+    const legacy = localStorage.getItem("parent_pin");
+    if (legacy && /^\d{4}$/.test(legacy.trim())) {
+      const salt = generatePinSalt();
+      const hash = await hashPin(legacy.trim(), salt);
+      localStorage.setItem(PIN_SALT_KEY, salt);
+      localStorage.setItem(PIN_HASH_KEY, hash);
+      localStorage.removeItem("parent_pin");
+    }
+  } catch(e) {}
+}
+migrateLegacyPin();
+
+async function setParentPin(pin) {
+  if (!/^\d{4}$/.test(pin)) return false;
+  try {
+    const salt = generatePinSalt();
+    const hash = await hashPin(pin, salt);
+    localStorage.setItem(PIN_SALT_KEY, salt);
+    localStorage.setItem(PIN_HASH_KEY, hash);
+    localStorage.removeItem("parent_pin");
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+async function verifyParentPin(pin) {
+  if (!/^\d{4}$/.test(pin)) return false;
+  try {
+    const salt = localStorage.getItem(PIN_SALT_KEY);
+    const hash = localStorage.getItem(PIN_HASH_KEY);
+    if (!salt || !hash) return false;
+    const computed = await hashPin(pin, salt);
+    return computed === hash;
+  } catch(e) {
+    return false;
+  }
+}
+
+let parentPinModalState = window.parentPinModalState = {
+  purpose: "gate",
+  step: "verify",
+  entered: "",
+  tempPin: "",
+  onSuccess: null,
+  onCancel: null
+};
+
+function renderParentPinModalUI(errorMsg = "") {
+  const modal = document.getElementById("parentPinModal");
+  if (!modal) return;
+
+  const titleEl = document.getElementById("parentPinModalTitle");
+  const subEl = document.getElementById("parentPinModalSub");
+  const dotsEl = document.getElementById("parentPinModalDots");
+  const errEl = document.getElementById("parentPinModalErr");
+  const padEl = document.getElementById("parentPinModalPad");
+  const helpEl = document.getElementById("parentPinModalHelp");
+
+  const s = parentPinModalState;
+
+  if (titleEl) {
+    if (s.step === "setup_enter") {
+      titleEl.textContent = lang === "vi" ? "Tạo mã PIN phụ huynh" : "Create Parent PIN";
+    } else if (s.step === "setup_confirm") {
+      titleEl.textContent = lang === "vi" ? "Xác nhận mã PIN" : "Confirm Parent PIN";
+    } else if (s.step === "change_current") {
+      titleEl.textContent = lang === "vi" ? "Nhập mã PIN hiện tại" : "Enter Current PIN";
+    } else if (s.step === "change_enter") {
+      titleEl.textContent = lang === "vi" ? "Nhập mã PIN mới" : "Enter New PIN";
+    } else if (s.step === "change_confirm") {
+      titleEl.textContent = lang === "vi" ? "Xác nhận mã PIN mới" : "Confirm New PIN";
+    } else if (s.purpose === "unlock_time") {
+      titleEl.textContent = lang === "vi" ? "Gia hạn thêm thời gian" : "Extend Study Time";
+    } else {
+      titleEl.textContent = lang === "vi" ? "Khóa phụ huynh" : "Parent Gate";
+    }
+  }
+
+  if (subEl) {
+    if (s.step === "setup_enter") {
+      subEl.textContent = lang === "vi" ? "Bố mẹ vui lòng đặt mã PIN gồm 4 số để bảo vệ cài đặt" : "Please set a 4-digit PIN to protect settings";
+    } else if (s.step === "setup_confirm") {
+      subEl.textContent = lang === "vi" ? "Nhập lại 4 số mã PIN vừa đặt" : "Re-enter the 4-digit PIN to confirm";
+    } else if (s.step === "change_current") {
+      subEl.textContent = lang === "vi" ? "Nhập mã PIN hiện tại của bố mẹ" : "Enter your current 4-digit PIN";
+    } else if (s.step === "change_enter") {
+      subEl.textContent = lang === "vi" ? "Nhập 4 số mã PIN mới" : "Enter your new 4-digit PIN";
+    } else if (s.step === "change_confirm") {
+      subEl.textContent = lang === "vi" ? "Nhập lại mã PIN mới để xác nhận" : "Re-enter your new PIN to confirm";
+    } else if (s.purpose === "unlock_time") {
+      subEl.textContent = lang === "vi" ? "Nhập mã PIN để mở thêm 15 phút học" : "Enter PIN to extend 15 minutes";
+    } else {
+      subEl.textContent = lang === "vi" ? "Nhập 4 chữ số mã PIN để tiếp tục" : "Enter 4-digit PIN to continue";
+    }
+  }
+
+  if (dotsEl) {
+    dotsEl.innerHTML = [0, 1, 2, 3].map(i => {
+      return `<span class="pin-dot ${i < s.entered.length ? 'filled' : ''}"></span>`;
+    }).join("");
+  }
+
+  if (errEl) {
+    errEl.textContent = errorMsg;
+    if (errorMsg) {
+      errEl.style.animation = "none";
+      void errEl.offsetWidth;
+      errEl.style.animation = "shake .3s";
+    }
+  }
+
+  if (padEl && !padEl.hasChildNodes()) {
+    padEl.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, "C", 0, "⌫"].map(k => {
+      return `<button class="pin-key" type="button" onclick="window.__parentPinModalPress('${k}')">${k}</button>`;
+    }).join("");
+  }
+
+  if (helpEl) {
+    if (s.step && s.step.startsWith("setup_")) {
+      helpEl.innerHTML = `💡 ${lang === "vi" ? "Mã PIN giúp ngăn bé vô tình thay đổi cài đặt hoặc mở giới hạn giờ." : "PIN helps prevent children from altering settings or time limits."}`;
+    } else if (s.step && s.step.startsWith("change_")) {
+      helpEl.innerHTML = `💡 ${lang === "vi" ? "Mã PIN gồm đúng 4 chữ số." : "PIN consists of exactly 4 digits."}`;
+    } else {
+      helpEl.innerHTML = `💡 ${lang === "vi" ? "Chỉ dành cho bố mẹ. Bố mẹ có thể đổi mã PIN trong bảng điều khiển." : "Parents only. You can change PIN in the dashboard."}`;
+    }
+  }
+}
+
+function openParentPinModal(options = {}) {
+  const purpose = options.purpose || "gate";
+  let step = "verify";
+  if (!hasParentPin() || purpose === "setup") {
+    step = "setup_enter";
+  } else if (purpose === "change") {
+    step = "change_current";
+  } else {
+    step = "verify";
+  }
+
+  window.parentPinModalState = parentPinModalState = {
+    purpose: purpose,
+    step: step,
+    entered: "",
+    tempPin: "",
+    onSuccess: options.onSuccess || null,
+    onCancel: options.onCancel || null
+  };
+
+  const modal = document.getElementById("parentPinModal");
+  if (modal) {
+    modal.style.display = "flex";
+  }
+  renderParentPinModalUI();
+}
+window.openParentPinModal = openParentPinModal;
+
+function closeParentPinModal() {
+  const modal = document.getElementById("parentPinModal");
+  if (modal) modal.style.display = "none";
+  const onCancel = parentPinModalState.onCancel;
+  window.parentPinModalState = parentPinModalState = { purpose: "gate", step: "verify", entered: "", tempPin: "", onSuccess: null, onCancel: null };
+  if (typeof onCancel === "function") onCancel();
+}
+window.__closeParentPinModal = closeParentPinModal;
+
+window.__parentPinModalPress = async function(k) {
+  const s = parentPinModalState;
+  if (k === "C") {
+    s.entered = "";
+    renderParentPinModalUI();
     return;
   }
-  if(k === "⌫"){
-    enteredPin = enteredPin.slice(0, -1);
-    renderGatePin();
+  if (k === "⌫") {
+    s.entered = s.entered.slice(0, -1);
+    renderParentPinModalUI();
     return;
   }
-  if(enteredPin.length < 4){
-    enteredPin += k;
-    renderGatePin();
-    if(enteredPin.length === 4){
-      setTimeout(() => {
-        if(enteredPin === correctPin){
+  if (s.entered.length < 4) {
+    s.entered += k;
+    renderParentPinModalUI();
+    if (s.entered.length === 4) {
+      const pinTyped = s.entered;
+      if (s.step === "setup_enter") {
+        s.tempPin = pinTyped;
+        s.entered = "";
+        s.step = "setup_confirm";
+        setTimeout(() => renderParentPinModalUI(), 120);
+      } else if (s.step === "setup_confirm") {
+        if (pinTyped === s.tempPin) {
+          await setParentPin(pinTyped);
           sfxOk();
-          go("parent");
+          const modal = document.getElementById("parentPinModal");
+          if (modal) modal.style.display = "none";
+          const cb = s.onSuccess;
+          window.parentPinModalState = parentPinModalState = { purpose: "gate", step: "verify", entered: "", tempPin: "", onSuccess: null, onCancel: null };
+          if (typeof cb === "function") cb();
+          else go("parent");
         } else {
           sfxNo();
-          enteredPin = "";
-          renderGatePin(lang === "vi" ? "Mã PIN chưa đúng! Vui lòng thử lại" : "Incorrect PIN! Please try again");
+          s.entered = "";
+          s.tempPin = "";
+          s.step = "setup_enter";
+          renderParentPinModalUI(lang === "vi" ? "Mã PIN xác nhận không trùng khớp! Vui lòng thử lại" : "PIN confirmation mismatch! Please try again");
         }
-      }, 150);
+      } else if (s.step === "change_current") {
+        const ok = await verifyParentPin(pinTyped);
+        if (ok) {
+          sfxOk();
+          s.entered = "";
+          s.step = "change_enter";
+          renderParentPinModalUI();
+        } else {
+          sfxNo();
+          s.entered = "";
+          renderParentPinModalUI(lang === "vi" ? "Mã PIN hiện tại chưa đúng! Vui lòng thử lại" : "Current PIN is incorrect! Please try again");
+        }
+      } else if (s.step === "change_enter") {
+        s.tempPin = pinTyped;
+        s.entered = "";
+        s.step = "change_confirm";
+        setTimeout(() => renderParentPinModalUI(), 120);
+      } else if (s.step === "change_confirm") {
+        if (pinTyped === s.tempPin) {
+          await setParentPin(pinTyped);
+          sfxOk();
+          const modal = document.getElementById("parentPinModal");
+          if (modal) modal.style.display = "none";
+          window.parentPinModalState = parentPinModalState = { purpose: "gate", step: "verify", entered: "", tempPin: "", onSuccess: null, onCancel: null };
+          alert(lang === "vi" ? "✅ Đã đổi mã PIN phụ huynh thành công!" : "✅ Parent PIN changed successfully!");
+        } else {
+          sfxNo();
+          s.entered = "";
+          s.tempPin = "";
+          s.step = "change_enter";
+          renderParentPinModalUI(lang === "vi" ? "Mã PIN xác nhận không trùng khớp! Vui lòng thử lại" : "PIN confirmation mismatch! Please try again");
+        }
+      } else if (s.step === "verify") {
+        const ok = await verifyParentPin(pinTyped);
+        if (ok) {
+          sfxOk();
+          const modal = document.getElementById("parentPinModal");
+          if (modal) modal.style.display = "none";
+          const cb = s.onSuccess;
+          window.parentPinModalState = parentPinModalState = { purpose: "gate", step: "verify", entered: "", tempPin: "", onSuccess: null, onCancel: null };
+          if (typeof cb === "function") cb();
+          else go("parent");
+        } else {
+          sfxNo();
+          s.entered = "";
+          renderParentPinModalUI(lang === "vi" ? "Mã PIN chưa đúng! Vui lòng thử lại" : "Incorrect PIN! Please try again");
+        }
+      }
     }
   }
 };
 
-function changeParentPin(){
-  const curr = ls.get("parent_pin", "1234");
-  const p1 = prompt(lang === "vi" ? "Nhập mã PIN mới (gồm 4 chữ số):" : "Enter new 4-digit PIN:", "");
-  if(!p1) return;
-  if(/^\d{4}$/.test(p1.trim())){
-    ls.set("parent_pin", p1.trim());
-    alert(lang === "vi" ? `✅ Đã đổi mã PIN thành công: ${p1.trim()}` : `✅ PIN changed to: ${p1.trim()}`);
+let enteredPin = "";
+function gate(){
+  if (!hasParentPin()) {
+    openParentPinModal({
+      purpose: "setup",
+      onSuccess: () => go("parent"),
+      onCancel: () => go("home")
+    });
   } else {
-    alert(lang === "vi" ? "⚠ Mã PIN phải gồm đúng 4 chữ số!" : "⚠ PIN must be 4 digits!");
+    openParentPinModal({
+      purpose: "gate",
+      onSuccess: () => go("parent"),
+      onCancel: () => go("home")
+    });
   }
 }
+
+function renderGatePin(errorMsg = ""){
+  gate();
+}
+
+window.__pinPress = function(k){
+  window.__parentPinModalPress(k);
+};
+
+function changeParentPin(){
+  openParentPinModal({
+    purpose: "change"
+  });
+}
 window.changeParentPin = changeParentPin;
+
+/* ========================================================
+   TASK P6-02: AN TOÀN VIDEO YOUTUBE & BẢO VỆ LIÊN KẾT NGOÀI
+   ======================================================== */
+
+function openExternalLinkWithParentGate(url, title) {
+  if (typeof openParentPinModal === "function") {
+    openParentPinModal({
+      purpose: "gate",
+      title: lang === "vi" ? "Mở liên kết ngoài (YouTube)" : "External Link Security (YouTube)",
+      sub: lang === "vi"
+        ? "Cần bố mẹ xác nhận mã PIN trước khi mở video trên YouTube:"
+        : "Parent PIN required before opening YouTube video:",
+      onSuccess: () => {
+        if (typeof window !== "undefined") {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+      }
+    });
+  } else {
+    if (typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  }
+}
+window.openExternalLinkWithParentGate = openExternalLinkWithParentGate;
+
 
 function updateKidName(newName){
   const clean = (newName || "").trim();
   if(clean){
     ls.set("kid_name", clean);
+    try {
+      const profiles = getKidProfiles();
+      const active = getActiveProfile();
+      const p = profiles.find(x => x.id === active.id);
+      if(p){
+        p.name = clean;
+        localStorage.setItem("bhv_profiles", JSON.stringify(profiles));
+      }
+    } catch(e) {}
   }
 }
 window.updateKidName = updateKidName;
@@ -3590,7 +3958,8 @@ setInterval(() => {
 
 let limitModalDismissedUntil = 0;
 function checkDailyTimeLimit(mins){
-  const limit = parseInt(ls.get("daily_limit_minutes", "0"), 10) || 0;
+  const limitVal = parseInt(ls.get("daily_limit_minutes", "15"), 10);
+  const limit = Number.isNaN(limitVal) ? 15 : limitVal;
   if(limit > 0 && mins >= limit){
     if(Date.now() > limitModalDismissedUntil){
       const modal = document.getElementById("timeLimitModal");
@@ -3604,15 +3973,15 @@ function checkDailyTimeLimit(mins){
 }
 
 window.__unlockTimeLimit = function(){
-  const pin = prompt(lang === "vi" ? "Nhập mã PIN phụ huynh để mở thêm 15 phút:" : "Enter Parent PIN for 15 more minutes:");
-  if(pin === ls.get("parent_pin", "1234")){
-    limitModalDismissedUntil = Date.now() + 15 * 60 * 1000;
-    const modal = document.getElementById("timeLimitModal");
-    if(modal) modal.style.display = "none";
-    alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học!" : "✅ Extended 15 more minutes!");
-  } else if(pin !== null){
-    alert(lang === "vi" ? "⚠ Mã PIN không đúng!" : "⚠ Incorrect PIN!");
-  }
+  openParentPinModal({
+    purpose: "unlock_time",
+    onSuccess: () => {
+      limitModalDismissedUntil = Date.now() + 15 * 60 * 1000;
+      const modal = document.getElementById("timeLimitModal");
+      if (modal) modal.style.display = "none";
+      alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học!" : "✅ Extended 15 more minutes!");
+    }
+  });
 };
 
 function setDailyLimit(mins){
@@ -3690,13 +4059,472 @@ function resetAllKidsData(){
 }
 window.resetAllKidsData = resetAllKidsData;
 
+/* ========================================================
+   TASK P5-04 & P5-05: NHIỀU HỒ SƠ BÉ & CÀI ĐẶT TẬP TRUNG
+   ======================================================== */
+
+const KID_AVATARS_LIST = ["👧", "🧒", "👶", "🐱", "🐰", "🦊", "🐼", "🦄", "🌸", "⭐"];
+
+function getKidProfiles() {
+  let list = [];
+  try {
+    list = JSON.parse(ls.get("bhv_profiles", "[]"));
+  } catch (e) {
+    list = [];
+  }
+  if (!Array.isArray(list) || list.length === 0) {
+    const defaultProfile = {
+      id: "prof_default",
+      name: ls.get("kid_name", "Bé Yêu"),
+      avatar: ls.get("kid_avatar", "👧"),
+      ageTier: ls.get("ageTier", "preschool"),
+      createdAt: Date.now()
+    };
+    list = [defaultProfile];
+    try {
+      localStorage.setItem("bhv_profiles", JSON.stringify(list));
+      if (!localStorage.getItem("bhv_active_profile_id", "blg_unlock_all", "blg_unlocked_stages")) {
+        localStorage.setItem("bhv_active_profile_id", "prof_default");
+      }
+    } catch(e) {}
+  }
+  return list;
+}
+window.getKidProfiles = getKidProfiles;
+
+function getActiveProfile() {
+  const profiles = getKidProfiles();
+  const activeId = ls.get("bhv_active_profile_id", "prof_default");
+  let active = profiles.find(p => p.id === activeId);
+  if (!active) {
+    active = profiles[0];
+    try { localStorage.setItem("bhv_active_profile_id", active.id); } catch(e) {}
+  }
+  return active;
+}
+window.getActiveProfile = getActiveProfile;
+
+function saveActiveProfileSnapshot() {
+  const active = getActiveProfile();
+  if (!active) return;
+  const data = {};
+  const staticKeys = [
+    "stars", "st", "lvl", "ageTier", "blg_stage", "streak",
+    "kids_streak_count", "kids_streak_last_date", "badges",
+    "bhv_act_stats", "bhv_offscreen_done"
+  ];
+  staticKeys.forEach(k => {
+    const v = localStorage.getItem(k);
+    if (v !== null) data[k] = v;
+  });
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith("study_sec_") || k.startsWith("c_") || k.startsWith("w_"))) {
+        data[k] = localStorage.getItem(k);
+      }
+    }
+    localStorage.setItem("bhv_pdata_" + active.id, JSON.stringify(data));
+  } catch(e) {}
+}
+window.saveActiveProfileSnapshot = saveActiveProfileSnapshot;
+
+function restoreProfileSnapshot(profileId) {
+  const keysToRemove = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith("study_sec_") || k.startsWith("c_") || k.startsWith("w_"))) {
+        keysToRemove.push(k);
+      }
+    }
+  } catch(e) {}
+
+  [
+    "stars", "st", "lvl", "blg_stage", "streak",
+    "kids_streak_count", "kids_streak_last_date", "badges",
+    "bhv_act_stats", "bhv_offscreen_done"
+  ].forEach(k => keysToRemove.push(k));
+
+  keysToRemove.forEach(k => {
+    try { localStorage.removeItem(k); } catch(e) {}
+  });
+
+  const raw = localStorage.getItem("bhv_pdata_" + profileId);
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([k, v]) => {
+        localStorage.setItem(k, v);
+      });
+    } catch (e) {}
+  }
+  reloadProfileGlobals();
+}
+window.restoreProfileSnapshot = restoreProfileSnapshot;
+
+function reloadProfileGlobals() {
+  stars = parseInt(ls.get("stars", "0"), 10) || 0;
+  try {
+    ST = JSON.parse(ls.get("st", "")) || {};
+  } catch (e) {
+    ST = {};
+  }
+  ST.n = ST.n || 0;
+  ST.f = ST.f || 0;
+  ST.w = ST.w || {};
+  currentTier = ls.get("ageTier", "preschool");
+  const sEl = document.getElementById("stars");
+  if (sEl) sEl.innerHTML = (typeof im === "function" ? im("gstar") : "⭐") + " " + stars;
+  const bEl = document.getElementById("badgeCount");
+  if (bEl) {
+    const bList = (ls.get("badges", "") || "").split(",").filter(Boolean);
+    bEl.textContent = bList.length;
+  }
+}
+window.reloadProfileGlobals = reloadProfileGlobals;
+
+function switchKidProfile(profileId) {
+  const current = getActiveProfile();
+  if (current && current.id === profileId) return;
+
+  saveActiveProfileSnapshot();
+  localStorage.setItem("bhv_active_profile_id", profileId);
+  restoreProfileSnapshot(profileId);
+
+  const profiles = getKidProfiles();
+  const next = profiles.find(p => p.id === profileId) || profiles[0];
+  ls.set("kid_name", next.name);
+  ls.set("kid_avatar", next.avatar);
+  ls.set("ageTier", next.ageTier || "preschool");
+  currentTier = next.ageTier || "preschool";
+
+  head();
+  if (cur === "parent") parent();
+  else if (cur === "home") home();
+}
+window.switchKidProfile = switchKidProfile;
+
+function createKidProfile(name, avatar, ageTier) {
+  saveActiveProfileSnapshot();
+
+  const profiles = getKidProfiles();
+  const newId = "prof_" + Date.now();
+  const cleanName = (name || ("Bé " + (profiles.length + 1))).trim();
+  const newProfile = {
+    id: newId,
+    name: cleanName,
+    avatar: avatar || "🧒",
+    ageTier: ageTier || "preschool",
+    createdAt: Date.now()
+  };
+  profiles.push(newProfile);
+  localStorage.setItem("bhv_profiles", JSON.stringify(profiles));
+
+  localStorage.setItem("bhv_active_profile_id", newId);
+  restoreProfileSnapshot(newId);
+
+  ls.set("kid_name", newProfile.name);
+  ls.set("kid_avatar", newProfile.avatar);
+  ls.set("ageTier", newProfile.ageTier);
+  currentTier = newProfile.ageTier;
+
+  head();
+  if (cur === "parent") parent();
+}
+window.createKidProfile = createKidProfile;
+
+function deleteKidProfile(profileId) {
+  let profiles = getKidProfiles();
+  if (profiles.length <= 1) {
+    alert(T("Cần giữ ít nhất 1 hồ sơ bé!", "Must keep at least one profile!"));
+    return;
+  }
+  const toDelete = profiles.find(p => p.id === profileId);
+  const name = toDelete ? toDelete.name : "";
+  if (!confirm(T("Xóa hồ sơ \"" + name + "\"?\nToàn bộ số sao và tiến độ của bé này sẽ bị xóa.", "Delete profile \"" + name + "\"?\nAll progress will be deleted."))) {
+    return;
+  }
+
+  const activeId = localStorage.getItem("bhv_active_profile_id");
+  if (activeId === profileId) {
+    const other = profiles.find(p => p.id !== profileId);
+    switchKidProfile(other.id);
+    profiles = getKidProfiles();
+  }
+
+  profiles = profiles.filter(p => p.id !== profileId);
+  localStorage.setItem("bhv_profiles", JSON.stringify(profiles));
+  localStorage.removeItem("bhv_pdata_" + profileId);
+
+  head();
+  if (cur === "parent") parent();
+}
+window.deleteKidProfile = deleteKidProfile;
+
+function toggleAddProfileForm(show) {
+  const form = document.getElementById("addProfileForm");
+  if (!form) return;
+  const isCurrentlyHidden = form.style.display === "none";
+  const shouldShow = typeof show === "boolean" ? show : isCurrentlyHidden;
+  form.style.display = shouldShow ? "flex" : "none";
+  if (shouldShow) {
+    const inp = document.getElementById("newProfileName");
+    if (inp) { inp.value = ""; inp.focus(); }
+  }
+}
+window.toggleAddProfileForm = toggleAddProfileForm;
+
+function selectNewProfileAvatar(el, av) {
+  document.querySelectorAll(".profile-avatar-opt").forEach(o => o.classList.remove("selected"));
+  el.classList.add("selected");
+  const hidden = document.getElementById("newProfileAvatar");
+  if (hidden) hidden.value = av;
+}
+window.selectNewProfileAvatar = selectNewProfileAvatar;
+
+function selectNewProfileTier(tier) {
+  ["preschool", "grade1_2", "grade3_5"].forEach(t => {
+    const btn = document.getElementById("tierBtn_" + t);
+    if (btn) btn.classList.toggle("on", t === tier);
+  });
+  const hidden = document.getElementById("newProfileTier");
+  if (hidden) hidden.value = tier;
+}
+window.selectNewProfileTier = selectNewProfileTier;
+
+function submitCreateProfile() {
+  const nameInp = document.getElementById("newProfileName");
+  const avInp = document.getElementById("newProfileAvatar");
+  const tierInp = document.getElementById("newProfileTier");
+  const name = nameInp ? nameInp.value.trim() : "";
+  if (!name) {
+    alert(T("Vui lòng nhập tên cho bé nhé!", "Please enter kid's name!"));
+    if (nameInp) nameInp.focus();
+    return;
+  }
+  const avatar = avInp ? avInp.value : "👧";
+  const tier = tierInp ? tierInp.value : "preschool";
+  createKidProfile(name, avatar, tier);
+}
+window.submitCreateProfile = submitCreateProfile;
+
+function setMotionPref(val) {
+  ls.set("rm", val);
+  if (val === "1") {
+    ls.set("kids_confetti_disabled", "1");
+  } else if (val === "0") {
+    ls.set("kids_confetti_disabled", "0");
+  }
+  applyRM();
+}
+window.setMotionPref = setMotionPref;
+
+
+/* ========================================================
+   TASK P5-03 & P5-07: BÁO CÁO TUẦN & HOẠT ĐỘNG NGOÀI MÀN HÌNH
+   ======================================================== */
+
+// 1. Thống kê học tập 7 ngày gần nhất (Past 7 Days Study Stats)
+function getWeeklyStudyStats() {
+  const days = [];
+  const now = new Date();
+  let totalSec = 0;
+  let activeDays = 0;
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    const dayName = d.toLocaleDateString("vi-VN", { weekday: "short" });
+    const dayNameEn = d.toLocaleDateString("en-US", { weekday: "short" });
+    const sec = parseInt(ls.get("study_sec_" + dateStr, "0"), 10) || 0;
+    const mins = Math.round(sec / 60);
+    totalSec += sec;
+    if (mins > 0) activeDays++;
+
+    days.push({
+      dateStr,
+      dayName: dayName.toUpperCase(),
+      dayNameEn: dayNameEn.toUpperCase(),
+      mins,
+      sec,
+      isToday: i === 0,
+      metTarget: mins >= 5 && mins <= 15
+    });
+  }
+
+  const totalMins = Math.round(totalSec / 60);
+  const avgMins = activeDays > 0 ? Math.round(totalMins / activeDays) : 0;
+
+  return {
+    days,
+    totalMins,
+    activeDays,
+    avgMins
+  };
+}
+window.getWeeklyStudyStats = getWeeklyStudyStats;
+
+// 2. Phân loại kỹ năng: Đã vững / Đang học / Cần ôn (Skills Mastery Breakdown)
+function getSkillsMasteryBreakdown() {
+  const skillsData = (typeof ST !== "undefined" && ST.skills) ? ST.skills : {};
+  const wrongData = (typeof ST !== "undefined" && ST.w) ? ST.w : {};
+
+  const mastered = [];
+  const learning = [];
+  const needsReview = [];
+
+  const defaultSkills = [
+    { id: "num_1_5", nameVi: "Nhận biết số 1–5", nameEn: "Numbers 1–5", subject: "math" },
+    { id: "num_count", nameVi: "Đếm số lượng đồ vật 1–10", nameEn: "Counting 1–10", subject: "math" },
+    { id: "vowels_basic", nameVi: "Mặt chữ cái đơn (O, Ô, Ơ, A, Ă, Â)", nameEn: "Basic Vowels", subject: "vietnamese" },
+    { id: "consonants_basic", nameVi: "Phụ âm cơ bản (B, C, D, Đ)", nameEn: "Basic Consonants", subject: "vietnamese" },
+    { id: "colors_animals_en", nameVi: "Từ vựng màu sắc & động vật Tiếng Anh", nameEn: "Colors & Animals (EN)", subject: "english" },
+    { id: "reading_listen", nameVi: "Đọc hiểu câu chuyện có audio", nameEn: "Story Comprehension", subject: "reading" },
+    { id: "fine_motor_trace", nameVi: "Vận động tinh & Tô nét cơ bản", nameEn: "Fine Motor & Tracing", subject: "skills" }
+  ];
+
+  defaultSkills.forEach(sk => {
+    let practices = 0;
+    let wrongs = 0;
+
+    Object.entries(skillsData).forEach(([k, cnt]) => {
+      if (k.toLowerCase().includes(sk.nameVi.toLowerCase()) || sk.nameVi.toLowerCase().includes(k.toLowerCase())) {
+        practices += cnt;
+      }
+    });
+
+    Object.entries(wrongData).forEach(([k, cnt]) => {
+      if (k.toLowerCase().includes(sk.nameVi.toLowerCase()) || sk.nameVi.toLowerCase().includes(k.toLowerCase())) {
+        wrongs += cnt;
+      }
+    });
+
+    if (sk.subject === "math") practices += Math.floor((ST.mathCount || 0) / 3);
+    if (sk.subject === "vietnamese") practices += Math.floor((ST.letCount || 0) / 4);
+    if (sk.subject === "reading") practices += (ST.storyCount || 0);
+    if (sk.subject === "skills") practices += (ST.traceCount || 0);
+    if (sk.subject === "english") practices += Math.floor((ST.engCount || 0) / 2);
+
+    if (wrongs >= 2 && practices <= wrongs) {
+      needsReview.push({ ...sk, practices, wrongs });
+    } else if (practices >= 3 && wrongs <= 1) {
+      mastered.push({ ...sk, practices, wrongs });
+    } else if (practices > 0) {
+      learning.push({ ...sk, practices, wrongs });
+    } else {
+      learning.push({ ...sk, practices: 0, wrongs: 0, isNew: true });
+    }
+  });
+
+  return { mastered, learning, needsReview };
+}
+window.getSkillsMasteryBreakdown = getSkillsMasteryBreakdown;
+
+// 3. Danh mục hoạt động ngoài màn hình (Off-screen Activities)
+const OFFSCREEN_ACTIVITIES = [
+  {
+    id: "off_fine_motor_clay",
+    category: "motor",
+    icon: "🎨",
+    nameVi: "Nặn đất sét tạo hình chữ cái & chữ số",
+    nameEn: "Clay Sculpting Letters & Numbers",
+    skillVi: "Vận động tinh & Cảm giác ngón tay",
+    skillEn: "Fine Motor & Tactile Skills",
+    descVi: "Cùng bé vo tròn, lăn dài đất nặn để uốn thành hình chữ O, chữ A hoặc số 1, số 2. Giúp cơ bàn tay bé dẻo dai trước khi cầm bút.",
+    descEn: "Roll and shape playdough into letters like O, A or numbers 1, 2 to build finger dexterity."
+  },
+  {
+    id: "off_sand_tray_trace",
+    category: "motor",
+    icon: "🏖️",
+    nameVi: "Vẽ chữ và số trên khay cát / bột mì",
+    nameEn: "Finger Tracing on Sand / Flour Tray",
+    skillVi: "Nhận diện mặt chữ & Định hướng nét",
+    skillEn: "Letter Recognition & Stroke Orientation",
+    descVi: "Rải một lớp bột mì hoặc cát sạch lên khay, hướng dẫn bé dùng ngón trỏ vạch nét thẳng, nét cong. Khi sai chỉ cần lắc nhẹ khay là xóa sạch!",
+    descEn: "Spread flour on a tray and guide child's index finger to trace strokes and curves."
+  },
+  {
+    id: "off_real_counting_spoons",
+    category: "math",
+    icon: "🥄",
+    nameVi: "Đếm thìa đũa & Chia bánh kẹo thật",
+    nameEn: "Counting Utensils & Fair Sharing",
+    skillVi: "Đếm đồ vật thật & Tư duy số lượng",
+    skillEn: "Real-life Counting & Quantity Sense",
+    descVi: "Khi dọn cơm, nhờ bé đếm đủ số thìa cho cả nhà (ví dụ 4 người = 4 thìa). Khi ăn hoa quả, chia đều cho mỗi người 2 quả táo.",
+    descEn: "Ask child to count spoons for dinner or share fruit evenly among family members."
+  },
+  {
+    id: "off_open_ended_story",
+    category: "expression",
+    icon: "💬",
+    nameVi: "Hỏi mở và kể lại truyện cùng bé",
+    nameEn: "Open-ended Storytelling & Reflection",
+    skillVi: "Giao tiếp, Diễn đạt & Tư duy phản biện",
+    skillEn: "Verbal Expression & Critical Thinking",
+    descVi: "Sau khi nghe truyện (Rùa & Thỏ, Chú Thỏ Trắng), hỏi bé: 'Nếu là bạn Thỏ, bé sẽ làm gì?', 'Bé thích bạn nào nhất và vì sao?'. Khích lệ bé diễn đạt trọn câu.",
+    descEn: "Ask open questions: 'What would you do if you were the Bunny?' to foster speech and empathy."
+  },
+  {
+    id: "off_clean_up_habit",
+    category: "habit",
+    icon: "🧺",
+    nameVi: "Nề nếp tự cất đồ chơi & xếp dép",
+    nameEn: "Tidying Up & Independence Habit",
+    skillVi: "Tự lập, Nề nếp & Kỹ năng sống",
+    skillEn: "Self-reliance & Daily Routines",
+    descVi: "Cùng bé thi đua 'Ai cất đồ chơi vào giỏ nhanh hơn trong 1 phút'. Tập cho bé thói quen xếp dép ngay ngắn khi về nhà.",
+    descEn: "Turn tidying toys into a 1-minute fun challenge and practice placing shoes neatly."
+  },
+  {
+    id: "off_letter_hunt_grocery",
+    category: "reading",
+    icon: "🔍",
+    nameVi: "Thợ săn chữ cái trên bao bì & biển hiệu",
+    nameEn: "Letter Hunt on Packaging & Signs",
+    skillVi: "Nhận biết chữ cái trong đời sống",
+    skillEn: "Environmental Print Recognition",
+    descVi: "Khi đi dạo hoặc đi chợ, đố bé tìm thấy chữ 'A' trên biển hiệu hoặc hộp sữa. Giúp bé thấy chữ cái hiện diện ở khắp mọi nơi quen thuộc.",
+    descEn: "Spot letters like 'A' or 'O' on street signs or milk cartons during daily walks."
+  }
+];
+window.OFFSCREEN_ACTIVITIES = OFFSCREEN_ACTIVITIES;
+
+function getCompletedOffscreenIds() {
+  try {
+    const raw = localStorage.getItem("bhv_offscreen_done");
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) {
+    return [];
+  }
+}
+window.getCompletedOffscreenIds = getCompletedOffscreenIds;
+
+function toggleOffscreenCompleted(id) {
+  try {
+    let list = getCompletedOffscreenIds();
+    if (list.includes(id)) {
+      list = list.filter(x => x !== id);
+    } else {
+      list.push(id);
+    }
+    localStorage.setItem("bhv_offscreen_done", JSON.stringify(list));
+    if (cur === "parent") parent();
+  } catch(e) {}
+}
+window.toggleOffscreenCompleted = toggleOffscreenCompleted;
+
 function parent(){
   const kidName = ls.get("kid_name", "Bé Yêu");
   const kidAvatar = ls.get("kid_avatar", "🐣");
   const curLv = getCurrentLevel();
   const streakInfo = getDailyStreak();
   const todayMins = getTodayStudyMinutes();
-  const dailyLimit = parseInt(ls.get("daily_limit_minutes", "0"), 10) || 0;
+  const limitVal = parseInt(ls.get("daily_limit_minutes", "15"), 10);
+  const dailyLimit = Number.isNaN(limitVal) ? 15 : limitVal;
   const recom = getWeakSkillRecommendation();
   const topErrors = Object.entries(ST.w || {}).sort((a,b)=>b[1]-a[1]).slice(0, 6);
   const correctPct = ST.n ? Math.round((ST.f / ST.n) * 100) : 100;
@@ -3724,21 +4552,121 @@ function parent(){
     <h2>👨‍👩‍👧 ${T("Bảng điều khiển của phụ huynh","Parent Dashboard")}</h2>
 
     <div class="parent-dash">
-      <!-- 1. HỒ SƠ BÉ -->
+      <!-- 1. HỒ SƠ CÁC BÉ (MULTI-PROFILE - P5-04) -->
       <div class="dash-card">
-        <div class="dash-card-title">👤 ${T("Hồ sơ & Nhóm tuổi của bé","Kid Profile & Age Group")}</div>
-        <div class="profile-row">
-          <div class="profile-avatar" id="kidAvatarEl" onclick="cycleKidAvatar()" title="${T("Bấm để đổi hình đại diện","Tap to change avatar")}">${kidAvatar}</div>
-          <div class="profile-info">
-            <div style="font-size:13px;color:#64748b;font-weight:700">${T("Tên của bé (Bố mẹ chạm để sửa):","Kid's Name (Tap to edit):")}</div>
-            <input class="profile-name-input" type="text" value="${esc(kidName)}" onchange="updateKidName(this.value)" placeholder="Ví dụ: Bé Bơ, Bé Na...">
-            <div style="font-size:14px;color:var(--acc);font-weight:800;margin-top:4px">
-              ${curLv.title} · ⭐ ${stars} sao · 🔥 ${streakInfo.count} ngày học
+        <div class="dash-card-title">👥 ${T("Hồ sơ các bé trên thiết bị", "Kid Profiles on Device")}</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:8px">
+          ${T("Mỗi bé có thể có một hồ sơ riêng với số sao, chuỗi ngày học và nhóm tuổi độc lập:","Each child can have their own profile with separate stars, streak, and age group:")}
+        </div>
+        
+        <!-- DANH SÁCH THẺ HỒ SƠ -->
+        <div class="profile-grid">
+          ${(() => {
+            const profiles = getKidProfiles();
+            const activeId = (getActiveProfile() || {}).id;
+            return profiles.map(prof => {
+              const isActive = prof.id === activeId;
+              let profStars = stars;
+              let profStreak = streakInfo.count;
+              if (!isActive) {
+                try {
+                  const sData = JSON.parse(localStorage.getItem("bhv_pdata_" + prof.id) || "{}");
+                  profStars = parseInt(sData.stars || "0", 10) || 0;
+                  profStreak = parseInt(sData.kids_streak_count || sData.streak || "0", 10) || 0;
+                } catch(e) {}
+              }
+              const tierMeta = (typeof AGE_TIERS !== "undefined" && AGE_TIERS[prof.ageTier]) ? AGE_TIERS[prof.ageTier] : { nameVi: "Mầm non", nameEn: "Preschool", badge: "🌱" };
+              return `
+                <div class="profile-card ${isActive ? "active" : ""}">
+                  <div class="profile-card-head">
+                    <div class="profile-card-avatar" ${isActive ? 'id="kidAvatarEl" onclick="cycleKidAvatar()" title="' + T("Bấm để đổi avatar", "Tap to change avatar") + '" style="cursor:pointer"' : ''}>
+                      ${prof.avatar || "👧"}
+                    </div>
+                    <div class="profile-card-info">
+                      ${isActive ? `
+                        <input class="profile-name-input" type="text" value="${esc(prof.name)}" onchange="updateKidName(this.value)" placeholder="Tên bé...">
+                      ` : `
+                        <div class="profile-card-name">${esc(prof.name)}</div>
+                      `}
+                      <div class="profile-card-tier">${tierMeta.badge} ${T(tierMeta.nameVi, tierMeta.nameEn)}</div>
+                    </div>
+                    <div>
+                      <span class="profile-status-badge ${isActive ? "active" : "idle"}">
+                        ${isActive ? T("🌟 Đang chọn", "🌟 Active") : T("Nghỉ", "Idle")}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="profile-card-meta">
+                    <span>⭐ ${profStars} ${T("sao", "stars")}</span>
+                    <span>🔥 ${profStreak} ${T("ngày", "days")}</span>
+                    ${(!isActive && profiles.length > 1) ? `
+                      <button class="profile-del-btn" onclick="deleteKidProfile('${prof.id}')" title="${T("Xóa hồ sơ bé", "Delete profile")}">🗑 ${T("Xóa", "Del")}</button>
+                    ` : ''}
+                  </div>
+
+                  ${!isActive ? `
+                    <button class="profile-switch-btn" onclick="switchKidProfile('${prof.id}')">
+                      👉 ${T("Chuyển sang bé " + prof.name, "Switch to " + prof.name)}
+                    </button>
+                  ` : `
+                    <div style="font-size:12px;color:#15803d;font-weight:700;display:flex;align-items:center;gap:4px">
+                      <span>✅ Bé đang học trên ứng dụng lúc này</span>
+                    </div>
+                  `}
+                </div>
+              `;
+            }).join("");
+          })()}
+        </div>
+
+        <!-- FORM THÊM BÉ MỚI (ẨN / HIỆN) -->
+        <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <button class="pill" onclick="toggleAddProfileForm()" style="background:#eff6ff;color:#1e40af;border-color:#93c5fd;font-weight:800">
+            ➕ ${T("Thêm hồ sơ bé mới (Bé thứ 2, thứ 3...)", "Add another kid profile")}
+          </button>
+        </div>
+
+        <div id="addProfileForm" class="profile-add-form" style="display:none">
+          <div style="font-weight:800;color:#0369a1;font-size:14px">
+            🌟 ${T("Tạo hồ sơ cho bé mới:", "Create New Child Profile:")}
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="newProfileName" class="profile-name-input" type="text" placeholder="${T("Nhập tên bé (Ví dụ: Bé Na, Bé Bơ...)", "Enter kid's name...")}" style="flex:1;min-width:180px">
+          </div>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;color:#64748b;margin-bottom:4px">${T("Chọn hình đại diện:", "Choose avatar:")}</div>
+            <div class="profile-avatar-select">
+              ${["👧", "🧒", "👶", "🐱", "🐰", "🦊", "🐼", "🦄", "🌸", "⭐"].map((av, idx) => `
+                <div class="profile-avatar-opt ${idx === 0 ? "selected" : ""}" onclick="selectNewProfileAvatar(this, '${av}')">${av}</div>
+              `).join("")}
             </div>
+            <input type="hidden" id="newProfileAvatar" value="👧">
+          </div>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;color:#64748b;margin-bottom:4px">${T("Nhóm tuổi học tập:", "Age Group:")}</div>
+            <div class="chips">
+              <button type="button" class="pill on" id="tierBtn_preschool" onclick="selectNewProfileTier('preschool')">🌱 Mầm non (4–6 tuổi)</button>
+              <button type="button" class="pill" id="tierBtn_grade1_2" onclick="selectNewProfileTier('grade1_2')">🎒 Lớp 1–2</button>
+              <button type="button" class="pill" id="tierBtn_grade3_5" onclick="selectNewProfileTier('grade3_5')">🚀 Lớp 3–5</button>
+            </div>
+            <input type="hidden" id="newProfileTier" value="preschool">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <button class="pill on" onclick="submitCreateProfile()" style="background:#0284c7;color:#fff;border-color:#0284c7;font-weight:800">
+              ✔ ${T("Lưu hồ sơ và chuyển sang bé mới", "Save & Switch to new child")}
+            </button>
+            <button class="pill" onclick="toggleAddProfileForm(false)">
+              ✕ ${T("Hủy", "Cancel")}
+            </button>
           </div>
         </div>
-        <div style="margin-top:12px">
-          <div style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:6px">${T("Chọn nhóm tuổi học tập phù hợp:","Select Learning Age Group:")}</div>
+
+        <!-- CÀI ĐẶT TẦNG TUỔI BÉ ĐANG CHỌN -->
+        <div style="margin-top:14px;border-top:1.5px dashed #cbd5e1;padding-top:12px">
+          <div style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:6px">
+            ${T("Nhóm tuổi học tập của bé đang chọn:","Learning Age Group for Active Kid:")}
+          </div>
           <div class="tier-tabs">
             ${(typeof AGE_TIERS !== "undefined" ? Object.values(AGE_TIERS) : []).map(t => `
               <button class="tier-tab ${t.id === currentTier ? "on" : ""}" onclick="setAgeTier('${t.id}');parent()">
@@ -3758,7 +4686,7 @@ function parent(){
                 ${T("Hiện bộ chọn 3 tầng tuổi trên trang chủ cho bé","Show 3 age tier tabs on Home for kid")}
               </div>
               <div style="font-size:12px;color:#64748b;font-weight:600">
-                ${T("Mặc định TẮT: Bé 5–6 tuổi học lộ trình chuẩn bị vào lớp 1 gọn gàng, không bị phân tâm","Default OFF: 5–6 age prep curriculum mode")}
+                ${T("Mặc định TẮT: Bé 4–6 tuổi học lộ trình làm quen trước lớp 1 gọn gàng, không bị phân tâm","Default OFF: 4–6 age prep curriculum mode")}
               </div>
             </div>
             <div>
@@ -3788,6 +4716,152 @@ function parent(){
               `).join("")}
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 2B. BÁO CÁO TUẦN (WEEKLY LEARNING REPORT - P5-03) -->
+      ${(() => {
+        const weekly = getWeeklyStudyStats();
+        const maxBarMins = Math.max(15, ...weekly.days.map(d => d.mins));
+        const mastery = getSkillsMasteryBreakdown();
+        return `
+          <div class="dash-card">
+            <div class="dash-card-title">
+              📅 ${T("Báo cáo tuần & Tiến độ 7 ngày của bé","Weekly Report & 7-Day Progress")}
+            </div>
+            <div style="font-size:13.5px;color:#64748b;margin-bottom:12px">
+              ${T("Thời lượng học của bé trong 7 ngày gần nhất (Khuyến nghị 5–10 phút/ngày):","Child's study time over the last 7 days (Recommended 5-10 mins/day):")}
+            </div>
+            
+            <!-- BIỂU ĐỒ CỘT 7 NGÀY -->
+            <div class="weekly-bar-chart">
+              ${weekly.days.map(d => {
+                const barHeightPct = Math.min(100, Math.round((d.mins / maxBarMins) * 100));
+                return `
+                  <div class="weekly-bar-col">
+                    <span class="weekly-bar-val">${d.mins ? d.mins + "'" : "0"}</span>
+                    <div class="weekly-bar-fill ${d.isToday ? "today" : d.metTarget ? "target" : ""}" style="height:${Math.max(4, barHeightPct)}%" title="${d.dateStr}: ${d.mins} phút"></div>
+                    <span class="weekly-bar-lbl" style="${d.isToday ? "color:#0284c7;font-weight:900" : ""}">${lang === "vi" ? d.dayName : d.dayNameEn}</span>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+
+            <!-- TỔNG KẾT TUẦN -->
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">
+              <div style="flex:1;min-width:120px;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:14px;padding:8px 12px;text-align:center">
+                <div style="font-size:20px;font-weight:900;color:#16a34a">⏱ ${weekly.totalMins} ${T("phút","mins")}</div>
+                <div style="font-size:12px;font-weight:700;color:#15803d">${T("Tổng thời gian 7 ngày","7-day total time")}</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:8px 12px;text-align:center">
+                <div style="font-size:20px;font-weight:900;color:#2563eb">🌱 ${weekly.activeDays}/7 ${T("ngày","days")}</div>
+                <div style="font-size:12px;font-weight:700;color:#1d4ed8">${T("Số ngày có học tập","Active study days")}</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#fffbeb;border:2px solid #fde68a;border-radius:14px;padding:8px 12px;text-align:center">
+                <div style="font-size:20px;font-weight:900;color:#d97706">🎯 ~${weekly.avgMins} ${T("phút/ngày","mins/day")}</div>
+                <div style="font-size:12px;font-weight:700;color:#b45309">${T("Trung bình mỗi ngày","Daily average")}</div>
+              </div>
+            </div>
+
+            <!-- PHÂN TÍCH THÀNH THẠO KỸ NĂNG (MASTERY BREAKDOWN) -->
+            <div style="margin-top:14px;border-top:1.5px dashed #cbd5e1;padding-top:12px">
+              <div style="font-size:14px;font-weight:800;color:#1e293b;margin-bottom:8px">
+                🎯 ${T("Mức độ thành thạo các kỹ năng cốt lõi:","Core Skills Mastery Overview:")}
+              </div>
+              <div class="mastery-box">
+                <div class="mastery-row">
+                  <span style="font-size:13px;font-weight:800;color:#15803d;min-width:110px">🌟 ${T("Đã vững vàng:","Mastered:")}</span>
+                  ${mastery.mastered.length > 0 ? mastery.mastered.map(m => `
+                    <span class="mastery-badge mastered">✓ ${lang === "vi" ? m.nameVi : m.nameEn}</span>
+                  `).join("") : `<span style="font-size:12.5px;color:#64748b"><i>${T("Bé đang tích lũy thêm bài tập","Working towards mastery")}</i></span>`}
+                </div>
+                <div class="mastery-row">
+                  <span style="font-size:13px;font-weight:800;color:#0369a1;min-width:110px">📖 ${T("Đang rèn luyện:","Learning:")}</span>
+                  ${mastery.learning.map(m => `
+                    <span class="mastery-badge learning">● ${lang === "vi" ? m.nameVi : m.nameEn}</span>
+                  `).join("")}
+                </div>
+                ${mastery.needsReview.length > 0 ? `
+                  <div class="mastery-row">
+                    <span style="font-size:13px;font-weight:800;color:#b91c1c;min-width:110px">🔄 ${T("Cần ôn lại:","Needs review:")}</span>
+                    ${mastery.needsReview.map(m => `
+                      <span class="mastery-badge review">⚠ ${lang === "vi" ? m.nameVi : m.nameEn}</span>
+                    `).join("")}
+                  </div>
+                ` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+      })()}
+
+      <!-- 3B. LỘ TRÌNH 6 CHẶNG & MỞ KHÓA THỦ CÔNG (P5-06) -->
+      <div class="dash-card">
+        <div class="dash-card-title">🗺️ ${T("Lộ trình 6 Chặng & Mở khóa học tập", "6-Stage Curriculum & Manual Unlock")}</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:12px;line-height:1.45">
+          ${T("Bố mẹ có thể đặt chặng học cho bé hôm nay, hoặc mở khóa tự do toàn bộ các chặng để bé làm quen trước theo khả năng:","Parents can pick the child's active stage or unlock all stages to explore ahead:")}
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#f0f9ff;border:2px solid #bae6fd;border-radius:16px;padding:12px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#0369a1">
+              🔓 ${T("Mở khóa tự do tất cả các chặng:", "Freely Unlock All Stages:")}
+            </div>
+            <div style="font-size:12px;color:#0284c7;font-weight:600">
+              ${T("Cho phép bé tự do chạm vào bất kỳ chặng nào mà không bị giới hạn tuần tự", "Allow child to tap any stage without sequential lock")}
+            </div>
+          </div>
+          <div>
+            <button class="pill ${ls.get("blg_unlock_all", "0") === "1" ? "on" : ""}" onclick="toggleUnlockAllStages();parent()">
+              ${ls.get("blg_unlock_all", "0") === "1" ? T("ĐANG MỞ TẤT CẢ ✔", "ALL UNLOCKED ✔") : T("KHÓA THEO TIẾN ĐỘ 🔒", "SEQUENTIAL 🔒")}
+            </button>
+          </div>
+        </div>
+
+        <!-- DANH SÁCH 6 CHẶNG -->
+        <div class="stage-manage-grid">
+          ${STAGE_META.map(sm => {
+            const isCur = sm.stage === getKidCurrentStage();
+            const isUnl = isStageUnlocked(sm.stage);
+            const actsCount = (typeof getActivitiesByStage === "function" ? getActivitiesByStage(sm.stage) : []).length;
+            return `
+              <div class="stage-manage-card ${isCur ? "current" : isUnl ? "unlocked" : "locked"}">
+                <div class="stage-manage-head">
+                  <div class="stage-manage-icon">${isUnl ? sm.icon : "🔒"}</div>
+                  <div style="flex:1;min-width:0">
+                    <div class="stage-manage-title">${T(sm.nameVi, sm.nameEn)}</div>
+                    <div class="stage-manage-sub">${T(sm.titleVi, sm.titleEn)} (${actsCount} ${T("bài", "lessons")})</div>
+                  </div>
+                  <div>
+                    <span class="stage-status-badge ${isCur ? "current" : isUnl ? "unlocked" : "locked"}">
+                      ${isCur ? T("🌟 Đang học", "🌟 Active") : isUnl ? T("Đã mở", "Open") : T("Đang khóa", "Locked")}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="stage-manage-actions">
+                  ${!isCur ? `
+                    <button class="pill" onclick="setStageByParent(${sm.stage});parent()" style="font-size:12px;font-weight:800;background:#eff6ff;color:#1e40af;border-color:#93c5fd">
+                      🎯 ${T("Đặt làm chặng học hôm nay", "Set as today's stage")}
+                    </button>
+                  ` : `
+                    <span style="font-size:12.5px;color:#16a34a;font-weight:800">✅ Bé đang học chặng này</span>
+                  `}
+                  ${(!isCur && ls.get("blg_unlock_all", "0") !== "1") ? (
+                    isUnl && sm.stage > 1 ? `
+                      <button class="pill" onclick="lockStage(${sm.stage});parent()" style="font-size:12px;background:#fee2e2;color:#991b1b;border-color:#fca5a5">
+                        🔒 ${T("Khóa lại", "Lock")}
+                      </button>
+                    ` : !isUnl ? `
+                      <button class="pill" onclick="unlockStage(${sm.stage});parent()" style="font-size:12px;background:#f0fdf4;color:#166534;border-color:#86efac">
+                        🔓 ${T("Mở khóa", "Unlock")}
+                      </button>
+                    ` : ''
+                  ) : ''}
+                </div>
+              </div>
+            `;
+          }).join("")}
         </div>
       </div>
 
@@ -3863,7 +4937,7 @@ function parent(){
           </div>
         </div>
         <div style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border:1.5px solid #dcfce7;border-radius:12px;font-size:13px;color:#166534;line-height:1.45">
-          💡 <b>${T("Khích lệ bé nhẹ nhàng:","Gentle encouragement:")}</b> ${T("Ứng dụng ghi nhận mỗi ngày bé nỗ lực học tập và không bao giờ trừ điểm hay reset chuỗi khi bé nghỉ ngơi. Mỗi ngày bé học 10–15 phút là một niềm vui!","Every day of learning is recorded and never reset when taking breaks. 10–15 minutes a day brings pure joy!")}
+          💡 <b>${T("Khích lệ bé nhẹ nhàng:","Gentle encouragement:")}</b> ${T("Ứng dụng ghi nhận mỗi ngày bé nỗ lực học tập và không bao giờ trừ điểm hay reset chuỗi khi bé nghỉ ngơi. Mỗi ngày bé học 5–10 phút là một niềm vui!","Every day of learning is recorded and never reset when taking breaks. 5–10 minutes a day brings pure joy!")}
         </div>
       </div>
 
@@ -3939,7 +5013,7 @@ function parent(){
       <div class="dash-card">
         <div class="dash-card-title">💡 ${T("Mẹo đồng hành cùng bé ở nhà","Parent Guidance & Practical Tips")}</div>
         <div style="font-size:13.5px;color:#475569;margin-bottom:12px;line-height:1.45">
-          ${T("Bé 5–6 tuổi chuẩn bị vào lớp 1 học tốt nhất khi được kết hợp giữa ứng dụng và tương tác ngoài đời thực với bố mẹ:","5-6 year-olds prep best when combining digital practice with real-life interactions:")}
+          ${T("Bé 4–6 tuổi làm quen trước lớp 1 học tốt nhất khi được kết hợp giữa ứng dụng và tương tác ngoài đời thực với bố mẹ:","4-6 year-olds prep best when combining digital practice with real-life interactions:")}
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
           <div style="background:#fef3c7;border:2px solid #fde68a;border-radius:16px;padding:12px;color:#92400e">
@@ -3956,7 +5030,7 @@ function parent(){
           </div>
           <div style="background:#fdf2f8;border:2px solid #fbcfe8;border-radius:16px;padding:12px;color:#9d174d">
             <div style="font-weight:800;font-size:14px;margin-bottom:4px">⏱️ ${T("Thời lượng học vàng","Optimal Session")}</div>
-            <div style="font-size:13px;line-height:1.45">${T("Mỗi ngày bé chỉ nên học 10–15 phút. Học đều đặn mỗi ngày tốt hơn nhiều so với học dồn một lần trong tuần.","10-15 minutes daily consistency is far more effective than long sessions.")}</div>
+            <div style="font-size:13px;line-height:1.45">${T("Mỗi ngày bé chỉ nên học 5–10 phút (1–2 hoạt động). Học đều đặn mỗi ngày tốt hơn nhiều so với học dồn một lần trong tuần.","5-10 minutes daily consistency is far more effective than long sessions.")}</div>
           </div>
         </div>
 
@@ -3981,6 +5055,42 @@ function parent(){
         </div>
       </div>
 
+      <!-- 4D. HOẠT ĐỘNG NGOÀI MÀN HÌNH CÙNG BÉ (OFFSCREEN ACTIVITIES - P5-07) -->
+      ${(() => {
+        const doneList = getCompletedOffscreenIds();
+        return `
+          <div class="dash-card">
+            <div class="dash-card-title">
+              🎨 ${T("Hoạt động ngoài màn hình cùng bé (Học qua đời thực)","Off-screen Parent-Child Activities")}
+            </div>
+            <div style="font-size:13.5px;color:#475569;margin-bottom:8px;line-height:1.45">
+              ${T("Các hoạt động bổ ích rèn luyện vận động tinh, đếm đồ vật thật, thói quen nề nếp và giao tiếp. Bố mẹ chạm nút đánh dấu khi đã hoàn thành cùng bé nhé:","Interactive real-life activities for fine motor, real counting, habits and speaking. Tap to mark as completed:")}
+            </div>
+            
+            <div class="offscreen-grid">
+              ${OFFSCREEN_ACTIVITIES.map(act => {
+                const isDone = doneList.includes(act.id);
+                return `
+                  <div class="offscreen-card ${isDone ? "done" : ""}">
+                    <div class="offscreen-head">
+                      <div class="offscreen-icon">${act.icon}</div>
+                      <div class="offscreen-title">${lang === "vi" ? act.nameVi : act.nameEn}</div>
+                    </div>
+                    <div>
+                      <span class="offscreen-skill">🎯 ${lang === "vi" ? act.skillVi : act.skillEn}</span>
+                    </div>
+                    <div class="offscreen-desc">${lang === "vi" ? act.descVi : act.descEn}</div>
+                    <button class="offscreen-btn ${isDone ? "active" : "idle"}" onclick="toggleOffscreenCompleted('${act.id}')">
+                      ${isDone ? T("✅ Đã hoàn thành cùng bé", "✅ Completed with child") : T("⚪ Đánh dấu đã hoàn thành", "⚪ Mark as completed")}
+                    </button>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      })()}
+
       <!-- 5. KỸ NĂNG CẦN LUYỆN THÊM -->
       ${topErrors.length ? `
         <div class="dash-card">
@@ -3991,27 +5101,70 @@ function parent(){
         </div>
       ` : ""}
 
-      <!-- 6. BẢO MẬT & CÀI ĐẶT -->
+      <!-- 6. CÀI ĐẶT TẬP TRUNG & GIỌNG ĐỌC (P5-05) -->
       <div class="dash-card">
-        <div class="dash-card-title">⚙️ ${T("Cài đặt hệ thống & Giọng đọc","Settings & Voice")}</div>
+        <div class="dash-card-title">⚙️ ${T("Cài đặt tập trung hệ thống","Centralized System Settings")}</div>
         <div style="margin-bottom:8px">${vh}</div>
-        <div style="font-size:13px;color:#64748b;font-weight:700;margin-top:8px">${T("Ngôn ngữ hiển thị & phát âm:","Language:")}</div>
-        <div class="chips">
-          ${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 English"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}');parent()">${t}</button>`).join("")}
+
+        <!-- 1. GIỚI HẠN THỜI GIAN HẰNG NGÀY -->
+        <div class="settings-group">
+          <div class="settings-group-title">⏰ ${T("Giới hạn thời gian màn hình mỗi ngày:","Daily Screen Time Limit:")}</div>
+          <div class="settings-group-desc">${T("Tự động nhắc bé nghỉ ngơi giữ mắt sáng khi hết giờ:","Automatically prompts child to rest eyes when limit is reached:")}</div>
+          <div class="chips" style="margin-top:4px">
+            ${[0, 15, 30, 45, 60].map(mVal => `
+              <button class="pill ${dailyLimit === mVal ? "on" : ""}" onclick="setDailyLimit(${mVal})">
+                ${mVal === 0 ? T("Không giới hạn","No limit") : mVal + " " + T("phút","mins")}
+              </button>
+            `).join("")}
+          </div>
         </div>
-        <div style="font-size:13px;color:#334155;font-weight:700;margin-top:10px">${T("Tốc độ đọc giọng nói:","Speech speed:")}</div>
-        <div class="chips">
-          <button class="pill ${RATE<0.5 ? "on" : ""}" onclick="setSpeechRate(0.4)">🐢 ${T("Chậm (0.4×)","Slow (0.4×)")}</button>
-          <button class="pill ${RATE>=0.5 && RATE<0.7 ? "on" : ""}" onclick="setSpeechRate(0.6)">🐰 ${T("Vừa (0.6×)","Medium (0.6×)")}</button>
-          <button class="pill ${RATE>=0.7 ? "on" : ""}" onclick="setSpeechRate(0.85)">🐇 ${T("Chuẩn (0.85×)","Standard (0.85×)")}</button>
+
+        <!-- 2. NGÔN NGỮ HIỂN THỊ & PHÁT ÂM -->
+        <div class="settings-group">
+          <div class="settings-group-title">🌐 ${T("Ngôn ngữ hiển thị & phát âm:","Language:")}</div>
+          <div class="chips" style="margin-top:4px">
+            ${[["vi","🇻🇳 Tiếng Việt"],["en","🇬🇧 English"],["both","Song ngữ VI + EN"]].map(([k,t])=>`<button class="pill${lang===k?" on":""}" onclick="setLang('${k}');parent()">${t}</button>`).join("")}
+          </div>
         </div>
-        <div style="font-size:13px;color:#334155;font-weight:700;margin-top:10px">${T("Âm thanh & Hiệu ứng:","Sound & Effects:")}</div>
-        <div class="chips">
-          <button class="pill${SOUND_ON()?" on":""}" onclick="toggleSoundMaster();parent()">🔊 ${T("Âm thanh & Giọng đọc: "+(SOUND_ON()?"BẬT":"TẮT"),"Master sound: "+(SOUND_ON()?"ON":"OFF"))}</button>
-          <button class="pill${sf?" on":""}" onclick="togSfx();parent()">🔔 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button>
-          <button class="pill${rmOn()?" on":""}" onclick="togRM();parent()">🎞 ${T("Giảm chuyển động: "+(rp==="auto"?"THEO MÁY":rp==="1"?"BẬT":"TẮT"),"Reduce motion: "+(rp==="auto"?"AUTO":rp==="1"?"ON":"OFF"))}</button>
-          <button class="pill" onclick="changeParentPin()">🔑 ${T("Đổi mã PIN phụ huynh","Change PIN")}</button>
-          <button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button>
+
+        <!-- 3. TỐC ĐỘ ĐỌC GIỌNG NÓI -->
+        <div class="settings-group">
+          <div class="settings-group-title">🐇 ${T("Tốc độ giọng đọc cho bé:","Speech Speed for Child:")}</div>
+          <div class="chips" style="margin-top:4px">
+            <button class="pill ${RATE<0.5 ? "on" : ""}" onclick="setSpeechRate(0.4)">🐢 ${T("Chậm (0.4×)","Slow (0.4×)")}</button>
+            <button class="pill ${RATE>=0.5 && RATE<0.7 ? "on" : ""}" onclick="setSpeechRate(0.6)">🐰 ${T("Vừa (0.6×)","Medium (0.6×)")}</button>
+            <button class="pill ${RATE>=0.7 ? "on" : ""}" onclick="setSpeechRate(0.85)">🐇 ${T("Chuẩn (0.85×)","Standard (0.85×)")}</button>
+          </div>
+        </div>
+
+        <!-- 4. GIẢM CHUYỂN ĐỘNG & BẢO VỆ MẮT -->
+        <div class="settings-group">
+          <div class="settings-group-title">🎞 ${T("Giảm chuyển động (Bảo vệ mắt & Máy mượt):","Reduce Motion (Eye Comfort):")}</div>
+          <div class="settings-group-desc">${T("Tắt bớt hoạt họa và pháo hoa rực rỡ để bé tập trung hơn:","Reduces heavy animations and particles for low-end devices and eye focus:")}</div>
+          <div class="chips" style="margin-top:4px">
+            <button class="pill ${rp==="auto" ? "on" : ""}" onclick="setMotionPref('auto');parent()">${T("THEO MÁY (Tự động)","AUTO (System)")}</button>
+            <button class="pill ${rp==="1" ? "on" : ""}" onclick="setMotionPref('1');parent()">${T("BẬT (Giảm bớt chuyển động)","ON (Reduced)")}</button>
+            <button class="pill ${rp==="0" ? "on" : ""}" onclick="setMotionPref('0');parent()">${T("TẮT (Hoạt họa đầy đủ)","OFF (Full motion)")}</button>
+          </div>
+        </div>
+
+        <!-- 5. ÂM THANH & HIỆU ỨNG SFX -->
+        <div class="settings-group">
+          <div class="settings-group-title">🔊 ${T("Âm thanh & Hiệu ứng:","Audio & Sound Effects:")}</div>
+          <div class="chips" style="margin-top:4px">
+            <button class="pill${SOUND_ON()?" on":""}" onclick="toggleSoundMaster();parent()">🔊 ${T("Âm thanh & Giọng đọc: "+(SOUND_ON()?"BẬT":"TẮT"),"Master sound: "+(SOUND_ON()?"ON":"OFF"))}</button>
+            <button class="pill${sf?" on":""}" onclick="togSfx();parent()">🔔 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button>
+          </div>
+        </div>
+
+        <!-- 6. BẢO MẬT & THU ÂM -->
+        <div class="settings-group">
+          <div class="settings-group-title">🔑 ${T("Bảo mật & Giọng bố mẹ:","Security & Voice Recording:")}</div>
+          <div class="chips" style="margin-top:4px">
+            <button class="pill" onclick="changeParentPin()">🔑 ${T("Đổi mã PIN phụ huynh","Change PIN")}</button>
+            <button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button>
+            <button class="pill" onclick="testVi()">🔊 ${T("Nghe thử giọng máy","Test speech")}</button>
+          </div>
         </div>
       </div>
 
@@ -4660,17 +5813,78 @@ const VIHELP="Cách xử lý: cài giọng tiếng Việt cho máy, hoặc dùng
 function testVi(){const o=lang;lang="vi";say("Xin chào bé. Mình cùng học nhé","Hello");lang=o}
 const bm=t=>{const e=document.getElementById("bmsg");if(e){e.textContent=t;e.hidden=false}};
 const b2d=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(b)});
-const LSK=["stars","st","lvl","lang","rate2","auto","ad","sfx","rm","trm","sound_master"];
-const LSV={stars:/^\d{1,9}$/,lvl:/^[123]$/,lang:/^(vi|en|both)$/,rate2:/^\d?\.?\d{1,3}$/,auto:/^[01]$/,ad:/^\d{1,3},\d{1,3}$/,sfx:/^[01]$/,rm:/^(auto|0|1)$/,trm:/^(up|lo|nu)$/,sound_master:/^[01]$/};
-const okSt=v=>{try{const o=JSON.parse(v);return!!o&&typeof o==="object"&&Number.isFinite(+o.n)&&Number.isFinite(+o.f)&&(!o.w||typeof o.w==="object")}catch(e){return false}};
+const LSK = [
+  "stars", "st", "lvl", "lang", "rate2", "auto", "ad", "sfx", "rm", "trm", "sound_master",
+  "badges", "kid_name", "kid_avatar", "ageTier", "show_age_tiers", "showAgeTiers",
+  "daily_limit_minutes", "blg_stage", "streak", "kids_streak_count", "kids_streak_last_date",
+  "kids_confetti_disabled", "bhv_act_stats", "bhv_offscreen_done", "bhv_profiles", "bhv_active_profile_id"
+];
+const LSV = {
+  stars: /^\d{1,9}$/,
+  lvl: /^[123]$/,
+  lang: /^(vi|en|both)$/,
+  rate2: /^\d?\.?\d{1,3}$/,
+  auto: /^[01]$/,
+  ad: /^\d{1,3},\d{1,3}$/,
+  sfx: /^[01]$/,
+  rm: /^(auto|0|1)$/,
+  trm: /^(up|lo|nu)$/,
+  sound_master: /^[01]$/,
+  badges: /^[a-z0-9_,]{0,1000}$/,
+  kid_name: /^.{1,50}$/,
+  kid_avatar: /^.{1,20}$/,
+  ageTier: /^(preschool|grade1_2|grade3_5)$/,
+  show_age_tiers: /^[01]$/,
+  showAgeTiers: /^(true|false|0|1)$/,
+  daily_limit_minutes: /^\d{1,3}$/,
+  blg_stage: /^\d{1,3}$/,
+  streak: /^\d{1,5}$/,
+  kids_streak_count: /^\d{1,5}$/,
+  kids_streak_last_date: /^\d{4}-\d{2}-\d{2}$/,
+  kids_confetti_disabled: /^[01]$/,
+  bhv_act_stats: /^[\s\S]{2,100000}$/,
+  bhv_offscreen_done: /^[\s\S]{2,10000}$/,
+  bhv_profiles: /^\[[\s\S]*\]$/,
+  bhv_active_profile_id: /^[a-zA-Z0-9_\-]{1,60}$/,
+  blg_unlock_all: /^[01]$/,
+  blg_unlocked_stages: /^\[[\d,\s]*\]$/
+};
+const okSt = v => {
+  try {
+    const o = JSON.parse(v);
+    return !!o && typeof o === "object" && Number.isFinite(+o.n) && Number.isFinite(+o.f) && (!o.w || typeof o.w === "object");
+  } catch(e) {
+    return false;
+  }
+};
+const okActStats = v => {
+  try {
+    const o = JSON.parse(v);
+    return !!o && typeof o === "object";
+  } catch(e) {
+    return false;
+  }
+};
 async function saveFile(bl,name){const f=new File([bl],name,{type:bl.type});
  if(matchMedia("(pointer:coarse)").matches&&navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:name});return"share"}catch(e){if(e&&e.name==="AbortError")return"cancel"}}
  const u=URL.createObjectURL(bl),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return"dl"}
 async function exportData(full){
- try{const d={app:"be-hoc-vui",v:1,t:new Date().toISOString(),ls:{},rec:{}};
-  LSK.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)d.ls[k]=v}catch(e){}});
+ try{const d={app:"be-hoc-vui",schemaVersion:2,v:2,exportedAt:new Date().toISOString(),ls:{},rec:{}};
+  LSK.forEach(k=>{
+   if(/pin/i.test(k)) return;
+   try{const v=localStorage.getItem(k);if(v!==null)d.ls[k]=v}catch(e){}
+  });
+  try {
+   for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && (/^study_sec_\d{4}-\d{2}-\d{2}$/.test(k) || /^bhv_pdata_/.test(k))) {
+     const v = localStorage.getItem(k);
+     if (v !== null && /^\d{1,8}$/.test(v)) d.ls[k] = v;
+    }
+   }
+  } catch(e) {}
   if(full){const all=await idb("readonly",s=>s.getAll())||[];for(const o of all)d.rec[o.k]=await b2d(o.b)}
-  const bl=new Blob([JSON.stringify(d)],{type:"application/json"}),name=`be-hoc-vui-${full?"kem-giong":"tien-do"}-${new Date().toISOString().slice(0,10)}.json`,r=await saveFile(bl,name);
+  const bl=new Blob([JSON.stringify(d, null, 2)],{type:"application/json"}),name=`be-hoc-vui-${full?"kem-giong":"tien-do"}-${new Date().toISOString().slice(0,10)}.json`,r=await saveFile(bl,name);
   if(r!=="cancel")bm(`✅ Đã tạo file ${name} (${bl.size>1048576?(bl.size/1048576).toFixed(1)+" MB":Math.max(1,Math.round(bl.size/1024))+" KB"}). Hãy giữ file này ở nơi an toàn.`)}
  catch(e){bm("⚠ Không tạo được file sao lưu.")}}
 async function importData(file){if(!file)return;
@@ -4678,7 +5892,17 @@ async function importData(file){if(!file)return;
   if(!d||d.app!=="be-hoc-vui"||!d.ls||typeof d.ls!=="object")throw 0;
   const recs=Object.entries(d.rec||{}).filter(([k,u])=>/^(vi|en)\|/.test(k)&&typeof u==="string"&&/^data:[^,]*;base64,/.test(u));
   if(!confirm("Khôi phục dữ liệu từ file này?\nSao, thống kê và cài đặt hiện tại sẽ được thay bằng dữ liệu trong file."+(recs.length?`\n${recs.length} bản thu sẽ được thêm vào (trùng tên sẽ bị ghi đè).`:"")))return;
-  let n=0;for(const k of LSK){const v=d.ls[k];if(typeof v!=="string")continue;if(k==="st"?okSt(v):LSV[k].test(v)){ls.set(k,v);n++}}
+  let n=0;
+  for(const [k, v] of Object.entries(d.ls)){
+   if(typeof v!=="string")continue;
+   if(/pin/i.test(k))continue;
+   let valid = false;
+   if(k==="st") valid = okSt(v);
+   else if(k==="bhv_act_stats") valid = okActStats(v);
+   else if(LSV[k]) valid = LSV[k].test(v);
+   else if(/^study_sec_\d{4}-\d{2}-\d{2}$/.test(k)) valid = /^\d{1,8}$/.test(v);
+   if(valid){ls.set(k,v);n++}
+  }
   for(const[k,u]of recs){const bl=await(await fetch(u)).blob();await idb("readwrite",s=>s.put({k,b:bl},k))}
   alert("Đã khôi phục xong. Ứng dụng sẽ tải lại.");location.reload()}
  catch(e){bm("⚠ File này không đúng định dạng sao lưu của Bé học vui hoặc đã bị hỏng.")}}

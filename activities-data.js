@@ -8,8 +8,8 @@ const AGE_TIERS = {
     id: "preschool",
     nameVi: "Tiền tiểu học",
     nameEn: "Preschool",
-    ageVi: "5–6 tuổi",
-    ageEn: "Ages 5–6",
+    ageVi: "4–6 tuổi",
+    ageEn: "Ages 4–6",
     badge: "🐣",
     descVi: "Chữ cái, Học số, Đếm hình, Tiếng Anh & Đánh vần cơ bản",
     descEn: "Letters, Numbers, Counting, English & Phonics"
@@ -61,6 +61,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Starting Letter: Apple",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     skill: "Nhận biết âm đầu chữ cái tiếng Việt",
     type: "image_quiz",
@@ -87,8 +88,9 @@ const ACTIVITIES_DATA = [
     id: "act_pre_let_02",
     title: "Điền chữ còn thiếu: C_N MÈO 🐱",
     titleEn: "Missing Letter: C_N MÈO",
-    ageTier: "preschool",
-    stage: 1,
+    ageTier: "grade1_2",
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     skill: "Điền khuyết nguyên âm cơ bản",
     type: "fill_blank",
@@ -116,8 +118,9 @@ const ACTIVITIES_DATA = [
     id: "act_pre_let_03",
     title: "Ghép chữ in hoa và chữ thường 🔤",
     titleEn: "Match Uppercase & Lowercase",
-    ageTier: "preschool",
-    stage: 1,
+    ageTier: "grade1_2",
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     skill: "Nhận diện chữ hoa và chữ thường",
     type: "matching",
@@ -144,6 +147,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Find Number 4",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "math",
     skill: "Nhận biết mặt chữ số 1–10",
     type: "image_quiz",
@@ -171,6 +175,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Sort Numbers: 1, 2, 3",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "math",
     skill: "Thứ tự đếm số tự nhiên cơ bản",
     type: "drag_drop",
@@ -199,6 +204,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Match Number with Apple Count",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "math",
     skill: "Đếm tương ứng số lượng 1-1",
     type: "matching",
@@ -225,6 +231,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Colors: Sun Color",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "english",
     skill: "Nhận biết từ vựng màu sắc tiếng Anh cơ bản",
     type: "image_quiz",
@@ -252,6 +259,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Match Animal Words",
     ageTier: "preschool",
     stage: 1,
+    minAge: 4,
     subject: "english",
     skill: "Từ vựng con vật thân thuộc tiếng Anh",
     type: "matching",
@@ -278,6 +286,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Story: The Good Bunny",
     ageTier: "preschool",
     stage: 4,
+    minAge: 4,
     subject: "reading",
     skill: "Đọc hiểu chi tiết văn bản ngắn",
     type: "reading_passage",
@@ -309,7 +318,8 @@ const ACTIVITIES_DATA = [
     title: "Điền vần đúng: Quả B___ng bay 🎈",
     titleEn: "Fill Phonics: Quả B_ng",
     ageTier: "grade1_2",
-    stage: 3,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     skill: "Quy tắc chính tả ghép vần có âm cuối ng",
     type: "fill_blank",
@@ -337,7 +347,8 @@ const ACTIVITIES_DATA = [
     title: "Sắp xếp từ thành câu: Bé yêu gia đình 👨‍👩‍👧",
     titleEn: "Word Order: Family Love",
     ageTier: "grade1_2",
-    stage: 4,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     skill: "Cấu trúc ngữ pháp câu đơn tiếng Việt",
     type: "drag_drop",
@@ -365,7 +376,8 @@ const ACTIVITIES_DATA = [
     title: "Chính tả C hay K: Con ___ua và con ___iến 🦀🐜",
     titleEn: "Spelling Rule: C or K",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     skill: "Quy tắc chính tả phân biệt C và K",
     type: "image_quiz",
@@ -393,6 +405,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Addition within 20: 8 + 7",
     ageTier: "grade1_2",
     stage: null,
+    minAge: 6,
     subject: "math",
     skill: "Phép tính cộng qua 10 phạm vi 20",
     type: "fill_blank",
@@ -421,6 +434,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Number Pattern by 5s",
     ageTier: "grade1_2",
     stage: null,
+    minAge: 6,
     subject: "math",
     skill: "Quy luật dãy số cách đều đếm tiến",
     type: "fill_blank",
@@ -448,7 +462,8 @@ const ACTIVITIES_DATA = [
     title: "Ghép phép tính có cùng kết quả = 10 🎯",
     titleEn: "Match Equations Sum to 10",
     ageTier: "grade1_2",
-    stage: 3,
+    stage: null,
+    minAge: 6,
     subject: "math",
     skill: "Cặp số cộng bằng 10 và tính chất giao hoán",
     type: "matching",
@@ -474,7 +489,8 @@ const ACTIVITIES_DATA = [
     title: "School Things: Đồ dùng học tập 🖊️📖",
     titleEn: "School Items Match",
     ageTier: "grade1_2",
-    stage: 3,
+    stage: null,
+    minAge: 6,
     subject: "english",
     skill: "Từ vựng đồ dùng học sinh tiếng Anh",
     type: "matching",
@@ -500,7 +516,8 @@ const ACTIVITIES_DATA = [
     title: "Missing letter: B_OK (Quyển sách) 📖",
     titleEn: "Spell the word: BOOK",
     ageTier: "grade1_2",
-    stage: 3,
+    stage: null,
+    minAge: 6,
     subject: "english",
     skill: "Đánh vần và nhận biết từ vựng tiếng Anh",
     type: "fill_blank",
@@ -529,6 +546,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Story: The Tortoise and The Hare",
     ageTier: "grade1_2",
     stage: 4,
+    minAge: 4,
     subject: "reading",
     skill: "Đọc hiểu ý nghĩa và bài học ngụ ngôn",
     type: "reading_passage",
@@ -811,6 +829,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Meet Cute Household Pets",
     ageTier: "preschool",
     stage: 0,
+    minAge: 4,
     subject: "skills",
     type: "video_quiz",
     mediaSource: {
@@ -862,6 +881,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Giant Friends in the Wild Jungle",
     ageTier: "preschool",
     stage: 0,
+    minAge: 4,
     subject: "science",
     type: "video_quiz",
     mediaSource: {
@@ -913,6 +933,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Ocean Journey: Friendly Sea Creatures",
     ageTier: "preschool",
     stage: 0,
+    minAge: 4,
     subject: "science",
     type: "video_quiz",
     mediaSource: {
@@ -965,7 +986,8 @@ const ACTIVITIES_DATA = [
     title: "Tập đánh vần cùng cô Lan Anh: Âm B và Dấu Thanh 🔤👩‍🏫",
     titleEn: "Phonics with Teacher Lan Anh: Letter B & Tones",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -1016,7 +1038,8 @@ const ACTIVITIES_DATA = [
     title: "Học vần cùng cô Lan Anh: Âm C và Tiếng Có Nghĩa 🐟🦀",
     titleEn: "Phonics with Teacher Lan Anh: Letter C & Words",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -1067,7 +1090,8 @@ const ACTIVITIES_DATA = [
     title: "Phân biệt D và Đ cùng cô Lan Anh: Con Dê và Đàn Gà 🐐🐔",
     titleEn: "Distinguish D and Đ with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -1118,7 +1142,8 @@ const ACTIVITIES_DATA = [
     title: "Bí quyết ghép vần đôi 'AI' và 'AY' cùng cô Lan Anh 🌾👋",
     titleEn: "Mastering Rhymes AI and AY with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 3,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -1834,6 +1859,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Letter A: Happy Open Mouth with Teacher Lan Anh",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=t5As5kwFvRM",
     learningGoal: "Bé nhận biết mặt chữ A, mở rộng khẩu hình miệng cười tươi và phát âm 'A' to, rõ ràng.",
@@ -1875,6 +1901,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Letter Ă: Crescent Smile with Teacher Lan Anh",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=1qAjhNd2N6M",
     learningGoal: "Bé nhận diện chữ Ă (Á), liên tưởng dấu á với vầng trăng khuyết ngửa lên trời.",
@@ -1916,6 +1943,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Letter Â: The Little Hat with Teacher Lan Anh",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=rErOluFSNT0",
     learningGoal: "Bé phân biệt rõ ràng chữ Â (Ớ) với Ă nhờ chiếc nón úp nhọn đầu như mái nhà che mưa.",
@@ -1957,6 +1985,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Letter B: Big Round Bellies with Teacher Lan Anh",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=bicX1RNzHos",
     learningGoal: "Nhận biết phụ âm B, mím hai môi bật hơi phát âm chuẩn 'Bờ' và tìm chữ B trong đồ chơi quen thuộc.",
@@ -1998,6 +2027,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Letter C: Curved Crescent with Teacher Lan Anh",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=uP9Ri14I28o",
     learningGoal: "Nhận biết chữ C với nét cong hở phải, phát âm 'Cờ' dứt khoát và làm quen ghép tiếng 'Cá'.",
@@ -2045,6 +2075,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter O",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2081,6 +2112,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Ô",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2117,6 +2149,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Ơ",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2153,6 +2186,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter A",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2189,6 +2223,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Ă",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2225,6 +2260,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Â",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2261,6 +2297,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter U",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2297,6 +2334,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Ư",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2333,6 +2371,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter E",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2369,6 +2408,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Ê",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2405,6 +2445,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter I",
     ageTier: "grade1_2",
     stage: 1,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2441,6 +2482,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter C & Orthography",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2477,6 +2519,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter B & Tones",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2513,6 +2556,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter D",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2549,6 +2593,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Grade 1 VTV7: Letter Đ & Contrast D/Đ",
     ageTier: "grade1_2",
     stage: 2,
+    minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2584,7 +2629,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép GH & Quy tắc G/GH 🪑 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph GH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2620,7 +2666,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép CH: Chú Chó, Quả Chanh 🐕 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph CH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2656,7 +2703,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép GI: Cơn Gió, Giỏ Cá 💨 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph GI",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2692,7 +2740,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép KH: Chú Khỉ, Khăn Quàng 🐒 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph KH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2728,7 +2777,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép NG & NGH: Con Ngựa, Nghé Con 🐎 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraphs NG & NGH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2764,7 +2814,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép PH: Phố Phường, Bát Phở 🍜 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph PH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2800,7 +2851,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép TR & Phân biệt TR/CH ☀️ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph TR & Contrast TR/CH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2836,7 +2888,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép NH: Ngôi Nhà, Chùm Nho 🏠 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph NH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2872,7 +2925,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép TH: Thước Kẻ, Con Thỏ 🐇 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph TH",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2908,7 +2962,8 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Phụ âm ghép QU: Quả Quýt, Cái Quạt 🍊 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Digraph QU",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
+    minAge: 6,
     subject: "vietnamese",
     type: "video_quiz",
     mediaSource: {
@@ -2958,7 +3013,13 @@ const ACTIVITY_SCHEMA = {
     stage: {
       type: ["integer", "null"],
       enum: [0, 1, 2, 3, 4, 5, null],
-      description: "Chặng học từ 0 đến 5 cho lộ trình chuẩn bị vào lớp 1 (5–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
+      description: "Chặng học từ 0 đến 5 cho lộ trình làm quen và chuẩn bị vào lớp 1 (4–6 tuổi) theo PLAN.md. Giá trị null dành cho bài nâng cao lớp 3–5."
+    },
+    minAge: {
+      type: "integer",
+      minimum: 3,
+      maximum: 12,
+      description: "Độ tuổi tối thiểu đề xuất cho hoạt động"
     },
     subject: { enum: ["vietnamese", "math", "english", "science", "skills"] },
     type: { enum: ["video_quiz", "interactive_story", "logic_puzzle", "phonics_game"] },
@@ -3001,6 +3062,11 @@ function validateActivity(act) {
   if (act.stage !== undefined && act.stage !== null) {
     if (!Number.isInteger(act.stage) || act.stage < 0 || act.stage > 5) {
       errors.push("Invalid 'stage' (must be integer 0-5 or null)");
+    }
+  }
+  if (act.minAge !== undefined && act.minAge !== null) {
+    if (!Number.isInteger(act.minAge) || act.minAge < 3 || act.minAge > 12) {
+      errors.push("Invalid 'minAge' (must be integer 3-12)");
     }
   }
   if (!["vietnamese", "math", "english", "science", "skills", "reading", "logic"].includes(act.subject)) errors.push("Invalid 'subject'");

@@ -13,26 +13,26 @@
 
 ### Danh sách 77 bài học:
 
-| # | ID bài học | Tiêu đề bài học | Môn | ageTier | Đề xuất Stage | Kỹ năng đề xuất (`skill id`) | Mức phù hợp 5–6 tuổi |
+| # | ID bài học | Tiêu đề bài học | Môn | ageTier | Đề xuất Stage | Kỹ năng đề xuất (`skill id`) | Mức phù hợp 4–6 tuổi |
 |---|---|---|---|---|:---:|---|:---:|
-| 1 | `act_pre_let_01` | Chữ cái đầu tiên: Quả Táo 🍎 | VN | preschool | **1** | `vi.phonics.initial-sound` | 🟢 Phù hợp |
-| 2 | `act_pre_let_02` | Điền chữ còn thiếu: C_N MÈO 🐱 | VN | preschool | **1** | `vi.letters.vowels` | 🟢 Phù hợp |
-| 3 | `act_pre_let_03` | Ghép chữ in hoa và chữ thường 🔤 | VN | preschool | **1** | `vi.letters.vowels` | 🟢 Phù hợp |
-| 4 | `act_pre_num_01` | Bé tìm chữ số 4 ⛵ | Math | preschool | **1** | `math.count.1-5` | 🟢 Phù hợp |
-| 5 | `act_pre_num_02` | Sắp xếp số từ bé đến lớn: 1, 2, 3 🔢 | Math | preschool | **1** | `math.order.numbers` | 🟢 Phù hợp |
-| 6 | `act_pre_num_03` | Nối số với số lượng quả táo 🍎 | Math | preschool | **1** | `math.count.1-10` | 🟢 Phù hợp |
-| 7 | `act_pre_eng_01` | Colors: Màu sắc mặt trời ☀️ | EN | preschool | **1** | `en.intro.colors` | 🟢 Phù hợp |
-| 8 | `act_pre_eng_02` | Animals: Ghép con vật tiếng Anh 🐶🐱 | EN | preschool | **1** | `en.intro.colors` | 🟢 Phù hợp |
-| 9 | `act_pre_read_01` | Đọc hiểu: Chú Thỏ Trắng ngoan ngoãn 🐰 | Reading | preschool | **4** | `vi.listen.story` | 🟢 Phù hợp |
-| 10 | `act_g12_vn_01` | Điền vần đúng: Quả B___ng bay 🎈 | VN | grade1_2 | **3** | `vi.blend.simple` | 🟡 Hơi khó |
-| 11 | `act_g12_vn_02` | Sắp xếp từ thành câu: Bé yêu gia đình 👨‍👩‍👧 | VN | grade1_2 | **4** | `vi.read.sentence-short` | 🟡 Hơi khó |
-| 12 | `act_g12_vn_03` | Chính tả C hay K: Con ___ua và con ___iến 🦀🐜 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 13 | `act_g12_math_01` | Phép cộng có nhớ: 8 + 7 = ? 🧮 | Math | grade1_2 | Sau Lớp 1 | `math.addsub.beyond10` | 🔴 Quá khó |
-| 14 | `act_g12_math_02` | Dãy số cách đều 5: 5, 10, 15, ___ 🚀 | Math | grade1_2 | Sau Lớp 1 | `math.pattern.repeat` | 🔴 Quá khó |
-| 15 | `act_g12_math_03` | Ghép phép tính có cùng kết quả = 10 🎯 | Math | grade1_2 | **3** | `math.addsub.within10` | 🟡 Hơi khó |
-| 16 | `act_g12_eng_01` | School Things: Đồ dùng học tập 🖊️📖 | EN | grade1_2 | **3** | `en.intro.abc` | 🟢 Phù hợp |
-| 17 | `act_g12_eng_02` | Missing letter: B_OK (Quyển sách) 📖 | EN | grade1_2 | **3** | `en.intro.abc` | 🟡 Hơi khó |
-| 18 | `act_g12_read_01` | Đọc hiểu: Chuyện Rùa và Thỏ chạy thi 🐢🐇 | Reading | grade1_2 | **4** | `vi.listen.story` | 🟢 Phù hợp |
+| 1 | `act_pre_let_01` | Chữ cái đầu tiên: Quả Táo 🍎 | VN | preschool | **1** | `vi.phonics.initial-sound` | 🟢 Phù hợp (giữ lại) |
+| 2 | `act_pre_let_02` | Điền chữ còn thiếu: C_N MÈO 🐱 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.vowels` | 🔴 Dời qua Lớp 1 (ghép từ) |
+| 3 | `act_pre_let_03` | Ghép chữ in hoa và chữ thường 🔤 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.vowels` | 🔴 Dời qua Lớp 1 (hoa/thường) |
+| 4 | `act_pre_num_01` | Bé tìm chữ số 4 ⛵ | Math | preschool | **1** | `math.count.1-5` | 🟢 Phù hợp (giữ lại) |
+| 5 | `act_pre_num_02` | Sắp xếp số từ bé đến lớn: 1, 2, 3 🔢 | Math | preschool | **1** | `math.order.numbers` | 🟢 Phù hợp (giữ lại) |
+| 6 | `act_pre_num_03` | Nối số với số lượng quả táo 🍎 | Math | preschool | **1** | `math.count.1-10` | 🟢 Phù hợp (giữ lại) |
+| 7 | `act_pre_eng_01` | Colors: Màu sắc mặt trời ☀️ | EN | preschool | **1** | `en.intro.colors` | 🟢 Phù hợp (giữ lại) |
+| 8 | `act_pre_eng_02` | Animals: Ghép con vật tiếng Anh 🐶🐱 | EN | preschool | **1** | `en.intro.colors` | 🟢 Phù hợp (giữ lại) |
+| 9 | `act_pre_read_01` | Đọc hiểu: Chú Thỏ Trắng ngoan ngoãn 🐰 | Reading | preschool | **4** | `vi.listen.story` | 🟢 Phù hợp (giữ lại) |
+| 10 | `act_g12_vn_01` | Điền vần đúng: Quả B___ng bay 🎈 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.blend.simple` | 🔴 Dời qua Lớp 1 (vần ong) |
+| 11 | `act_g12_vn_02` | Sắp xếp từ thành câu: Bé yêu gia đình 👨‍👩‍👧 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.read.sentence-short` | 🔴 Dời qua Lớp 1 (câu) |
+| 12 | `act_g12_vn_03` | Chính tả C hay K: Con ___ua và con ___iến 🦀🐜 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (chính tả c/k) |
+| 13 | `act_g12_math_01` | Phép cộng có nhớ: 8 + 7 = ? 🧮 | Math | grade1_2 | Sau Lớp 1 (null) | `math.addsub.beyond10` | 🔴 Quá khó (Lớp 1-2) |
+| 14 | `act_g12_math_02` | Dãy số cách đều 5: 5, 10, 15, ___ 🚀 | Math | grade1_2 | Sau Lớp 1 (null) | `math.pattern.repeat` | 🔴 Quá khó (Lớp 1-2) |
+| 15 | `act_g12_math_03` | Ghép phép tính có cùng kết quả = 10 🎯 | Math | grade1_2 | Sau Lớp 1 (null) | `math.addsub.within10` | 🔴 Dời qua Lớp 1 (phép tính) |
+| 16 | `act_g12_eng_01` | School Things: Đồ dùng học tập 🖊️📖 | EN | grade1_2 | Sau Lớp 1 (null) | `en.intro.abc` | 🔴 Dời qua Lớp 1 (đồ dùng) |
+| 17 | `act_g12_eng_02` | Missing letter: B_OK (Quyển sách) 📖 | EN | grade1_2 | Sau Lớp 1 (null) | `en.intro.abc` | 🔴 Dời qua Lớp 1 (điền chữ) |
+| 18 | `act_g12_read_01` | Đọc hiểu: Chuyện Rùa và Thỏ chạy thi 🐢🐇 | Reading | grade1_2 | **4** | `vi.listen.story` | 🟢 Phù hợp (giữ lại) |
 | 19 | `act_g35_vn_01` | Tìm từ đồng nghĩa với 'Chăm chỉ' 🐝 | VN | grade3_5 | Sau Lớp 1 | `vi.vocab.advanced` | 🔴 Quá khó |
 | 20 | `act_g35_vn_02` | Ghép thành ngữ: Học thầy không tày... 📜 | VN | grade3_5 | Sau Lớp 1 | `vi.idiom.advanced` | 🔴 Quá khó |
 | 21 | `act_g35_vn_03` | Cặp từ trái nghĩa trong tiếng Việt ⚖️ | VN | grade3_5 | Sau Lớp 1 | `vi.vocab.advanced` | 🔴 Quá khó |
@@ -45,10 +45,10 @@
 | 28 | `act_vq_pre_01_pets` | Bé làm quen thú cưng đáng yêu trong nhà 🐶🐱🐹 | Skills | preschool | **0** | `life.emotions` | 🟢 Phù hợp |
 | 29 | `act_vq_pre_02_wildlife` | Những người bạn khổng lồ nơi rừng xanh 🐘🦒🦁 | Science | preschool | **0** | `vi.phonics.initial-sound` | 🟢 Phù hợp |
 | 30 | `act_vq_pre_03_ocean` | Chuyến du hành dưới đáy đại dương bao la 🐬🐢🐙 | Science | preschool | **0** | `vi.phonics.initial-sound` | 🟢 Phù hợp |
-| 31 | `act_vq_g12_01_spell_b` | Tập đánh vần cùng cô Lan Anh: Âm B và Dấu Thanh 🔤👩‍🏫 | VN | grade1_2 | **2** | `vi.tones.six` | 🟢 Phù hợp |
-| 32 | `act_vq_g12_02_spell_c` | Học vần cùng cô Lan Anh: Âm C và Tiếng Có Nghĩa 🐟🦀 | VN | grade1_2 | **2** | `vi.blend.simple` | 🟢 Phù hợp |
-| 33 | `act_vq_g12_03_spell_d_dd` | Phân biệt D và Đ cùng cô Lan Anh: Con Dê và Đàn Gà 🐐🐔 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 34 | `act_vq_g12_04_spell_ai_ay` | Bí quyết ghép vần đôi 'AI' và 'AY' cùng cô Lan Anh 🌾👋 | VN | grade1_2 | **3** | `vi.blend.simple` | 🟡 Hơi khó |
+| 31 | `act_vq_g12_01_spell_b` | Tập đánh vần cùng cô Lan Anh: Âm B và Dấu Thanh 🔤👩‍🏫 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.tones.six` | 🔴 Dời qua Lớp 1 (đánh vần) |
+| 32 | `act_vq_g12_02_spell_c` | Học vần cùng cô Lan Anh: Âm C và Tiếng Có Nghĩa 🐟🦀 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.blend.simple` | 🔴 Dời qua Lớp 1 (đánh vần) |
+| 33 | `act_vq_g12_03_spell_d_dd` | Phân biệt D và Đ cùng cô Lan Anh: Con Dê và Đàn Gà 🐐🐔 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (đánh vần) |
+| 34 | `act_vq_g12_04_spell_ai_ay` | Bí quyết ghép vần đôi 'AI' và 'AY' cùng cô Lan Anh 🌾👋 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.blend.simple` | 🔴 Dời qua Lớp 1 (vần đôi) |
 | 35 | `act_vq_g35_01_solar_system` | Hành trình kỳ vĩ khám phá Hệ Mặt Trời 🪐🚀 | Science | grade3_5 | Sau Lớp 1 | `sci.space.planets` | 🔴 Quá khó |
 | 36 | `act_vq_g35_02_earth_moon` | Trái Đất và Mặt Trăng: Điệu vũ ngày và đêm 🌍🌙 | Science | grade3_5 | Sau Lớp 1 | `sci.earth.moon` | 🔴 Quá khó |
 | 37 | `act_vq_g35_03_space_travel` | Chinh phục không gian: Bước chân con người lên Mặt Trăng 👨‍🚀🚀 | Science | grade3_5 | Sau Lớp 1 | `sci.space.travel` | 🔴 Quá khó |
@@ -82,16 +82,16 @@
 | 65 | `g1_vtv7_13_letter_b` | VTV7 Lớp 1: Học phụ âm B & Ghép dấu thanh ⚽ | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
 | 66 | `g1_vtv7_14_letter_d` | VTV7 Lớp 1: Học phụ âm D (Dờ) & Tiếng có âm D 🐐 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
 | 67 | `g1_vtv7_17_letter_dd` | VTV7 Lớp 1: Học phụ âm Đ & Phân biệt D/Đ 🏮 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 68 | `g1_vtv7_31_letter_gh` | VTV7 Lớp 1: Phụ âm ghép GH & Quy tắc G/GH 🪑 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 69 | `g1_vtv7_32_letter_ch` | VTV7 Lớp 1: Phụ âm ghép CH: Chú Chó, Quả Chanh 🐕 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 70 | `g1_vtv7_33_letter_gi` | VTV7 Lớp 1: Phụ âm ghép GI: Cơn Gió, Giỏ Cá 💨 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 71 | `g1_vtv7_34_letter_kh` | VTV7 Lớp 1: Phụ âm ghép KH: Chú Khỉ, Khăn Quàng 🐒 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 72 | `g1_vtv7_35_letter_ng` | VTV7 Lớp 1: Phụ âm ghép NG & NGH: Con Ngựa, Nghé Con 🐎 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 73 | `g1_vtv7_37_letter_ph` | VTV7 Lớp 1: Phụ âm ghép PH: Phố Phường, Bát Phở 🍜 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 74 | `g1_vtv7_38_letter_tr` | VTV7 Lớp 1: Phụ âm ghép TR & Phân biệt TR/CH ☀️ | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 75 | `g1_vtv7_39_letter_nh` | VTV7 Lớp 1: Phụ âm ghép NH: Ngôi Nhà, Chùm Nho 🏠 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 76 | `g1_vtv7_40_letter_th` | VTV7 Lớp 1: Phụ âm ghép TH: Thước Kẻ, Con Thỏ 🐇 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
-| 77 | `g1_vtv7_41_letter_qu` | VTV7 Lớp 1: Phụ âm ghép QU: Quả Quýt, Cái Quạt 🍊 | VN | grade1_2 | **2** | `vi.letters.consonants` | 🟢 Phù hợp |
+| 68 | `g1_vtv7_31_letter_gh` | VTV7 Lớp 1: Phụ âm ghép GH & Quy tắc G/GH 🪑 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép gh) |
+| 69 | `g1_vtv7_32_letter_ch` | VTV7 Lớp 1: Phụ âm ghép CH: Chú Chó, Quả Chanh 🐕 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép ch) |
+| 70 | `g1_vtv7_33_letter_gi` | VTV7 Lớp 1: Phụ âm ghép GI: Cơn Gió, Giỏ Cá 💨 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép gi) |
+| 71 | `g1_vtv7_34_letter_kh` | VTV7 Lớp 1: Phụ âm ghép KH: Chú Khỉ, Khăn Quàng 🐒 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép kh) |
+| 72 | `g1_vtv7_35_letter_ng` | VTV7 Lớp 1: Phụ âm ghép NG & NGH: Con Ngựa, Nghé Con 🐎 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép ng) |
+| 73 | `g1_vtv7_37_letter_ph` | VTV7 Lớp 1: Phụ âm ghép PH: Phố Phường, Bát Phở 🍜 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép ph) |
+| 74 | `g1_vtv7_38_letter_tr` | VTV7 Lớp 1: Phụ âm ghép TR & Phân biệt TR/CH ☀️ | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép tr) |
+| 75 | `g1_vtv7_39_letter_nh` | VTV7 Lớp 1: Phụ âm ghép NH: Ngôi Nhà, Chùm Nho 🏠 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép nh) |
+| 76 | `g1_vtv7_40_letter_th` | VTV7 Lớp 1: Phụ âm ghép TH: Thước Kẻ, Con Thỏ 🐇 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép th) |
+| 77 | `g1_vtv7_41_letter_qu` | VTV7 Lớp 1: Phụ âm ghép QU: Quả Quýt, Cái Quạt 🍊 | VN | grade1_2 | Sau Lớp 1 (null) | `vi.letters.consonants` | 🔴 Dời qua Lớp 1 (ghép qu) |
 
 ---
 

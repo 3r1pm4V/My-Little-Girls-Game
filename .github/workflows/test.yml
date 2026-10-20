@@ -1,0 +1,45 @@
+name: Test Suite & Quality Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check sw.js
+          node --check activities-data.js
+          node --check audio-map.js
+
+      - name: Run all automated test suites
+        run: |
+          node test-p6-quality-security.js
+          node test-p5-stage-unlock.js
+          node test-p5-profiles-settings.js
+          node test-p5-parent-report.js
+          node test-p5-parent-backup.js
+          node test-activity-schema.js
+          node test-audio-system.js
+          node test-scoring.js
+          node test-p1-home.js
+          node test-p1-header.js
+          node test-p1-journey.js
+          node test-p1-streak-audio.js
+          node test-p1-touch-rest.js
+          node test-p1-touch-tips.js
+          node test-dom-performance.js

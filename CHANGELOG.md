@@ -7,6 +7,163 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **fix(UI & Audio: Home & Hover TTS)**:
+  - **Khắc phục lỗi vỡ layout 3 nút lớn Trang chủ**:
+    - Bổ sung dấu đóng ngoặc `}` bị thiếu trong `@keyframes bubbleFloatUp` tại `styles.css`. Khôi phục 100% hiển thị trực quan cho `.kid-home-menu`, `.kid-home-btn`, `.kid-btn-today`, `.kid-btn-games`, `.kid-btn-stickers`.
+    - Kiểm tra và xác minh cân bằng 100% các cặp dấu ngoặc nhọn `{}` trong `styles.css`.
+  - **Loại bỏ triệt để giọng máy đọc khi di chuột (hover)**:
+    - Gỡ bỏ hoàn toàn sự kiện `onmouseenter` tại 3 nút lớn trang chủ và danh sách thẻ bài học `stage-act-card` trong `app.js`.
+    - Cập nhật hàm `speakKidBtn(type)` phát trực tiếp file MP3 VieNeu chuẩn giọng cô giáo Tưởng Vy (`audio/ui_home_btn_today.mp3`, `audio/ui_home_btn_games.mp3`, `audio/ui_home_btn_stickers.mp3`) khi bé chạm/nhấn nút (`onpointerdown`).
+    - Bổ sung các alias văn bản tương ứng vào `audio-map.js`.
+  - **Nâng cấp Service Worker**: Bump cache lên `bhv-v44` trong `sw.js`.
+  - **Kiểm thử**: Chạy 15/15 bộ test tự động PASS 100%, chụp ảnh màn hình nghiệm thu thực tế bằng Google Chrome headless (`fixed-home.png`) xác nhận giao diện 3 nút lớn hiển thị chuẩn đẹp.
+- **feat & security(Phase 6: P6-01…P6-07)**:
+  - **An toàn video YouTube & Bảo vệ thoát ứng dụng (P6-02)**:
+    - Toàn bộ video nhúng chuyển sang tên miền tăng cường riêng tư `youtube-nocookie.com`.
+    - Bổ sung thông số bắt buộc: `rel=0` (chỉ gợi ý video trong cùng kênh, không hiển thị video bên ngoài), `modestbranding=1` (ẩn tối đa logo YouTube), `controls=1`, `playsinline=1`.
+    - Bổ sung hàm bảo vệ `openExternalLinkWithParentGate()`: toàn bộ các nút liên kết mở YouTube bên ngoài (trong bài học Video Quiz, Đánh vần Cô Lan Anh, VTV7) đều bắt buộc vượt qua Cổng mã PIN phụ huynh (`#parentPinModal`), loại bỏ hoàn toàn nguy cơ bé 4–6 tuổi vô ý thoát ra ngoài môi trường YouTube mở.
+  - **Bảo mật CSP & HTTP Headers trong netlify.toml (P6-05)**:
+    - Thiết lập chính sách bảo mật nội dung chặt chẽ `Content-Security-Policy`: cho phép tài nguyên nội bộ (`'self'`, `blob:`, `data:`), video từ `youtube-nocookie.com`, âm thanh TTS từ `vieneu.com` và `api.viettelgroup.ai`, chặn hoàn toàn plugin `object-src 'none'`.
+    - Bổ sung các tiêu đề bảo vệ chống clickjacking và đánh cắp MIME: `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(self), geolocation=(), payment=()`.
+  - **Tích hợp Tự động CI qua GitHub Actions (P6-06)**:
+    - Thiết lập file cấu hình workflow `.github/workflows/test.yml` tự động chạy khi push và pull request vào nhánh `main`.
+    - Tự động kiểm tra cú pháp toàn bộ tệp JavaScript và chạy tuần tự toàn bộ 15 bộ kiểm thử tự động của repository.
+  - **Audit Khả năng tiếp cận & Hiệu năng máy yếu (P6-03 & P6-04)**:
+    - Tiếp cận: hỗ trợ chỉ báo `:focus-visible` chuẩn màu tương phản cao (#0284c7), hỗ trợ media query `prefers-reduced-motion` và class `.rm` tắt hoạt họa/pháo hoa, nhãn ARIA đầy đủ trên các nút điều hướng.
+    - Hiệu năng: tối ưu hóa CSS Containment (`contain: content`), phân đoạn cuộn vô tận 14 mục tránh phình to DOM, dọn dẹp bộ nhớ Blob (`URL.revokeObjectURL`) và khống chế dung lượng IndexedDB tối đa 50MB.
+  - **Tài liệu Kiểm thử Offline & Nghiệm thu v1.0 (P6-01 & P6-07)**:
+    - Soạn thảo tài liệu hướng dẫn kiểm thử chi tiết chế độ máy bay trên Android và iOS PWA: [`docs/offline-testing-checklist.md`](file:///d:/Nghia/Python/My-Little-Girls-Game/docs/offline-testing-checklist.md).
+    - Soạn thảo bảng tiêu chuẩn nghiệm thu toàn diện và hướng dẫn gắn thẻ phát hành chính thức `git tag v1.0`: [`docs/release-v1.0-checklist.md`](file:///d:/Nghia/Python/My-Little-Girls-Game/docs/release-v1.0-checklist.md).
+    - Thêm bộ kiểm thử tự động `test-p6-quality-security.js` (15/15 test suites đạt 100% PASS).
+- **feat(P5-06)**:
+  - **Mở khóa & Bỏ qua chặng thủ công cho phụ huynh (P5-06: Manual Stage Unlock & Skip)**:
+    - Bổ sung các hàm điều khiển chặng học:
+      - `getUnlockedStages()`: trả về danh sách các chặng đã được mở khóa (mặc định luôn mở sẵn Chặng 0 và Chặng 1, cùng chặng hiện tại bé đang học).
+      - `isStageUnlocked(stageNum)`: kiểm tra xem chặng có được phép truy cập hay không.
+      - `unlockStage(stageNum)` và `lockStage(stageNum)`: cho phép phụ huynh mở khóa hoặc khóa từng chặng linh hoạt (bảo vệ không khóa chặng bé đang học).
+      - `setStageByParent(st)`: đặt chặng học hôm nay trực tiếp từ bảng phụ huynh và tự động mở khóa chặng đó.
+      - `toggleUnlockAllStages()`: công tắc mở khóa tự do toàn bộ 6 chặng (`blg_unlock_all`), dành cho bé học trước lộ trình hoặc phụ huynh muốn bé trải nghiệm mọi bài học.
+    - Cập nhật giao diện màn hình bé (`todayLearning()`):
+      - Các chặng chưa mở khóa hiển thị biểu tượng ổ khóa 🔒 với hiệu ứng mờ nhẹ (`.stage-tab-btn.locked`).
+      - Khi bé chạm vào chặng đang khóa, hệ thống phát âm thanh nhắc nhở dịu dàng: *"Chặng này đang được khóa. Bé nhờ bố mẹ mở khóa trong khu phụ huynh nhé!"* và hiển thị thông báo hướng dẫn.
+    - Tích hợp **Card 3B: Lộ trình 6 Chặng & Mở khóa học tập** trong Bảng điều khiển phụ huynh (`parent()`):
+      - Hiển thị danh mục 6 chặng với huy hiệu trạng thái: *🌟 Đang học*, *Đã mở*, hoặc *Đang khóa*.
+      - Nút hành động nhanh: *🎯 Đặt làm chặng học hôm nay*, *🔓 Mở khóa*, *🔒 Khóa lại*, và công tắc *🔓 Mở khóa tự do tất cả các chặng*.
+    - Đồng bộ lưu trữ và sao lưu: bổ sung `blg_unlock_all` và `blg_unlocked_stages` vào `LSK`/`LSV` và lưu riêng theo từng hồ sơ bé (`bhv_pdata_*`).
+    - Nâng cấp cache Service Worker lên `bhv-v43`.
+    - Bổ sung bộ kiểm thử tự động toàn diện `test-p5-stage-unlock.js` (14/14 test suites của repo đạt PASS 100%).
+- **feat(P5-04 & P5-05)**:
+  - **Quản lý đa hồ sơ bé trên một thiết bị (P5-04: Multiple Kid Profiles)**:
+    - Bổ sung cấu trúc lưu trữ danh sách hồ sơ `bhv_profiles` và ID hồ sơ đang học `bhv_active_profile_id`. Tự động tạo hoặc di chuyển hồ sơ mặc định từ `kid_name`, `kid_avatar`, `ageTier` sẵn có, đảm bảo tương thích ngược 100%.
+    - Cơ chế chụp và khôi phục tiến trình theo hồ sơ (`bhv_pdata_<profileId>`): khi chuyển đổi bé qua `switchKidProfile()`, toàn bộ dữ liệu (sao, chuỗi ngày streak, huy hiệu, thống kê câu hỏi `st`, thời gian học `study_sec_*`, hoạt động ngoại khóa `bhv_offscreen_done`) của bé hiện tại được tự động lưu vào snapshot và tiến trình của bé được chọn được nạp đầy đủ.
+    - Chức năng tạo hồ sơ mới (`createKidProfile()`): hỗ trợ đặt tên, chọn biểu tượng avatar ngộ nghĩnh (👧, 🧒, 👶, 🐱, 🐰, 🦊, 🐼, 🦄...) và chỉ định tầng tuổi học tập ban đầu.
+    - Chức năng xóa hồ sơ (`deleteKidProfile()`): có hộp thoại xác nhận an toàn và quy tắc bảo vệ: không cho phép xóa khi chỉ còn 1 hồ sơ duy nhất trên thiết bị.
+    - Nâng cấp Card 1 trong Bảng điều khiển phụ huynh (`parent()`): hiển thị dạng lưới thẻ responsive (`.profile-grid`), highlight viền xanh nổi bật cho bé đang học, có nút chuyển đổi ngay lập tức và form thêm bé mới dễ sử dụng.
+    - Tích hợp sao lưu v2: bổ sung `bhv_profiles`, `bhv_active_profile_id` vào `LSK`/`LSV` và tự động trích xuất/khôi phục toàn bộ các snapshot `bhv_pdata_*` qua `exportData()` và `importData()`.
+  - **Cài đặt tập trung hệ thống (P5-05: Centralized System Settings)**:
+    - Quy hoạch lại Card 6 trong Bảng điều khiển phụ huynh thành khu vực **Cài đặt tập trung** với 6 nhóm cấu hình trực quan:
+      1. *Giới hạn thời gian màn hình hằng ngày*: chọn nhanh 0 (không giới hạn), 15', 30', 45', 60'.
+      2. *Ngôn ngữ hiển thị & phát âm*: Tiếng Việt, English, hoặc Song ngữ (Both).
+      3. *Tốc độ giọng đọc*: Chậm (0.4×), Vừa (0.6×), Chuẩn (0.85×).
+      4. *Giảm chuyển động & Bảo vệ mắt (`setMotionPref()`)*: THEO MÁY (`auto`), BẬT (`1`), TẮT (`0`). Khi BẬT, tự động tắt hiệu ứng pháo hoa confetti (`kids_confetti_disabled = "1"`) để bảo vệ mắt bé và tối ưu hóa hiệu năng trên máy yếu.
+      5. *Âm thanh & Hiệu ứng SFX*: Bật/tắt âm thanh tổng thể và âm hiệu ứng độc lập.
+      6. *Bảo mật & Thu âm*: Đổi mã PIN phụ huynh (SHA-256), nghe thử giọng máy, và thu âm giọng đọc bố mẹ.
+  - **Cache & Testing**:
+    - Nâng cấp phiên bản cache Service Worker lên `bhv-v42` trong `sw.js`.
+    - Bổ sung bộ kiểm thử tự động toàn diện `test-p5-profiles-settings.js` (kiểm tra di chuyển hồ sơ mặc định, tạo bé thứ 2, hoán đổi dữ liệu tiến trình, bảo vệ không xóa hồ sơ duy nhất, các hàm cài đặt tập trung và kết xuất dashboard).
+    - Toàn bộ 13/13 bộ kiểm thử tự động của repo đều PASS 100%.
+- **feat(P5-03 & P5-07)**:
+  - **Báo cáo học tập tuần cho phụ huynh (P5-03: Weekly Learning Report)**:
+    - Bổ sung hàm `getWeeklyStudyStats()`: tổng hợp tự động dữ liệu 7 ngày qua từ các key `study_sec_YYYY-MM-DD`, tính tổng số phút học, số ngày học tích cực, thời gian trung bình mỗi ngày và đối chiếu mục tiêu vàng (5–10 phút/ngày, tối đa 15 phút).
+    - Biểu đồ cột CSS nhẹ (`.weekly-bar-chart`): trực quan hóa số phút học mỗi ngày trong tuần, có highlight màu xanh lá nổi bật cho ngày hôm nay và chỉ báo đạt ngưỡng mục tiêu.
+    - Phân tích kỹ năng thuần thục & cần ôn (`getSkillsMasteryBreakdown()`): phân loại minh bạch dựa trên số lần hoàn thành và tỉ lệ làm sai:
+      - *Đã thuần thục (Mastered)*: hoàn thành $\ge 3$ lần và số câu sai $\le 1$.
+      - *Cần cùng bé ôn lại (Needs Review)*: sai $\ge 2$ lần hoặc tỉ lệ sai cao so với số lần làm.
+      - *Đang tiến bộ (Learning)*: đang luyện tập tích cực theo lộ trình.
+    - Tích hợp Card 2B trong Bảng điều khiển phụ huynh (`parent()`), trình bày trực quan với các huy hiệu màu sắc phân biệt.
+  - **Hoạt động tương tác ngoài màn hình cùng bé (P5-07: Off-screen Parent-Child Activities)**:
+    - Xây dựng danh mục 6 hoạt động thực tế gắn liền với kỹ năng bài học của bé 4–6 tuổi:
+      1. *Nặn đất sét tạo hình chữ cái & chữ số* (Vận động tinh & Cảm giác ngón tay).
+      2. *Vẽ chữ và số trên khay cát / bột mì* (Nhận diện nét & Định hướng không gian).
+      3. *Đếm thìa dĩa dọn bàn ăn* (Toán thực tế & Số lượng 1–10).
+      4. *Hỏi mở sau khi đọc truyện* (Kể lại truyện & Diễn đạt cảm xúc).
+      5. *Thử thách 1 phút dọn dẹp đồ chơi* (Nề nếp & Thói quen tự lập).
+      6. *Đi tìm chữ cái trong siêu thị / biển hiệu* (Quan sát thế giới thực).
+    - Bổ sung chức năng đánh dấu hoàn thành tương tác: phụ huynh chạm để lưu trạng thái đã thực hiện cùng bé.
+    - Dữ liệu lưu trong `localStorage` với key `bhv_offscreen_done`, tự động được đồng bộ vào danh sách sao lưu `LSK` và `LSV` (Backup v2).
+    - Tích hợp Card 4D trong Bảng điều khiển phụ huynh (`parent()`) với giao diện thẻ responsive dạng lưới (`.offscreen-grid`).
+  - **Cache & Testing**:
+    - Nâng cấp Service Worker cache lên `bhv-v41` trong `sw.js`.
+    - Viết mới bộ kiểm thử tự động toàn diện `test-p5-parent-report.js` (kiểm tra cấu trúc metadata, tính toán thống kê tuần, phân loại kỹ năng, lưu trữ toggle và kết xuất giao diện).
+    - Toàn bộ 12/12 bộ kiểm thử tự động của repo đều PASS 100%.
+- **feat(audio & offline cache)**:
+  - **Tạo mới 241 file âm thanh chuẩn VieNeu TTS (`vieneu-v4`, Giọng cô giáo Tưởng Vy)**:
+    - Sinh thành công 241/241 file âm thanh MP3 lưu trữ cục bộ trong thư mục `audio/` bao phủ toàn diện nhóm ưu tiên:
+      - Toàn bộ giao diện 4–6 tuổi: Trang chủ 3 nút lớn, hộp thoại nghỉ ngơi giữ mắt sáng, chuỗi streak 1–10 ngày, hướng dẫn chạm nối thẻ, lời nhắc màn hình chơi tự do & luyện đọc.
+      - Hộp thoại Cổng phụ huynh & mở thêm giờ: hướng dẫn thiết lập PIN, xác nhận PIN, thông báo lỗi & nhắc nhở.
+      - Toàn bộ 31 bài học mầm non cốt lõi (Chặng 0, 1, 2, 4): tiêu đề bài học chuẩn hóa không emoji, câu hỏi tương tác, gợi ý & giải thích Video Quiz, câu chuyện đọc hiểu Thỏ Trắng & Rùa và Thỏ, cùng các bài học cô Lan Anh và VTV7.
+    - Sử dụng cơ chế xoay vòng round-robin 4 API Key để phân tán tải, không gặp lỗi Rate Limit (HTTP 429), hoàn thành nhanh chóng và an toàn.
+  - **Tự động tái lập bản đồ ngữ cảnh (Remap Audio Map)**:
+    - Bổ sung +1,780 khóa ánh xạ vào [`audio-map.js`](file:///D:/Nghia/Python/My-Little-Girls-Game/audio-map.js) (nâng tổng số lên 14,728 keys).
+    - Hỗ trợ đầy đủ các biến thể câu thoại (chuẩn Unicode NFC, chữ thường, bỏ dấu chấm/chấm than, có dấu chấm) giúp hàm `playSafeAudio()` hit ngay 100% trong cache offline, không cần gọi mạng.
+    - Bảo mật tuyệt đối: file `.env` chứa các API Key được cấu hình trong `.gitignore`, không bao giờ được commit hay push lên GitHub.
+    - 11/11 bộ test kiểm thử tự động của dự án đạt 100% PASS.
+- **security & feat(P5-01)**:
+  - **Cổng phụ huynh thống nhất (Unified Parent Gate) & Loại bỏ hoàn toàn `window.prompt()`**:
+    - Thay thế toàn bộ các lệnh `window.prompt()` ở `__unlockTimeLimit` (mở thêm 15 phút học) và `changeParentPin` (đổi mã PIN) bằng hộp thoại UI tích hợp trong ứng dụng (`#parentPinModal`).
+    - Bàn phím số PIN thiết kế chuẩn công thái học cho trẻ nhỏ và phụ huynh: phím `.pin-key` đạt kích thước tối thiểu 64×64px, khoảng cách lưới `.pin-pad` tối thiểu 12px, có nút đóng (✕) dễ bấm.
+  - **Mã hóa băm muối (Salted SHA-256) & Xóa bỏ mã PIN mặc định 1234**:
+    - Bắt buộc tạo mã PIN 4 chữ số ở lần đầu tiên truy cập cổng phụ huynh (gồm 2 bước: Nhập PIN và Xác nhận lại PIN).
+    - Lưu trữ mã PIN an toàn tuyệt đối với SHA-256 kèm salt ngẫu nhiên 16 bytes (32 ký tự hex) qua Web Crypto API (`parent_pin_hash` và `parent_pin_salt`), có fallback FNV-1a nếu môi trường thiếu Web Crypto.
+    - Không lưu trữ plaintext PIN vào bất kỳ tệp tin, biến cục bộ hay console log nào.
+    - Tự động di chuyển (migration) mã PIN cũ: nếu phát hiện key `parent_pin` dạng plaintext từ phiên bản cũ, hệ thống tự động băm và tạo salt mới, lưu `parent_pin_hash` + `parent_pin_salt` và xóa sạch key plaintext khỏi `localStorage`.
+- **feat & security(P5-02)**:
+  - **Nâng cấp Sao lưu & Khôi phục dữ liệu (Backup v2 & PIN exclusion)**:
+    - Mở rộng danh mục lưu trữ `LSK` và bộ kiểm định `LSV` từ 11 key cũ lên đầy đủ 23 keys bao quát toàn bộ tiến trình của bé: `badges`, `kid_name`, `kid_avatar`, `ageTier`, `show_age_tiers`, `showAgeTiers`, `daily_limit_minutes`, `blg_stage`, `streak`, `kids_streak_count`, `kids_streak_last_date`, `kids_confetti_disabled`, `bhv_act_stats`, cùng các khóa động `study_sec_YYYY-MM-DD`.
+    - Cập nhật định dạng xuất file sao lưu với `schemaVersion: 2` (tương thích ngược với file sao lưu v1).
+    - **Bảo mật**: Tuyệt đối loại bỏ mọi trường PIN (`parent_pin`, `parent_pin_hash`, `parent_pin_salt`, `/pin/i`) khi xuất file. Khi nhập file, hệ thống chủ động bỏ qua mọi trường liên quan đến PIN để bảo vệ mã PIN trên thiết bị sở tại không bị ghi đè.
+    - Bổ sung bộ kiểm thử tự động toàn diện `test-p5-parent-backup.js` xác minh 8 kịch bản (11/11 bộ test của repository đạt 100% PASS).
+    - Bump phiên bản Service Worker lên `bhv-v39`.
+- **refactor(P2-01, P2-02)**:
+  - **Tách toàn bộ CSS inline ra file riêng (styles.css)**:
+    - Chuyển 85KB CSS inline từ thẻ `<style>` trong `index.html` sang file `styles.css` độc lập (~65KB).
+    - Giảm kích thước `index.html` từ ~90KB xuống chỉ còn ~4.8KB (giảm hơn 94%), giúp trình duyệt parse DOM nhanh chóng.
+    - Cập nhật thẻ `<link rel="stylesheet" href="styles.css">` chuẩn HTML5.
+  - **Tách ảnh nền base64 ra file độc lập (bg.webp)**:
+    - Trích xuất ảnh nền base64 WebP (~20KB chuỗi base64) ra file nhị phân `bg.webp` (15,224 bytes).
+    - Thay thế tham chiếu trong `styles.css`: `background: url('bg.webp') center/cover;`.
+  - **Service Worker & Precache**:
+    - Bổ sung `"styles.css"` và `"bg.webp"` vào mảng `CORE` precache trong `sw.js`.
+    - Bump phiên bản Service Worker lên `bhv-v38`.
+  - **Chụp màn hình đối chứng và xác minh không đổi giao diện**:
+    - Chụp màn hình bằng Chrome headless ở 3 màn hình chính: Trang chủ bé (`home`), Học hôm nay (`todayLearning`), Chơi tự do (`games`).
+    - Kết quả đối chiếu trước/sau: Trang chủ bé và Học hôm nay khớp từng byte (100% bit-for-bit identical, cùng dung lượng chính xác: 200,706 bytes và 264,126 bytes); Chơi tự do giao diện hoàn toàn đồng nhất.
+    - Cập nhật toàn bộ các bộ test tự động kiểm tra CSS: `test-dom-performance.js`, `test-p1-home.js`, `test-p1-touch-rest.js`, `test-p1-touch-tips.js` (10/10 bộ test đạt 100% PASS).
+- **feat(P1-12)**:
+  - **Tinh chỉnh nội dung trọng tâm cho bé 4 tuổi ("Làm quen trước lớp 1")**:
+    - Thực hiện theo chỉ đạo của phụ huynh: Chỉ giữ lại nhận diện số 1–20, màu sắc tiếng Anh, nhận diện mặt chữ cái tiếng Anh & Việt, truyện có audio.
+    - Giữ lại đúng 31 bài học cốt lõi trong lộ trình học của bé (`stage: 0–4`, `minAge: 4`):
+      - Stage 0: 3 bài Video Quiz khám phá thế giới động vật có audio lời bình sinh động (`act_vq_pre_01..03`).
+      - Stage 1: 20 bài nhận diện số 1–20 (`act_pre_num_01..03`), màu sắc & động vật tiếng Anh (`act_pre_eng_01..02`), chữ cái đơn (`act_pre_let_01`, 3 bài Cô Lan Anh `a, ă, â`, 11 bài VTV7 `o, ô, ơ, a, ă, â, u, ư, e, ê, i`).
+      - Stage 2: 6 bài nhận diện phụ âm đơn (2 bài Cô Lan Anh `b, c`, 4 bài VTV7 `c, b, d, đ`).
+      - Stage 4: 2 bài truyện kể ngắn có audio kèm trắc nghiệm (`act_pre_read_01` Chú Thỏ Trắng, `act_g12_read_01` Rùa và Thỏ).
+    - Dời toàn bộ 22 bài học nâng cao sang Lớp 1 (`stage: null`, `ageTier: "grade1_2"`, `minAge: 6`):
+      - Đánh vần ghép âm, vần kép: `act_pre_let_02` (điền C_N MÈO), `act_pre_let_03` (ghép hoa/thường), 4 bài Vương quốc âm thanh Cô Lan Anh (`act_vq_g12_01..04`), 10 bài âm ghép VTV7 (`g1_vtv7_31` đến `41`: gh, ch, gi, kh, ng, ph, tr, nh, th, qu), điền vần ong (`act_g12_vn_01`), chính tả c/k (`act_g12_vn_03`).
+      - Cú pháp và toán phép tính: sắp xếp từ thành câu (`act_g12_vn_02`), phép cộng tổng = 10 (`act_g12_math_03`), đồ dùng học tập & điền chữ tiếng Anh (`act_g12_eng_01`, `02`).
+    - Toàn bộ dữ liệu bài học được bảo toàn 100%, phụ huynh có thể bật hiển thị phân lớp theo tầng tuổi trong Khu phụ huynh bất cứ lúc nào.
+  - **Định vị lại "4–6 tuổi, làm quen trước lớp 1"**:
+    - Cập nhật `<title>` và meta description trong `index.html`.
+    - Cập nhật `name` và `description` trong `manifest.webmanifest`.
+    - Chuẩn hóa thông tin tầng tuổi `AGE_TIERS.preschool` trong `app.js` và `activities-data.js` thành "4–6 tuổi", "Làm quen trước lớp 1".
+    - Cập nhật các dòng chào, tiêu đề và dặn dò phụ huynh sang lứa tuổi 4–6 tuổi.
+  - **Thời lượng phiên gợi ý & Giới hạn hằng ngày**:
+    - Điều chỉnh thời lượng phiên gợi ý thành 5–10 phút (phù hợp với khoảng chú ý của trẻ 4 tuổi).
+    - Đặt giới hạn ngày mặc định là 15 phút nếu người dùng chưa từng thiết lập; bảo toàn 100% lựa chọn cũ của người dùng nếu đã tự cài đặt trước đó.
+  - **Rà soát 53 bài học cho bé 4 tuổi & Schema**:
+    - Lập bảng đánh giá chi tiết trong `docs/age-fit.md` và `docs/stage-map.md`.
+    - Bổ sung trường tùy chọn `minAge` vào `activity.schema.json` và hàm xác thực `validateActivity` trong `activities-data.js`.
+    - Cập nhật toàn bộ các bộ test: `test-activity-schema.js`, `test-p1-journey.js`, `test-p1-home.js` (10/10 bộ test đạt 100% PASS).
+    - Bump cache Service Worker lên `bhv-v37` trong `sw.js`.
 - **feat(P1-09, P1-10)**:
   - **P1-09 (Chế độ chạm thay thế kéo-thả nối dây & bắt bóng nhẹ nhàng)**:
     - Bổ sung cơ chế Chạm-chọn (Tap-to-Match) trong trò chơi ghép thẻ nối dây (`match()`): Bé chỉ cần chạm thẻ chữ cái bên trái (phát âm và gắn hiệu ứng chọn `.tap-selected` phát sáng), sau đó chạm thẻ hình ảnh bên phải để tự động nối dây và kiểm tra kết quả. Cho phép chọn theo chiều ngược lại hoặc chạm đổi thẻ cùng bên tự nhiên. Cơ chế kéo-thả (Drag-to-Connect) vẫn hoạt động song song mượt mà.
@@ -68,8 +225,8 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
   - Bổ sung TEST 5 trong `test-activity-schema.js` kiểm tra toàn bộ 53 bài phục vụ bé 5–6 tuổi đều có `stage` hợp lệ và kiểm tra negative tests khi thiếu/sai `stage`.
 - **docs(P1-00)**:
   - Phân tích và tạo `docs/stage-map.md`: Lập bảng phân bổ 77 bài học và các mini-game theo 6 chặng (0–5), đánh giá khoảng trống và đề xuất giải pháp tương thích ngược cho trường `stage`.
-- **sec(P0-08)**:
-  - Thu hồi và xóa hoàn toàn hardcoded VieNeu API Key khỏi `server.js`, `netlify/functions/tts.js`, `generate_spelling_audio.js`.
+- **sec(P0-09)** *(sửa mã task, trước đó ghi nhầm P0-08)*:
+  - Xóa hardcoded VieNeu API Key khỏi (LƯU Ý: key cũ vẫn còn trong lịch sử git công khai; việc thu hồi/xoay key tại VieNeu do chủ dự án thực hiện, chưa xác nhận): `server.js`, `netlify/functions/tts.js`, `generate_spelling_audio.js`.
   - Thay thế `audit.md` và `docs/audit.md` bằng bản đã xóa secret (`audit.redacted.md`).
   - Thêm `.env` và `.env.*` vào `.gitignore`, tạo `.env.example`.
   - Bổ sung luật cấm ghi secret vào bất kỳ file nào trong `AGENTS.md`.

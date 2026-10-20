@@ -25,21 +25,21 @@ console.log('================================================================\n'
 console.log('--- TEST 1: Kiểm tra Metadata (index.html & manifest.webmanifest) ---');
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
-assert(indexHtml.includes('<title>Bé học vui · 5–6 tuổi, chuẩn bị vào lớp 1</title>'), 
-  'index.html phải có <title> cập nhật thành "5–6 tuổi, chuẩn bị vào lớp 1"');
+assert(indexHtml.includes('<title>Bé học vui · 4–6 tuổi, làm quen trước lớp 1</title>'), 
+  'index.html phải có <title> cập nhật thành "4–6 tuổi, làm quen trước lớp 1"');
 
-assert(indexHtml.includes('5–6 tuổi, chuẩn bị vào lớp 1: Tiếng Việt, Toán học, Tiếng Anh, Đọc hiểu và Luyện viết'),
-  'index.html meta description phải chuyển sang "5–6 tuổi, chuẩn bị vào lớp 1"');
+assert(indexHtml.includes('4–6 tuổi, làm quen trước lớp 1: Tiếng Việt, Toán học, Tiếng Anh, Đọc hiểu và Luyện viết'),
+  'index.html meta description phải chuyển sang "4–6 tuổi, làm quen trước lớp 1"');
 
 assert(!indexHtml.includes('4–11 tuổi'), 
   'index.html không được còn chứa "4–11 tuổi"');
 
 const manifestContent = fs.readFileSync('manifest.webmanifest', 'utf8');
 const manifest = JSON.parse(manifestContent);
-assert(manifest.name.includes('5–6 tuổi, chuẩn bị vào lớp 1'),
-  'manifest.webmanifest name phải có "5–6 tuổi, chuẩn bị vào lớp 1"');
-assert(manifest.description.includes('5–6 tuổi, chuẩn bị vào lớp 1'),
-  'manifest.webmanifest description phải có "5–6 tuổi, chuẩn bị vào lớp 1"');
+assert(manifest.name.includes('4–6 tuổi, làm quen trước lớp 1'),
+  'manifest.webmanifest name phải có "4–6 tuổi, làm quen trước lớp 1"');
+assert(manifest.description.includes('4–6 tuổi, làm quen trước lớp 1'),
+  'manifest.webmanifest description phải có "4–6 tuổi, làm quen trước lớp 1"');
 
 console.log('✔ Metadata trong index.html và manifest.webmanifest đã cập nhật chuẩn 100%!');
 
@@ -51,11 +51,11 @@ console.log('\n--- TEST 2: Kiểm tra AGE_TIERS và hàm chặng trong activitie
 const activitiesModule = require('./activities-data.js');
 const { ACTIVITIES_DATA, AGE_TIERS, getPreschoolJourneyActivities, getActivitiesByStage, getActivitiesByTier } = activitiesModule;
 
-assert(AGE_TIERS.preschool.ageVi.includes('5–6 tuổi'), 'AGE_TIERS.preschool.ageVi phải là "5–6 tuổi"');
-assert(AGE_TIERS.preschool.ageEn.includes('5–6'), 'AGE_TIERS.preschool.ageEn phải là "Ages 5–6"');
+assert(AGE_TIERS.preschool.ageVi.includes('4–6 tuổi'), 'AGE_TIERS.preschool.ageVi phải là "4–6 tuổi"');
+assert(AGE_TIERS.preschool.ageEn.includes('4–6'), 'AGE_TIERS.preschool.ageEn phải là "Ages 4–6"');
 
 const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 53, `getPreschoolJourneyActivities phải trả về 53 bài (thực tế: ${journeyActs.length})`);
+assert.strictEqual(journeyActs.length, 31, `getPreschoolJourneyActivities phải trả về 31 bài (thực tế: ${journeyActs.length})`);
 
 // Kiểm tra 100% bài trong journeyActs đều có stage từ 0 đến 5
 journeyActs.forEach(act => {
@@ -68,11 +68,11 @@ journeyActs.forEach(act => {
 const g35InJourney = journeyActs.filter(a => a.ageTier === 'grade3_5');
 assert.strictEqual(g35InJourney.length, 0, 'Tuyệt đối không có bài grade3_5 trong lộ trình của bé');
 
-// Đảm bảo 2 bài toán lớp 1-2 quá khó (8+7, cách đều 5) không lọt vào lộ trình của bé
-const hardMathInJourney = journeyActs.filter(a => a.id === 'act_g12_math_01' || a.id === 'act_g12_math_02');
-assert.strictEqual(hardMathInJourney.length, 0, '2 bài toán lớp 1-2 quá khó không được có trong lộ trình của bé');
+// Đảm bảo các bài lớp 1-2 dời qua lớp 1 (toán khó, ghép vần, âm ghép...) không lọt vào lộ trình của bé
+const hardMathInJourney = journeyActs.filter(a => a.id === 'act_g12_math_01' || a.id === 'act_g12_math_02' || a.id === 'act_g12_math_03');
+assert.strictEqual(hardMathInJourney.length, 0, 'Các bài toán lớp 1-2 không được có trong lộ trình của bé 4 tuổi');
 
-console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 5–6 tuổi!');
+console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 4–6 tuổi (31 bài)!');
 
 // ----------------------------------------------------------------------------
 // TEST 3: Mô phỏng hành vi app.js khi mở app mới hoàn toàn (empty localStorage)
@@ -121,8 +121,8 @@ if (!isTierSelectorOnNew) {
 } else {
   actsForNewKid = getActivitiesByTier(defaultTier);
 }
-assert.strictEqual(actsForNewKid.length, 53, 'Bé mới chỉ nhận 53 bài có stage 0–5');
-console.log('✔ Mở app mới tinh: Mặc định preschool, ẩn bộ chọn tầng tuổi, hiển thị chuẩn 53 bài chặng 0–5');
+assert.strictEqual(actsForNewKid.length, 31, 'Bé mới chỉ nhận 31 bài có stage 0–5');
+console.log('✔ Mở app mới tinh: Mặc định preschool, ẩn bộ chọn tầng tuổi, hiển thị chuẩn 31 bài chặng 0–5');
 
 // ----------------------------------------------------------------------------
 // TEST 4: Mô phỏng hành vi khi app đã có dữ liệu cũ (legacy localStorage)
@@ -166,7 +166,7 @@ if (!isTierSelectorOnLegacy) {
 } else {
   actsForLegacyKid = getActivitiesByTier(legacyTier);
 }
-assert.strictEqual(actsForLegacyKid.length, 53, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 53 bài chặng 0–5');
+assert.strictEqual(actsForLegacyKid.length, 31, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 31 bài chặng 0–5');
 
 // Khi phụ huynh vào cài đặt và bật cờ tầng tuổi
 lsLegacy.set("show_age_tiers", "1");
@@ -179,7 +179,7 @@ if (!isTierSelectorOnAfterParent) {
 } else {
   actsAfterParentEnabled = getActivitiesByTier(legacyTier);
 }
-assert.strictEqual(actsAfterParentEnabled.length, 43, 'Khi phụ huynh bật tầng tuổi, lấy lại đúng 43 bài Lớp 1-2 cũ');
+assert.strictEqual(actsAfterParentEnabled.length, 45, 'Khi phụ huynh bật tầng tuổi, lấy đầy đủ 45 bài Lớp 1-2');
 console.log('✔ Tương thích 100% dữ liệu cũ: Không mất sao (120 ⭐), không mất huy hiệu, phụ huynh bật/tắt tầng tuổi mượt mà!');
 
 // ----------------------------------------------------------------------------
@@ -192,8 +192,9 @@ assert(appJs.includes('function isAgeTierSelectorEnabled()'), 'app.js phải có
 assert(appJs.includes('function setShowAgeTiers('), 'app.js phải có hàm setShowAgeTiers');
 assert(appJs.includes('getPreschoolJourneyActivities'), 'app.js phải gọi getPreschoolJourneyActivities');
 assert(appJs.includes('Hiện bộ chọn 3 tầng tuổi trên trang chủ cho bé'), 'app.js phải có mục cài đặt bật/tắt tầng tuổi trong parent()');
+assert(appJs.includes('daily_limit_minutes", "15"'), 'app.js phải đặt giới hạn thời gian mặc định là 15 phút');
 
-console.log('✔ app.js có đầy đủ các hàm hỗ trợ P1-01 và cấu trúc bảo vệ bé 5–6 tuổi!');
+console.log('✔ app.js có đầy đủ các hàm hỗ trợ P1-01, P1-12 và cấu trúc bảo vệ bé 4–6 tuổi!');
 
 console.log('\n================================================================');
 console.log('  TẤT CẢ TEST P1-01 & P1-02 ĐÃ VƯỢT QUA 100% THÀNH CÔNG! ');

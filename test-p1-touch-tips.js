@@ -12,6 +12,8 @@ console.log('  CHẠY TEST SUITE: TASK P1-07 & P1-08');
 console.log('================================================================\n');
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
+assert(indexHtml.includes('styles.css'), 'index.html phải liên kết tới styles.css');
+const stylesCss = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : indexHtml;
 const appJs = fs.readFileSync('app.js', 'utf8');
 
 // ----------------------------------------------------------------------------
@@ -21,9 +23,9 @@ console.log('--- TEST 1: Kiểm tra P1-07 (Touch target >= 64px & Gap >= 12px) -
 
 // 1.1 Kiểm tra rule chuẩn hóa touch target min-height >= 64px và min-width >= 64px
 const targetSelectorRegex = /button[\s\S]*?\{min-height:\s*64px;min-width:\s*64px;touch-action:\s*manipulation\}/;
-assert(targetSelectorRegex.test(indexHtml), 'index.html phải có CSS rule chuẩn hóa min-height:64px;min-width:64px');
+assert(targetSelectorRegex.test(stylesCss), 'styles.css phải có CSS rule chuẩn hóa min-height:64px;min-width:64px');
 
-const targetRuleMatch = indexHtml.match(/(button[^{]*)\{min-height:\s*64px;min-width:\s*64px/);
+const targetRuleMatch = stylesCss.match(/(button[^{]*)\{min-height:\s*64px;min-width:\s*64px/);
 assert(targetRuleMatch, 'Phải tìm thấy selector danh sách nút >= 64px');
 const selectors = targetRuleMatch[1];
 const requiredSelectors = [
@@ -49,13 +51,13 @@ const gapChecks = [
 ];
 
 gapChecks.forEach(gc => {
-  assert(gc.pattern.test(indexHtml), `CSS ${gc.name} phải có gap >= 12px`);
+  assert(gc.pattern.test(stylesCss), `CSS ${gc.name} phải có gap >= 12px`);
   console.log(`  ✔ ${gc.name}: gap >= 12px`);
 });
 
 // 1.3 Kiểm tra @media(max-width:600px) (màn hình hẹp 360px)
 console.log('\n--- Kiểm tra chế độ màn hình hẹp 360px (@media max-width:600px) ---');
-const media600Match = indexHtml.match(/@media\(max-width:600px\)\{([\s\S]*?)\n\}/);
+const media600Match = stylesCss.match(/@media\(max-width:600px\)\{([\s\S]*?)\n\}/);
 assert(media600Match, 'Phải có @media(max-width:600px)');
 const mediaCss = media600Match[1];
 
@@ -82,7 +84,7 @@ assert(!playActivityCode.includes('${cornerTipBtnHtml}'), 'playActivity KHÔNG �
 console.log('✔ Màn hình bài học không còn nút nổi góc trái dưới che chú mèo và nội dung làm bài!');
 
 // 2.2 CSS .parent-tip-corner-btn bị vô hiệu hóa display: none !important
-assert(indexHtml.includes('.parent-tip-corner-btn{display:none!important;'), '.parent-tip-corner-btn phải có display:none!important');
+assert(stylesCss.includes('.parent-tip-corner-btn{display:none!important;'), '.parent-tip-corner-btn phải có display:none!important');
 console.log('✔ CSS bảo vệ .parent-tip-corner-btn{display:none!important} ngăn mọi nút nổi vô ý!');
 
 // 2.3 Khu vực phụ huynh (parent()) có thẻ hướng dẫn sư phạm chuyên biệt

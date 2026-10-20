@@ -178,34 +178,42 @@ preschoolActs.forEach(act => {
 });
 console.log(`✔ Toàn bộ ${preschoolActs.length} bài preschool đều có stage hợp lệ (0-5)`);
 
-// 5.3 Mọi bài grade1_2 dùng cho bé (Cô Lan Anh, VTV7, Video Quiz đánh vần, v.v.) phải có stage hợp lệ (0-5)
+// 5.3 Mọi bài grade1_2 dùng cho bé (Cô Lan Anh, VTV7, v.v.) phải có stage hợp lệ (0-5)
 const journeyG12Acts = ACTIVITIES_DATA.filter(a => a.ageTier === 'grade1_2' && a.stage !== null);
-assert(journeyG12Acts.length === 41, `Phải có đúng 41 bài grade1_2 dùng cho lộ trình bé 5–6 tuổi (thực tế: ${journeyG12Acts.length})`);
+assert(journeyG12Acts.length === 21, `Phải có đúng 21 bài grade1_2 dùng cho lộ trình bé 4–6 tuổi (thực tế: ${journeyG12Acts.length})`);
 journeyG12Acts.forEach(act => {
   assert(act.stage !== undefined, `Bài grade1_2 dùng cho bé ${act.id} không được để undefined`);
   assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài grade1_2 ${act.id} có stage không hợp lệ: ${act.stage}`);
 });
-console.log(`✔ Toàn bộ 41 bài grade1_2 phục vụ bé 5-6 tuổi (Cô Lan Anh, VTV7, v.v.) có stage hợp lệ`);
+console.log(`✔ Toàn bộ 21 bài grade1_2 phục vụ bé 4-6 tuổi (Cô Lan Anh, VTV7 chữ cái đơn, Truyện Rùa & Thỏ) có stage hợp lệ`);
 
-// 5.4 Hai bài grade1_2 quá khó cho bé 5-6 tuổi (8+7, cách đều 5) phải có stage = null
-const excludedG12Ids = ['act_g12_math_01', 'act_g12_math_02'];
+// 5.4 Các bài grade1_2 chuyển sang lớp 1 phải có stage = null
+const excludedG12Ids = [
+  'act_g12_math_01', 'act_g12_math_02', 'act_g12_math_03',
+  'act_g12_vn_01', 'act_g12_vn_02', 'act_g12_vn_03',
+  'act_g12_eng_01', 'act_g12_eng_02',
+  'act_pre_let_02', 'act_pre_let_03',
+  'act_vq_g12_01_spell_b', 'act_vq_g12_02_spell_c', 'act_vq_g12_03_spell_d_dd', 'act_vq_g12_04_spell_ai_ay',
+  'g1_vtv7_31_letter_gh', 'g1_vtv7_32_letter_ch', 'g1_vtv7_33_letter_gi', 'g1_vtv7_34_letter_kh', 'g1_vtv7_35_letter_ng',
+  'g1_vtv7_37_letter_ph', 'g1_vtv7_38_letter_tr', 'g1_vtv7_39_letter_nh', 'g1_vtv7_40_letter_th', 'g1_vtv7_41_letter_qu'
+];
 excludedG12Ids.forEach(id => {
   const act = ACTIVITIES_DATA.find(a => a.id === id);
   assert(act, `Không tìm thấy ${id}`);
-  assert.strictEqual(act.stage, null, `Bài quá khó ${id} phải có stage = null`);
+  assert.strictEqual(act.stage, null, `Bài dời qua lớp 1 ${id} phải có stage = null`);
 });
-console.log('✔ Hai bài Toán lớp 1-2 quá khó (8+7, cách đều 5) có stage: null đúng thiết kế');
+console.log(`✔ Toàn bộ ${excludedG12Ids.length} bài dời qua lớp 1 (ghép âm, vần kép, phép tính, điền chữ...) có stage: null đúng thiết kế`);
 
-// 5.5 Kiểm tra getPreschoolJourneyActivities() trả về đủ 53 bài (12 preschool + 41 grade1_2)
+// 5.5 Kiểm tra getPreschoolJourneyActivities() trả về đúng 31 bài (10 preschool + 21 grade1_2)
 const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 53, `getPreschoolJourneyActivities() phải trả về đúng 53 bài (thực tế: ${journeyActs.length})`);
+assert.strictEqual(journeyActs.length, 31, `getPreschoolJourneyActivities() phải trả về đúng 31 bài (thực tế: ${journeyActs.length})`);
 journeyActs.forEach(act => {
   assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài ${act.id} trong lộ trình phải có stage từ 0 đến 5`);
 });
-console.log(`✔ getPreschoolJourneyActivities() trả về đúng 53 bài học chuẩn bị vào lớp 1`);
+console.log(`✔ getPreschoolJourneyActivities() trả về đúng 31 bài học làm quen trước lớp 1 cho bé 4–6 tuổi`);
 
 // 5.6 Phân bố số lượng bài theo từng chặng theo docs/stage-map.md
-const expectedStageCounts = { 0: 3, 1: 22, 2: 20, 3: 5, 4: 3, 5: 0 };
+const expectedStageCounts = { 0: 3, 1: 20, 2: 6, 3: 0, 4: 2, 5: 0 };
 for (const [stg, count] of Object.entries(expectedStageCounts)) {
   const stageNum = parseInt(stg, 10);
   const actsInStage = getActivitiesByStage(stageNum);
@@ -240,6 +248,14 @@ assert.strictEqual(validateActivity({ ...sampleAct, stage: 'stage1' }).valid, fa
 assert.strictEqual(validateActivity({ ...sampleAct, stage: null }).valid, true, 'validateActivity chấp nhận stage: null');
 assert.strictEqual(validateActivity({ ...sampleAct, stage: 0 }).valid, true, 'validateActivity chấp nhận stage: 0');
 assert.strictEqual(validateActivity({ ...sampleAct, stage: 5 }).valid, true, 'validateActivity chấp nhận stage: 5');
+
+// Kiểm tra trường minAge (P1-12)
+assert.strictEqual(validateActivity({ ...sampleAct, minAge: 4 }).valid, true, 'validateActivity chấp nhận minAge: 4');
+assert.strictEqual(validateActivity({ ...sampleAct, minAge: 6 }).valid, true, 'validateActivity chấp nhận minAge: 6');
+assert.strictEqual(validateActivity({ ...sampleAct, minAge: 2 }).valid, false, 'validateActivity từ chối minAge < 3');
+assert.strictEqual(validateActivity({ ...sampleAct, minAge: 15 }).valid, false, 'validateActivity từ chối minAge > 12');
+assert.strictEqual(validateActivity({ ...sampleAct, minAge: "4" }).valid, false, 'validateActivity từ chối minAge dạng string');
+console.log('✔ Trường tùy chọn minAge hợp lệ theo chuẩn schema!');
 
 console.log('✔ Negative test: Đã bắt thành công mọi trường hợp thiếu hoặc sai stage!');
 

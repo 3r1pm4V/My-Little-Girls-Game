@@ -26,36 +26,38 @@ console.log('  CHẠY TEST SUITE: TASK P1-04 (HOME CHO BÉ 3 NÚT LỚN)');
 console.log('================================================================\n');
 
 // ----------------------------------------------------------------------------
-// TEST 1: Kiểm tra CSS trong index.html
+// TEST 1: Kiểm tra CSS trong styles.css & index.html
 // ----------------------------------------------------------------------------
-console.log('--- TEST 1: Kiểm tra CSS Layout & Vùng chạm (index.html) ---');
+console.log('--- TEST 1: Kiểm tra CSS Layout & Vùng chạm (styles.css & index.html) ---');
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
+assert(indexHtml.includes('styles.css'), 'index.html phải liên kết tới styles.css');
+const stylesCss = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : indexHtml;
 
-assert(indexHtml.includes('.kid-home-menu'), 'CSS phải có class .kid-home-menu');
-assert(indexHtml.includes('.kid-home-btn'), 'CSS phải có class .kid-home-btn');
-assert(indexHtml.includes('.kid-btn-today'), 'CSS phải có class .kid-btn-today');
-assert(indexHtml.includes('.kid-btn-games'), 'CSS phải có class .kid-btn-games');
-assert(indexHtml.includes('.kid-btn-stickers'), 'CSS phải có class .kid-btn-stickers');
+assert(stylesCss.includes('.kid-home-menu'), 'CSS phải có class .kid-home-menu');
+assert(stylesCss.includes('.kid-home-btn'), 'CSS phải có class .kid-home-btn');
+assert(stylesCss.includes('.kid-btn-today'), 'CSS phải có class .kid-btn-today');
+assert(stylesCss.includes('.kid-btn-games'), 'CSS phải có class .kid-btn-games');
+assert(stylesCss.includes('.kid-btn-stickers'), 'CSS phải có class .kid-btn-stickers');
 
 // Kiểm tra quy định vùng chạm >= 64px và khoảng cách >= 12px
-const btnHeightMatch = indexHtml.match(/\.kid-home-btn[\s\S]*?min-height:\s*(\d+)px/);
+const btnHeightMatch = stylesCss.match(/\.kid-home-btn[\s\S]*?min-height:\s*(\d+)px/);
 assert(btnHeightMatch, 'Nút lớn phải có CSS min-height');
 const minHeight = parseInt(btnHeightMatch[1], 10);
 assert(minHeight >= 64, `Vùng chạm nút lớn min-height phải >= 64px (thực tế: ${minHeight}px)`);
 
-const btnWidthMatch = indexHtml.match(/\.kid-home-btn[\s\S]*?min-width:\s*(\d+)px/);
+const btnWidthMatch = stylesCss.match(/\.kid-home-btn[\s\S]*?min-width:\s*(\d+)px/);
 assert(btnWidthMatch, 'Nút lớn phải có CSS min-width');
 const minWidth = parseInt(btnWidthMatch[1], 10);
 assert(minWidth >= 64, `Vùng chạm nút lớn min-width phải >= 64px (thực tế: ${minWidth}px)`);
 
-const gapMatch = indexHtml.match(/\.kid-home-menu[\s\S]*?gap:\s*(\d+)px/);
+const gapMatch = stylesCss.match(/\.kid-home-menu[\s\S]*?gap:\s*(\d+)px/);
 assert(gapMatch, 'Menu nút lớn phải có khoảng cách gap');
 const gap = parseInt(gapMatch[1], 10);
 assert(gap >= 12, `Khoảng cách giữa các nút gap phải >= 12px (thực tế: ${gap}px)`);
 
 // Kiểm tra CSS thẻ bài học theo chặng
-const stageActCardMatch = indexHtml.match(/\.stage-act-card[\s\S]*?min-height:\s*(\d+)px/);
+const stageActCardMatch = stylesCss.match(/\.stage-act-card[\s\S]*?min-height:\s*(\d+)px/);
 assert(stageActCardMatch, '.stage-act-card phải có min-height');
 assert(parseInt(stageActCardMatch[1], 10) >= 64, 'Thẻ bài học theo chặng phải có vùng chạm >= 64px');
 
@@ -165,14 +167,14 @@ const stage4Acts = getActivitiesByStage(4);
 const stage5Acts = getActivitiesByStage(5);
 
 assert.strictEqual(stage0Acts.length, 3, 'Chặng 0 phải có 3 bài học');
-assert.strictEqual(stage1Acts.length, 22, 'Chặng 1 phải có 22 bài học');
-assert.strictEqual(stage2Acts.length, 20, 'Chặng 2 phải có 20 bài học');
-assert.strictEqual(stage3Acts.length, 5, 'Chặng 3 phải có 5 bài học');
-assert.strictEqual(stage4Acts.length, 3, 'Chặng 4 phải có 3 bài học');
+assert.strictEqual(stage1Acts.length, 20, 'Chặng 1 phải có 20 bài học');
+assert.strictEqual(stage2Acts.length, 6, 'Chặng 2 phải có 6 bài học');
+assert.strictEqual(stage3Acts.length, 0, 'Chặng 3 phải có 0 bài học');
+assert.strictEqual(stage4Acts.length, 2, 'Chặng 4 phải có 2 bài học');
 assert.strictEqual(stage5Acts.length, 0, 'Chặng 5 hiện tại có 0 bài học');
 
 const totalJourneyActs = stage0Acts.length + stage1Acts.length + stage2Acts.length + stage3Acts.length + stage4Acts.length + stage5Acts.length;
-assert.strictEqual(totalJourneyActs, 53, 'Tổng số bài qua 6 chặng phải là 53 bài chuẩn bị vào lớp 1');
+assert.strictEqual(totalJourneyActs, 31, 'Tổng số bài qua 6 chặng phải là 31 bài làm quen cho bé 4–6 tuổi');
 
 console.log(`✔ Dữ liệu 6 chặng kết nối chính xác: Chặng 0 (${stage0Acts.length}), Chặng 1 (${stage1Acts.length}), Chặng 2 (${stage2Acts.length}), Chặng 3 (${stage3Acts.length}), Chặng 4 (${stage4Acts.length}), Chặng 5 (${stage5Acts.length})!`);
 
