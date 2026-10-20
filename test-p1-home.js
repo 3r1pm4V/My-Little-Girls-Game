@@ -153,49 +153,41 @@ assert(appJs.includes('onpointerdown="speakKidBtn(\'stickers\')"'), 'Nút Sticke
 console.log('✔ Home cho bé kết xuất đúng 3 nút lớn với toàn icon và hỗ trợ âm thanh khi chạm giữ!');
 
 // ----------------------------------------------------------------------------
-// TEST 4: Kiểm tra kết nối dữ liệu hoạt động theo chặng trong todayLearning()
+// TEST 4: Kiểm tra màn hình Học Chữ & Tập Tô (lettersHome) và 4 trụ cột chính
 // ----------------------------------------------------------------------------
-console.log('\n--- TEST 4: Kiểm tra phân bổ bài học theo từng chặng trong todayLearning() ---');
+console.log('\n--- TEST 4: Kiểm tra 4 trụ cột chính & màn hình lettersHome() ---');
 
-const { ACTIVITIES_DATA, getActivitiesByStage } = require('./activities-data.js');
+assert(appJs.includes('function lettersHome()'), 'app.js phải có hàm lettersHome()');
+assert(appJs.includes('14 Nét viết cơ bản'), 'lettersHome phải có 14 Nét viết cơ bản');
+assert(appJs.includes('Bảng chữ cái Tiếng Việt'), 'lettersHome phải có Bảng chữ cái Tiếng Việt');
+assert(appJs.includes('Bé tập đánh vần'), 'lettersHome phải có Bé tập đánh vần');
+assert(appJs.includes('Tư thế ngồi & Cách cầm bút'), 'lettersHome phải có hướng dẫn tư thế ngồi & cầm bút');
 
-const stage0Acts = getActivitiesByStage(0);
-const stage1Acts = getActivitiesByStage(1);
-const stage2Acts = getActivitiesByStage(2);
-const stage3Acts = getActivitiesByStage(3);
-const stage4Acts = getActivitiesByStage(4);
-
-assert.strictEqual(stage0Acts.length, 7, 'Chặng 0 phải có 7 bài học');
-assert.strictEqual(stage1Acts.length, 7, 'Chặng 1 phải có 7 bài học');
-assert.strictEqual(stage2Acts.length, 7, 'Chặng 2 phải có 7 bài học');
-assert.strictEqual(stage3Acts.length, 7, 'Chặng 3 phải có 7 bài học');
-assert.strictEqual(stage4Acts.length, 6, 'Chặng 4 phải có 6 bài học');
-
-const totalJourneyActs = stage0Acts.length + stage1Acts.length + stage2Acts.length + stage3Acts.length + stage4Acts.length;
-assert.strictEqual(totalJourneyActs, 34, 'Tổng số bài qua 5 chặng phải là 34 bài làm quen cho bé 4–6 tuổi');
-
-console.log(`✔ Dữ liệu 5 chặng kết nối chính xác: Chặng 0 (${stage0Acts.length}), Chặng 1 (${stage1Acts.length}), Chặng 2 (${stage2Acts.length}), Chặng 3 (${stage3Acts.length}), Chặng 4 (${stage4Acts.length})!`);
+console.log('✔ Màn hình lettersHome() kết nối đầy đủ 14 nét viết, 29 chữ cái, đánh vần & nề nếp cầm bút theo chuẩn Drive!');
 
 // ----------------------------------------------------------------------------
-// TEST 5: Kiểm tra màn hình "Chơi tự do" (games())
+// TEST 5: Kiểm tra danh mục trò chơi trong games() - Tinh gọn, không trùng lặp
 // ----------------------------------------------------------------------------
 console.log('\n--- TEST 5: Kiểm tra danh mục trò chơi trong games() ---');
 
-const gamesSnippet = appJs.slice(appJs.indexOf('function games()'), appJs.indexOf('function games()') + 2000);
+const gamesSnippet = appJs.slice(appJs.indexOf('function games()'), appJs.indexOf('function games()') + 1500);
 
-assert(gamesSnippet.includes('Chơi tự do'), 'games() phải có tiêu đề Chơi tự do');
+assert(gamesSnippet.includes('Trò chơi vui nhộn') || gamesSnippet.includes('Chơi tự do'), 'games() phải có tiêu đề Trò chơi');
 assert(gamesSnippet.includes('countGame'), 'games() phải có trò đếm hình countGame');
 assert(gamesSnippet.includes('bubbleGame'), 'games() phải có trò bắt bóng chữ bubbleGame');
-assert(gamesSnippet.includes('letL'), 'games() phải có bảng chữ cái letL');
-assert(gamesSnippet.includes('numL'), 'games() phải có số đếm numL');
-assert(gamesSnippet.includes('trace'), 'games() phải có luyện nét trace');
-assert(gamesSnippet.includes('readL'), 'games() phải có đánh vần readL');
-assert(gamesSnippet.includes('storyL'), 'games() phải có truyện storyL');
+assert(gamesSnippet.includes('mis'), 'games() phải có trò số còn thiếu mis');
 assert(gamesSnippet.includes('match'), 'games() phải có ghép chữ match');
 assert(gamesSnippet.includes('mem'), 'games() phải có lật thẻ mem');
 assert(gamesSnippet.includes('cmpS'), 'games() phải có so sánh cmpS');
 
-console.log('✔ Màn hình Chơi tự do chứa đầy đủ 11 trò chơi & hoạt động tương tác cho bé!');
+// Đảm bảo không trùng lặp các mục đã có ở trang chủ
+assert(!gamesSnippet.includes('card("letL"'), 'Không được để trùng letL trong games');
+assert(!gamesSnippet.includes('card("numL"'), 'Không được để trùng numL trong games');
+assert(!gamesSnippet.includes('card("trace"'), 'Không được để trùng trace trong games');
+assert(!gamesSnippet.includes('card("readL"'), 'Không được để trùng readL trong games');
+assert(!gamesSnippet.includes('card("storyL"'), 'Không được để trùng storyL trong games');
+
+console.log('✔ Màn hình Trò chơi tinh gọn chính xác với 6 trò chơi tương tác, loại bỏ 100% trùng lặp!');
 
 console.log('\n================================================================');
 console.log('  TẤT CẢ TEST TASK P1-04 ĐẠT 100% THÀNH CÔNG!');

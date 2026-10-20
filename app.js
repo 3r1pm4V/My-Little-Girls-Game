@@ -351,25 +351,10 @@ async function evictLRUIfNeeded(db,incomingSize){
   });
 }
 
-function fallbackToWebSpeech(text,langCode="vi-VN",onEnd){
-  console.log(`[Audio:Source] 🤖 Fallback sang Web Speech API: "${text}" (${langCode})`);
-  if(!text||!SOUND_ON()){if(onEnd)onEnd();return}
-  if(!SS){if(onEnd)onEnd();return}
-  try{
-    SS.cancel();
-    const u=new SpeechSynthesisUtterance(text);
-    u.lang=langCode;
-    u.rate=RATE;
-    u.pitch=1.15;
-    if(/^vi/i.test(langCode)){
-      const v=viV();if(v)u.voice=v;
-    }else if(/^en/i.test(langCode)){
-      const enV=VOICES.find(v=>/^en([-_]|$)/i.test(v.lang||""));
-      if(enV)u.voice=enV;
-    }
-    u.onend=u.onerror=()=>{if(onEnd)onEnd()};
-    SS.speak(u);
-  }catch(e){if(onEnd)onEnd()}
+function fallbackToWebSpeech(text, langCode="vi-VN", onEnd){
+  // Hoàn toàn tắt giọng máy robot để không chen ngang tiếng thực của bé
+  if (typeof SS !== "undefined" && SS) { try { SS.cancel(); } catch(e){} }
+  if (typeof onEnd === "function") onEnd();
 }
 
 const getAudio=ak=>{
@@ -2707,6 +2692,80 @@ function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&
  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='letD';trm=getGroupForLetter('${L}');ls.set('trm',trm);trace('${L.toLowerCase()}')" style="background:#ec4899;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(236,72,153,0.3);border-radius:24px">✍️ ${T("Bé tập tô chữ " + L, "Trace letter " + L)}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
 function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
  say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
+function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
+ quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
+
+function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const more=R(0,1)==0,o1=pick(COUNT),o2=pick(COUNT);
+ const right=a==b?"eq":more?(a>b?"a":"b"):(a<b?"a":"b"),grp=(n,o)=>`<div class="grp">${Array.from({length:n},()=>im(o)).join("")}</div>`;
+ const q=more?["Bên nào NHIỀU hơn?","Which has MORE?"]:["Bên nào ÍT hơn?","Which has FEWER?"];
+ quiz(T(q[0],q[1]),q[0],q[1],"",[{k:"a",h:grp(a,o1)},{k:"eq",h:`<span class="ans">=</span>${T("Bằng nhau","Same")}`},{k:"b",h:grp(b,o2)}],right,cmp,()=>{
+  if(a==b)return[`<div class="eq">${a} = ${b}</div>`,`${NV[a]} bằng ${NV[b]}. Hai bên bằng nhau!`,`${NE[a]} equals ${NE[b]}. They are the same!`];
+  const w=right=="a"?a:b,l=right=="a"?b:a;
+  return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
+function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");
+ const QBC={numP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"numL",t:T("Học số","Numbers"),i:"🔢"},{t:T("Đố đếm số","Quiz"),i:"❓"}],letP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Đố chữ cái","Quiz"),i:"❓"}],mis:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Số còn thiếu","Missing"),i:"🔢"}],cmpS:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Dấu so sánh","Signs"),i:"⚖️"}],math10:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Toán 10","Math 10"),i:"➕"}],cmp:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("So sánh","Compare"),i:"⚖️"}]};
+ const bcHtml=kbc(QBC[cur]||[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Câu đố","Quiz"),i:"❓"}]);
+ m.innerHTML=`${bcHtml}<h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
+ document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
+ m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
+  if(b.dataset.k==String(right)){
+   done=true;b.classList.add("good");sfxOk();fx();
+   if(wr){rd.st=0}else{rd.st++;rd.f++}
+   if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
+   if(cur==="numP"||cur==="mis")ST.numCount=(ST.numCount||0)+1;
+   if(cur==="letP")ST.letCount=(ST.letCount||0)+1;
+   if(cur==="math10")ST.mathCount=(ST.mathCount||0)+1;
+   rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");
+   stars++;ls.set("stars",stars);head();checkBadges();
+   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next);
+  }
+  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn chỗ này nè","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
+function numF(){const n=R(0,MX()),c=new Set([n]);while(c.size<3)c.add(R(0,MX()));
+ quiz(T(`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`),`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`,"",shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
+function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k]);while(c.size<3){const o=pick(exP(l));if(EXA[o].L!==L)c.add(o)}
+ quiz(T(`Hình nào bắt đầu bằng chữ ${L}?`,`Which starts with ${L}?`),`Hình nào bắt đầu bằng chữ ${LV[LET.indexOf(L)]}?`,`Which one starts with ${L}?`,imL(L,"big"),shuf([...c]).map(v=>({k:v,h:im(EXA[v].img)})),k,letP,()=>["",l==="vi"?`${LV[LET.indexOf(L)]}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
+
+function result(){
+  const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
+  const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
+  stars += starCount;
+  ls.set("stars", stars);
+  recordDailyActivity();
+  head();
+  checkBadges();
+
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kết quả","Results"),i:"🏆"}])}<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:3},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<starCount?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;
+  ql=null;catSet("celebrate");fx();
+  triggerCelebration(T("Hoàn thành xuất sắc!","All Done!"),T(`Bé làm đúng ${f} trên ${N} câu và nhận được ${starCount} sao! Giỏi quá!`,`You got ${f} out of ${N} right and earned ${starCount} stars!`),"🏆",Array(starCount).fill("⭐").join(""));
+  say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu, thưởng bé ${starCount} sao. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}, you earned ${starCount} stars. Great job!`);
+}
+function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
+function win(wr,next,vi,en){
+  if(wr){rd.st=0}else{rd.st++;rd.f++}
+  if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
+  rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();checkBadges();
+  sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");
+  const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);
+  adv(rd.n>=(RL[cur]||ROUND)?result:next);
+}
+function games(){
+  window.__traceFrom = "games";
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi vui nhộn","Fun Games"),i:"🎮"}])}
+  <div style="text-align:center;margin:8px 0 16px">
+    <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Trò chơi vui nhộn","Fun Games")}</h2>
+    <p style="font-size:14px;color:#64748b;margin:0">${T("Các trò chơi tương tác rèn luyện trí tuệ & kỹ năng cho bé 🌟","Fun interactive games for kids 🌟")}</p>
+  </div>
+  <div class="cards">
+    ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
+    ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
+    ${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}
+    ${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}
+    ${card("mem",im("cat")+im("cat"),"Lật thẻ ghi nhớ","Memory","game")}
+    ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
+  </div>`;
+  sayPrompt("games","Bé chọn một trò chơi nhé","Pick a game to play",180000);
+}
+
 function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
  quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
 
