@@ -22,7 +22,7 @@ const list = name => {
   const m = sw.match(new RegExp("const " + name + "\\s*=\\s*\\[([\\s\\S]*?)\\]"));
   return m ? [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]) : null;
 };
-const CORE = list("CORE"), OPT = list("OPT");
+const CORE = list("CORE"), OPT = list("OPT"), OPT_AUDIO = list("OPT_AUDIO") || [];
 const storedHash = (sw.match(/asset-hash:\s*([0-9a-f]+)/) || [])[1];
 
 console.log("sw.js precache");
@@ -32,12 +32,12 @@ if (!OPT) fail("không đọc được OPT");
 if (!CORE || !OPT) { console.error("\nFAIL"); process.exit(1); }
 
 const norm = f => (f === "./" ? "index.html" : f);
-const coreSet = new Set(CORE.map(norm)), optSet = new Set(OPT.map(norm));
+const coreSet = new Set(CORE.map(norm)), optSet = new Set(OPT.map(norm)), audioSet = new Set(OPT_AUDIO.map(norm));
 
 // 1) không trùng lặp
-const all = [...CORE, ...OPT]; // so thô: "./" và "index.html" là 2 khóa cache khác nhau, cố ý có cả hai
+const all = [...CORE, ...OPT, ...OPT_AUDIO]; // so thô: "./" và "index.html" là 2 khóa cache khác nhau, cố ý có cả hai
 const dup = all.filter((f, i) => all.indexOf(f) !== i);
-dup.length ? fail("trùng trong CORE/OPT: " + [...new Set(dup)].join(", ")) : ok("CORE/OPT không trùng");
+dup.length ? fail("trùng trong CORE/OPT/OPT_AUDIO: " + [...new Set(dup)].join(", ")) : ok("CORE/OPT/OPT_AUDIO không trùng");
 
 // 2) file tồn tại
 [...new Set(CORE.map(norm))].forEach(f => { if (!exists(f)) fail(`CORE thiếu file trên đĩa: ${f} (thiếu 1 file là SW không cài được)`); });
@@ -64,7 +64,7 @@ dynMissing.length ? fail("app.js nạp động nhưng không precache: " + dynMi
 if (refs.some(u => /fonts\.googleapis\.com|fonts\.gstatic\.com/.test(u))) warn("index.html còn nạp Google Fonts (offline phụ thuộc cache động) → P2-03");
 
 // 6) asset-hash: ép bump version khi asset đổi
-const files = [...new Set([...coreSet, ...optSet])].filter(exists).sort();
+const files = [...new Set([...coreSet, ...optSet, ...audioSet])].filter(exists).sort();
 const h = crypto.createHash("sha256");
 for (const f of files) {
   let b = fs.readFileSync(path.join(ROOT, f));
