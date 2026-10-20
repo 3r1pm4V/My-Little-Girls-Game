@@ -311,6 +311,479 @@ const ACTIVITIES_DATA = [
   },
 
   // ========================================================
+  // LỘ TRÌNH HỌC VẦN & ĐÁNH VẦN CHUẨN TIỀN TIỂU HỌC
+  // Giáo trình: "Bé luyện đọc Tiếng Việt tự tin vào lớp 1"
+  // CHẶNG 3: VẦN ĐƠN, VẦN GHÉP & TỪ ỨNG DỤNG (8 BÀI)
+  // ========================================================
+  {
+    id: "act_p2_spell_ba_tones",
+    title: "Ghép vần đơn: b + a + thanh điệu 👵",
+    titleEn: "Phonics: b + a + tones",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.phonics.onset-rhyme",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé ghép âm: b + a + dấu huyền = tiếng gì nhỉ? 👵",
+      "questionEn": "b + a + grave accent = ?",
+      "media": "👵  b + a + \\ = [ ? ]",
+      "template": "b + a + huyền = [ ? ]"
+},
+    options: [
+      {
+            "id": "bà",
+            "text": "bà"
+      },
+      {
+            "id": "bá",
+            "text": "bá"
+      },
+      {
+            "id": "bả",
+            "text": "bả"
+      }
+],
+    correctAnswer: "bà",
+    feedback: {
+      "correct": "Hoan hô bé! b - a - ba - huyền - BÀ! Bà yêu bé lắm! 👵💖",
+      "wrong": "Bé nghe lại nhé: b + a + dấu huyền tạo thành tiếng BÀ! Thử lại nào!",
+      "hint": "b - a - ba - huyền - bà"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_vocab_be_ba",
+    title: "Từ ứng dụng: Bé và Bà 👧👵",
+    titleEn: "Key Words: Bé and Bà",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.vocab.sight-words",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Hình ảnh người bà hiền từ tương ứng với từ nào bé ơi? 👵",
+      "questionEn": "Which word means Grandmother? 👵",
+      "media": "👵"
+},
+    options: [
+      {
+            "id": "bà",
+            "text": "bà"
+      },
+      {
+            "id": "bé",
+            "text": "bé"
+      },
+      {
+            "id": "bố",
+            "text": "bố"
+      }
+],
+    correctAnswer: "bà",
+    feedback: {
+      "correct": "Chính xác! Tiếng 'bà' có âm b, nguyên âm a và dấu huyền! 👵",
+      "wrong": "Bé nhìn tranh bà hiền từ và chọn tiếng 'bà' nhé!",
+      "hint": "Tiếng 'bà' có dấu huyền"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_spell_ca_sac",
+    title: "Ghép vần đơn: c + a + sắc = cá 🐟",
+    titleEn: "Phonics: c + a + acute accent",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.phonics.onset-rhyme",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé ghép âm: c + a + dấu sắc = tiếng gì bơi dưới nước? 🐟",
+      "questionEn": "c + a + acute accent = ?",
+      "media": "🐟  c + a + / = [ ? ]",
+      "template": "c + a + sắc = [ ? ]"
+},
+    options: [
+      {
+            "id": "cá",
+            "text": "cá"
+      },
+      {
+            "id": "cà",
+            "text": "cà"
+      },
+      {
+            "id": "cả",
+            "text": "cả"
+      }
+],
+    correctAnswer: "cá",
+    feedback: {
+      "correct": "Đúng rồi! c - a - ca - sắc - CÁ! Chú cá bơi lội tung tăng! 🐟",
+      "wrong": "Dấu sắc vút lên bé ơi: c + a + sắc = CÁ! Bé chọn lại nhé!",
+      "hint": "c - a - ca - sắc - cá"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_spell_bo_huyen",
+    title: "Ghép vần đơn: b + o + huyền = bò 🐮",
+    titleEn: "Phonics: b + o + grave accent",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.phonics.onset-rhyme",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé chọn tiếng đúng: b + o + dấu huyền = con gì thích ăn cỏ? 🐮",
+      "questionEn": "b + o + grave accent = ?",
+      "media": "🐮  b + o + \\ = [ ? ]",
+      "template": "b + o + huyền = [ ? ]"
+},
+    options: [
+      {
+            "id": "bò",
+            "text": "bò"
+      },
+      {
+            "id": "bó",
+            "text": "bó"
+      },
+      {
+            "id": "bỏ",
+            "text": "bỏ"
+      }
+],
+    correctAnswer: "bò",
+    feedback: {
+      "correct": "Hoan hô bé! b - o - bo - huyền - BÒ! Chú bò sữa ngoan ngoãn! 🐮",
+      "wrong": "b + o = bo, thêm dấu huyền thành BÒ bé nhé! Thử lại nào!",
+      "hint": "b - o - bo - huyền - bò"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_rhyme_an",
+    title: "Học vần ghép: Vần AN & Cái Bàn 🪑",
+    titleEn: "Rhyme AN: The Table",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.phonics.rhymes",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Vần a - n - an! Đố bé: b + an + dấu huyền = tiếng gì? 🪑",
+      "questionEn": "Rhyme an: b + an + grave accent = ?",
+      "media": "🪑  b + an + \\ = [ ? ]",
+      "template": "b + an + huyền = [ ? ]"
+},
+    options: [
+      {
+            "id": "bàn",
+            "text": "bàn"
+      },
+      {
+            "id": "bạn",
+            "text": "bạn"
+      },
+      {
+            "id": "bán",
+            "text": "bán"
+      }
+],
+    correctAnswer: "bàn",
+    feedback: {
+      "correct": "Tuyệt vời! b - an - ban - huyền - BÀN! Cái bàn học xinh xắn của bé! 🪑",
+      "wrong": "b + an = ban, thêm dấu huyền thành BÀN bé nhé! Thử lại nào!",
+      "hint": "b - an - ban - huyền - bàn"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_vocab_cai_ban",
+    title: "Từ ứng dụng vần AN: Cái Bàn 🪑",
+    titleEn: "Application Words: Cái Bàn",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.vocab.sight-words",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Bé chọn từ khóa đúng có chứa vần 'an' cho hình ảnh chiếc bàn học nhé: 🪑",
+      "questionEn": "Choose the word with rhyme 'an' for table: 🪑",
+      "media": "🪑  CÁI BÀN"
+},
+    options: [
+      {
+            "id": "cái bàn",
+            "text": "cái bàn"
+      },
+      {
+            "id": "ghế",
+            "text": "ghế"
+      },
+      {
+            "id": "vở",
+            "text": "vở"
+      }
+],
+    correctAnswer: "cái bàn",
+    feedback: {
+      "correct": "Giỏi quá! CÁI BÀN có tiếng 'bàn' mang vần an! 🪑🌟",
+      "wrong": "Bé tìm từ 'cái bàn' có chứa vần an nhé!",
+      "hint": "Cái bàn"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_rhyme_on",
+    title: "Học vần ghép: Vần ON & Con Cá 🐟",
+    titleEn: "Rhyme ON: Little Fish",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.phonics.rhymes",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Vần o - n - on! Bé ghép âm: c + on = tiếng gì nào? 🐟",
+      "questionEn": "c + on = ?",
+      "media": "🐟  c + on = [ ? ]",
+      "template": "c + on = [ ? ]"
+},
+    options: [
+      {
+            "id": "con",
+            "text": "con"
+      },
+      {
+            "id": "còn",
+            "text": "còn"
+      },
+      {
+            "id": "cỏ",
+            "text": "cỏ"
+      }
+],
+    correctAnswer: "con",
+    feedback: {
+      "correct": "Hoan hô bé! c - on - CON trong từ CON CÁ! 🐟✨",
+      "wrong": "Âm cờ ghép với vần on tạo thành CON bé nhé! Thử lại nào!",
+      "hint": "c - on - con"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_vocab_con_ca",
+    title: "Từ ứng dụng vần ON: Con Cá 🐟",
+    titleEn: "Application Words: Con Cá",
+    ageTier: "preschool",
+    stage: 3,
+    minAge: 5,
+    subject: "vietnamese",
+    skill: "vi.vocab.sight-words",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Đố bé tìm đúng từ 'con cá' có chứa vần on đang bơi dưới nước? 🐟",
+      "questionEn": "Find the word 'con cá' (fish) 🐟",
+      "media": "🐟  CON CÁ"
+},
+    options: [
+      {
+            "id": "con cá",
+            "text": "con cá"
+      },
+      {
+            "id": "gà",
+            "text": "gà"
+      },
+      {
+            "id": "chó",
+            "text": "chó"
+      }
+],
+    correctAnswer: "con cá",
+    feedback: {
+      "correct": "Xuất sắc! CON CÁ gồm tiếng 'con' vần on và tiếng 'cá' vần a! 🐟🎉",
+      "wrong": "Bé nhìn chú cá bơi lội và chọn từ 'con cá' nhé!",
+      "hint": "Con cá"
+},
+    reward: { stars: 3 }
+  },
+
+  // ========================================================
+  // CHẶNG 4: CÂU ĐỌC HIỂU NGẮN 3-5 TIẾNG CÓ HÌNH MINH HỌA (4 BÀI)
+  // ========================================================
+  {
+    id: "act_p2_sen_ban_nho",
+    title: "Đọc câu ngắn: Bé có cái bàn nhỏ 🪑",
+    titleEn: "Short Sentence: The Small Desk",
+    ageTier: "preschool",
+    stage: 4,
+    minAge: 5,
+    subject: "reading",
+    skill: "vi.read.sentence-short",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Bé đọc câu: 'Bé có cái bàn nhỏ.' Đố bé trong câu nhắc đến đồ vật nào? 🪑",
+      "questionEn": "Sentence: 'Bé có cái bàn nhỏ.' What object is mentioned?",
+      "media": "🪑  Bé có cái bàn nhỏ."
+},
+    options: [
+      {
+            "id": "cái bàn",
+            "text": "cái bàn"
+      },
+      {
+            "id": "xe",
+            "text": "xe"
+      },
+      {
+            "id": "bút",
+            "text": "bút"
+      }
+],
+    correctAnswer: "cái bàn",
+    feedback: {
+      "correct": "Chính xác! Câu văn nói: 'Bé có cái bàn nhỏ' để bé ngồi học bài! 🪑👏",
+      "wrong": "Bé đọc lại câu nhé: 'Bé có cái bàn nhỏ'. Đồ vật là cái bàn!",
+      "hint": "Cái bàn nhỏ"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_sen_dan_ga",
+    title: "Đọc câu ngắn: Đàn gà lon ton 🐥",
+    titleEn: "Short Sentence: Chicks Running",
+    ageTier: "preschool",
+    stage: 4,
+    minAge: 5,
+    subject: "reading",
+    skill: "vi.read.sentence-short",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé điền từ còn thiếu vào câu: 'Đàn gà ___ ton theo mẹ.' 🐥",
+      "questionEn": "Fill in the blank: 'Đàn gà ___ ton theo mẹ.'",
+      "media": "🐥 🌾  Đàn gà [ ? ] ton.",
+      "template": "Đàn gà [ ? ] ton."
+},
+    options: [
+      {
+            "id": "lon",
+            "text": "lon"
+      },
+      {
+            "id": "bay",
+            "text": "bay"
+      },
+      {
+            "id": "bơi",
+            "text": "bơi"
+      }
+],
+    correctAnswer: "lon",
+    feedback: {
+      "correct": "Hoan hô bé! 'Đàn gà lon ton' chạy theo chân gà mẹ! 🐥🌾",
+      "wrong": "Gà con chân ngắn chạy lon ton bé ơi! Bé chọn chữ 'lon' nhé!",
+      "hint": "lon ton"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_sen_bo_xe_tai",
+    title: "Đọc câu ngắn: Bố lái xe tải 🚚",
+    titleEn: "Short Sentence: Dad Drives Truck",
+    ageTier: "preschool",
+    stage: 4,
+    minAge: 5,
+    subject: "reading",
+    skill: "vi.read.sentence-short",
+    type: "image_quiz",
+    difficulty: 1,
+    content: {
+      "question": "Bé đọc câu: 'Bố lái xe tải về nhà.' Ai đang lái xe tải vậy bé nhỉ? 🚚",
+      "questionEn": "Sentence: 'Bố lái xe tải.' Who is driving the truck?",
+      "media": "🚚 🏠  Bố lái xe tải."
+},
+    options: [
+      {
+            "id": "bố",
+            "text": "bố"
+      },
+      {
+            "id": "bé",
+            "text": "bé"
+      },
+      {
+            "id": "bà",
+            "text": "bà"
+      }
+],
+    correctAnswer: "bố",
+    feedback: {
+      "correct": "Đúng rồi! 'Bố lái xe tải về nhà' thăm bé và cả gia đình! 🚚❤️",
+      "wrong": "Bé đọc lại câu nhé: 'Bố lái xe tải'. Người lái xe là Bố!",
+      "hint": "Bố lái xe"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_p2_sen_be_yeu_ba",
+    title: "Đọc câu ngắn: Bé yêu bà 👵💖",
+    titleEn: "Short Sentence: Baby Loves Grandma",
+    ageTier: "preschool",
+    stage: 4,
+    minAge: 5,
+    subject: "reading",
+    skill: "vi.read.sentence-short",
+    type: "fill_blank",
+    difficulty: 1,
+    content: {
+      "question": "Bé hoàn thành câu yêu thương gia đình: 'Bé yêu ___.' 👵💖",
+      "questionEn": "Complete sentence: 'Bé yêu ___.'",
+      "media": "👧 👵 💖  Bé yêu [ ? ].",
+      "template": "Bé yêu [ ? ]."
+},
+    options: [
+      {
+            "id": "bà",
+            "text": "bà"
+      },
+      {
+            "id": "bóng",
+            "text": "bóng"
+      },
+      {
+            "id": "bút",
+            "text": "bút"
+      }
+],
+    correctAnswer: "bà",
+    feedback: {
+      "correct": "Tuyệt vời! 'Bé yêu bà'! Bé luôn ngoan ngoãn và lễ phép với ông bà nhé! 👵💖",
+      "wrong": "Bé yêu ai trong gia đình nhỉ? Bé chọn chữ 'bà' nhé!",
+      "hint": "Bé yêu bà"
+},
+    reward: { stars: 3 }
+  },
+
+  // ========================================================
   // NHÓM 2: LỚP 1–2 (6–8 TUỔI) - 9 HOẠT ĐỘNG
   // ========================================================
   {
@@ -3071,8 +3544,8 @@ function validateActivity(act) {
   }
   if (!["vietnamese", "math", "english", "science", "skills", "reading", "logic"].includes(act.subject)) errors.push("Invalid 'subject'");
   if (!act.mediaSource || typeof act.mediaSource !== "object") {
-    if (act.videoUrl && typeof act.videoUrl === "string") {
-      // videoUrl provided directly
+    if ((act.videoUrl && typeof act.videoUrl === "string") || (act.content && act.content.media)) {
+      // videoUrl or content.media provided directly
     } else {
       errors.push("Missing 'mediaSource'");
     }
