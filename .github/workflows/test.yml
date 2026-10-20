@@ -28,19 +28,7 @@ jobs:
 
       - name: Run all automated test suites
         run: |
-          node test-sw-precache.js
-          node test-p6-quality-security.js
-          node test-p5-stage-unlock.js
-          node test-p5-profiles-settings.js
-          node test-p5-parent-report.js
-          node test-p5-parent-backup.js
-          node test-activity-schema.js
-          node test-audio-system.js
-          node test-scoring.js
-          node test-p1-home.js
-          node test-p1-header.js
-          node test-p1-journey.js
-          node test-p1-streak-audio.js
-          node test-p1-touch-rest.js
-          node test-p1-touch-tips.js
-          node test-dom-performance.js
+          for file in test-*.js; do
+            echo "=== Running $file ==="
+            node "$file"
+          done

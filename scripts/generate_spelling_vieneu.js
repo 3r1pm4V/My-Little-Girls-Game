@@ -226,7 +226,7 @@ async function main() {
           console.log(`    ⚠ Key #${(keyIndex % keys.length) + 1} đã hết hạn mức ngày, loại khỏi vòng xoay.`);
           keys.splice(keyIndex % keys.length, 1);
           if (keys.length === 0) {
-            console.error('✖ Tất cả các khóa API đều đã đạt hạn mức ngày!');
+            console.error('✖ Tất cả các khóa API đều đã đạt hạn mức ngày! Tạm dừng và lưu hàng đợi.');
             break;
           }
         } else {
@@ -241,6 +241,11 @@ async function main() {
       failCount++;
     }
 
+    if (keys.length === 0) {
+      console.log('\n--- HẾT HẠN MỨC TOKEN TOÀN BỘ KEYS: LƯU DỮ LIỆU ĐÃ SINH & LẬP HÀNG ĐỢI CHO NGÀY MAI ---\n');
+      break;
+    }
+
     if ((i + 1) % BATCH_SIZE === 0 && i < toProcess.length - 1) {
       console.log(`\n--- Nghỉ 2s giữa lô để bảo vệ rate-limit ---\n`);
       await sleep(2000);
@@ -250,6 +255,25 @@ async function main() {
   if (Object.keys(newMapEntries).length > 0) {
     registerInAudioMap(newMapEntries);
   }
+
+  // Ghi tệp trạng thái hàng đợi (Queue Status)
+  const remainingCandidates = buildCandidateList().filter(item => {
+    const filePath = path.join(AUDIO_DIR, item.fileName);
+    return !(fs.existsSync(filePath) && fs.statSync(filePath).size > 1000);
+  });
+
+  const queueInfo = {
+    updatedAt: new Date().toISOString(),
+    localTime: new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }),
+    keysExhausted: keys.length === 0,
+    resetTimeUTC: "2026-10-20T17:00:00.000Z",
+    resetTimeLocal: "00:00 ngày mai (GMT+7)",
+    generatedInRun: successCount,
+    totalRemainingFiles: remainingCandidates.length,
+    remainingConsonants: [...new Set(remainingCandidates.map(x => x.c))]
+  };
+  fs.writeFileSync(path.join(ROOT_DIR, 'scripts', 'vieneu_queue_status.json'), JSON.stringify(queueInfo, null, 2), 'utf8');
+  console.log(`✔ Đã cập nhật file hàng đợi scripts/vieneu_queue_status.json (Còn lại: ${remainingCandidates.length} file)`);
 
   console.log('\n========================================');
   console.log(`Hoàn thành: ${successCount} thành công, ${failCount} thất bại.`);
