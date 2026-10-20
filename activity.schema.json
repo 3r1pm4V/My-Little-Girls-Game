@@ -58,7 +58,7 @@
     "type": {
       "type": "string",
       "description": "Định dạng trải nghiệm hoạt động tương tác",
-      "enum": ["video_quiz", "interactive_story", "logic_puzzle", "phonics_game"]
+      "enum": ["video_quiz", "interactive_story", "logic_puzzle", "phonics_game", "story_listen", "reading_passage", "image_quiz", "fill_blank", "matching", "drag_drop"]
     },
     "mediaSource": {
       "type": "object",

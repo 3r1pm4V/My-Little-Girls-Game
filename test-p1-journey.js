@@ -55,7 +55,7 @@ assert(AGE_TIERS.preschool.ageVi.includes('4–6 tuổi'), 'AGE_TIERS.preschool.
 assert(AGE_TIERS.preschool.ageEn.includes('4–6'), 'AGE_TIERS.preschool.ageEn phải là "Ages 4–6"');
 
 const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 53, `getPreschoolJourneyActivities phải trả về 53 bài (thực tế: ${journeyActs.length})`);
+assert.strictEqual(journeyActs.length, 58, `getPreschoolJourneyActivities phải trả về 58 bài (thực tế: ${journeyActs.length})`);
 
 // Kiểm tra 100% bài trong journeyActs đều có stage từ 0 đến 5
 journeyActs.forEach(act => {
@@ -72,7 +72,7 @@ assert.strictEqual(g35InJourney.length, 0, 'Tuyệt đối không có bài grade
 const hardMathInJourney = journeyActs.filter(a => a.id === 'act_g12_math_01' || a.id === 'act_g12_math_02' || a.id === 'act_g12_math_03');
 assert.strictEqual(hardMathInJourney.length, 0, 'Các bài toán lớp 1-2 không được có trong lộ trình của bé 4 tuổi');
 
-console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 4–6 tuổi (53 bài)!');
+console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 4–6 tuổi (58 bài)!');
 
 // ----------------------------------------------------------------------------
 // TEST 3: Mô phỏng hành vi app.js khi mở app mới hoàn toàn (empty localStorage)
@@ -121,8 +121,8 @@ if (!isTierSelectorOnNew) {
 } else {
   actsForNewKid = getActivitiesByTier(defaultTier);
 }
-assert.strictEqual(actsForNewKid.length, 53, 'Bé mới chỉ nhận 53 bài có stage 0–5');
-console.log('✔ Mở app mới tinh: Mặc định preschool, ẩn bộ chọn tầng tuổi, hiển thị chuẩn 53 bài chặng 0–5');
+assert.strictEqual(actsForNewKid.length, 58, 'Bé mới chỉ nhận 58 bài có stage 0–5');
+console.log('✔ Mở app mới tinh: Mặc định preschool, ẩn bộ chọn tầng tuổi, hiển thị chuẩn 58 bài chặng 0–5');
 
 // ----------------------------------------------------------------------------
 // TEST 4: Mô phỏng hành vi khi app đã có dữ liệu cũ (legacy localStorage)
@@ -166,7 +166,7 @@ if (!isTierSelectorOnLegacy) {
 } else {
   actsForLegacyKid = getActivitiesByTier(legacyTier);
 }
-assert.strictEqual(actsForLegacyKid.length, 53, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 53 bài chặng 0–5');
+assert.strictEqual(actsForLegacyKid.length, 58, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 58 bài chặng 0–5');
 
 // Khi phụ huynh vào cài đặt và bật cờ tầng tuổi
 lsLegacy.set("show_age_tiers", "1");

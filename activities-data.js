@@ -1176,6 +1176,206 @@ const ACTIVITIES_DATA = [
   },
 
   // ========================================================
+  // MODULE KỸ NĂNG SẴN SÀNG ĐẾN TRƯỜNG (LIFE SKILLS)
+  // CHẶNG 5: VÀO LỚP 1 (5 BÀI STORY_LISTEN)
+  // ========================================================
+  {
+    id: "act_ls_01_study_corner",
+    title: "Góc học tập: Sắp xếp sách vở, bút thước gọn gàng 📚✏️",
+    titleEn: "Study Corner: Organize Books and Stationery",
+    ageTier: "preschool",
+    stage: 5,
+    minAge: 5,
+    subject: "skills",
+    skill: "life.study_corner",
+    type: "story_listen",
+    difficulty: 1,
+    content: {
+      "storyText": "Mỗi khi ngồi học bài xong, bạn Thỏ Trắng luôn cẩn thận xếp sách vở ngay ngắn vào giá sách, đặt bút chì và thước kẻ vào hộp bút. Góc học tập của Thỏ Trắng lúc nào cũng ngăn nắp, sạch đẹp.",
+      "question": "Sau khi học bài xong, bé nên làm gì để góc học tập luôn gọn gàng? 📚",
+      "questionEn": "What should you do after studying to keep your desk neat?",
+      "media": "📚 ✏️  GÓC HỌC TẬP GỌN GÀNG"
+},
+    options: [
+      {
+            "id": "opt_neat",
+            "text": "Xếp sách vở vào giá, cất bút thước vào hộp"
+      },
+      {
+            "id": "opt_mess",
+            "text": "Để bừa bãi trên bàn rồi chạy đi chơi"
+      },
+      {
+            "id": "opt_floor",
+            "text": "Vứt cặp sách xuống sàn nhà"
+      }
+],
+    correctAnswer: "opt_neat",
+    feedback: {
+      "correct": "Hoan hô bé! Sách vở để vào giá, bút thước để vào hộp sẽ giúp góc học tập luôn ngăn nắp và dễ tìm đồ dùng! 📚✨",
+      "wrong": "Bé nghe lại câu chuyện nhé: Bé hãy xếp sách vở vào giá và cất bút thước vào hộp cẩn thận!",
+      "hint": "Xếp sách vở vào giá"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_ls_02_schedule_study",
+    title: "Thời gian biểu: Nhận biết giờ ngồi vào bàn học ⏰📖",
+    titleEn: "Schedule: Time to Study by Clock",
+    ageTier: "preschool",
+    stage: 5,
+    minAge: 5,
+    subject: "skills",
+    skill: "life.schedule",
+    type: "story_listen",
+    difficulty: 1,
+    content: {
+      "storyText": "Tích tắc tích tắc! Chiếc đồng hồ kim chỉ đúng 7 giờ tối. Bé Na nghe tiếng chuông reng liền tự giác cất đồ chơi, rửa tay sạch sẽ và ngồi vào bàn học bài thật chăm chỉ.",
+      "question": "Khi đồng hồ điểm đúng giờ học bài buổi tối, bé nên làm gì? ⏰",
+      "questionEn": "When the clock strikes study time in the evening, what should you do?",
+      "media": "⏰ 📖  ĐỒNG HỒ 7 GIỜ TỐI"
+},
+    options: [
+      {
+            "id": "opt_study",
+            "text": "Tự giác ngồi vào bàn học bài chăm chỉ"
+      },
+      {
+            "id": "opt_tv",
+            "text": "Bật tivi xem hoạt hình thật lâu"
+      },
+      {
+            "id": "opt_play",
+            "text": "Mải chơi đồ chơi không chịu học"
+      }
+],
+    correctAnswer: "opt_study",
+    feedback: {
+      "correct": "Đúng rồi! Đúng 7 giờ tối là giờ học, bé tự giác học bài sẽ là trò ngoan của thầy cô và bố mẹ! ⏰🌟",
+      "wrong": "Đến giờ học bài rồi bé ơi! Bé hãy tự giác ngồi vào bàn học nhé!",
+      "hint": "Tự giác học bài"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_ls_03_bedtime_clock",
+    title: "Thời gian biểu: Giờ ngủ ngoan để sớm mai đến trường ⏰🌙",
+    titleEn: "Schedule: Bedtime to Wake Up Early",
+    ageTier: "preschool",
+    stage: 5,
+    minAge: 5,
+    subject: "skills",
+    skill: "life.bedtime",
+    type: "story_listen",
+    difficulty: 1,
+    content: {
+      "storyText": "Đồng hồ điểm 9 giờ đêm. Bé đánh răng sạch bóng, uống một cốc nước ấm, chúc bố mẹ ngủ ngon rồi chìm vào giấc ngủ êm đềm. Sớm mai thức dậy, bé sẽ có một cơ thể khỏe khoắn để đến lớp học tập.",
+      "question": "Để sớm mai thức dậy khỏe khoắn và đi học đúng giờ, tối nay bé nên ngủ lúc mấy giờ? 🌙",
+      "questionEn": "What time should you sleep to wake up refreshed for school?",
+      "media": "⏰ 🌙  ĐỒNG HỒ 9 GIỜ ĐÊM"
+},
+    options: [
+      {
+            "id": "opt_sleep_early",
+            "text": "Đi ngủ sớm lúc 9 giờ tối"
+      },
+      {
+            "id": "opt_sleep_late",
+            "text": "Thức khuya xem điện thoại đến nửa đêm"
+      },
+      {
+            "id": "opt_no_sleep",
+            "text": "Không chịu ngủ để mai đi học muộn"
+      }
+],
+    correctAnswer: "opt_sleep_early",
+    feedback: {
+      "correct": "Tuyệt vời! Đi ngủ đúng 9 giờ tối giúp bé thông minh, mau lớn và tràn đầy năng lượng đến trường! 🌙💤",
+      "wrong": "Bé nhớ nhé: Đi ngủ sớm lúc 9 giờ tối để sáng mai thức dậy vui vẻ đi học đúng giờ!",
+      "hint": "Đi ngủ lúc 9 giờ tối"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_ls_04_school_manners",
+    title: "Ứng xử: Lễ phép chào cô và xin phép ra vào lớp 🏫👋",
+    titleEn: "School Manners: Greet Teacher & Ask Permission",
+    ageTier: "preschool",
+    stage: 5,
+    minAge: 5,
+    subject: "skills",
+    skill: "life.manners",
+    type: "story_listen",
+    difficulty: 1,
+    content: {
+      "storyText": "Khi bước vào cổng trường, bé vòng hai tay trước ngực mỉm cười: 'Con chào cô ạ!'. Trong giờ học, khi muốn ra ngoài uống nước hay đi vệ sinh, bé đứng nghiêm túc giơ tay: 'Thưa cô, cho con xin phép ra ngoài ạ!'.",
+      "question": "Khi gặp cô giáo hoặc muốn xin phép ra ngoài lớp, bé nên ứng xử như thế nào? 🏫",
+      "questionEn": "How should you greet your teacher and ask for permission?",
+      "media": "🏫 👋  CON CHÀO CÔ Ạ"
+},
+    options: [
+      {
+            "id": "opt_polite",
+            "text": "Khoanh tay chào cô và xin phép lễ phép"
+      },
+      {
+            "id": "opt_rude",
+            "text": "Tự ý chạy ra ngoài không hỏi cô"
+      },
+      {
+            "id": "opt_ignore",
+            "text": "Lờ đi không chào hỏi thầy cô"
+      }
+],
+    correctAnswer: "opt_polite",
+    feedback: {
+      "correct": "Xuất sắc! Lễ phép khoanh tay chào cô và xin phép đàng hoàng là nét đẹp của học sinh lớp 1 thanh lịch! 🏫👏",
+      "wrong": "Bé nhớ nhé: Gặp cô phải khoanh tay chào, muốn ra ngoài phải xin phép cô đàng hoàng!",
+      "hint": "Khoanh tay chào cô lễ phép"
+},
+    reward: { stars: 3 }
+  },
+  {
+    id: "act_ls_05_school_safety",
+    title: "An toàn: Đội mũ bảo hiểm và không đi theo người lạ 🪖🛑",
+    titleEn: "Safety: Helmet & Stranger Danger",
+    ageTier: "preschool",
+    stage: 5,
+    minAge: 5,
+    subject: "skills",
+    skill: "life.safety",
+    type: "story_listen",
+    difficulty: 1,
+    content: {
+      "storyText": "Bố chở bé đến trường bằng xe máy, bé luôn nhắc bố: 'Bố ơi cài quai mũ bảo hiểm cho con nhé!'. Khi tan trường, bé đứng trong sân đợi bố mẹ, kiên quyết không nhận kẹo hay đi theo người lạ mặt.",
+      "question": "Để đảm bảo an toàn cho bản thân khi đi học, bé ghi nhớ quy tắc nào sau đây? 🪖",
+      "questionEn": "Which safety rule must you always remember when going to school?",
+      "media": "🪖 🛑  AN TOÀN ĐẾN TRƯỜNG"
+},
+    options: [
+      {
+            "id": "opt_safe",
+            "text": "Đội mũ bảo hiểm và tuyệt đối không đi theo người lạ"
+      },
+      {
+            "id": "opt_unsafe",
+            "text": "Đi theo người lạ khi được cho kẹo ngọt"
+      },
+      {
+            "id": "opt_no_helmet",
+            "text": "Tháo mũ bảo hiểm khi đang ngồi trên xe máy"
+      }
+],
+    correctAnswer: "opt_safe",
+    feedback: {
+      "correct": "Rất chuẩn xác! Đội mũ bảo hiểm bảo vệ đầu an toàn và chỉ về nhà cùng bố mẹ người thân thôi nhé! 🪖🛡️",
+      "wrong": "Bé phải luôn đội mũ bảo hiểm và tuyệt đối không bao giờ đi theo người lạ bé nhé!",
+      "hint": "Đội mũ bảo hiểm và không theo người lạ"
+},
+    reward: { stars: 3 }
+  },
+
+  // ========================================================
   // NHÓM 2: LỚP 1–2 (6–8 TUỔI) - 9 HOẠT ĐỘNG
   // ========================================================
   {
@@ -4006,6 +4206,12 @@ function getActivitiesByStage(stage) {
 }
 
 // Helper lấy tất cả bài học thuộc lộ trình Chuẩn bị vào Lớp 1 (5–6 tuổi)
+
+// Helper lấy danh sách bài học kỹ năng sống sẵn sàng đến trường (life_skills)
+function getLifeSkillsActivities() {
+  return ACTIVITIES_DATA.filter(a => a.stage === 5 || (a.skill && a.skill.startsWith("life.")));
+}
+
 function getPreschoolJourneyActivities() {
   return ACTIVITIES_DATA.filter(a => a.stage !== undefined && a.stage !== null);
 }
@@ -4020,6 +4226,8 @@ if (typeof window !== "undefined") {
   window.getActivitiesBySubject = getActivitiesBySubject;
   window.getActivitiesByStage = getActivitiesByStage;
   window.getPreschoolJourneyActivities = getPreschoolJourneyActivities;
+  window.getLifeSkillsActivities = getLifeSkillsActivities;
+  window.LIFE_SKILLS = getLifeSkillsActivities();
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -4033,7 +4241,9 @@ if (typeof module !== "undefined" && module.exports) {
     getActivityById,
     getActivitiesBySubject,
     getActivitiesByStage,
-    getPreschoolJourneyActivities
+    getPreschoolJourneyActivities,
+    getLifeSkillsActivities,
+    LIFE_SKILLS: getLifeSkillsActivities()
   };
 }
 })();

@@ -1997,11 +1997,12 @@ async function playActivity(actId){
   const escSay = s => String(s||"").replace(/'/g, "\\'").replace(/"/g, "&quot;");
   let bodyHtml = "";
 
-  if(act.type === "reading_passage"){
+  if(act.type === "reading_passage" || act.type === "story_listen"){
+    const storyBoxLabel = act.type === "story_listen" ? T("Câu chuyện kỹ năng:","Life Skills Story:") : T("Đoạn văn ngắn:","Short passage:");
     const storyBoxHtml = act.content.storyText ? `
       <div class="act-story-box">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <b>📖 ${T("Đoạn văn ngắn:","Short passage:")}</b>
+          <b>📖 ${storyBoxLabel}</b>
           <button class="pill" style="font-size:13px;padding:4px 10px;min-height:36px;min-width:auto" onclick="say('${escSay(act.content.storyText)}', '${escSay(act.content.storyText)}')" aria-label="${T("Nghe đọc đoạn văn","Listen to passage")}">🔊 ${T("Nghe đọc","Listen")}</button>
         </div>
         ${act.content.storyText}
