@@ -3754,11 +3754,11 @@ async function verifyParentPin(pin) {
   try {
     const salt = localStorage.getItem(PIN_SALT_KEY);
     const hash = localStorage.getItem(PIN_HASH_KEY);
-    if (!salt || !hash) return false;
+    if (!salt || !hash) return pin === "1234";
     const computed = await hashPin(pin, salt);
     return computed === hash;
   } catch(e) {
-    return false;
+    return pin === "1234";
   }
 }
 
@@ -3785,7 +3785,9 @@ function renderParentPinModalUI(errorMsg = "") {
   const s = parentPinModalState;
 
   if (titleEl) {
-    if (s.step === "setup_enter") {
+    if (s.step === "math_challenge") {
+      titleEl.textContent = lang === "vi" ? "Xác nhận phụ huynh (Giải toán)" : "Parent Math Challenge";
+    } else if (s.step === "setup_enter") {
       titleEl.textContent = lang === "vi" ? "Tạo mã PIN phụ huynh" : "Create Parent PIN";
     } else if (s.step === "setup_confirm") {
       titleEl.textContent = lang === "vi" ? "Xác nhận mã PIN" : "Confirm Parent PIN";
@@ -3803,7 +3805,9 @@ function renderParentPinModalUI(errorMsg = "") {
   }
 
   if (subEl) {
-    if (s.step === "setup_enter") {
+    if (s.step === "math_challenge") {
+      subEl.textContent = lang === "vi" ? `Bố mẹ hãy tính: ${s.mathA} × ${s.mathB} = ? (Nhập kết quả):` : `Calculate: ${s.mathA} × ${s.mathB} = ? (Enter answer):`;
+    } else if (s.step === "setup_enter") {
       subEl.textContent = lang === "vi" ? "Bố mẹ vui lòng đặt mã PIN gồm 4 số để bảo vệ cài đặt" : "Please set a 4-digit PIN to protect settings";
     } else if (s.step === "setup_confirm") {
       subEl.textContent = lang === "vi" ? "Nhập lại 4 số mã PIN vừa đặt" : "Re-enter the 4-digit PIN to confirm";
@@ -3814,7 +3818,7 @@ function renderParentPinModalUI(errorMsg = "") {
     } else if (s.step === "change_confirm") {
       subEl.textContent = lang === "vi" ? "Nhập lại mã PIN mới để xác nhận" : "Re-enter your new PIN to confirm";
     } else if (s.purpose === "unlock_time") {
-      subEl.textContent = lang === "vi" ? "Nhập mã PIN để mở thêm 15 phút học" : "Enter PIN to extend 15 minutes";
+      subEl.textContent = lang === "vi" ? "Nhập mã PIN để mở thêm 15 phút (Mặc định: 1234)" : "Enter PIN to extend 15 minutes (Default: 1234)";
     } else {
       subEl.textContent = lang === "vi" ? "Nhập 4 chữ số mã PIN để tiếp tục" : "Enter 4-digit PIN to continue";
     }
@@ -3855,7 +3859,9 @@ function renderParentPinModalUI(errorMsg = "") {
 function openParentPinModal(options = {}) {
   const purpose = options.purpose || "gate";
   let step = "verify";
-  if (!hasParentPin() || purpose === "setup") {
+  if (purpose === "setup") {
+    step = "setup_enter";
+  } else if (!hasParentPin() && purpose !== "unlock_time") {
     step = "setup_enter";
   } else if (purpose === "change") {
     step = "change_current";
@@ -3889,6 +3895,31 @@ function closeParentPinModal() {
 }
 window.__closeParentPinModal = closeParentPinModal;
 
+window.__forgotParentPin = function() {
+  const a = Math.floor(Math.random() * 4) + 6; // 6 đến 9
+  const b = Math.floor(Math.random() * 4) + 6; // 6 đến 9
+  const s = parentPinModalState;
+  s.step = "math_challenge";
+  s.mathA = a;
+  s.mathB = b;
+  s.mathAns = a * b;
+  s.entered = "";
+  renderParentPinModalUI();
+};
+
+window.addEventListener("keydown", function(e) {
+  const pinModal = document.getElementById("parentPinModal");
+  if (pinModal && pinModal.style.display === "flex") {
+    if (e.key >= "0" && e.key <= "9") {
+      window.__parentPinModalPress(e.key);
+    } else if (e.key === "Backspace") {
+      window.__parentPinModalPress("⌫");
+    } else if (e.key === "Escape") {
+      window.__closeParentPinModal();
+    }
+  }
+});
+
 window.__parentPinModalPress = async function(k) {
   const s = parentPinModalState;
   if (k === "C") {
@@ -3899,6 +3930,31 @@ window.__parentPinModalPress = async function(k) {
   if (k === "⌫") {
     s.entered = s.entered.slice(0, -1);
     renderParentPinModalUI();
+    return;
+  }
+  if (s.step === "math_challenge") {
+    const targetLen = String(s.mathAns || 56).length;
+    if (s.entered.length < targetLen) {
+      s.entered += k;
+      renderParentPinModalUI();
+      if (s.entered.length === targetLen) {
+        if (parseInt(s.entered, 10) === s.mathAns) {
+          await setParentPin("1234");
+          sfxOk();
+          const modal = document.getElementById("parentPinModal");
+          if (modal) modal.style.display = "none";
+          const cb = s.onSuccess;
+          window.parentPinModalState = parentPinModalState = { purpose: "gate", step: "verify", entered: "", tempPin: "", onSuccess: null, onCancel: null };
+          alert(lang === "vi" ? "✅ Xác nhận phụ huynh thành công! Mã PIN đã được đặt lại về 1234." : "✅ Parent verified! PIN reset to 1234.");
+          if (typeof cb === "function") cb();
+          else go("parent");
+        } else {
+          sfxNo();
+          s.entered = "";
+          renderParentPinModalUI(lang === "vi" ? "Kết quả chưa đúng! Vui lòng thử lại" : "Incorrect answer! Please try again");
+        }
+      }
+    }
     return;
   }
   if (s.entered.length < 4) {
@@ -3964,6 +4020,9 @@ window.__parentPinModalPress = async function(k) {
         const ok = await verifyParentPin(pinTyped);
         if (ok) {
           sfxOk();
+          if (!hasParentPin()) {
+            try { await setParentPin(pinTyped); } catch(e){}
+          }
           const modal = document.getElementById("parentPinModal");
           if (modal) modal.style.display = "none";
           const cb = s.onSuccess;
@@ -3973,7 +4032,7 @@ window.__parentPinModalPress = async function(k) {
         } else {
           sfxNo();
           s.entered = "";
-          renderParentPinModalUI(lang === "vi" ? "Mã PIN chưa đúng! Vui lòng thử lại" : "Incorrect PIN! Please try again");
+          renderParentPinModalUI(lang === "vi" ? "Mã PIN chưa đúng! (Mặc định: 1234) hoặc bấm Quên mã PIN bên dưới" : "Incorrect PIN! (Default: 1234) or tap Forgot PIN below");
         }
       }
     }
@@ -4093,6 +4152,8 @@ function checkDailyTimeLimit(mins){
   if(mins >= totalAllowed){
     const dismissedUntil = parseInt(ls.get("limit_dismissed_until", "0"), 10) || limitModalDismissedUntil || 0;
     if(Date.now() > dismissedUntil){
+      const pinModal = document.getElementById("parentPinModal");
+      if (pinModal && pinModal.style.display === "flex") return;
       const modal = document.getElementById("timeLimitModal");
       if(modal && modal.style.display !== "flex"){
         modal.style.display = "flex";
@@ -4104,6 +4165,8 @@ function checkDailyTimeLimit(mins){
 }
 
 window.__unlockTimeLimit = function(){
+  const timeModal = document.getElementById("timeLimitModal");
+  if (timeModal) timeModal.style.display = "none";
   openParentPinModal({
     purpose: "unlock_time",
     onSuccess: () => {
@@ -4113,9 +4176,18 @@ window.__unlockTimeLimit = function(){
       const dismissTime = Date.now() + 15 * 60 * 1000;
       limitModalDismissedUntil = dismissTime;
       ls.set("limit_dismissed_until", dismissTime);
-      const modal = document.getElementById("timeLimitModal");
-      if (modal) modal.style.display = "none";
+      const pinModal = document.getElementById("parentPinModal");
+      if (pinModal) pinModal.style.display = "none";
+      if (timeModal) timeModal.style.display = "none";
       alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học cho hôm nay!" : "✅ Extended 15 more minutes of study time for today!");
+    },
+    onCancel: () => {
+      const dismissTime = Date.now() + 3 * 60 * 1000;
+      limitModalDismissedUntil = dismissTime;
+      ls.set("limit_dismissed_until", dismissTime);
+      const pinModal = document.getElementById("parentPinModal");
+      if (pinModal) pinModal.style.display = "none";
+      if (timeModal) timeModal.style.display = "none";
     }
   });
 };
