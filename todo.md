@@ -51,7 +51,7 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 - [~] **P0-10 (P1)** Báo cáo audit: agent đã thay bằng bản redacted; còn cần chỉ giữ `docs/audit.md`, xóa `audit.md` ở root
 - [ ] **P0-11 (P2)** `server.js` mặc định phục vụ `index.html`; xử lý `test-local.html` (lệch bản)
 - [ ] **P0-12 (P1)** Xác minh nguồn gốc/giấy phép trong `ASSETS.md` (repo public): font HPTapViet/HPCham, thư mục `audio/` (có giọng VTV7?), điều khoản VieNeu, sprite `img-*.js`, truyện `truyencotich.top`. Chưa chắc → ghi `UNVERIFIED`, không đoán
-- [x] **P0-13 (P1)** Tự động hóa kiểm tra & bump cache `sw.js`: trang bị script `test-sw-precache.js`, bắt buộc chạy `node test-sw-precache.js --fix` trước mỗi commit đổi asset, tích hợp CI GitHub Actions (2026-10-20)
+- [~] **P0-13 (P1)** Tự động hóa kiểm tra & bump cache `sw.js`: trang bị script `test-sw-precache.js`, bắt buộc chạy `node test-sw-precache.js --fix` trước mỗi commit đổi asset, tích hợp CI GitHub Actions (2026-10-20) — xác minh bằng (đọc code: sw.js dòng 1-3) + (test: test-sw-precache.js); chờ Nghĩa kiểm tra (thiết bị: máy tính bảng Android của bé, bật chế độ máy bay)
 
 ---
 
@@ -77,11 +77,11 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 
 - [x] **P2-01 (P1)** Tách CSS inline (~80% `index.html`) ra `styles.css`; bump cache `sw.js` (2026-10-20)
 - [x] **P2-02 (P1)** Chuyển ảnh nền base64 trong CSS thành file `.webp` riêng (2026-10-20)
-- [x] **P2-03 (P1)** Tự host font "Baloo 2" (woff2 weight 600 & 800 subset Latin/Vietnamese trong `fonts/`), kèm giấy phép `fonts/OFL.txt`, xóa 3 thẻ Google Fonts trong `index.html`, siết CSP trong `netlify.toml`, xóa FONT_HOSTS trong `sw.js`, xác minh 0 request ra ngoài Google (2026-10-20)
+- [~] **P2-03 (P1)** Tự host font "Baloo 2" (woff2 weight 600 & 800 subset Latin/Vietnamese trong `fonts/`), kèm giấy phép `fonts/OFL.txt`, xóa 3 thẻ Google Fonts trong `index.html`, siết CSP trong `netlify.toml`, xóa FONT_HOSTS trong `sw.js`, xác minh 0 request ra ngoài Google (2026-10-20) — xác minh bằng (đọc code: styles.css dòng 8-19, index.html dòng 17-23, netlify.toml dòng 14) + (test: test-sw-precache.js); chờ Nghĩa kiểm tra (thiết bị: máy tính bảng Android của bé, bật chế độ máy bay)
 - [ ] **P2-04 (P2)** Thống nhất danh mục môn: schema `subject` (vietnamese, math, english, science, skills) lệch với UI (math, vietnamese, reading, game, logic, trace). Chốt bảng chuẩn trong `PLAN.md` mục 5 rồi sửa schema + CSS + data
 - [ ] **P2-05 (P2)** Chuyển `onclick` inline sang `addEventListener`; gom hàm toàn cục vào namespace `BLG`
 - [ ] **P2-06 (P2)** Chia `app.js` thành module theo chức năng (router, progress, audio, templates, parent) — giữ nguyên hành vi, test trước/sau
-- [x] **P2-07 (P2)** Quản lý cache `sw.js` & precache âm thanh Chặng 0–1: tự sinh version từ asset-hash (`test-sw-precache.js`), nạp precache `CORE` (17 file) + `OPT` (4 file tải lười) + `OPT_AUDIO` (242 file âm thanh Home & Chặng 0–1, ~11.85 MB theo Phương án b) tải an toàn; bump cache `bhv-v46` (2026-10-20)
+- [~] **P2-07 (P2)** Quản lý cache `sw.js` & precache âm thanh Chặng 0–1: tự sinh version từ asset-hash (`test-sw-precache.js`), nạp precache `CORE` (17 file) + `OPT` (4 file tải lười) + `OPT_AUDIO` (242 file âm thanh Home & Chặng 0–1, ~11.85 MB theo Phương án b); bump cache `bhv-v46` (2026-10-20) — xác minh bằng (đọc code: sw.js dòng 19-278) + (test: test-sw-precache.js); chờ Nghĩa kiểm tra (thiết bị: máy tính bảng Android của bé, bật chế độ máy bay)
 - [ ] **P2-08 (P3)** Thêm `README.md` (cách chạy, cách thêm bài, cách deploy)
 - [ ] **P2-09 (P3)** Thêm lint nhẹ (ESLint cấu hình tối thiểu) chạy bằng `npx`, không đổi cách build
 - [ ] **P2-10 (P2)** `img-core.js` + `img-s.js` + `img-o.js` ≈ 4,3 MB ảnh base64 trong JS và `audio-map.js` ≈ 610 KB nạp đồng bộ: chuyển sang file thật/tải lazy, đo thời gian mở app trên máy của bé

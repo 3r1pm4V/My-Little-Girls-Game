@@ -8,10 +8,10 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ### 2026-10-20
 - **feat(P2-07: Implement Plan B Audio Precache for Stages 0–1)**:
-  - Tích hợp gói 242 tệp âm thanh cốt lõi (Trang chủ 3 nút lớn, dặn dò chú mèo, streak 1–10 ngày, bảng chữ cái & số đếm 1–20, toàn bộ 3 bài Video Quiz Chặng 0 và 20 bài học Chặng 1, tổng 11.85 MB) vào `sw.js` thông qua mảng `OPT_AUDIO`.
-  - Cài đặt tải song song bất đồng bộ với cơ chế bọc lỗi an toàn `catch()` trong sự kiện `install`: đảm bảo cài đặt PWA hoàn tất ngay lập tức (< 0.2s cho `CORE`), đồng thời nạp ngầm toàn bộ 242 tệp âm thanh vào bộ nhớ đệm Cache Storage mà không sợ rủi ro đứt mạng giữa chừng.
-  - Nâng cấp `test-sw-precache.js`: tự động đọc `OPT_AUDIO`, kiểm tra không trùng lặp, xác minh 100% tệp tồn tại trên đĩa và đưa vào hàm băm SHA-256 asset-hash.
-  - Tự động bump cache Service Worker từ `bhv-v45` lên `bhv-v46` với `asset-hash: 46d61b2de7d6572e`.
+  - Tích hợp gói 242 tệp âm thanh (Trang chủ 3 nút lớn, dặn dò chú mèo, streak 1–10 ngày, bảng chữ cái `alpha_*`, toàn bộ 3 bài Video Quiz Chặng 0 và 20 bài học Chặng 1; lưu ý: gói hiện KHÔNG có các file audio số 0–10 được ánh xạ trong `numMap` tại `app.js` dòng 3469–3481; tổng dung lượng đo được 12,423,374 bytes ~ 11.85 MB) vào `sw.js` dòng 19–262 qua mảng `OPT_AUDIO`.
+  - Cơ chế nạp nằm trong sự kiện `install` (`sw.js` dòng 271–280), tải qua `Promise.all(OPT_AUDIO.map(...))` với bọc lỗi an toàn `catch()`. Do nằm trong sự kiện `install` (`e.waitUntil`), Service Worker mới chỉ kích hoạt sau khi tải xong toàn bộ gói (~11.85 MB).
+  - Nâng cấp `test-sw-precache.js` (dòng 25, 38, 67): đọc mảng `OPT_AUDIO`, kiểm tra không trùng lặp và đưa vào hàm băm SHA-256 asset-hash (test hiện chưa kiểm tra tồn tại từng file của `OPT_AUDIO` trên đĩa).
+  - Tự động bump cache Service Worker từ `bhv-v45` lên `bhv-v46` với `asset-hash: 46d61b2de7d6572e` (`sw.js` dòng 1–3).
   - Cập nhật câu hỏi Q3 trong `todo.md`: xác nhận thiết bị học tập của bé là máy tính bảng Android, bộ nhớ trống dồi dào > 2GB, kết nối Wifi gia đình ổn định.
 - **docs(P2-07: Audio Precache Sizing Plan)**:
   - Khảo sát và đo lường thực tế toàn bộ 3,197 file âm thanh trong thư mục `audio/` (tổng 68,796,273 bytes ~ 65.61 MB).
