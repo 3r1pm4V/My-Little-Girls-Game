@@ -2927,7 +2927,7 @@ function bubbleGame(isReplay) {
           <span style="font-weight:800;font-size:clamp(15px,3.8vw,18px);color:#334155">
             🎯 ${T("Bắt chữ:","Pop:")}
           </span>
-          <span class="bubble-target-letter" id="bgTargetLetter">${targetLetter}</span>
+          <span class="bubble-target-letter" id="bgTargetLetter" onclick="window.__bgReplayAudio()" style="cursor:pointer" title="${T("Bấm để nghe phát âm","Tap to listen")}" role="button" tabindex="0">${targetLetter}</span>
           <button class="pill" onclick="window.__bgReplayAudio()" style="font-size:13.5px;padding:3px 10px;min-height:36px;border-radius:18px">
             🔊 ${T("Nghe lại","Listen")}
           </button>
@@ -2947,8 +2947,29 @@ function bubbleGame(isReplay) {
   const targetLetterEl = m.querySelector("#bgTargetLetter");
   const scoreEl = m.querySelector("#bgScore");
 
+  const alphaMap = {
+    "a": "audio/alpha_vi_a.mp3", "ă": "audio/alpha_vi_aw.mp3", "â": "audio/alpha_vi_aa.mp3",
+    "b": "audio/alpha_vi_b.mp3", "c": "audio/alpha_vi_c.mp3", "d": "audio/alpha_vi_d.mp3",
+    "đ": "audio/alpha_vi_dd.mp3", "e": "audio/alpha_vi_e.mp3", "ê": "audio/alpha_vi_ee.mp3",
+    "g": "audio/alpha_vi_g.mp3", "h": "audio/alpha_vi_h.mp3", "i": "audio/alpha_vi_i.mp3",
+    "k": "audio/alpha_vi_k.mp3", "l": "audio/alpha_vi_l.mp3", "m": "audio/alpha_vi_m.mp3",
+    "n": "audio/alpha_vi_n.mp3", "o": "audio/alpha_vi_o.mp3", "ô": "audio/alpha_vi_oo.mp3",
+    "ơ": "audio/alpha_vi_ow.mp3", "p": "audio/alpha_vi_p.mp3", "q": "audio/alpha_vi_q.mp3",
+    "r": "audio/alpha_vi_r.mp3", "s": "audio/alpha_vi_s.mp3", "t": "audio/alpha_vi_t.mp3",
+    "u": "audio/alpha_vi_u.mp3", "ư": "audio/alpha_vi_uw.mp3", "v": "audio/alpha_vi_v.mp3",
+    "x": "audio/alpha_vi_x.mp3", "y": "audio/alpha_vi_y.mp3"
+  };
+
+  function playBubbleLetter(letter) {
+    if (!SOUND_ON() || !letter) return;
+    const lKey = String(letter).toLowerCase();
+    const map = window.AUDIO_MAP || {};
+    const audioPath = (l === "vi" ? alphaMap[lKey] : null) || map[letter] || map["vi|" + letter] || map[lKey] || map["vi|" + lKey] || ("audio/alpha_vi_" + lKey + ".mp3");
+    playSafeAudio(audioPath, "Tưởng Vy");
+  }
+
   function announceTarget() {
-    sayAs(l, `Bé hãy bắt bóng chữ ${targetLetter}`, `Pop the bubble with letter ${targetLetter}`);
+    playBubbleLetter(targetLetter);
   }
 
   window.__bgReplayAudio = function() {
@@ -3027,6 +3048,7 @@ function bubbleGame(isReplay) {
       if (bubbleObj.letter === targetLetter) {
         bubbleObj.state = "popping";
         sfxPop();
+        playBubbleLetter(bubbleObj.letter);
         score++;
         if (scoreEl) scoreEl.textContent = score;
 
@@ -3068,7 +3090,7 @@ function bubbleGame(isReplay) {
         sfxDeflate();
         bEl.classList.add("bubble-deflating");
 
-        say(`Bé tìm chữ ${targetLetter} nhé`, `Look for letter ${targetLetter}`);
+        setTimeout(() => { playBubbleLetter(targetLetter); }, 280);
 
         if (targetLetterEl) {
           targetLetterEl.style.animation = "shake .4s ease-in-out";
