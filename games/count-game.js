@@ -357,7 +357,7 @@ function render(isReplay = false) {
   renderCountQuestion();
 }
 
-// Hỗ trợ phổ quát cho cả trình duyệt (window.CountGame) và ES Module (import/export)
+// Hỗ trợ phổ quát cho cả trình duyệt (window.CountGame) và Node.js / module bundlers
 if (typeof window !== "undefined") {
   window.CountGame = { init, render };
 }
@@ -366,5 +366,3 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = { init, render };
 }
 
-export { init, render };
-export default { init, render };

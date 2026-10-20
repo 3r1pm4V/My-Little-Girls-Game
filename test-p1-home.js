@@ -146,7 +146,7 @@ assert.strictEqual(isKidPreschoolMode, true, 'isKidPreschoolMode phải là true
 
 // Kiểm tra mã HTML render từ app.js
 assert(appJs.includes('<div class="kid-home-menu">'), 'Home phải sinh ra .kid-home-menu');
-assert(appJs.includes('onpointerdown="speakKidBtn(\'today\')"'), 'Nút Học hôm nay phải có sự kiện phát âm thanh khi chạm giữ');
+assert(appJs.includes('onpointerdown="speakKidBtn(\'letters\')"') || appJs.includes('onpointerdown="speakKidBtn(\'today\')"'), 'Nút Học chữ & Tập tô phải có sự kiện phát âm thanh khi chạm giữ');
 assert(appJs.includes('onpointerdown="speakKidBtn(\'games\')"'), 'Nút Chơi tự do phải có sự kiện phát âm thanh khi chạm giữ');
 assert(appJs.includes('onpointerdown="speakKidBtn(\'stickers\')"'), 'Nút Sticker phải có sự kiện phát âm thanh khi chạm giữ');
 

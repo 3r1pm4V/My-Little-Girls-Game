@@ -1718,7 +1718,7 @@ function home(){
         <!-- 1. HỌC CHỮ & TẬP TÔ -->
         <button class="kid-home-btn kid-btn-today kid-btn-letters" 
           onclick="go('lettersHome')"
-          onpointerdown="speakKidBtn('today')"
+          onpointerdown="speakKidBtn('letters')"
           aria-label="${T("Học chữ & Tập tô", "Learn Letters & Trace")}">
           <div class="kid-btn-icon-wrap">🔤</div>
           <div class="kid-btn-text">
@@ -2853,20 +2853,17 @@ function games(){
 let countGameModule = null;
 
 async function countGame(isReplay){
-  if(!countGameModule){
-    m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải trò chơi...","Loading game...")}</p></div>`;
-    const isFileProto = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
-    if (isFileProto) {
+  if (typeof window !== "undefined" && window.CountGame) {
+    countGameModule = window.CountGame;
+  }
+  if (!countGameModule) {
+    try {
       await loadScriptTag("games/count-game.js");
-      countGameModule = window.CountGame;
-    } else {
-      try {
-        const mod = await import('./games/count-game.js');
-        countGameModule = mod.default || mod || window.CountGame;
-      } catch(e) {
-        await loadScriptTag("games/count-game.js");
+      if (typeof window !== "undefined" && window.CountGame) {
         countGameModule = window.CountGame;
       }
+    } catch(e) {
+      console.warn("Could not load games/count-game.js", e);
     }
   }
 
@@ -5345,12 +5342,16 @@ async function importAudio(list){let ok=0;const bad=[];
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
 let curTone = 0;
 function playConsonant(c, r){
-  const consKey = "cons_" + (c === "đ" ? "dd" : c);
-  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[consKey] || window.AUDIO_MAP["cons_" + c] || window.AUDIO_MAP[r])) || r;
+  const cFile = (c === "đ" ? "dd" : c);
+  const consKey = "cons_" + cFile;
+  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[consKey] || window.AUDIO_MAP["cons_" + c] || window.AUDIO_MAP[r])) || `audio/alpha_vi_${cFile}.mp3`;
   playSafeAudio(target, "Tưởng Vy");
 }
 function playVowel(v){
-  playSafeAudio(v, "Tưởng Vy");
+  const vNormMap = { "a": "a", "e": "e", "ê": "ee", "i": "i", "o": "o", "ô": "oo", "ơ": "ow", "u": "u", "ư": "uw" };
+  const vFile = vNormMap[v] || v;
+  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[v] || window.AUDIO_MAP["vi|" + v])) || `audio/alpha_vi_${vFile}.mp3`;
+  playSafeAudio(target, "Tưởng Vy");
 }
 function playSyllable(text, c, v, toneIdx, spellText){
   curTone = toneIdx;
@@ -5367,7 +5368,9 @@ function playSyllable(text, c, v, toneIdx, spellText){
     btn.classList.toggle("active", i === toneIdx);
     btn.classList.toggle("on", i === toneIdx);
   });
-  playSafeAudio(text, "Tưởng Vy");
+  const sylKey = `syl_${c}_${v}_${toneIdx}`;
+  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[text] || window.AUDIO_MAP["vi|" + text] || window.AUDIO_MAP[sylKey])) || `audio/${sylKey}.mp3`;
+  playSafeAudio(target, "Tưởng Vy");
 }
 function playSpell(c, v, toneIdx, finalWord, spellText){
   A.pause(); A.onended = null; A.onerror = null;
@@ -5375,8 +5378,8 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
   const my = ++tok;
   busy = true;
 
-  // Đọc trọn câu đánh vần: Ưu tiên audio mẫu Cô Lan Anh nếu có, hoặc VieNeu
   const lananhKey = `lananh_spell_${c}_${v}_${toneIdx}`;
+  const spellKey = `spell_${c}_${v}_${toneIdx}`;
   const spoken = spellText.replace(/\s*-\s*/g, " ").trim();
   const subEl = document.querySelector(".spell-sub");
   if(subEl){
@@ -5390,8 +5393,56 @@ function playSpell(c, v, toneIdx, finalWord, spellText){
     }
   };
 
-  const targetAudio = (window.AUDIO_MAP && window.AUDIO_MAP[lananhKey]) || spoken;
-  playSafeAudio(targetAudio, "Tưởng Vy", fin);
+  // 1. Nếu có file âm thanh trọn câu (Cô Lan Anh hoặc VieNeu TTS)
+  const map = window.AUDIO_MAP || {};
+  const targetAudio = map[lananhKey] || map[spellKey] || map[spoken] || map["vi|" + spoken] || getAudio(spoken);
+  if(targetAudio && typeof targetAudio === "string" && (targetAudio.startsWith("audio/") || targetAudio.startsWith("http"))){
+    playSafeAudio(targetAudio, "Tưởng Vy", fin);
+    return;
+  }
+
+  // 2. Ghép chuỗi âm thanh sư phạm tự nhiên (Composite Audio Sequencer)
+  // [Phụ âm] -> [Nguyên âm] -> [Tiếng gốc] (-> [Dấu thanh] -> [Tiếng hoàn chỉnh])
+  const cFile = (c === "đ" ? "dd" : c);
+  const vNormMap = { "a": "a", "e": "e", "ê": "ee", "i": "i", "o": "o", "ô": "oo", "ơ": "ow", "u": "u", "ư": "uw" };
+  const vFile = vNormMap[v] || v;
+  const toneFiles = ["tone_khong_dau.mp3", "tone_huyen.mp3", "tone_sac.mp3", "tone_hoi.mp3", "tone_nga.mp3", "tone_nang.mp3"];
+
+  const seq = [
+    `audio/alpha_vi_${cFile}.mp3`,
+    `audio/alpha_vi_${vFile}.mp3`,
+    `audio/syl_${c}_${v}_0.mp3`
+  ];
+
+  if(toneIdx > 0 && toneIdx < toneFiles.length){
+    seq.push(`audio/${toneFiles[toneIdx]}`);
+    seq.push(`audio/syl_${c}_${v}_${toneIdx}.mp3`);
+  }
+
+  let step = 0;
+  function playNext(){
+    if(my !== tok) return;
+    if(step >= seq.length){
+      fin();
+      return;
+    }
+    const currentSrc = seq[step++];
+    A.onended = () => {
+      if(my !== tok) return;
+      setTimeout(playNext, 120);
+    };
+    A.onerror = () => {
+      if(my !== tok) return;
+      playNext();
+    };
+    A.src = currentSrc;
+    A.play().catch(() => {
+      if(my !== tok) return;
+      playNext();
+    });
+  }
+
+  playNext();
 }
 function pickConsonant(c, r){
   curC = c;

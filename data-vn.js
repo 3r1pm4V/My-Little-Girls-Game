@@ -1677,6 +1677,8 @@ if (typeof window !== "undefined") {
   window.VN_STROKES = VN_STROKES;
   window.VN_LETTER_GROUPS = VN_LETTER_GROUPS;
   window.LETTER_STROKE_GUIDES = LETTER_STROKE_GUIDES;
+  window.VN_SPELL = VN_SPELL;
+  window.VN_SPELL_WORDS = VN_SPELL_WORDS;
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -1684,6 +1686,8 @@ if (typeof module !== "undefined" && module.exports) {
     VN_STROKE_GROUPS,
     VN_STROKES,
     VN_LETTER_GROUPS,
-    LETTER_STROKE_GUIDES
+    LETTER_STROKE_GUIDES,
+    VN_SPELL,
+    VN_SPELL_WORDS
   };
 }
