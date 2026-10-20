@@ -222,9 +222,18 @@ async function main() {
       } catch (err) {
         process.stdout.write(`LỖI!\n`);
         console.warn(`    ⚠ Lỗi: ${err.message}`);
-        keyIndex++; // Đổi key khi gặp lỗi
+        if (err.message.includes('Daily token limit reached')) {
+          console.log(`    ⚠ Key #${(keyIndex % keys.length) + 1} đã hết hạn mức ngày, loại khỏi vòng xoay.`);
+          keys.splice(keyIndex % keys.length, 1);
+          if (keys.length === 0) {
+            console.error('✖ Tất cả các khóa API đều đã đạt hạn mức ngày!');
+            break;
+          }
+        } else {
+          keyIndex++; // Đổi key khi gặp lỗi khác
+        }
         retries++;
-        await sleep(1500 * retries);
+        await sleep(1000 * retries);
       }
     }
 
