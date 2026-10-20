@@ -7,6 +7,12 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **test(P2-07: Hardened Audio Precache Verification)**:
+  - Cập nhật tiêu đề và mô tả trong `test-sw-precache.js` dòng 1–6 phản ánh đầy đủ các điều kiện kiểm tra mới.
+  - Thêm kiểm tra nghiêm ngặt sự tồn tại của 100% tệp trong `OPT_AUDIO` trên đĩa (dòng 46): nếu thiếu bất kỳ file nào trong 242 file thì báo lỗi FAIL ngay lập tức.
+  - Bổ sung hằng số `MAX_OPT_AUDIO_BYTES = 13 * 1024 * 1024` (13 MB) tại dòng 15 kèm lý giải tránh đầy bộ nhớ cache trên thiết bị di động cũ/yếu; tính toán và in ra tổng dung lượng thực tế (dòng 50–59: 11.85 MB / 12,423,374 bytes $\le$ 13 MB).
+  - Bổ sung bước quét tự động toàn bộ mã nguồn `app.js` (dòng 72–80): phát hiện các chuỗi `"audio/....mp3"` viết cứng và in cảnh báo WARN chi tiết danh sách 11 file số 0–10 trong `numMap` (`app.js` dòng 3469–3481) chưa được đưa vào danh sách `OPT_AUDIO`.
+  - Chạy `node test-sw-precache.js` đạt PASS 100% (cảnh báo đúng 11 file số 0–10); toàn bộ 16/16 test suites của repository đều xanh.
 - **feat(P2-07: Implement Plan B Audio Precache for Stages 0–1)**:
   - Tích hợp gói 242 tệp âm thanh (Trang chủ 3 nút lớn, dặn dò chú mèo, streak 1–10 ngày, bảng chữ cái `alpha_*`, toàn bộ 3 bài Video Quiz Chặng 0 và 20 bài học Chặng 1; lưu ý: gói hiện KHÔNG có các file audio số 0–10 được ánh xạ trong `numMap` tại `app.js` dòng 3469–3481; tổng dung lượng đo được 12,423,374 bytes ~ 11.85 MB) vào `sw.js` dòng 19–262 qua mảng `OPT_AUDIO`.
   - Cơ chế nạp nằm trong sự kiện `install` (`sw.js` dòng 271–280), tải qua `Promise.all(OPT_AUDIO.map(...))` với bọc lỗi an toàn `catch()`. Do nằm trong sự kiện `install` (`e.waitUntil`), Service Worker mới chỉ kích hoạt sau khi tải xong toàn bộ gói (~11.85 MB).
