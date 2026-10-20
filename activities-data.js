@@ -53,1366 +53,1894 @@ const AGE_TIERS = {
  */
 const ACTIVITIES_DATA = [
   // ========================================================
-  // NHÓM 1: TIỀN TIỂU HỌC (4–6 TUỔI) - 9 HOẠT ĐỘNG
+  // NHÓM 1: CHUẨN BỊ VÀO LỚP 1 (4–6 TUỔI) - LỘ TRÌNH 5 CHẶNG THEO GOOGLE DRIVE (34 BÀI HỌC)
   // ========================================================
+  // Source: GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1 (Trang 1)
   {
-    id: "act_pre_let_01",
-    title: "Tập viết: Bé tập tô nét thẳng và nét cong ✏️",
-    titleEn: "Tracing: Straight and Curved Strokes",
-    icon: "✏️",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "vietnamese",
-    skill: "Tập tô nét cơ bản (thẳng, cong)",
-    skills: ["vi.trace.strokes"],
-    type: "trace",
-    traceMode: "net",
-    traceItem: "net_thang_dung",
-    difficulty: 1,
-    content: {
-      question: "Bé chọn nét nào là nét thẳng đứng kéo từ trên xuống dưới? ✏️",
-      questionEn: "Which stroke is a straight vertical line?",
-      media: "✏️ | ⭕ ➖"
-    },
-    options: [
-      { id: "opt_line", text: "Nét thẳng đứng | ✏️" },
-      { id: "opt_circle", text: "Nét cong tròn O ⭕" },
-      { id: "opt_curve", text: "Nét cong hở C 🌙" }
+    "id": "act_s0_tu_the_cam_but",
+    "title": "Tư thế ngồi học và cách cầm bút đúng chuẩn 🎒",
+    "titleEn": "Sitting Posture and Pencil Grip",
+    "icon": "🎒",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "skills",
+    "skill": "Tư thế ngồi học và cầm bút",
+    "skills": [
+      "life.school_manners",
+      "vi.trace.prep"
     ],
-    correctAnswer: "opt_line",
-    feedback: {
-      correct: "Đúng rồi! Nét thẳng đứng được kéo từ trên xuống dưới theo ô ly! ✏️✨",
-      wrong: "Bé chọn nét sổ thẳng từ trên xuống nhé!",
-      hint: "Nét thẳng đứng |"
+    "prerequisites": [],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận biết tư thế ngồi học thẳng lưng, mắt cách vở 25-30cm và quy tắc cầm bút bằng 3 ngón tay.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/posture_pencil.png",
+      "thumbnail": "img/posture_pencil.png"
     },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_let_02",
-    title: "Điền chữ còn thiếu: C_N MÈO 🐱",
-    titleEn: "Missing Letter: C_N MÈO",
-    ageTier: "grade1_2",
-    stage: null,
-    minAge: 6,
-    subject: "vietnamese",
-    skill: "Điền khuyết nguyên âm cơ bản",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      question: "Bé chọn chữ cái đúng để hoàn thành từ: C___N MÈO 🐱",
-      questionEn: "Choose the missing letter to complete: C___N MÈO 🐱",
-      media: "🐱",
-      template: "C [ ? ] N  M È O"
+    "source": "GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1 (Trang 1)",
+    "content": {
+      "question": "Bé cầm bút bằng mấy ngón tay của bàn tay phải? ✏️",
+      "questionEn": "How many fingers do you use to hold the pencil?",
+      "media": "✏️ 🖐️"
     },
-    options: [
-      { id: "O", text: "O (Chữ O tròn)" },
-      { id: "A", text: "A" },
-      { id: "U", text: "U" }
+    "options": [
+      {
+        "id": "opt_3",
+        "text": "3 ngón tay (ngón cái, ngón trỏ giữ, ngón giữa đỡ) ✍️"
+      },
+      {
+        "id": "opt_all",
+        "text": "Nắm cả bàn tay ✊"
+      },
+      {
+        "id": "opt_1",
+        "text": "Chỉ dùng 1 ngón tay ☝️"
+      }
     ],
-    correctAnswer: "O",
-    feedback: {
-      correct: "Hoan hô bé! C - O - N ➔ CON MÈO kêu meo meo! 🐱",
-      wrong: "Chữ O tròn như quả trứng gà bé ơi! Thử lại nhé!",
-      hint: "Chữ O tròn xoe"
+    "correctAnswer": "opt_3",
+    "feedback": {
+      "correct": "Đúng rồi! Cầm bút bằng tay phải, dùng ngón cái và ngón trỏ giữ bút, ngón giữa đỡ phía dưới nhé! 🌟",
+      "wrong": "Bé nhớ quy tắc 3 ngón tay cầm bút: ngón cái, ngón trỏ và ngón giữa nhé!",
+      "hint": "Quy tắc 3 ngón tay cầm bút"
     },
-    reward: { stars: 3 }
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1 (Trang 1)
   {
-    id: "act_pre_let_03",
-    title: "Ghép chữ in hoa và chữ thường 🔤",
-    titleEn: "Match Uppercase & Lowercase",
-    ageTier: "grade1_2",
-    stage: null,
-    minAge: 6,
-    subject: "vietnamese",
-    skill: "Nhận diện chữ hoa và chữ thường",
-    type: "matching",
-    difficulty: 2,
-    content: {
-      question: "Bé chạm vào chữ in hoa rồi chạm chữ in thường tương ứng nhé!",
-      questionEn: "Match the uppercase letter with the lowercase letter!",
-      media: "🔤",
-      pairs: [
-        { id: "p1", left: "Chữ A (Hoa)", right: "a (thường)" },
-        { id: "p2", left: "Chữ B (Hoa)", right: "b (thường)" },
-        { id: "p3", left: "Chữ C (Hoa)", right: "c (thường)" }
-      ]
-    },
-    feedback: {
-      correct: "Tuyệt vời! Bé đã ghép đúng cả 3 cặp chữ cái in hoa và in thường! 👏",
-      wrong: "Bé nhìn thật kỹ dáng chữ rồi ghép lại nhé!"
-    },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_num_01",
-    icon: "🔢",
-    title: "Bé tìm chữ số 4 ⛵",
-    titleEn: "Find Number 4",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "math",
-    skill: "Nhận biết mặt chữ số 1–10",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      question: "Đố bé biết số 4 giống cánh buồm ở đâu?",
-      questionEn: "Where is number 4 looking like a sailboat?",
-      media: "⛵ ⛵ ⛵ ⛵"
-    },
-    options: [
-      { id: "4", text: "Số 4" },
-      { id: "1", text: "Số 1" },
-      { id: "7", text: "Số 7" }
+    "id": "act_s0_do_dung_hoc_tap",
+    "title": "Nhận biết đồ dùng học tập của bé Lớp 1 🎒✏️",
+    "titleEn": "School Supplies for Grade 1",
+    "icon": "🎒",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "skills",
+    "skill": "Nhận biết đồ dùng học tập",
+    "skills": [
+      "life.observation",
+      "life.study_corner"
     ],
-    correctAnswer: "4",
-    feedback: {
-      correct: "Chính xác! Số 4 giống như cánh buồm căng gió lướt sóng! ⛵",
-      wrong: "Bé nhìn kỹ nhé: Số 4 có nét gập ngang như cánh buồm!"
+    "prerequisites": [],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé làm quen và gọi đúng tên các đồ dùng đi học: cặp sách, hộp bút, bút chì, thước kẻ, bảng con.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/school_supplies.png",
+      "thumbnail": "img/school_supplies.png"
     },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_num_02",
-    icon: "🔢",
-    title: "Sắp xếp số từ bé đến lớn: 1, 2, 3 🔢",
-    titleEn: "Sort Numbers: 1, 2, 3",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "math",
-    skill: "Thứ tự đếm số tự nhiên cơ bản",
-    type: "drag_drop",
-    difficulty: 1,
-    content: {
-      question: "Bé chạm vào các số để xếp theo thứ tự từ bé đến lớn nhé!",
-      questionEn: "Tap the numbers in order from smallest to largest!",
-      media: "🔢 1 ➔ 2 ➔ 3",
-      slots: 3,
-      tokens: [
-        { id: "t2", text: "2" },
-        { id: "t1", text: "1" },
-        { id: "t3", text: "3" }
-      ],
-      correctSequence: ["1", "2", "3"]
+    "source": "GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1 (Trang 1)",
+    "content": {
+      "question": "Đồ dùng nào dùng để đựng sách vở và dụng cụ khi bé đến trường? 🎒",
+      "questionEn": "Which item holds your books and supplies when going to school?",
+      "media": "🎒 ✏️ 📏"
     },
-    feedback: {
-      correct: "Xuất sắc! Thứ tự đúng là: 1 rồi đến 2, rồi đến 3! 🌟",
-      wrong: "Số nào nhỏ nhất bé xếp trước nhé: 1, rồi đến mấy nhỉ?"
-    },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_num_03",
-    title: "Đếm số lượng đồ dùng học tập: Bút, Thước, Vở 🎒✏️📏",
-    titleEn: "Counting: Pens, Rulers, and Notebooks",
-    icon: "🔢",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "math",
-    skill: "Đếm số lượng đồ dùng học tập 1-5",
-    skills: ["math.count.stationery"],
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      question: "Bé đếm xem bạn Thỏ có mấy cây bút chì màu: ✏️ ✏️ ✏️ ?",
-      questionEn: "How many colored pencils does Bunny have: ✏️ ✏️ ✏️ ?",
-      media: "✏️ ✏️ ✏️"
-    },
-    options: [
-      { id: "opt_3", text: "3 cây bút chì ✏️" },
-      { id: "opt_2", text: "2 cây bút chì ✏️" },
-      { id: "opt_4", text: "4 cây bút chì ✏️" }
+    "options": [
+      {
+        "id": "opt_bag",
+        "text": "Cặp sách (Balo đi học) 🎒"
+      },
+      {
+        "id": "opt_pillow",
+        "text": "Gối ngủ 🛋️"
+      },
+      {
+        "id": "opt_bowl",
+        "text": "Bát ăn cơm 🥣"
+      }
     ],
-    correctAnswer: "opt_3",
-    feedback: {
-      correct: "Chính xác! 1, 2, 3 cây bút chì màu xinh xắn! 🌟",
-      wrong: "Bé đếm lại cùng Thỏ nhé: 1, 2, 3!",
-      hint: "Có 3 cây bút chì"
+    "correctAnswer": "opt_bag",
+    "feedback": {
+      "correct": "Chính xác! Cặp sách giúp bé xếp gọn gàng sách vở, hộp bút để sẵn sàng tới trường! 🎒✨",
+      "wrong": "Bé chọn chiếc cặp sách xinh xắn để đựng sách vở nhé!",
+      "hint": "Chiếc cặp sách (balo)"
     },
-    reward: { stars: 3 }
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1; cac net co ban.pdf - Page 1
   {
-    id: "act_pre_eng_01",
-    icon: "🇬🇧",
-    title: "Colors: Màu sắc mặt trời ☀️",
-    titleEn: "Colors: Sun Color",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "english",
-    skill: "Nhận biết từ vựng màu sắc tiếng Anh cơ bản",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      question: "Mặt trời ☀️ màu vàng rực rỡ, tiếng Anh gọi là gì?",
-      questionEn: "What color is the sunny sun? ☀️",
-      media: "☀️  YELLOW"
-    },
-    options: [
-      { id: "yellow", text: "Yellow (Màu vàng)" },
-      { id: "red", text: "Red (Màu đỏ)" },
-      { id: "blue", text: "Blue (Màu xanh)" }
+    "id": "act_s0_dong_ke_o_ly",
+    "title": "Làm quen dòng kẻ ô ly và bảng con 📏",
+    "titleEn": "Grid Lines and Writing Slate",
+    "icon": "✏️",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Nhận biết dòng kẻ ô ly",
+    "skills": [
+      "vi.trace.prep"
     ],
-    correctAnswer: "yellow",
-    feedback: {
-      correct: "Awesome! Sun is Yellow! Màu vàng tiếng Anh là Yellow! ☀️",
-      wrong: "Màu vàng là Yellow bé ơi! Nghe lại nhé: YEL-LOW!"
+    "prerequisites": [],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận biết đường kẻ ngang đậm (mặt đất), đường kẻ dọc và các ô ly 1 ly, 2 ly.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/grid_lines.png",
+      "thumbnail": "img/grid_lines.png"
     },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_eng_02",
-    icon: "🇬🇧",
-    title: "Animals: Ghép con vật tiếng Anh 🐶🐱",
-    titleEn: "Match Animal Words",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "english",
-    skill: "Từ vựng con vật thân thuộc tiếng Anh",
-    type: "matching",
-    difficulty: 1,
-    content: {
-      question: "Bé nối hình con vật với tên tiếng Anh của bạn ấy nhé!",
-      questionEn: "Match the animal with its English name!",
-      media: "🐶 🐱 🐥",
-      pairs: [
-        { id: "e1", left: "🐶 Chú chó", right: "Dog" },
-        { id: "e2", left: "🐱 Chú mèo", right: "Cat" },
-        { id: "e3", left: "🐥 Gà con", right: "Chick" }
-      ]
+    "source": "GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1; cac net co ban.pdf - Page 1",
+    "content": {
+      "question": "Đường kẻ ngang đậm nhất ở dưới cùng của bảng ô ly được gọi là gì? 📏",
+      "questionEn": "What is the boldest horizontal line at the bottom called?",
+      "media": "📏 ⬛ 🔲"
     },
-    feedback: {
-      correct: "Hooray! Dog là chú chó, Cat là chú mèo, Chick là gà con! Giỏi lắm! 🎉",
-      wrong: "Chú chó sủa gâu gâu là Dog, chú mèo meo meo là Cat bé nhé!"
-    },
-    reward: { stars: 3 }
-  },
-  {
-    id: "act_pre_read_01",
-    icon: "📚",
-    title: "Đọc hiểu: Chú Thỏ Trắng ngoan ngoãn 🐰",
-    titleEn: "Story: The Good Bunny",
-    ageTier: "preschool",
-    stage: 4,
-    minAge: 4,
-    subject: "reading",
-    skill: "Đọc hiểu chi tiết văn bản ngắn",
-    type: "reading_passage",
-    difficulty: 1,
-    content: {
-      storyText: "Chú Thỏ Trắng có đôi tai dài và bộ lông trắng muốt. Mỗi buổi sáng, Thỏ Trắng đều thích ăn củ cà rốt giòn ngọt cùng mẹ.",
-      question: "Trong câu chuyện, chú Thỏ Trắng thích ăn món gì nhất?",
-      questionEn: "What does the little bunny love to eat?",
-      media: "🐰 🥕"
-    },
-    options: [
-      { id: "carrot", text: "Củ cà rốt giòn ngọt 🥕" },
-      { id: "fish", text: "Con cá rán 🐟" },
-      { id: "candy", text: "Cái kẹo mút 🍭" }
+    "options": [
+      {
+        "id": "opt_mat_dat",
+        "text": "Đường kẻ ngang 1 (Đường mặt đất) 🏡"
+      },
+      {
+        "id": "opt_mai_nha",
+        "text": "Mái nhà cao ⛺"
+      },
+      {
+        "id": "opt_dong_song",
+        "text": "Dòng sông xanh 🌊"
+      }
     ],
-    correctAnswer: "carrot",
-    feedback: {
-      correct: "Đúng rồi! Thỏ Trắng thích ăn củ cà rốt đỏ cam giòn rụm! 🥕🐰",
-      wrong: "Bé nghe lại nhé: 'Thỏ Trắng đều thích ăn củ cà rốt giòn ngọt'!"
+    "correctAnswer": "opt_mat_dat",
+    "feedback": {
+      "correct": "Đúng rồi! Đường kẻ ngang 1 là đường kẻ đậm, còn được gọi là mặt đất để đặt chân các chữ cái! 🏡🌟",
+      "wrong": "Bé chọn đường kẻ ngang số 1 (đường mặt đất) nhé!",
+      "hint": "Đường mặt đất (đường ngang 1)"
     },
-    reward: { stars: 3 }
+    "reward": {
+      "stars": 3
+    }
   },
-
-  // ========================================================
-  // LỘ TRÌNH HỌC VẦN & ĐÁNH VẦN CHUẨN TIỀN TIỂU HỌC
-  // Giáo trình: "Bé luyện đọc Tiếng Việt tự tin vào lớp 1"
-  // CHẶNG 3: VẦN ĐƠN, VẦN GHÉP & TỪ ỨNG DỤNG (8 BÀI)
-  // ========================================================
+  // Source: cac net co ban.pdf - Page 1-8; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1, 2
   {
-    id: "act_p2_spell_ba_tones",
-    icon: "🔤",
-    title: "Ghép vần đơn: b + a + thanh điệu 👵",
-    titleEn: "Phonics: b + a + tones",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.phonics.onset-rhyme",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé ghép âm: b + a + dấu huyền = tiếng gì nhỉ? 👵",
-      "questionEn": "b + a + grave accent = ?",
-      "media": "👵  b + a + \\ = [ ? ]",
-      "template": "b + a + huyền = [ ? ]"
-},
-    options: [
+    "id": "act_s0_net_thang",
+    "title": "Tập viết Nhóm 1: Nét thẳng đứng, nét ngang và nét xiên ✏️",
+    "titleEn": "Strokes Group 1: Straight, Horizontal, and Slanted Lines",
+    "icon": "✏️",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Luyện viết nét thẳng",
+    "skills": [
+      "vi.trace.strokes"
+    ],
+    "prerequisites": [],
+    "type": "trace",
+    "traceMode": "net",
+    "traceItem": "net_thang_dung",
+    "difficulty": 1,
+    "learningObjective": "Bé tập tô nét thẳng đứng cao 2 ly, nét ngang rộng 2 ly, nét xiên trái và xiên phải theo ô ly.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "trace:net",
+      "thumbnail": "trace:net"
+    },
+    "source": "cac net co ban.pdf - Page 1-8; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 1, 2",
+    "content": {
+      "question": "Bé chọn bút màu và tập tô nét thẳng đứng kéo từ trên xuống dưới nhé! ✏️",
+      "questionEn": "Trace the vertical stroke from top to bottom!",
+      "media": "✏️ | ➖ ╱"
+    },
+    "options": [
       {
-            "id": "bà",
-            "text": "bà"
+        "id": "net_thang_dung",
+        "text": "Nét thẳng đứng | ✏️"
       },
       {
-            "id": "bá",
-            "text": "bá"
+        "id": "net_thang_ngang",
+        "text": "Nét thẳng ngang ➖"
       },
       {
-            "id": "bả",
-            "text": "bả"
+        "id": "net_xien_phai",
+        "text": "Nét xiên phải ╱"
       }
-],
-    correctAnswer: "bà",
-    feedback: {
-      "correct": "Hoan hô bé! b - a - ba - huyền - BÀ! Bà yêu bé lắm! 👵💖",
-      "wrong": "Bé nghe lại nhé: b + a + dấu huyền tạo thành tiếng BÀ! Thử lại nào!",
-      "hint": "b - a - ba - huyền - bà"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "net_thang_dung",
+    "feedback": {
+      "correct": "Bé nắn nót viết nét thẳng rất đẹp! Kéo thẳng từ trên xuống đường mặt đất! 🌟✍️",
+      "wrong": "Bé tô nét thẳng đứng từ trên xuống dưới nhé!",
+      "hint": "Nét thẳng đứng |"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: cac net co ban.pdf - Page 9-14; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 3, 4
   {
-    id: "act_p2_vocab_be_ba",
-    icon: "🔤",
-    title: "Từ ứng dụng: Bé và Bà 👧👵",
-    titleEn: "Key Words: Bé and Bà",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.vocab.sight-words",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Hình ảnh người bà hiền từ tương ứng với từ nào bé ơi? 👵",
-      "questionEn": "Which word means Grandmother? 👵",
-      "media": "👵"
-},
-    options: [
+    "id": "act_s0_net_moc",
+    "title": "Tập viết Nhóm 2: Nét móc xuôi, nét móc ngược và nét móc hai đầu ✏️",
+    "titleEn": "Strokes Group 2: Downward, Upward, and Double Hooks",
+    "icon": "✏️",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Luyện viết nét móc",
+    "skills": [
+      "vi.trace.strokes"
+    ],
+    "prerequisites": [],
+    "type": "trace",
+    "traceMode": "net",
+    "traceItem": "net_moc_nguoc",
+    "difficulty": 1,
+    "learningObjective": "Bé tập tô nét móc ngược (cao 2 ly, rộng 1 ly), nét móc xuôi và nét móc hai đầu.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "trace:net",
+      "thumbnail": "trace:net"
+    },
+    "source": "cac net co ban.pdf - Page 9-14; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 3, 4",
+    "content": {
+      "question": "Bé tập tô nét móc ngược: kéo thẳng xuống rồi uốn cong móc lên trên nhé! ✍️",
+      "questionEn": "Trace the upward hook stroke!",
+      "media": "✍️ 🦯 🪝"
+    },
+    "options": [
       {
-            "id": "bà",
-            "text": "bà"
+        "id": "net_moc_nguoc",
+        "text": "Nét móc ngược (móc dưới) 🪝"
       },
       {
-            "id": "bé",
-            "text": "bé"
+        "id": "net_moc_xuoi",
+        "text": "Nét móc xuôi (móc trên) 🦯"
       },
       {
-            "id": "bố",
-            "text": "bố"
+        "id": "net_moc_hai_dau",
+        "text": "Nét móc 2 đầu 〰️"
       }
-],
-    correctAnswer: "bà",
-    feedback: {
-      "correct": "Chính xác! Tiếng 'bà' có âm b, nguyên âm a và dấu huyền! 👵",
-      "wrong": "Bé nhìn tranh bà hiền từ và chọn tiếng 'bà' nhé!",
-      "hint": "Tiếng 'bà' có dấu huyền"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "net_moc_nguoc",
+    "feedback": {
+      "correct": "Bé viết nét móc rất khéo léo! Đây là nét chính để viết các chữ cái u, ư, i, t! 🌟",
+      "wrong": "Bé kéo thẳng xuống rồi uốn nhẹ móc lên nhé!",
+      "hint": "Nét móc ngược"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: cac net co ban.pdf - Page 15-20; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 5
   {
-    id: "act_p2_spell_ca_sac",
-    icon: "🔤",
-    title: "Ghép vần đơn: c + a + sắc = cá 🐟",
-    titleEn: "Phonics: c + a + acute accent",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.phonics.onset-rhyme",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé ghép âm: c + a + dấu sắc = tiếng gì bơi dưới nước? 🐟",
-      "questionEn": "c + a + acute accent = ?",
-      "media": "🐟  c + a + / = [ ? ]",
-      "template": "c + a + sắc = [ ? ]"
-},
-    options: [
+    "id": "act_s0_net_cong",
+    "title": "Tập viết Nhóm 3: Nét cong hở và nét cong tròn kín ⭕",
+    "titleEn": "Strokes Group 3: Open Curve and Closed Circle",
+    "icon": "✏️",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Luyện viết nét cong",
+    "skills": [
+      "vi.trace.strokes"
+    ],
+    "prerequisites": [],
+    "type": "trace",
+    "traceMode": "net",
+    "traceItem": "net_cong_kin",
+    "difficulty": 1,
+    "learningObjective": "Bé tập tô nét cong trái, nét cong phải và nét cong tròn kín chữ O (cao 2 ly, rộng 1.5 ly).",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "trace:net",
+      "thumbnail": "trace:net"
+    },
+    "source": "cac net co ban.pdf - Page 15-20; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 5",
+    "content": {
+      "question": "Bé tập tô nét cong tròn kín tròn xoe như quả trứng gà nhé! ⭕",
+      "questionEn": "Trace the closed circle curve!",
+      "media": "⭕ 🌙 🥚"
+    },
+    "options": [
       {
-            "id": "cá",
-            "text": "cá"
+        "id": "net_cong_kin",
+        "text": "Nét cong kín (chữ O tròn) ⭕"
       },
       {
-            "id": "cà",
-            "text": "cà"
+        "id": "net_cong_ho_phai",
+        "text": "Nét cong hở phải (chữ C) 🌙"
       },
       {
-            "id": "cả",
-            "text": "cả"
+        "id": "net_cong_ho_trai",
+        "text": "Nét cong hở trái 🌘"
       }
-],
-    correctAnswer: "cá",
-    feedback: {
-      "correct": "Đúng rồi! c - a - ca - sắc - CÁ! Chú cá bơi lội tung tăng! 🐟",
-      "wrong": "Dấu sắc vút lên bé ơi: c + a + sắc = CÁ! Bé chọn lại nhé!",
-      "hint": "c - a - ca - sắc - cá"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "net_cong_kin",
+    "feedback": {
+      "correct": "Tuyệt vời! Nét cong kín tròn xoe, lưng cong chạm vào đường kẻ dọc! 🌟⭕",
+      "wrong": "Bé đặt bút dưới đường kẻ ngang 3 rồi uốn cong tròn kín nhé!",
+      "hint": "Nét cong tròn kín"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: cac net co ban.pdf - Page 21-30; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 6
   {
-    id: "act_p2_spell_bo_huyen",
-    icon: "🔤",
-    title: "Ghép vần đơn: b + o + huyền = bò 🐮",
-    titleEn: "Phonics: b + o + grave accent",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.phonics.onset-rhyme",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé chọn tiếng đúng: b + o + dấu huyền = con gì thích ăn cỏ? 🐮",
-      "questionEn": "b + o + grave accent = ?",
-      "media": "🐮  b + o + \\ = [ ? ]",
-      "template": "b + o + huyền = [ ? ]"
-},
-    options: [
+    "id": "act_s0_net_khuyet_that",
+    "title": "Tập viết Nhóm 4 & 5: Nét khuyết trên, khuyết dưới và nét thắt ✍️",
+    "titleEn": "Strokes Group 4 & 5: Loops and Tie Strokes",
+    "icon": "✏️",
+    "ageTier": "preschool",
+    "stage": 0,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Luyện viết nét khuyết và thắt",
+    "skills": [
+      "vi.trace.strokes"
+    ],
+    "prerequisites": [],
+    "type": "trace",
+    "traceMode": "net",
+    "traceItem": "net_khuyet_tren",
+    "difficulty": 2,
+    "learningObjective": "Bé làm quen và tập viết nét khuyết trên cao 5 ly (dùng viết l, b, h) và nét thắt.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "trace:net",
+      "thumbnail": "trace:net"
+    },
+    "source": "cac net co ban.pdf - Page 21-30; GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 6",
+    "content": {
+      "question": "Bé tập tô nét khuyết trên cao 5 ô ly để chuẩn bị viết các chữ cái l, b, h nhé! ✍️",
+      "questionEn": "Trace the upper loop stroke!",
+      "media": "✍️ 🦒 🎗️"
+    },
+    "options": [
       {
-            "id": "bò",
-            "text": "bò"
+        "id": "net_khuyet_tren",
+        "text": "Nét khuyết trên cao 5 ly 🦒"
       },
       {
-            "id": "bó",
-            "text": "bó"
+        "id": "net_khuyet_duoi",
+        "text": "Nét khuyết dưới (chữ g, y) 🐟"
       },
       {
-            "id": "bỏ",
-            "text": "bỏ"
+        "id": "net_that_giua",
+        "text": "Nét thắt giữa (chữ k) 🎗️"
       }
-],
-    correctAnswer: "bò",
-    feedback: {
-      "correct": "Hoan hô bé! b - o - bo - huyền - BÒ! Chú bò sữa ngoan ngoãn! 🐮",
-      "wrong": "b + o = bo, thêm dấu huyền thành BÒ bé nhé! Thử lại nào!",
-      "hint": "b - o - bo - huyền - bò"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "net_khuyet_tren",
+    "feedback": {
+      "correct": "Bé viết nét khuyết rất giỏi! Đưa chéo lên rồi uốn lượn kéo thẳng đứng xuống! 🌟👏",
+      "wrong": "Bé đưa nét xiên lên góc ô ly rồi uốn cong kéo thẳng xuống nhé!",
+      "hint": "Nét khuyết trên cao 5 ly"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 1-3
   {
-    id: "act_p2_rhyme_an",
-    icon: "🔤",
-    title: "Học vần ghép: Vần AN & Cái Bàn 🪑",
-    titleEn: "Rhyme AN: The Table",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.phonics.rhymes",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Vần a - n - an! Đố bé: b + an + dấu huyền = tiếng gì? 🪑",
-      "questionEn": "Rhyme an: b + an + grave accent = ?",
-      "media": "🪑  b + an + \\ = [ ? ]",
-      "template": "b + an + huyền = [ ? ]"
-},
-    options: [
+    "id": "act_s1_tv_nguyen_am_a_o_e",
+    "title": "Nhận biết nguyên âm đơn: A, Ă, Â, O, Ô, Ơ, E, Ê 🔤",
+    "titleEn": "Vowels: A, Ă, Â, O, Ô, Ơ, E, Ê",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Nhận diện nguyên âm đơn",
+    "skills": [
+      "vi.vowels"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận diện và phát âm đúng các nguyên âm đơn: a, ă, â, o, ô, ơ, e, ê.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/vowels_group1.png",
+      "thumbnail": "img/vowels_group1.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 1-3",
+    "content": {
+      "question": "Chữ cái nào tròn xoe như quả trứng gà? ⭕",
+      "questionEn": "Which letter is round like an egg?",
+      "media": "⭕ 🅰️ 🅾️"
+    },
+    "options": [
       {
-            "id": "bàn",
-            "text": "bàn"
+        "id": "opt_o",
+        "text": "Chữ O (O tròn như quả trứng gà) ⭕"
       },
       {
-            "id": "bạn",
-            "text": "bạn"
+        "id": "opt_a",
+        "text": "Chữ A 🍎"
       },
       {
-            "id": "bán",
-            "text": "bán"
+        "id": "opt_e",
+        "text": "Chữ E 🐑"
       }
-],
-    correctAnswer: "bàn",
-    feedback: {
-      "correct": "Tuyệt vời! b - an - ban - huyền - BÀN! Cái bàn học xinh xắn của bé! 🪑",
-      "wrong": "b + an = ban, thêm dấu huyền thành BÀN bé nhé! Thử lại nào!",
-      "hint": "b - an - ban - huyền - bàn"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_o",
+    "feedback": {
+      "correct": "Đúng rồi! O tròn như quả trứng gà, Ô thì đội mũ, Ơ thì thêm râu! ⭕✨",
+      "wrong": "Chữ tròn xoe không có nét thừa là chữ O nhé!",
+      "hint": "Chữ O tròn"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 3-4
   {
-    id: "act_p2_vocab_cai_ban",
-    icon: "🔤",
-    title: "Từ ứng dụng vần AN: Cái Bàn 🪑",
-    titleEn: "Application Words: Cái Bàn",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.vocab.sight-words",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Bé chọn từ khóa đúng có chứa vần 'an' cho hình ảnh chiếc bàn học nhé: 🪑",
-      "questionEn": "Choose the word with rhyme 'an' for table: 🪑",
-      "media": "🪑  CÁI BÀN"
-},
-    options: [
+    "id": "act_s1_tv_nguyen_am_u_i",
+    "title": "Nhận biết nguyên âm đơn: U, Ư, I, Y 🔤",
+    "titleEn": "Vowels: U, Ư, I, Y",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Nhận diện nguyên âm đơn U, Ư, I",
+    "skills": [
+      "vi.vowels"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé phân biệt được nguyên âm u và ư (ư có râu), i ngắn và y dài.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/vowels_group2.png",
+      "thumbnail": "img/vowels_group2.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 3-4",
+    "content": {
+      "question": "Chữ nào có thêm chiếc râu nhỏ ở bên phải: chữ U hay chữ Ư? 🍇",
+      "questionEn": "Which letter has a small hook on the right: U or Ư?",
+      "media": "🥣 🍇"
+    },
+    "options": [
       {
-            "id": "cái bàn",
-            "text": "cái bàn"
+        "id": "opt_uw",
+        "text": "Chữ Ư (Chữ Ư có râu) 🍇"
       },
       {
-            "id": "ghế",
-            "text": "ghế"
+        "id": "opt_u",
+        "text": "Chữ U (Không có râu) 🥣"
       },
       {
-            "id": "vở",
-            "text": "vở"
+        "id": "opt_i",
+        "text": "Chữ I 🦯"
       }
-],
-    correctAnswer: "cái bàn",
-    feedback: {
-      "correct": "Giỏi quá! CÁI BÀN có tiếng 'bàn' mang vần an! 🪑🌟",
-      "wrong": "Bé tìm từ 'cái bàn' có chứa vần an nhé!",
-      "hint": "Cái bàn"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_uw",
+    "feedback": {
+      "correct": "Chính xác! Chữ Ư giống chữ U nhưng có thêm chiếc râu nhỏ xinh xắn! 🍇🌟",
+      "wrong": "Chữ có chiếc râu ở góc trên bên phải là chữ Ư nhé!",
+      "hint": "Chữ Ư có râu"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 4
   {
-    id: "act_p2_rhyme_on",
-    icon: "🔤",
-    title: "Học vần ghép: Vần ON & Con Cá 🐟",
-    titleEn: "Rhyme ON: Little Fish",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.phonics.rhymes",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Vần o - n - on! Bé ghép âm: c + on = tiếng gì nào? 🐟",
-      "questionEn": "c + on = ?",
-      "media": "🐟  c + on = [ ? ]",
-      "template": "c + on = [ ? ]"
-},
-    options: [
+    "id": "act_s1_tv_ghep_am_b",
+    "title": "Đánh vần âm đầu B: bà ba, be bé, bò bê, bế bé 👵",
+    "titleEn": "Spelling Consonant B: bà ba, be bé, bò bê",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Ghép âm đầu B",
+    "skills": [
+      "vi.phonics.blend",
+      "vi.consonants"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé ghép âm đầu b với nguyên âm và dấu thanh để đọc: bà ba, be bé, bò bê, bế bé.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/spell_b.png",
+      "thumbnail": "img/spell_b.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 4",
+    "content": {
+      "question": "Âm 'b' ghép với âm 'a' và thanh huyền tạo thành tiếng gì? (b - a - huyền) 👵",
+      "questionEn": "What word is made from b + a + grave accent?",
+      "media": "👵 👧"
+    },
+    "options": [
       {
-            "id": "con",
-            "text": "con"
+        "id": "opt_ba_huyen",
+        "text": "bà (Bà yêu của bé) 👵"
       },
       {
-            "id": "còn",
-            "text": "còn"
+        "id": "opt_bo",
+        "text": "bò 🐮"
       },
       {
-            "id": "cỏ",
-            "text": "cỏ"
+        "id": "opt_be",
+        "text": "bé 👶"
       }
-],
-    correctAnswer: "con",
-    feedback: {
-      "correct": "Hoan hô bé! c - on - CON trong từ CON CÁ! 🐟✨",
-      "wrong": "Âm cờ ghép với vần on tạo thành CON bé nhé! Thử lại nào!",
-      "hint": "c - on - con"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_ba_huyen",
+    "feedback": {
+      "correct": "Đúng rồi! b - a - ba - huyền - bà! Bé phát âm rất to và rõ ràng! 👵💖",
+      "wrong": "b ghép với a thành ba, thêm dấu huyền thành bà nhé!",
+      "hint": "b - a - huyền - bà"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 5
   {
-    id: "act_p2_vocab_con_ca",
-    icon: "🔤",
-    title: "Từ ứng dụng vần ON: Con Cá 🐟",
-    titleEn: "Application Words: Con Cá",
-    ageTier: "preschool",
-    stage: 2,
-    minAge: 5,
-    subject: "vietnamese",
-    skill: "vi.vocab.sight-words",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Đố bé tìm đúng từ 'con cá' có chứa vần on đang bơi dưới nước? 🐟",
-      "questionEn": "Find the word 'con cá' (fish) 🐟",
-      "media": "🐟  CON CÁ"
-},
-    options: [
+    "id": "act_s1_tv_ghep_am_c",
+    "title": "Đánh vần âm đầu C: cá cờ, cổ cò, cụ cố, cô ba 🐟",
+    "titleEn": "Spelling Consonant C: cá cờ, cổ cò, cụ cố",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "vietnamese",
+    "skill": "Ghép âm đầu C",
+    "skills": [
+      "vi.phonics.blend",
+      "vi.consonants"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé ghép âm c với các nguyên âm a, o, ô, u để đọc: cá cờ, cổ cò, cụ cố, cô ba.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/spell_c.png",
+      "thumbnail": "img/spell_c.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 5",
+    "content": {
+      "question": "Âm 'c' ghép với 'a' và dấu sắc tạo thành tiếng gì? (c - a - sắc) 🐟",
+      "questionEn": "What word is made from c + a + acute accent?",
+      "media": "🐟 🚩"
+    },
+    "options": [
       {
-            "id": "con cá",
-            "text": "con cá"
+        "id": "opt_ca_sac",
+        "text": "cá (Con cá bơi lội) 🐟"
       },
       {
-            "id": "gà",
-            "text": "gà"
+        "id": "opt_co",
+        "text": "cò 🦢"
       },
       {
-            "id": "chó",
-            "text": "chó"
+        "id": "opt_co_ba",
+        "text": "cô 👩"
       }
-],
-    correctAnswer: "con cá",
-    feedback: {
-      "correct": "Xuất sắc! CON CÁ gồm tiếng 'con' vần on và tiếng 'cá' vần a! 🐟🎉",
-      "wrong": "Bé nhìn chú cá bơi lội và chọn từ 'con cá' nhé!",
-      "hint": "Con cá"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_ca_sac",
+    "feedback": {
+      "correct": "Chính xác! c - a - ca - sắc - cá! Bé ghép vần rất cừ khôi! 🐟🌟",
+      "wrong": "c ghép với a thành ca, thêm sắc thành cá nhé!",
+      "hint": "c - a - sắc - cá"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
-
-  // ========================================================
-  // CHẶNG 4: CÂU ĐỌC HIỂU NGẮN 3-5 TIẾNG CÓ HÌNH MINH HỌA (4 BÀI)
-  // ========================================================
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 3-4
   {
-    id: "act_p2_sen_ban_nho",
-    icon: "📖",
-    title: "Đọc câu ngắn: Bé có cái bàn nhỏ 🪑",
-    titleEn: "Short Sentence: The Small Desk",
-    ageTier: "preschool",
-    stage: 4,
-    minAge: 5,
-    subject: "reading",
-    skill: "vi.read.sentence-short",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Bé đọc câu: 'Bé có cái bàn nhỏ.' Đố bé trong câu nhắc đến đồ vật nào? 🪑",
-      "questionEn": "Sentence: 'Bé có cái bàn nhỏ.' What object is mentioned?",
-      "media": "🪑  Bé có cái bàn nhỏ."
-},
-    options: [
+    "id": "act_s1_toan_dem_1_5",
+    "title": "Tập đếm số lượng đồ vật trong phạm vi 1 đến 5 🍎⛵",
+    "titleEn": "Counting Objects 1 to 5",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "math",
+    "skill": "Đếm trong phạm vi 5",
+    "skills": [
+      "math.count.5"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé đếm đúng số lượng từ 1 đến 5 qua hình ảnh trực quan: quả táo, cánh bướm, con thuyền.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/count_1_5.png",
+      "thumbnail": "img/count_1_5.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 3-4",
+    "content": {
+      "question": "Bé đếm xem có bao nhiêu quả táo đỏ tươi trên đĩa nhé: 🍎 🍎 🍎",
+      "questionEn": "Count the red apples: 🍎 🍎 🍎",
+      "media": "🍎 🍎 🍎"
+    },
+    "options": [
       {
-            "id": "cái bàn",
-            "text": "cái bàn"
+        "id": "opt_3",
+        "text": "3 quả táo 🍎"
       },
       {
-            "id": "xe",
-            "text": "xe"
+        "id": "opt_2",
+        "text": "2 quả táo 🍎"
       },
       {
-            "id": "bút",
-            "text": "bút"
+        "id": "opt_5",
+        "text": "5 quả táo 🍎"
       }
-],
-    correctAnswer: "cái bàn",
-    feedback: {
-      "correct": "Chính xác! Câu văn nói: 'Bé có cái bàn nhỏ' để bé ngồi học bài! 🪑👏",
-      "wrong": "Bé đọc lại câu nhé: 'Bé có cái bàn nhỏ'. Đồ vật là cái bàn!",
-      "hint": "Cái bàn nhỏ"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_3",
+    "feedback": {
+      "correct": "Chuẩn xác! 1, 2, 3 - có tất cả 3 quả táo đỏ thơm ngon! 🍎🌟",
+      "wrong": "Bé chỉ tay vào từng quả và đếm lại cùng cô nhé: 1, 2, 3!",
+      "hint": "Có 3 quả táo"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 5-6
   {
-    id: "act_p2_sen_dan_ga",
-    icon: "📖",
-    title: "Đọc câu ngắn: Đàn gà lon ton 🐥",
-    titleEn: "Short Sentence: Chicks Running",
-    ageTier: "preschool",
-    stage: 4,
-    minAge: 5,
-    subject: "reading",
-    skill: "vi.read.sentence-short",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé điền từ còn thiếu vào câu: 'Đàn gà ___ ton theo mẹ.' 🐥",
-      "questionEn": "Fill in the blank: 'Đàn gà ___ ton theo mẹ.'",
-      "media": "🐥 🌾  Đàn gà [ ? ] ton.",
-      "template": "Đàn gà [ ? ] ton."
-},
-    options: [
+    "id": "act_s1_toan_nhan_dien_so_1_5",
+    "title": "Nhận diện chữ số và nối số thích hợp (1 - 5) 🔢",
+    "titleEn": "Recognizing Numbers 1 to 5",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "math",
+    "skill": "Nhận diện số 1-5",
+    "skills": [
+      "math.number.recognition.5"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận biết hình dáng mặt chữ số 1, 2, 3, 4, 5 và khoanh đúng số lượng tương ứng.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/numbers_1_5.png",
+      "thumbnail": "img/numbers_1_5.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 5-6",
+    "content": {
+      "question": "Chữ số nào nhìn giống như một cánh buồm no gió trên biển khơi? ⛵",
+      "questionEn": "Which number looks like a sailboat on the sea?",
+      "media": "⛵ 1️⃣ 4️⃣"
+    },
+    "options": [
       {
-            "id": "lon",
-            "text": "lon"
+        "id": "opt_4",
+        "text": "Số 4 (Số bốn giống cánh buồm) ⛵"
       },
       {
-            "id": "bay",
-            "text": "bay"
+        "id": "opt_1",
+        "text": "Số 1 (Cây gậy thẳng) 🦯"
       },
       {
-            "id": "bơi",
-            "text": "bơi"
+        "id": "opt_2",
+        "text": "Số 2 (Con vịt bơi) 🦆"
       }
-],
-    correctAnswer: "lon",
-    feedback: {
-      "correct": "Hoan hô bé! 'Đàn gà lon ton' chạy theo chân gà mẹ! 🐥🌾",
-      "wrong": "Gà con chân ngắn chạy lon ton bé ơi! Bé chọn chữ 'lon' nhé!",
-      "hint": "lon ton"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_4",
+    "feedback": {
+      "correct": "Đúng rồi! Số 4 có hình dáng giống như một cánh buồm căng gió! ⛵✨",
+      "wrong": "Bé tìm số 4 có góc vuông và cánh buồm nhé!",
+      "hint": "Số 4 giống cánh buồm"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 12-13
   {
-    id: "act_p2_sen_bo_xe_tai",
-    icon: "📖",
-    title: "Đọc câu ngắn: Bố lái xe tải 🚚",
-    titleEn: "Short Sentence: Dad Drives Truck",
-    ageTier: "preschool",
-    stage: 4,
-    minAge: 5,
-    subject: "reading",
-    skill: "vi.read.sentence-short",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Bé đọc câu: 'Bố lái xe tải về nhà.' Ai đang lái xe tải vậy bé nhỉ? 🚚",
-      "questionEn": "Sentence: 'Bố lái xe tải.' Who is driving the truck?",
-      "media": "🚚 🏠  Bố lái xe tải."
-},
-    options: [
+    "id": "act_s1_toan_so_sanh_nhieu_it",
+    "title": "So sánh số lượng: Nhiều hơn, ít hơn, bằng nhau 🐸🐰",
+    "titleEn": "Comparison: More, Fewer, Equal",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 1,
+    "minAge": 4,
+    "subject": "math",
+    "skill": "So sánh nhiều hơn ít hơn",
+    "skills": [
+      "math.compare.quantity"
+    ],
+    "prerequisites": [
+      "stage_0"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé so sánh hai nhóm đồ vật bằng cách ghép cặp 1 - 1 để biết nhóm nào nhiều hơn, ít hơn hoặc bằng nhau.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/more_less.png",
+      "thumbnail": "img/more_less.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 12-13",
+    "content": {
+      "question": "Có 4 chú ếch xanh 🐸 và 3 chiếc lá sen 🍃. Số ếch nhiều hơn hay số lá nhiều hơn?",
+      "questionEn": "There are 4 frogs and 3 leaves. Are there more frogs or more leaves?",
+      "media": "🐸🐸🐸🐸  🍃🍃🍃"
+    },
+    "options": [
       {
-            "id": "bố",
-            "text": "bố"
+        "id": "opt_frogs_more",
+        "text": "Số ếch nhiều hơn số lá 🐸"
       },
       {
-            "id": "bé",
-            "text": "bé"
+        "id": "opt_leaves_more",
+        "text": "Số lá nhiều hơn số ếch 🍃"
       },
       {
-            "id": "bà",
-            "text": "bà"
+        "id": "opt_equal",
+        "text": "Hai bên bằng nhau ⚖️"
       }
-],
-    correctAnswer: "bố",
-    feedback: {
-      "correct": "Đúng rồi! 'Bố lái xe tải về nhà' thăm bé và cả gia đình! 🚚❤️",
-      "wrong": "Bé đọc lại câu nhé: 'Bố lái xe tải'. Người lái xe là Bố!",
-      "hint": "Bố lái xe"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_frogs_more",
+    "feedback": {
+      "correct": "Rất giỏi! 4 chú ếch so với 3 chiếc lá sen thì số ếch nhiều hơn số lá (thừa 1 chú ếch)! 🐸🌟",
+      "wrong": "4 lớn hơn 3 nên số ếch sẽ nhiều hơn số lá sen con nhé!",
+      "hint": "Số ếch (4) nhiều hơn số lá (3)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 3; Sach luyen doc.pdf - Page 4
   {
-    id: "act_p2_sen_be_yeu_ba",
-    icon: "📖",
-    title: "Đọc câu ngắn: Bé yêu bà 👵💖",
-    titleEn: "Short Sentence: Baby Loves Grandma",
-    ageTier: "preschool",
-    stage: 4,
-    minAge: 5,
-    subject: "reading",
-    skill: "vi.read.sentence-short",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé hoàn thành câu yêu thương gia đình: 'Bé yêu ___.' 👵💖",
-      "questionEn": "Complete sentence: 'Bé yêu ___.'",
-      "media": "👧 👵 💖  Bé yêu [ ? ].",
-      "template": "Bé yêu [ ? ]."
-},
-    options: [
+    "id": "act_s2_tv_6_dau_thanh",
+    "title": "Nhận biết 6 dấu thanh: Ngang, Huyền, Sắc, Hỏi, Ngã, Nặng ✍️",
+    "titleEn": "The 6 Vietnamese Tone Marks",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Nhận biết 6 dấu thanh",
+    "skills": [
+      "vi.tones"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận diện và phân biệt 6 dấu thanh: ngang (không dấu), huyền, sắc, hỏi, ngã, nặng.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/6_tones.png",
+      "thumbnail": "img/6_tones.png"
+    },
+    "source": "GIAO AN HANH TRANG VAO LOP 1.doc - Buoi 3; Sach luyen doc.pdf - Page 4",
+    "content": {
+      "question": "Dấu thanh nào có nét kéo xuôi từ trái xuống phải giống như tay chào xuôi xuống? ✍️",
+      "questionEn": "Which tone mark slants down from left to right?",
+      "media": "👵 ˋ ba bà"
+    },
+    "options": [
       {
-            "id": "bà",
-            "text": "bà"
+        "id": "opt_huyen",
+        "text": "Dấu huyền (bà, cà, bò) 👵"
       },
       {
-            "id": "bóng",
-            "text": "bóng"
+        "id": "opt_sac",
+        "text": "Dấu sắc (cá, bé, lá) 🐟"
       },
       {
-            "id": "bút",
-            "text": "bút"
+        "id": "opt_hoi",
+        "text": "Dấu hỏi (hổ, thỏ) 🐰"
       }
-],
-    correctAnswer: "bà",
-    feedback: {
-      "correct": "Tuyệt vời! 'Bé yêu bà'! Bé luôn ngoan ngoãn và lễ phép với ông bà nhé! 👵💖",
-      "wrong": "Bé yêu ai trong gia đình nhỉ? Bé chọn chữ 'bà' nhé!",
-      "hint": "Bé yêu bà"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_huyen",
+    "feedback": {
+      "correct": "Chính xác! Dấu huyền nghiêng từ trái sang phải, đọc giọng trầm: b - a - ba - huyền - bà! 👵✨",
+      "wrong": "Dấu kéo từ trên bên trái xuôi xuống bên phải là dấu huyền con nhé!",
+      "hint": "Dấu huyền ( \\ )"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
-
-  // ========================================================
-  // NÂNG CẤP TOÁN TIỀN TIỂU HỌC (BÉ TẬP LÀM TOÁN CHUẨN BỊ VÀO LỚP 1)
-  // CHẶNG 1: SỐ HỌC 1-5, HÌNH HỌC, ĐO LƯỜNG & TƯ DUY LOGIC (4 BÀI)
-  // CHẶNG 2: SỐ HỌC 6-10, PHÉP TÍNH CỘNG/TRỪ, ĐO LƯỜNG & QUY LUẬT (6 BÀI)
-  // ========================================================
+  // Source: Sach luyen doc.pdf - Page 6-7
   {
-    id: "act_p3_math_shapes",
-    icon: "🔺",
-    title: "Hình học: Bé nhận biết Hình vuông, Tròn, Tam giác 🔺⭕🟩",
-    titleEn: "Geometry: Shapes (Square, Circle, Triangle)",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 4,
-    subject: "math",
-    skill: "math.geometry.shapes",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Đố bé tìm hình tam giác có 3 góc nhọn màu đỏ ở đâu nào? 🔺",
-      "questionEn": "Where is the red triangle with 3 sharp corners? 🔺",
-      "media": "🔺  HÌNH TAM GIÁC"
-},
-    options: [
+    "id": "act_s2_tv_phu_am_d_dd",
+    "title": "Luyện đọc phụ âm D, Đ: da dẻ, đá đỏ, đu đủ, đi đò 🚣",
+    "titleEn": "Consonants D and Đ: da dẻ, đu đủ, đi đò",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Phụ âm D và Đ",
+    "skills": [
+      "vi.consonants",
+      "vi.phonics.blend"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé phân biệt chữ d và chữ đ (đ có nét gạch ngang), đọc các từ: da dẻ, đá đỏ, đu đủ, đi đò.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/letters_d_dd.png",
+      "thumbnail": "img/letters_d_dd.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 6-7",
+    "content": {
+      "question": "Chữ cái nào có nét gạch ngang ở giữa cột đứng: chữ D hay chữ Đ? 🚣",
+      "questionEn": "Which letter has a horizontal crossbar: D or Đ?",
+      "media": "d  đ"
+    },
+    "options": [
       {
-            "id": "tam_giac",
-            "text": "Hình tam giác"
+        "id": "opt_dd",
+        "text": "Chữ Đ (Đ có nét gạch ngang) 🏮"
       },
       {
-            "id": "hinh_vuong",
-            "text": "Hình vuông"
+        "id": "opt_d",
+        "text": "Chữ D (Không có nét gạch) 🐐"
       },
       {
-            "id": "hinh_tron",
-            "text": "Hình tròn"
+        "id": "opt_b",
+        "text": "Chữ B ⚽"
       }
-],
-    correctAnswer: "tam_giac",
-    feedback: {
-      "correct": "Hoan hô bé! Hình tam giác có 3 cạnh và 3 góc nhọn xinh xắn! 🔺🌟",
-      "wrong": "Bé nhìn kỹ nhé: Hình tam giác có 3 góc giống mái nhà nhọn! 🔺",
-      "hint": "Hình tam giác"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_dd",
+    "feedback": {
+      "correct": "Đúng rồi! Chữ Đ có thêm nét gạch ngang ngắn trên đầu cột đứng! Đ - đi đò, đu đủ! 🚣🌟",
+      "wrong": "Chữ Đ có gạch ngang ở trên thân, còn chữ D thì trơn không có gạch nhé!",
+      "hint": "Chữ Đ có gạch ngang"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 11-13
   {
-    id: "act_p3_math_compare_length",
-    icon: "📏",
-    title: "Đo lường: So sánh Dài hơn — Ngắn hơn 📏✏️",
-    titleEn: "Measurement: Longer vs Shorter",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 4,
-    subject: "math",
-    skill: "math.measure.length",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Bé quan sát cây thước kẻ và chiếc bút chì, vật nào dài hơn? 📏✏️",
-      "questionEn": "Looking at the ruler and pencil, which one is longer? 📏✏️",
-      "media": "📏 Cây thước (Dài)  và  ✏️ Bút chì (Ngắn)"
-},
-    options: [
+    "id": "act_s2_tv_phu_am_m_n_l",
+    "title": "Luyện đọc phụ âm M, N, L: bố mẹ, nơ đỏ, lá cờ 🚩",
+    "titleEn": "Consonants M, N, L: bố mẹ, nơ đỏ, lá cờ",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Phụ âm M, N, L",
+    "skills": [
+      "vi.consonants",
+      "vi.phonics.blend"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé đọc đúng các từ chứa phụ âm m, n, l: ba má, bố mẹ, no nê, nơ đỏ, lá cờ, lọ cà.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/letters_m_n_l.png",
+      "thumbnail": "img/letters_m_n_l.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 11-13",
+    "content": {
+      "question": "Bé chọn từ đúng mô tả món quà mẹ cài trên mái tóc xinh: n___ đỏ 🎀",
+      "questionEn": "Fill in the blank: n___ đỏ",
+      "media": "🎀 🚩"
+    },
+    "options": [
       {
-            "id": "thuoc",
-            "text": "Cây thước kẻ dài hơn 📏"
+        "id": "opt_no",
+        "text": "nơ đỏ (Chiếc nơ đỏ cài tóc) 🎀"
       },
       {
-            "id": "but",
-            "text": "Chiếc bút chì dài hơn ✏️"
+        "id": "opt_la",
+        "text": "lá cờ 🚩"
       },
       {
-            "id": "bang",
-            "text": "Hai vật bằng nhau"
+        "id": "opt_me",
+        "text": "bố mẹ 👩‍👧"
       }
-],
-    correctAnswer: "thuoc",
-    feedback: {
-      "correct": "Chính xác! Cây thước kẻ dài hơn chiếc bút chì bé nhé! 📏👏",
-      "wrong": "Bé so sánh chiều dài nhé: Cây thước kẻ dài hơn đấy!",
-      "hint": "Cây thước kẻ dài hơn"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_no",
+    "feedback": {
+      "correct": "Chính xác! n - ơ - nơ - đỏ! Chiếc nơ đỏ cài tóc bé rất đáng yêu! 🎀✨",
+      "wrong": "n ghép với ơ thành nơ, trong từ nơ đỏ con nhé!",
+      "hint": "nơ đỏ"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 7-11
   {
-    id: "act_p3_math_next_number_5",
-    icon: "🔢",
-    title: "Số học: Bé tìm số liền sau trong phạm vi 5 🔢",
-    titleEn: "Counting: Next Number within 5",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "math",
-    skill: "math.sequence.successor",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé đếm: 1, 2, 3... Số đứng liền sau số 3 là số mấy bé nhỉ? ⛵",
-      "questionEn": "Counting 1, 2, 3... What number comes right after 3? ⛵",
-      "media": "1 ➔ 2 ➔ 3 ➔ [ ? ]",
-      "template": "Số liền sau số 3 là: [ ? ]"
-},
-    options: [
+    "id": "act_s2_toan_cac_so_6_10",
+    "title": "Nhận diện và đếm số lượng các số 6, 7, 8, 9, 10 🔢",
+    "titleEn": "Counting and Numbers 6 to 10",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Số đếm 6-10",
+    "skills": [
+      "math.count.10"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé nhận biết mặt chữ số và đếm chính xác số lượng từ 6 đến 10.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/numbers_6_10.png",
+      "thumbnail": "img/numbers_6_10.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 7-11",
+    "content": {
+      "question": "Bé đếm xem có bao nhiêu chú chim cánh cụt đang xếp hàng nhé: 🐧🐧🐧🐧🐧🐧🐧",
+      "questionEn": "Count the penguins: 🐧🐧🐧🐧🐧🐧🐧",
+      "media": "🐧🐧🐧🐧🐧🐧🐧 (7 chú)"
+    },
+    "options": [
       {
-            "id": "4",
-            "text": "Số 4"
+        "id": "opt_7",
+        "text": "7 chú chim cánh cụt 🐧"
       },
       {
-            "id": "2",
-            "text": "Số 2"
+        "id": "opt_6",
+        "text": "6 chú chim 🐧"
       },
       {
-            "id": "5",
-            "text": "Số 5"
+        "id": "opt_8",
+        "text": "8 chú chim 🐧"
       }
-],
-    correctAnswer: "4",
-    feedback: {
-      "correct": "Giỏi quá! Đếm 1, 2, 3 rồi liền sau là 4! Số 4 giống cánh buồm! ⛵🌟",
-      "wrong": "Bé đếm ngón tay từ 1 đến 3 rồi thêm 1 nữa là mấy nhỉ? Là 4 nhé!",
-      "hint": "Số 4"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_7",
+    "feedback": {
+      "correct": "Tuyệt vời! 1, 2, 3, 4, 5, 6, 7 - có đúng 7 chú chim cánh cụt! 🐧🌟",
+      "wrong": "Bé chỉ tay từng chú chim và đếm chậm rãi nhé: có 7 chú chim!",
+      "hint": "Có 7 chú chim cánh cụt"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 14-19
   {
-    id: "act_p3_math_fill_pattern_5",
-    icon: "🧩",
-    title: "Tư duy logic: Điền số còn thiếu từ 1 đến 5 🚂",
-    titleEn: "Logic: Fill Missing Number 1 to 5",
-    ageTier: "preschool",
-    stage: 1,
-    minAge: 4,
-    subject: "logic",
-    skill: "math.logic.missing-number",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Đoàn tàu chở số: 1, 2, ___, 4, 5. Toa tàu số mấy đang bị thiếu? 🚂",
-      "questionEn": "Number train: 1, 2, ___, 4, 5. Which carriage is missing? 🚂",
-      "media": "🚂 [ 1 ] ➔ [ 2 ] ➔ [ ? ] ➔ [ 4 ] ➔ [ 5 ]",
-      "template": "Toa tàu còn thiếu số: [ ? ]"
-},
-    options: [
+    "id": "act_s2_toan_dau_so_sanh",
+    "title": "So sánh các số bằng dấu Lớn hơn (>), Bé hơn (<), Bằng nhau (=) ⚖️",
+    "titleEn": "Comparison Symbols: >, <, =",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Dấu so sánh lớn bé bằng",
+    "skills": [
+      "math.compare.symbols"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé nhận biết và sử dụng đúng các dấu so sánh: dấu lớn (>), dấu bé (<), dấu bằng (=).",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/compare_symbols.png",
+      "thumbnail": "img/compare_symbols.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 14-19",
+    "content": {
+      "question": "Bé điền dấu thích hợp vào chỗ chấm:  5  ...  3 ⚖️",
+      "questionEn": "Fill in the symbol: 5 ... 3",
+      "media": "5  [ ? ]  3"
+    },
+    "options": [
       {
-            "id": "3",
-            "text": "Số 3"
+        "id": "opt_gt",
+        "text": "Dấu lớn hơn ( > )"
       },
       {
-            "id": "1",
-            "text": "Số 1"
+        "id": "opt_lt",
+        "text": "Dấu bé hơn ( < )"
       },
       {
-            "id": "5",
-            "text": "Số 5"
+        "id": "opt_eq",
+        "text": "Dấu bằng ( = )"
       }
-],
-    correctAnswer: "3",
-    feedback: {
-      "correct": "Xuất sắc! Đoàn tàu hoàn chỉnh: 1, 2, 3, 4, 5 xình xịch lên đường! 🚂🎉",
-      "wrong": "Đứng giữa số 2 và số 4 là số 3 bé ơi! Thử lại nào!",
-      "hint": "Số 3"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_gt",
+    "feedback": {
+      "correct": "Đúng rồi! 5 lớn hơn 3 nên ta viết 5 > 3. Miệng dấu luôn há to về phía số lớn hơn! 🌟🐊",
+      "wrong": "Số 5 nhiều hơn số 3 nên ta dùng dấu lớn hơn (>) nhé!",
+      "hint": "5 > 3 (Dấu lớn hơn)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 20-25
   {
-    id: "act_p3_math_count_10",
-    icon: "🔢",
-    title: "Số học: Đếm số lượng ngôi sao trong phạm vi 10 ⭐",
-    titleEn: "Counting: Count Stars up to 10",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "math",
-    skill: "math.count.1-10",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Bé cùng đếm xem có tất cả bao nhiêu ngôi sao lấp lánh nào? ⭐",
-      "questionEn": "How many twinkling stars are there? ⭐",
-      "media": "⭐ ⭐ ⭐ ⭐ ⭐ ⭐ ⭐   (7 ngôi sao)"
-},
-    options: [
+    "id": "act_s2_toan_tach_gop_5",
+    "title": "Tách gộp số trong phạm vi 5 (Mấy và mấy) 🧩",
+    "titleEn": "Number Bonds within 5",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Tách gộp số phạm vi 5",
+    "skills": [
+      "math.number_bonds.5"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé hiểu bản chất cấu tạo số: 5 gồm 4 và 1; 5 gồm 3 và 2 để làm nền tảng cho phép cộng trừ.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/number_bonds_5.png",
+      "thumbnail": "img/number_bonds_5.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 20-25",
+    "content": {
+      "question": "Có 5 quả bóng, chia cho bạn Nam 3 quả. Hỏi bạn Mai nhận được mấy quả bóng? 🎈",
+      "questionEn": "There are 5 balloons. Nam gets 3. How many balloons does Mai get?",
+      "media": "🎈🎈🎈🎈🎈 -> Nam: 3  |  Mai: ?"
+    },
+    "options": [
       {
-            "id": "7",
-            "text": "7 ngôi sao"
+        "id": "opt_2",
+        "text": "2 quả bóng (5 gồm 3 và 2) 🎈🎈"
       },
       {
-            "id": "5",
-            "text": "5 ngôi sao"
+        "id": "opt_1",
+        "text": "1 quả bóng 🎈"
       },
       {
-            "id": "9",
-            "text": "9 ngôi sao"
+        "id": "opt_4",
+        "text": "4 quả bóng 🎈🎈🎈🎈"
       }
-],
-    correctAnswer: "7",
-    feedback: {
-      "correct": "Chính xác! Bé đếm rất chuẩn: có tất cả 7 ngôi sao vàng lấp lánh! ⭐👏",
-      "wrong": "Bé chạm ngón tay vào từng ngôi sao đếm chậm từ 1 đến 7 nhé!",
-      "hint": "7 ngôi sao"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_2",
+    "feedback": {
+      "correct": "Chính xác! 5 gồm 3 và 2. Nam có 3 quả thì Mai có 2 quả bóng! 🎈🎈🌟",
+      "wrong": "5 quả bớt đi 3 quả thì còn lại 2 quả bóng con nhé!",
+      "hint": "5 gồm 3 và 2"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 26-28
   {
-    id: "act_p3_math_prev_number_10",
-    icon: "🔢",
-    title: "Số học: Bé tìm số liền trước trong phạm vi 10 🎈",
-    titleEn: "Counting: Preceding Number up to 10",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "math",
-    skill: "math.sequence.predecessor",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé suy nghĩ xem: Số đứng ngay liền trước số 8 là số mấy nhỉ? 🎈",
-      "questionEn": "What number comes right before 8? 🎈",
-      "media": "[ ? ] ➔ 8",
-      "template": "Số liền trước số 8 là: [ ? ]"
-},
-    options: [
+    "id": "act_s2_toan_hinh_hoc",
+    "title": "Nhận biết Hình vuông, Hình tròn, Hình tam giác, Hình chữ nhật 🔴🟦🔺",
+    "titleEn": "Basic Shapes: Square, Circle, Triangle, Rectangle",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 2,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Hình học cơ bản",
+    "skills": [
+      "math.shapes.basic"
+    ],
+    "prerequisites": [
+      "stage_1"
+    ],
+    "type": "image_quiz",
+    "difficulty": 1,
+    "learningObjective": "Bé nhận biết và phân biệt 4 hình hình học cơ bản: hình vuông (4 cạnh bằng nhau), hình tròn, hình tam giác (3 cạnh), hình chữ nhật.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/basic_shapes.png",
+      "thumbnail": "img/basic_shapes.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 26-28",
+    "content": {
+      "question": "Hình nào có đúng 3 cạnh và 3 góc nhọn? 🔺",
+      "questionEn": "Which shape has 3 sides and 3 corners?",
+      "media": "🔺 🟦 🔴 🟨"
+    },
+    "options": [
       {
-            "id": "7",
-            "text": "Số 7"
+        "id": "opt_triangle",
+        "text": "Hình tam giác 🔺"
       },
       {
-            "id": "9",
-            "text": "Số 9"
+        "id": "opt_square",
+        "text": "Hình vuông 🟦"
       },
       {
-            "id": "6",
-            "text": "Số 6"
+        "id": "opt_circle",
+        "text": "Hình tròn 🔴"
       }
-],
-    correctAnswer: "7",
-    feedback: {
-      "correct": "Rất đúng! Đếm 7 rồi đến 8, nên số liền trước của 8 là 7! 🎈🌟",
-      "wrong": "Số bé hơn 8 một đơn vị là số mấy bé nhỉ? Là số 7 nhé!",
-      "hint": "Số 7"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_triangle",
+    "feedback": {
+      "correct": "Đúng rồi! Hình tam giác có 3 cạnh giống như mái nhà hay chiếc bánh kem! 🔺🍰",
+      "wrong": "Hình có 3 cạnh là hình tam giác con nhé!",
+      "hint": "Hình tam giác (3 cạnh)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 19, 24, 25, 27
   {
-    id: "act_p3_math_add_visual_10",
-    icon: "🔢",
-    title: "Phép tính: Phép cộng trực quan bằng quả táo 🍎🍏",
-    titleEn: "Math: Visual Addition with Apples",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "math",
-    skill: "math.addsub.within10",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Bé có 3 quả táo đỏ 🍎, mẹ cho thêm 2 quả táo xanh 🍏. Bé có tất cả mấy quả táo?",
-      "questionEn": "You have 3 red apples 🍎, mom gives 2 green apples 🍏. How many in total?",
-      "media": "🍎 🍎 🍎  +  🍏 🍏  =  [ ? ]",
-      "template": "3 + 2 = [ ? ]"
-},
-    options: [
+    "id": "act_s3_tv_phu_am_ghep",
+    "title": "Phụ âm ghép: ch, nh, kh, th (cha mẹ, nhà lá, cá kho, thỏ mẹ) 🏠",
+    "titleEn": "Blended Consonants: ch, nh, kh, th",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Phụ âm ghép",
+    "skills": [
+      "vi.phonics.blend",
+      "vi.consonants"
+    ],
+    "prerequisites": [
+      "stage_2",
+      "vi.vowels",
+      "vi.consonants"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé nhận biết các phụ âm ghép 2 chữ cái ch, nh, kh, th và đọc các từ ứng dụng trong đời sống.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/digraphs.png",
+      "thumbnail": "img/digraphs.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 19, 24, 25, 27",
+    "content": {
+      "question": "Phụ âm ghép 'nh' ghép với 'a' và dấu huyền tạo thành từ nơi bé ở là gì? 🏠",
+      "questionEn": "nh + a + grave accent makes which word for home?",
+      "media": "🏠 🏡"
+    },
+    "options": [
       {
-            "id": "5",
-            "text": "5 quả táo"
+        "id": "opt_nha",
+        "text": "nhà (Ngôi nhà ấm áp) 🏠"
       },
       {
-            "id": "4",
-            "text": "4 quả táo"
+        "id": "opt_tho",
+        "text": "thỏ 🐰"
       },
       {
-            "id": "6",
-            "text": "6 quả táo"
+        "id": "opt_cho",
+        "text": "chó 🐕"
       }
-],
-    correctAnswer: "5",
-    feedback: {
-      "correct": "Hoan hô bé! 3 cộng 2 bằng 5 quả táo thơm ngon! (3 + 2 = 5) 🍎🎉",
-      "wrong": "Bé đếm gộp tất cả quả táo nhé: 1, 2, 3... 4, 5 quả táo!",
-      "hint": "5 quả táo"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_nha",
+    "feedback": {
+      "correct": "Tuyệt vời! nh - a - nha - huyền - nhà! Ngôi nhà thân yêu của gia đình! 🏠💖",
+      "wrong": "nh ghép với a và dấu huyền là nhà con nhé!",
+      "hint": "nh - a - huyền - nhà"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 30
   {
-    id: "act_p3_math_sub_visual_10",
-    icon: "🔢",
-    title: "Phép tính: Phép trừ trực quan bằng đàn cá 🐟🌊",
-    titleEn: "Math: Visual Subtraction with Fish",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "math",
-    skill: "math.addsub.within10",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Trong bể có 6 chú cá 🐟, 2 chú bơi đi chơi mất. Hỏi trong bể còn lại mấy chú cá?",
-      "questionEn": "There were 6 fish 🐟, 2 swam away. How many fish are left?",
-      "media": "🐟 🐟 🐟 🐟 🐟 🐟  bớt đi  🐟 🐟  còn  [ ? ]",
-      "template": "6 - 2 = [ ? ]"
-},
-    options: [
+    "id": "act_s3_tv_van_doi_ia_oa_ua_ua",
+    "title": "Học vần đôi: ia, oa, ua, ưa (gà tía, toà nhà, cua bể, quả dưa) 🍈",
+    "titleEn": "Diphthongs: ia, oa, ua, ưa",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Vần đôi cơ bản",
+    "skills": [
+      "vi.phonics.blend"
+    ],
+    "prerequisites": [
+      "stage_2",
+      "vi.vowels",
+      "vi.consonants"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé đánh vần và đọc trơn các tiếng chứa vần đôi: ia (gà tía), oa (toà nhà), ua (múa lòa, cua bể), ưa (quả dưa).",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/diphthongs_ia_oa.png",
+      "thumbnail": "img/diphthongs_ia_oa.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 30",
+    "content": {
+      "question": "Con vật có hai chiếc càng to sống ở biển chứa vần 'ua': c___ bể 🦀",
+      "questionEn": "Fill in the blank with ua: c___ bể 🦀",
+      "media": "🦀 🌊"
+    },
+    "options": [
       {
-            "id": "4",
-            "text": "4 chú cá"
+        "id": "opt_cua",
+        "text": "cua bể (c - ua - cua) 🦀"
       },
       {
-            "id": "3",
-            "text": "3 chú cá"
+        "id": "opt_ca",
+        "text": "cá 🐟"
       },
       {
-            "id": "5",
-            "text": "5 chú cá"
+        "id": "opt_co",
+        "text": "cò 🦢"
       }
-],
-    correctAnswer: "4",
-    feedback: {
-      "correct": "Xuất sắc! 6 bớt 2 còn 4 chú cá! (6 - 2 = 4) 🐟🌊",
-      "wrong": "Bé lấy 6 ngón tay gập bớt 2 ngón xem còn mấy ngón nhé? Còn 4!",
-      "hint": "4 chú cá"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_cua",
+    "feedback": {
+      "correct": "Đúng rồi! c - ua - cua bể! Chú cua biển có hai chiếc càng giơ cao! 🦀🌟",
+      "wrong": "c ghép với vần ua thành cua trong cua bể nhé!",
+      "hint": "cua bể (vần ua)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 31
   {
-    id: "act_p3_math_compare_weight",
-    icon: "⚖️",
-    title: "Đo lường: So sánh Nặng hơn — Nhẹ hơn ⚖️🐘🐭",
-    titleEn: "Measurement: Heavier vs Lighter",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "math",
-    skill: "math.measure.weight",
-    type: "image_quiz",
-    difficulty: 1,
-    content: {
-      "question": "Trên chiếc bập bênh bập bùng, bác Voi 🐘 và chú Chuột 🐭, ai nặng hơn?",
-      "questionEn": "On the seesaw, Elephant 🐘 and Mouse 🐭, who is heavier?",
-      "media": "⚖️  Bác Voi 🐘 (Nặng)  và  Chú Chuột 🐭 (Nhẹ)"
-},
-    options: [
+    "id": "act_s3_tv_van_ai_oi_oi_oi",
+    "title": "Học vần: ai, oi, ôi, ơi (số hai, cá voi, xe nôi, con thoi) 🐋",
+    "titleEn": "Rhymes: ai, oi, ôi, ơi",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Vần kết thúc i",
+    "skills": [
+      "vi.phonics.blend"
+    ],
+    "prerequisites": [
+      "stage_2",
+      "vi.vowels",
+      "vi.consonants"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé nhận biết và đọc trơn các vần có âm cuối i: ai, oi, ôi, ơi qua các từ: số hai, cá voi, xe nôi, con thoi.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/rhymes_i.png",
+      "thumbnail": "img/rhymes_i.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 31",
+    "content": {
+      "question": "Loài cá to lớn nhất đại dương chứa vần 'oi' là con cá gì? 🐋",
+      "questionEn": "Which giant marine creature contains the rhyme 'oi'?",
+      "media": "🐋 🌊"
+    },
+    "options": [
       {
-            "id": "voi",
-            "text": "Bác Voi nặng hơn 🐘"
+        "id": "opt_ca_voi",
+        "text": "cá voi (v - oi - voi) 🐋"
       },
       {
-            "id": "chuot",
-            "text": "Chú Chuột nặng hơn 🐭"
+        "id": "opt_ca_ro",
+        "text": "cá rô 🐟"
       },
       {
-            "id": "bang",
-            "text": "Hai bạn nặng bằng nhau"
+        "id": "opt_ca_me",
+        "text": "cá mè 🐠"
       }
-],
-    correctAnswer: "voi",
-    feedback: {
-      "correct": "Đúng rồi! Bác Voi to lớn nặng hơn rất nhiều so với chú Chuột tí hon! 🐘⚖️",
-      "wrong": "Bác Voi khổng lồ làm bập bênh trĩu xuống, bác Voi nặng hơn bé ơi!",
-      "hint": "Bác Voi nặng hơn"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_ca_voi",
+    "feedback": {
+      "correct": "Chính xác! v - oi - voi! Chú cá voi xanh khổng lồ bơi lội giữa đại dương! 🐋🌊",
+      "wrong": "Cá chứa vần oi là cá voi con nhé!",
+      "hint": "cá voi (vần oi)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 31-36; Quyen luyen chu tieng tu va cau.pdf
   {
-    id: "act_p3_math_pattern_skip2",
-    icon: "🧩",
-    title: "Tư duy logic: Tìm quy luật dãy số 2, 4, 6, [?] 🐰🥕",
-    titleEn: "Logic: Number Pattern 2, 4, 6, [?]",
-    ageTier: "preschool",
-    stage: 3,
-    minAge: 5,
-    subject: "logic",
-    skill: "math.logic.number-pattern",
-    type: "fill_blank",
-    difficulty: 1,
-    content: {
-      "question": "Thỏ con nhảy bước đôi: 2, 4, 6... Đố bé bước nhảy tiếp theo là số mấy? 🐰",
-      "questionEn": "Bunny hops by 2s: 2, 4, 6... What is the next hop? 🐰",
-      "media": "2  ➔  4  ➔  6  ➔  [ ? ]",
-      "template": "2, 4, 6, [ ? ]"
-},
-    options: [
+    "id": "act_s3_tv_doc_tu_2_tieng",
+    "title": "Đọc từ ứng dụng 2 tiếng: cái bàn, bạn học, con trăn, bồ câu 🕊️",
+    "titleEn": "Reading 2-Syllable Words: cái bàn, bạn học, bồ câu",
+    "icon": "🔤",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "vietnamese",
+    "skill": "Đọc từ ứng dụng 2 tiếng",
+    "skills": [
+      "vi.words.2syllables"
+    ],
+    "prerequisites": [
+      "stage_2",
+      "vi.vowels",
+      "vi.consonants"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé đọc trơn và hiểu nghĩa của các từ ứng dụng 2 tiếng quen thuộc trong lớp học và tự nhiên.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/words_2syl.png",
+      "thumbnail": "img/words_2syl.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 31-36; Quyen luyen chu tieng tu va cau.pdf",
+    "content": {
+      "question": "Đồ vật trong lớp học nơi bé ngồi viết bài mỗi ngày được gọi là gì? 🪑",
+      "questionEn": "What classroom furniture do you sit at to write?",
+      "media": "🪑 📚"
+    },
+    "options": [
       {
-            "id": "8",
-            "text": "Số 8"
+        "id": "opt_cai_ban",
+        "text": "cái bàn (b - an - ban - huyền - bàn) 🪑"
       },
       {
-            "id": "7",
-            "text": "Số 7"
+        "id": "opt_bo_cau",
+        "text": "bồ câu 🕊️"
       },
       {
-            "id": "9",
-            "text": "Số 9"
+        "id": "opt_qua_cam",
+        "text": "quả cam 🍊"
       }
-],
-    correctAnswer: "8",
-    feedback: {
-      "correct": "Thần đồng toán học! Cứ mỗi bước cộng thêm 2: 2, 4, 6 rồi đến 8! 🐰🥕👏",
-      "wrong": "Bé đếm cách 2 nhé: 2 thêm 2 là 4, 4 thêm 2 là 6, 6 thêm 2 là 8!",
-      "hint": "Số 8"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_cai_ban",
+    "feedback": {
+      "correct": "Đúng rồi! 'cái bàn' là nơi bé ngồi học bài và để sách vở ngay ngắn! 🪑✨",
+      "wrong": "Đồ dùng để ngồi viết bài là 'cái bàn' con nhé!",
+      "hint": "cái bàn"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
-
-  // ========================================================
-  // MODULE KỸ NĂNG SẴN SÀNG ĐẾN TRƯỜNG (LIFE SKILLS)
-  // CHẶNG 5: VÀO LỚP 1 (5 BÀI STORY_LISTEN)
-  // ========================================================
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 29-35, 38-47; Phep-cong-pham-vi-10.pdf - Page 1-11
   {
-    id: "act_ls_01_study_corner",
-    icon: "🌱",
-    title: "Góc học tập: Sắp xếp sách vở, bút thước gọn gàng 📚✏️",
-    titleEn: "Study Corner: Organize Books and Stationery",
-    ageTier: "preschool",
-    stage: 5,
-    minAge: 5,
-    subject: "skills",
-    skill: "life.study_corner",
-    type: "story_listen",
-    difficulty: 1,
-    content: {
-      "storyText": "Mỗi khi ngồi học bài xong, bạn Thỏ Trắng luôn cẩn thận xếp sách vở ngay ngắn vào giá sách, đặt bút chì và thước kẻ vào hộp bút. Góc học tập của Thỏ Trắng lúc nào cũng ngăn nắp, sạch đẹp.",
-      "question": "Sau khi học bài xong, bé nên làm gì để góc học tập luôn gọn gàng? 📚",
-      "questionEn": "What should you do after studying to keep your desk neat?",
-      "media": "📚 ✏️  GÓC HỌC TẬP GỌN GÀNG"
-},
-    options: [
+    "id": "act_s3_toan_phep_cong_10",
+    "title": "Phép cộng không nhớ trong phạm vi 10 (2+1, 3+2, 4+4, 5+5) ➕",
+    "titleEn": "Addition within 10: 2+1, 3+2, 4+4, 5+5",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Phép cộng trong phạm vi 10",
+    "skills": [
+      "math.addition.10"
+    ],
+    "prerequisites": [
+      "stage_2"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé thực hiện đúng các phép cộng không nhớ trong phạm vi 10 bằng phương pháp gộp số trực quan.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/addition_10.png",
+      "thumbnail": "img/addition_10.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 29-35, 38-47; Phep-cong-pham-vi-10.pdf - Page 1-11",
+    "content": {
+      "question": "Bé tính xem: 3 quả táo đỏ cộng thêm 2 quả táo xanh bằng mấy quả táo? (3 + 2 = ?) 🍎🍏",
+      "questionEn": "What is 3 apples + 2 apples? (3 + 2 = ?)",
+      "media": "🍎🍎🍎  ➕  🍏🍏  =  ❓"
+    },
+    "options": [
       {
-            "id": "opt_neat",
-            "text": "Xếp sách vở vào giá, cất bút thước vào hộp"
+        "id": "opt_5",
+        "text": "5 quả táo (3 + 2 = 5) 🌟"
       },
       {
-            "id": "opt_mess",
-            "text": "Để bừa bãi trên bàn rồi chạy đi chơi"
+        "id": "opt_4",
+        "text": "4 quả táo"
       },
       {
-            "id": "opt_floor",
-            "text": "Vứt cặp sách xuống sàn nhà"
+        "id": "opt_6",
+        "text": "6 quả táo"
       }
-],
-    correctAnswer: "opt_neat",
-    feedback: {
-      "correct": "Hoan hô bé! Sách vở để vào giá, bút thước để vào hộp sẽ giúp góc học tập luôn ngăn nắp và dễ tìm đồ dùng! 📚✨",
-      "wrong": "Bé nghe lại câu chuyện nhé: Bé hãy xếp sách vở vào giá và cất bút thước vào hộp cẩn thận!",
-      "hint": "Xếp sách vở vào giá"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_5",
+    "feedback": {
+      "correct": "Chính xác! 3 + 2 = 5! Bé làm phép cộng rất nhanh và thông minh! 🍎🍏🌟",
+      "wrong": "Bé gộp 3 quả táo với 2 quả táo lại và đếm xem: 1, 2, 3, 4, 5 quả!",
+      "hint": "3 + 2 = 5"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 48-56
   {
-    id: "act_ls_02_schedule_study",
-    icon: "🌱",
-    title: "Thời gian biểu: Nhận biết giờ ngồi vào bàn học ⏰📖",
-    titleEn: "Schedule: Time to Study by Clock",
-    ageTier: "preschool",
-    stage: 5,
-    minAge: 5,
-    subject: "skills",
-    skill: "life.schedule",
-    type: "story_listen",
-    difficulty: 1,
-    content: {
-      "storyText": "Tích tắc tích tắc! Chiếc đồng hồ kim chỉ đúng 7 giờ tối. Bé Na nghe tiếng chuông reng liền tự giác cất đồ chơi, rửa tay sạch sẽ và ngồi vào bàn học bài thật chăm chỉ.",
-      "question": "Khi đồng hồ điểm đúng giờ học bài buổi tối, bé nên làm gì? ⏰",
-      "questionEn": "When the clock strikes study time in the evening, what should you do?",
-      "media": "⏰ 📖  ĐỒNG HỒ 7 GIỜ TỐI"
-},
-    options: [
+    "id": "act_s3_toan_phep_tru_10",
+    "title": "Phép trừ không nhớ trong phạm vi 10 (3-1, 5-2, 8-3, 10-4) ➖",
+    "titleEn": "Subtraction within 10: 3-1, 5-2, 8-3, 10-4",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Phép trừ trong phạm vi 10",
+    "skills": [
+      "math.subtraction.10"
+    ],
+    "prerequisites": [
+      "stage_2"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé hiểu bản chất phép trừ là thao tác bớt đi hoặc tách ra trong phạm vi 10.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/subtraction_10.png",
+      "thumbnail": "img/subtraction_10.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 48-56",
+    "content": {
+      "question": "Trên cành cây có 5 chú chim, bay đi mất 2 chú. Hỏi trên cành còn lại mấy chú chim? (5 - 2 = ?) 🐦",
+      "questionEn": "There are 5 birds. 2 fly away. How many birds are left? (5 - 2 = ?)",
+      "media": "🐦🐦🐦🐦🐦  ➖  🐦🐦  =  ❓"
+    },
+    "options": [
       {
-            "id": "opt_study",
-            "text": "Tự giác ngồi vào bàn học bài chăm chỉ"
+        "id": "opt_3",
+        "text": "3 chú chim (5 - 2 = 3) 🐦"
       },
       {
-            "id": "opt_tv",
-            "text": "Bật tivi xem hoạt hình thật lâu"
+        "id": "opt_2",
+        "text": "2 chú chim"
       },
       {
-            "id": "opt_play",
-            "text": "Mải chơi đồ chơi không chịu học"
+        "id": "opt_4",
+        "text": "4 chú chim"
       }
-],
-    correctAnswer: "opt_study",
-    feedback: {
-      "correct": "Đúng rồi! Đúng 7 giờ tối là giờ học, bé tự giác học bài sẽ là trò ngoan của thầy cô và bố mẹ! ⏰🌟",
-      "wrong": "Đến giờ học bài rồi bé ơi! Bé hãy tự giác ngồi vào bàn học nhé!",
-      "hint": "Tự giác học bài"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_3",
+    "feedback": {
+      "correct": "Tuyệt vời! 5 bớt đi 2 còn 3 chú chim! Phép tính 5 - 2 = 3 rất chuẩn! 🐦🌟",
+      "wrong": "Có 5 chú chim, bớt đi 2 chú thì còn lại 3 chú chim trên cành nhé!",
+      "hint": "5 - 2 = 3"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 57-64
   {
-    id: "act_ls_03_bedtime_clock",
-    icon: "🌱",
-    title: "Thời gian biểu: Giờ ngủ ngoan để sớm mai đến trường ⏰🌙",
-    titleEn: "Schedule: Bedtime to Wake Up Early",
-    ageTier: "preschool",
-    stage: 5,
-    minAge: 5,
-    subject: "skills",
-    skill: "life.bedtime",
-    type: "story_listen",
-    difficulty: 1,
-    content: {
-      "storyText": "Đồng hồ điểm 9 giờ đêm. Bé đánh răng sạch bóng, uống một cốc nước ấm, chúc bố mẹ ngủ ngon rồi chìm vào giấc ngủ êm đềm. Sớm mai thức dậy, bé sẽ có một cơ thể khỏe khoắn để đến lớp học tập.",
-      "question": "Để sớm mai thức dậy khỏe khoắn và đi học đúng giờ, tối nay bé nên ngủ lúc mấy giờ? 🌙",
-      "questionEn": "What time should you sleep to wake up refreshed for school?",
-      "media": "⏰ 🌙  ĐỒNG HỒ 9 GIỜ ĐÊM"
-},
-    options: [
+    "id": "act_s3_toan_day_so_11_20",
+    "title": "Đếm và nhận biết dãy số từ 11 đến 20 🚀",
+    "titleEn": "Counting and Numbers 11 to 20",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 3,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Số đếm 11-20",
+    "skills": [
+      "math.count.20"
+    ],
+    "prerequisites": [
+      "stage_2"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé nhận biết thứ tự dãy số tăng dần từ 11 đến 20 (11, 12, 13, ..., 20) và số liền trước/liền sau.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/numbers_11_20.png",
+      "thumbnail": "img/numbers_11_20.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 57-64",
+    "content": {
+      "question": "Bé tìm số liền sau của số 11 trong dãy số đếm nhé: 10, 11, [ ? ], 13 🚀",
+      "questionEn": "What number comes after 11? 10, 11, [ ? ], 13",
+      "media": "10 ➔ 11 ➔ [ ? ] ➔ 13"
+    },
+    "options": [
       {
-            "id": "opt_sleep_early",
-            "text": "Đi ngủ sớm lúc 9 giờ tối"
+        "id": "opt_12",
+        "text": "Số 12 (Mười hai) 🚀"
       },
       {
-            "id": "opt_sleep_late",
-            "text": "Thức khuya xem điện thoại đến nửa đêm"
+        "id": "opt_14",
+        "text": "Số 14"
       },
       {
-            "id": "opt_no_sleep",
-            "text": "Không chịu ngủ để mai đi học muộn"
+        "id": "opt_10",
+        "text": "Số 10"
       }
-],
-    correctAnswer: "opt_sleep_early",
-    feedback: {
-      "correct": "Tuyệt vời! Đi ngủ đúng 9 giờ tối giúp bé thông minh, mau lớn và tràn đầy năng lượng đến trường! 🌙💤",
-      "wrong": "Bé nhớ nhé: Đi ngủ sớm lúc 9 giờ tối để sáng mai thức dậy vui vẻ đi học đúng giờ!",
-      "hint": "Đi ngủ lúc 9 giờ tối"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_12",
+    "feedback": {
+      "correct": "Đúng rồi! 10 rồi đến 11, tiếp theo là 12, rồi đến 13! Bé đếm số rất siêu! 🚀✨",
+      "wrong": "Số liền sau số 11 là số 12 con nhé!",
+      "hint": "Số 12 (đứng sau số 11)"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 71
   {
-    id: "act_ls_04_school_manners",
-    icon: "🌱",
-    title: "Ứng xử: Lễ phép chào cô và xin phép ra vào lớp 🏫👋",
-    titleEn: "School Manners: Greet Teacher & Ask Permission",
-    ageTier: "preschool",
-    stage: 5,
-    minAge: 5,
-    subject: "skills",
-    skill: "life.manners",
-    type: "story_listen",
-    difficulty: 1,
-    content: {
-      "storyText": "Khi bước vào cổng trường, bé vòng hai tay trước ngực mỉm cười: 'Con chào cô ạ!'. Trong giờ học, khi muốn ra ngoài uống nước hay đi vệ sinh, bé đứng nghiêm túc giơ tay: 'Thưa cô, cho con xin phép ra ngoài ạ!'.",
-      "question": "Khi gặp cô giáo hoặc muốn xin phép ra ngoài lớp, bé nên ứng xử như thế nào? 🏫",
-      "questionEn": "How should you greet your teacher and ask for permission?",
-      "media": "🏫 👋  CON CHÀO CÔ Ạ"
-},
-    options: [
+    "id": "act_s4_tv_cau_loi_chao",
+    "title": "Luyện đọc câu thơ: Lời chào (Chào mẹ, chào cô khi đến lớp) 🏫",
+    "titleEn": "Poem: Greeting - Polite Manners at School",
+    "icon": "📖",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "reading",
+    "skill": "Đọc câu thơ ngắn",
+    "skills": [
+      "vi.reading.passage",
+      "life.school_manners"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "story_listen",
+    "difficulty": 2,
+    "learningObjective": "Bé đọc hiểu bài thơ ngắn 3-5 tiếng về lời chào và rèn luyện văn hóa lễ phép khi tới trường.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/poem_greeting.png",
+      "thumbnail": "img/poem_greeting.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 71",
+    "content": {
+      "storyText": "Đi về con chào mẹ,\nRa đường con chào cô.\nLời chào theo chân bé,\nAi cũng quý, cũng yêu.",
+      "question": "Khi đi học về hoặc gặp cô giáo, bé cần làm gì để thể hiện sự lễ phép? 🏫",
+      "questionEn": "What should you do to show polite manners when meeting teachers or arriving home?",
+      "media": "🏫 👋"
+    },
+    "options": [
       {
-            "id": "opt_polite",
-            "text": "Khoanh tay chào cô và xin phép lễ phép"
+        "id": "opt_chao",
+        "text": "Khoanh tay cúi đầu chào lễ phép 👋"
       },
       {
-            "id": "opt_rude",
-            "text": "Tự ý chạy ra ngoài không hỏi cô"
+        "id": "opt_chay",
+        "text": "Chạy thẳng vào nhà không nói gì 🏃"
       },
       {
-            "id": "opt_ignore",
-            "text": "Lờ đi không chào hỏi thầy cô"
+        "id": "opt_khoc",
+        "text": "Khóc nhè 😢"
       }
-],
-    correctAnswer: "opt_polite",
-    feedback: {
-      "correct": "Xuất sắc! Lễ phép khoanh tay chào cô và xin phép đàng hoàng là nét đẹp của học sinh lớp 1 thanh lịch! 🏫👏",
-      "wrong": "Bé nhớ nhé: Gặp cô phải khoanh tay chào, muốn ra ngoài phải xin phép cô đàng hoàng!",
-      "hint": "Khoanh tay chào cô lễ phép"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_chao",
+    "feedback": {
+      "correct": "Rất chính xác! 'Lời chào đi trước, rước nụ cười theo' - bé ngoan luôn lễ phép chào hỏi mọi người! 🌟💖",
+      "wrong": "Bé nhớ khoanh tay lễ phép chào mẹ và chào cô giáo nhé!",
+      "hint": "Khoanh tay chào lễ phép"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
+  // Source: Sach luyen doc.pdf - Page 78
   {
-    id: "act_ls_05_school_safety",
-    icon: "🌱",
-    title: "An toàn: Đội mũ bảo hiểm và không đi theo người lạ 🪖🛑",
-    titleEn: "Safety: Helmet & Stranger Danger",
-    ageTier: "preschool",
-    stage: 5,
-    minAge: 5,
-    subject: "skills",
-    skill: "life.safety",
-    type: "story_listen",
-    difficulty: 1,
-    content: {
-      "storyText": "Bố chở bé đến trường bằng xe máy, bé luôn nhắc bố: 'Bố ơi cài quai mũ bảo hiểm cho con nhé!'. Khi tan trường, bé đứng trong sân đợi bố mẹ, kiên quyết không nhận kẹo hay đi theo người lạ mặt.",
-      "question": "Để đảm bảo an toàn cho bản thân khi đi học, bé ghi nhớ quy tắc nào sau đây? 🪖",
-      "questionEn": "Which safety rule must you always remember when going to school?",
-      "media": "🪖 🛑  AN TOÀN ĐẾN TRƯỜNG"
-},
-    options: [
+    "id": "act_s4_tv_cau_ban_tay_me",
+    "title": "Luyện đọc câu ngắn: Bàn tay mẹ (3-5 tiếng) 👩‍👧",
+    "titleEn": "Short Story: Mother's Hands",
+    "icon": "📖",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "reading",
+    "skill": "Đọc câu ngắn 3-5 tiếng",
+    "skills": [
+      "vi.reading.passage"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "story_listen",
+    "difficulty": 2,
+    "learningObjective": "Bé rèn luyện kỹ năng đọc câu ngắn 3-5 tiếng và trả lời câu hỏi tìm hiểu nội dung.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/mothers_hands.png",
+      "thumbnail": "img/mothers_hands.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 78",
+    "content": {
+      "storyText": "Bàn tay của mẹ,\nBế bé sớm chiều.\nNấu cơm quét nhà,\nChăm lo cho bé.",
+      "question": "Trong bài thơ, bàn tay mẹ đã làm những công việc gì để chăm sóc bé? 👩‍👧",
+      "questionEn": "What does mother's hands do to take care of the child?",
+      "media": "👩‍👧 🍲"
+    },
+    "options": [
       {
-            "id": "opt_safe",
-            "text": "Đội mũ bảo hiểm và tuyệt đối không đi theo người lạ"
+        "id": "opt_care",
+        "text": "Bế bé, nấu cơm và quét dọn nhà cửa 🍲"
       },
       {
-            "id": "opt_unsafe",
-            "text": "Đi theo người lạ khi được cho kẹo ngọt"
+        "id": "opt_tv",
+        "text": "Chỉ xem ti vi 📺"
       },
       {
-            "id": "opt_no_helmet",
-            "text": "Tháo mũ bảo hiểm khi đang ngồi trên xe máy"
+        "id": "opt_sleep",
+        "text": "Chỉ ngủ cả ngày 😴"
       }
-],
-    correctAnswer: "opt_safe",
-    feedback: {
-      "correct": "Rất chuẩn xác! Đội mũ bảo hiểm bảo vệ đầu an toàn và chỉ về nhà cùng bố mẹ người thân thôi nhé! 🪖🛡️",
-      "wrong": "Bé phải luôn đội mũ bảo hiểm và tuyệt đối không bao giờ đi theo người lạ bé nhé!",
-      "hint": "Đội mũ bảo hiểm và không theo người lạ"
-},
-    reward: { stars: 3 }
+    ],
+    "correctAnswer": "opt_care",
+    "feedback": {
+      "correct": "Đúng rồi! Mẹ nấu cơm ngon, quét nhà sạch và luôn chăm sóc yêu thương bé mỗi ngày! 👩‍👧💖",
+      "wrong": "Bàn tay mẹ bế bé sớm chiều, nấu cơm và chăm lo cho bé con nhé!",
+      "hint": "Bế bé, nấu cơm và quét nhà"
+    },
+    "reward": {
+      "stars": 3
+    }
+  },
+  // Source: Sach luyen doc.pdf - Page 92
+  {
+    "id": "act_s4_tv_cau_co_va_me",
+    "title": "Luyện đọc bài thơ: Cô và mẹ 👩‍🏫",
+    "titleEn": "Poem: Teacher and Mother",
+    "icon": "📖",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "reading",
+    "skill": "Đọc câu thơ ngắn",
+    "skills": [
+      "vi.reading.passage"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "story_listen",
+    "difficulty": 2,
+    "learningObjective": "Bé rèn khả năng đọc lưu loát bài thơ ngắn và ghi nhớ tình cảm của cô giáo và mẹ hiền.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/teacher_mother.png",
+      "thumbnail": "img/teacher_mother.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 92",
+    "content": {
+      "storyText": "Buổi sáng bé chào mẹ,\nChạy đến ôm cổ cô.\nBuổi chiều bé chào cô,\nSà vào lòng của mẹ.",
+      "question": "Buổi sáng khi đến lớp, bé chạy đến làm gì với cô giáo? 👩‍🏫",
+      "questionEn": "What does the child do when arriving at class in the morning?",
+      "media": "🏫 👩‍🏫"
+    },
+    "options": [
+      {
+        "id": "opt_hug",
+        "text": "Chạy đến ôm cổ cô giáo 👩‍🏫"
+      },
+      {
+        "id": "opt_cry",
+        "text": "Khóc to đòi về 😭"
+      },
+      {
+        "id": "opt_hide",
+        "text": "Trốn sau cánh cửa 🚪"
+      }
+    ],
+    "correctAnswer": "opt_hug",
+    "feedback": {
+      "correct": "Chính xác! 'Buổi sáng bé chào mẹ / Chạy đến ôm cổ cô' - bé rất yêu cô giáo và trường lớp! 👩‍🏫🌟",
+      "wrong": "Bé chạy đến ôm cổ cô giáo con nhé!",
+      "hint": "Chạy đến ôm cổ cô"
+    },
+    "reward": {
+      "stars": 3
+    }
+  },
+  // Source: Sach luyen doc.pdf - Page 88
+  {
+    "id": "act_s4_tv_cau_muoi_qua_trung",
+    "title": "Luyện đọc: Mười quả trứng tròn 🐣",
+    "titleEn": "Poem: Ten Round Eggs",
+    "icon": "📖",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "reading",
+    "skill": "Đọc thơ kết hợp số đếm",
+    "skills": [
+      "vi.reading.passage",
+      "math.count.10"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "story_listen",
+    "difficulty": 2,
+    "learningObjective": "Bé đọc trơn bài thơ ngắn kết hợp củng cố số lượng 10 và quan sát sự nở của đàn gà con.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/ten_eggs.png",
+      "thumbnail": "img/ten_eggs.png"
+    },
+    "source": "Sach luyen doc.pdf - Page 88",
+    "content": {
+      "storyText": "Mười quả trứng tròn,\nMẹ gà ấp ủ.\nHôm nay nở ra,\nMười chú gà con.",
+      "question": "Từ 10 quả trứng tròn của mẹ gà, hôm nay đã nở ra bao nhiêu chú gà con? 🐣",
+      "questionEn": "How many baby chicks hatched from the 10 eggs?",
+      "media": "🥚🥚🥚 -> 🐣🐣🐣 (10 chú)"
+    },
+    "options": [
+      {
+        "id": "opt_10_chicks",
+        "text": "10 chú gà con lông vàng 🐣"
+      },
+      {
+        "id": "opt_5_chicks",
+        "text": "5 chú gà con"
+      },
+      {
+        "id": "opt_2_chicks",
+        "text": "2 chú gà con"
+      }
+    ],
+    "correctAnswer": "opt_10_chicks",
+    "feedback": {
+      "correct": "Đúng rồi! Mười quả trứng tròn nở ra đúng 10 chú gà con lông vàng óng ả! 🐣🌟",
+      "wrong": "Có đúng 10 chú gà con nở ra con nhé!",
+      "hint": "10 chú gà con"
+    },
+    "reward": {
+      "stars": 3
+    }
+  },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 62-64
+  {
+    "id": "act_s4_toan_dien_so_con_thieu_20",
+    "title": "Toán tư duy: Điền số còn thiếu vào dãy số phạm vi 20 🧩",
+    "titleEn": "Logic Math: Fill in Missing Numbers up to 20",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "Điền số còn thiếu phạm vi 20",
+    "skills": [
+      "math.logic.patterns",
+      "math.count.20"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé phát triển tư duy logic qua bài tập tìm quy luật và điền số còn thiếu trong dãy số 1 đến 20.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/pattern_20.png",
+      "thumbnail": "img/pattern_20.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 62-64",
+    "content": {
+      "question": "Bé tìm số còn thiếu điền vào ô trống nhé: 15, 16, [ ? ], 18, 19, 20 🚂",
+      "questionEn": "Find the missing number: 15, 16, [ ? ], 18, 19, 20",
+      "media": "15 ➔ 16 ➔ [ ? ] ➔ 18 ➔ 19 ➔ 20"
+    },
+    "options": [
+      {
+        "id": "opt_17",
+        "text": "Số 17 (Mười bảy) 🚂"
+      },
+      {
+        "id": "opt_14",
+        "text": "Số 14"
+      },
+      {
+        "id": "opt_21",
+        "text": "Số 21"
+      }
+    ],
+    "correctAnswer": "opt_17",
+    "feedback": {
+      "correct": "Chính xác! 15, 16 rồi đến 17, tiếp theo là 18! Bé tư duy dãy số rất nhạy bén! 🚂✨",
+      "wrong": "Số đứng giữa 16 và 18 là số 17 con nhé!",
+      "hint": "Số 17 (đứng sau 16 và trước 18)"
+    },
+    "reward": {
+      "stars": 3
+    }
+  },
+  // Source: TTH LAM QUEN VOI TOAN.pdf - Page 65-66
+  {
+    "id": "act_s4_toan_so_sanh_20",
+    "title": "Toán tư duy: So sánh số và phép tính trong phạm vi 20 ⚖️",
+    "titleEn": "Logic Math: Comparing Numbers and Operations up to 20",
+    "icon": "🔢",
+    "ageTier": "preschool",
+    "stage": 4,
+    "minAge": 5,
+    "subject": "math",
+    "skill": "So sánh số phạm vi 20",
+    "skills": [
+      "math.compare.symbols",
+      "math.logic"
+    ],
+    "prerequisites": [
+      "stage_3"
+    ],
+    "type": "image_quiz",
+    "difficulty": 2,
+    "learningObjective": "Bé so sánh các số trong phạm vi 20 và so sánh kết quả phép tính đơn giản với một số.",
+    "mediaSource": {
+      "type": "image_set",
+      "url": "img/compare_20.png",
+      "thumbnail": "img/compare_20.png"
+    },
+    "source": "TTH LAM QUEN VOI TOAN.pdf - Page 65-66",
+    "content": {
+      "question": "Bé so sánh xem số nào lớn hơn: 18 hay 15? ⚖️",
+      "questionEn": "Which number is greater: 18 or 15?",
+      "media": "18  [ ? ]  15"
+    },
+    "options": [
+      {
+        "id": "opt_18_gt",
+        "text": "18 > 15 (18 lớn hơn 15) 🌟"
+      },
+      {
+        "id": "opt_18_lt",
+        "text": "18 < 15"
+      },
+      {
+        "id": "opt_equal",
+        "text": "18 = 15"
+      }
+    ],
+    "correctAnswer": "opt_18_gt",
+    "feedback": {
+      "correct": "Chuẩn xác! 18 lớn hơn 15 nên ta có 18 > 15! Bé đã sẵn sàng bước vào Lớp 1 với tư duy toán học vững vàng! 🌟🎓",
+      "wrong": "18 có 1 chục và 8 đơn vị, lớn hơn 15 có 1 chục và 5 đơn vị con nhé!",
+      "hint": "18 > 15"
+    },
+    "reward": {
+      "stars": 3
+    }
   },
 
   // ========================================================
@@ -1651,7 +2179,7 @@ const ACTIVITIES_DATA = [
     title: "Đọc hiểu: Chuyện Rùa và Thỏ chạy thi 🐢🐇",
     titleEn: "Story: The Tortoise and The Hare",
     ageTier: "grade1_2",
-    stage: 4,
+    stage: null,
     minAge: 4,
     subject: "reading",
     skill: "Đọc hiểu ý nghĩa và bài học ngụ ngôn",
@@ -1936,7 +2464,7 @@ const ACTIVITIES_DATA = [
     titleEn: "School Life: Backpack & School Supplies",
     icon: "🎒",
     ageTier: "preschool",
-    stage: 0,
+    stage: null,
     minAge: 4,
     subject: "skills",
     skills: ["life.school_supplies"],
@@ -1988,7 +2516,7 @@ const ACTIVITIES_DATA = [
     titleEn: "School Life: Getting to Know Teacher and Friends",
     icon: "👩‍🏫",
     ageTier: "preschool",
-    stage: 0,
+    stage: null,
     minAge: 4,
     subject: "skills",
     skills: ["life.school_manners"],
@@ -2040,7 +2568,7 @@ const ACTIVITIES_DATA = [
     titleEn: "School Life: Tidying Your Study Desk",
     icon: "📚",
     ageTier: "preschool",
-    stage: 0,
+    stage: null,
     minAge: 4,
     subject: "skills",
     skills: ["life.study_desk"],
@@ -2963,7 +3491,7 @@ const ACTIVITIES_DATA = [
     title: "Học chữ A cùng cô Lan Anh: Chữ A tươi cười 🍎",
     titleEn: "Letter A: Happy Open Mouth with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=t5As5kwFvRM",
@@ -3006,7 +3534,7 @@ const ACTIVITIES_DATA = [
     title: "Học chữ Ă cùng cô Lan Anh: Chiếc mũ trăng khuyết 🌙",
     titleEn: "Letter Ă: Crescent Smile with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=1qAjhNd2N6M",
@@ -3049,7 +3577,7 @@ const ACTIVITIES_DATA = [
     title: "Học chữ Â cùng cô Lan Anh: Chiếc nón che mưa 🛖",
     titleEn: "Letter Â: The Little Hat with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=rErOluFSNT0",
@@ -3092,7 +3620,7 @@ const ACTIVITIES_DATA = [
     title: "Học chữ B cùng cô Lan Anh: Chữ B bụng bự ⚽",
     titleEn: "Letter B: Big Round Bellies with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=bicX1RNzHos",
@@ -3135,7 +3663,7 @@ const ACTIVITIES_DATA = [
     title: "Học chữ C cùng cô Lan Anh: Chữ C cong cong & Chú Cá nhỏ 🐟",
     titleEn: "Letter C: Curved Crescent with Teacher Lan Anh",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     videoUrl: "https://www.youtube.com/watch?v=uP9Ri14I28o",
@@ -3184,7 +3712,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ O tròn xoe ⭕ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter O",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3222,7 +3750,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Ô đội mũ 🧢 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ô",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3260,7 +3788,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Ơ có râu 🐱 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ơ",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3298,7 +3826,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ A & Đánh vần chữ A 🍎 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter A",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3336,7 +3864,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Ă: Vầng trăng khuyết 🌙 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ă",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3374,7 +3902,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Â: Chiếc nón che mưa 🛖 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Â",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3412,7 +3940,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ U & Tiếng có âm U 🥣 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter U",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3450,7 +3978,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Ư & Phân biệt U/Ư 🍇 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ư",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3488,7 +4016,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ E & Tiếng có âm E 🐑 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter E",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3526,7 +4054,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ Ê & Phân biệt E/Ê 🐐 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Ê",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3564,7 +4092,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học chữ I ngắn & Ghép tiếng ⚪ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter I",
     ageTier: "grade1_2",
-    stage: 1,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3602,7 +4130,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học phụ âm C & Quy tắc chính tả C/K 🐟 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter C & Orthography",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3640,7 +4168,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học phụ âm B & Ghép dấu thanh ⚽ (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter B & Tones",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3678,7 +4206,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học phụ âm D (Dờ) & Tiếng có âm D 🐐 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter D",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -3716,7 +4244,7 @@ const ACTIVITIES_DATA = [
     title: "VTV7 Lớp 1: Học phụ âm Đ & Phân biệt D/Đ 🏮 (ABC Vui từng giờ)",
     titleEn: "Grade 1 VTV7: Letter Đ & Contrast D/Đ",
     ageTier: "grade1_2",
-    stage: 2,
+    stage: null,
     minAge: 4,
     subject: "vietnamese",
     type: "video_quiz",
@@ -4141,7 +4669,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Basic Phonics: Blend b - a - ba",
     icon: "🔤",
     ageTier: "preschool",
-    stage: 2,
+    stage: null,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.blend.ba",
@@ -4195,7 +4723,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Basic Phonics: Blend m - e - me",
     icon: "🔤",
     ageTier: "preschool",
-    stage: 2,
+    stage: null,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.blend.me",
@@ -4249,7 +4777,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Vietnamese Tones: Grave and Acute Accents",
     icon: "📖",
     ageTier: "preschool",
-    stage: 2,
+    stage: null,
     minAge: 5,
     subject: "vietnamese",
     skill: "vi.tones.huyen_sac",
@@ -4306,7 +4834,7 @@ const ACTIVITIES_DATA = [
     titleEn: "Logic Math: Color Pattern",
     icon: "🎨",
     ageTier: "preschool",
-    stage: 3,
+    stage: null,
     minAge: 5,
     subject: "math",
     skill: "math.pattern.color",

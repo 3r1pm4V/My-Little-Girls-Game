@@ -162,37 +162,27 @@ tiers.forEach(tier => {
   console.log(`✔ getActivitiesByTier('${tier}'): Trả về ${acts.length} bài học`);
 });
 
-// 5. Kiểm tra trường 'stage' (0-5) cho lộ trình Chuẩn bị vào Lớp 1 (Task P1-00)
-console.log('\n--- TEST 5: Kiểm tra trường stage (0–5) cho lộ trình Chuẩn bị vào Lớp 1 ---');
+// 5. Kiểm tra trường 'stage' (0-4) cho lộ trình Chuẩn bị vào Lớp 1 (Chuẩn Drive 34 bài)
+console.log('\n--- TEST 5: Kiểm tra trường stage (0–4) cho lộ trình Chuẩn bị vào Lớp 1 ---');
 
 // 5.1 Kiểm tra các hàm helper theo chặng
 assert(typeof getActivitiesByStage === 'function', 'getActivitiesByStage phải là hàm');
 assert(typeof getPreschoolJourneyActivities === 'function', 'getPreschoolJourneyActivities phải là hàm');
 
-// 5.2 Mọi bài preschool phải có stage hợp lệ (0-5)
-const preschoolActs = ACTIVITIES_DATA.filter(a => a.ageTier === 'preschool');
-assert(preschoolActs.length > 0, 'Phải có danh sách bài preschool');
-preschoolActs.forEach(act => {
-  assert(act.stage !== undefined && act.stage !== null, `Bài mầm non ${act.id} phải có trường 'stage' xác định`);
-  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài mầm non ${act.id} có stage không hợp lệ: ${act.stage}`);
+// 5.2 Mọi bài trong lộ trình Chuẩn bị vào lớp 1 (getPreschoolJourneyActivities) phải có stage hợp lệ (0-4)
+const journeyActs = getPreschoolJourneyActivities();
+assert.strictEqual(journeyActs.length, 34, `getPreschoolJourneyActivities() phải trả về đúng 34 bài (thực tế: ${journeyActs.length})`);
+journeyActs.forEach(act => {
+  assert(act.stage !== undefined && act.stage !== null, `Bài lộ trình ${act.id} phải có trường 'stage' xác định`);
+  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 4, `Bài lộ trình ${act.id} có stage không hợp lệ: ${act.stage}`);
 });
-console.log(`✔ Toàn bộ ${preschoolActs.length} bài preschool đều có stage hợp lệ (0-5)`);
+console.log(`✔ Toàn bộ 34 bài lộ trình đều có stage hợp lệ (0-4)`);
 
-// 5.3 Mọi bài grade1_2 dùng cho bé (Cô Lan Anh, VTV7, v.v.) phải có stage hợp lệ (0-5)
-const journeyG12Acts = ACTIVITIES_DATA.filter(a => a.ageTier === 'grade1_2' && a.stage !== null);
-assert(journeyG12Acts.length === 21, `Phải có đúng 21 bài grade1_2 dùng cho lộ trình bé 4–6 tuổi (thực tế: ${journeyG12Acts.length})`);
-journeyG12Acts.forEach(act => {
-  assert(act.stage !== undefined, `Bài grade1_2 dùng cho bé ${act.id} không được để undefined`);
-  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài grade1_2 ${act.id} có stage không hợp lệ: ${act.stage}`);
-});
-console.log(`✔ Toàn bộ 21 bài grade1_2 phục vụ bé 4-6 tuổi (Cô Lan Anh, VTV7 chữ cái đơn, Truyện Rùa & Thỏ) có stage hợp lệ`);
-
-// 5.4 Các bài grade1_2 chuyển sang lớp 1 phải có stage = null
+// 5.3 Mọi bài grade1_2 chuyển sang lớp 1 phải có stage = null
 const excludedG12Ids = [
   'act_g12_math_01', 'act_g12_math_02', 'act_g12_math_03',
   'act_g12_vn_01', 'act_g12_vn_02', 'act_g12_vn_03',
   'act_g12_eng_01', 'act_g12_eng_02',
-  'act_pre_let_02', 'act_pre_let_03',
   'act_vq_g12_01_spell_b', 'act_vq_g12_02_spell_c', 'act_vq_g12_03_spell_d_dd', 'act_vq_g12_04_spell_ai_ay',
   'g1_vtv7_31_letter_gh', 'g1_vtv7_32_letter_ch', 'g1_vtv7_33_letter_gi', 'g1_vtv7_34_letter_kh', 'g1_vtv7_35_letter_ng',
   'g1_vtv7_37_letter_ph', 'g1_vtv7_38_letter_tr', 'g1_vtv7_39_letter_nh', 'g1_vtv7_40_letter_th', 'g1_vtv7_41_letter_qu'
@@ -204,16 +194,8 @@ excludedG12Ids.forEach(id => {
 });
 console.log(`✔ Toàn bộ ${excludedG12Ids.length} bài dời qua lớp 1 (ghép âm, vần kép, phép tính, điền chữ...) có stage: null đúng thiết kế`);
 
-// 5.5 Kiểm tra getPreschoolJourneyActivities() trả về đúng 31 bài (10 preschool + 21 grade1_2)
-const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 62, `getPreschoolJourneyActivities() phải trả về đúng 58 bài (thực tế: ${journeyActs.length})`);
-journeyActs.forEach(act => {
-  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, `Bài ${act.id} trong lộ trình phải có stage từ 0 đến 5`);
-});
-console.log(`✔ getPreschoolJourneyActivities() trả về đúng 62 bài học làm quen trước lớp 1 cho bé 4–6 tuổi`);
-
-// 5.6 Phân bố số lượng bài theo từng chặng theo docs/stage-map.md
-const expectedStageCounts = { 0: 3, 1: 22, 2: 17, 3: 9, 4: 6, 5: 5 };
+// 5.4 Phân bố số lượng bài theo từng chặng theo tài liệu Google Drive
+const expectedStageCounts = { 0: 7, 1: 7, 2: 7, 3: 7, 4: 6 };
 for (const [stg, count] of Object.entries(expectedStageCounts)) {
   const stageNum = parseInt(stg, 10);
   const actsInStage = getActivitiesByStage(stageNum);

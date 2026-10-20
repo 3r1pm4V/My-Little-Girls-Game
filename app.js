@@ -1334,30 +1334,29 @@ function card(f,vis,vi,en,subject="default"){
    TASK P1-04: LỘ TRÌNH 6 CHẶNG & HỌC HÔM NAY DÀNH CHO BÉ
    ======================================================== */
 const STAGE_META = [
-  { stage: 0, icon: "🐣", nameVi: "Chặng 0: Khám phá", nameEn: "Stage 0: Explore", titleVi: "Nét bút & Trường lớp", titleEn: "Strokes & School Life" },
-  { stage: 1, icon: "🔤", nameVi: "Chặng 1: Chữ cái & Số đếm", nameEn: "Stage 1: Letters & Numbers", titleVi: "Chữ cái & Số đếm", titleEn: "Letters & Numbers 1–5" },
-  { stage: 2, icon: "📖", nameVi: "Chặng 2: Ghép vần cơ bản", nameEn: "Stage 2: Basic Phonics", titleVi: "Ghép vần cơ bản", titleEn: "Basic Phonics & Tones" },
-  { stage: 3, icon: "🔢", nameVi: "Chặng 3: Toán tư duy", nameEn: "Stage 3: Logic Math", titleVi: "Toán tư duy", titleEn: "Logic Math & Shapes" },
-  { stage: 4, icon: "📚", nameVi: "Chặng 4: Đọc câu & Tư duy", nameEn: "Stage 4: Sentences & Logic", titleVi: "Đọc câu ngắn & Tư duy logic", titleEn: "Short Sentences & Logic" },
-  { stage: 5, icon: "🎓", nameVi: "Chặng 5: Vào Lớp 1", nameEn: "Stage 5: Ready for Grade 1", titleVi: "Tự tin bước vào Lớp 1", titleEn: "Confident for Grade 1" }
+  { stage: 0, icon: "✏️", nameVi: "Chặng 0: Khởi động", nameEn: "Stage 0: Getting Started", titleVi: "Làm quen & Nét bút", titleEn: "School Life & Strokes" },
+  { stage: 1, icon: "🔤", nameVi: "Chặng 1: Chữ cái & Số 1-5", nameEn: "Stage 1: Letters & 1-5", titleVi: "Chữ cái & Số 1-5", titleEn: "Letters & Numbers 1–5" },
+  { stage: 2, icon: "🔡", nameVi: "Chặng 2: Phụ âm & Số 6-10", nameEn: "Stage 2: Consonants & 6-10", titleVi: "Phụ âm, Dấu thanh & Số 6-10", titleEn: "Consonants, Tones & Numbers 6–10" },
+  { stage: 3, icon: "🔢", nameVi: "Chặng 3: Ghép vần & Toán", nameEn: "Stage 3: Advanced Phonics & Math", titleVi: "Ghép vần nâng cao & Toán 11-20", titleEn: "Advanced Phonics & Math 11–20" },
+  { stage: 4, icon: "📖", nameVi: "Chặng 4: Đọc câu & Tư duy", nameEn: "Stage 4: Sentences & Logic", titleVi: "Đọc câu & Tư duy logic", titleEn: "Short Sentences & Logic" }
 ];
 window.STAGE_META = STAGE_META;
 
 function getKidCurrentStage(){
   const s = parseInt(ls.get("blg_stage", "1"), 10);
-  return Number.isNaN(s) || s < 0 || s > 5 ? 1 : s;
+  return Number.isNaN(s) || s < 0 || s > 4 ? 1 : s;
 }
 window.getKidCurrentStage = getKidCurrentStage;
 
 function setKidCurrentStage(st){
   const s = parseInt(st, 10);
-  if(!Number.isNaN(s) && s >= 0 && s <= 5){
+  if(!Number.isNaN(s) && s >= 0 && s <= 4){
     ls.set("blg_stage", String(s));
   }
 }
 window.setKidCurrentStage = setKidCurrentStage;
 /* ========================================================
-   TASK P5-06: MỞ KHÓA / BỎ QUA CHẶNG THỦ CÔNG
+   TASK P5-06: MỞ KHÓA / BỎ QUA CHẶNG THỦ CÔNG & PREREQUISITES
    ======================================================== */
 
 function getUnlockedStages() {
@@ -1380,10 +1379,68 @@ function getUnlockedStages() {
 }
 window.getUnlockedStages = getUnlockedStages;
 
+function isSkillMastered(skillId) {
+  if (!skillId) return false;
+  if (typeof checkMastery === "function" && checkMastery(skillId)) return true;
+  if (typeof getSkillLevel === "function" && getSkillLevel(skillId) === "mastered") return true;
+  try {
+    const raw = (typeof ls !== "undefined" ? ls.get("blg.progress.v2", "") : localStorage.getItem("blg.progress.v2"));
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && p.skills && p.skills[skillId]) {
+        const sk = p.skills[skillId];
+        if (sk.history && sk.history.length >= 2 && sk.history.some(h => h.correct)) return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
+window.isSkillMastered = isSkillMastered;
+
+function isActivityMastered(actId) {
+  if (!actId) return false;
+  if (typeof ST !== "undefined" && ST.completedActs && ST.completedActs[actId]) return true;
+  if (typeof checkMastery === "function" && checkMastery(actId)) return true;
+  const act = (window.ACTIVITIES_DATA || []).find(a => a.id === actId);
+  if (act && Array.isArray(act.skills)) {
+    if (act.skills.some(s => isSkillMastered(s))) return true;
+  }
+  if (act && act.skillId && isSkillMastered(act.skillId)) return true;
+  try {
+    const raw = (typeof ls !== "undefined" ? ls.get("blg.progress.v2", "") : localStorage.getItem("blg.progress.v2"));
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && p.skills && p.skills[actId]) {
+        const sk = p.skills[actId];
+        if (sk.history && sk.history.length >= 1 && sk.history.some(h => h.correct)) return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
+window.isActivityMastered = isActivityMastered;
+
+function isStageMastered(stageNum) {
+  const acts = (typeof getActivitiesByStage === "function") 
+    ? getActivitiesByStage(stageNum) 
+    : (window.ACTIVITIES_DATA || []).filter(a => a.stage === stageNum);
+  if (!acts || acts.length === 0) return true;
+  let masteredCount = 0;
+  for (const act of acts) {
+    if (isActivityMastered(act.id)) masteredCount++;
+  }
+  return masteredCount >= Math.max(1, Math.ceil(acts.length * 0.7));
+}
+window.isStageMastered = isStageMastered;
+
 function isStageUnlocked(stageNum) {
   if (ls.get("blg_unlock_all", "0") === "1") return true;
   const s = parseInt(stageNum, 10);
-  return getUnlockedStages().includes(s);
+  if (s === 0 || s === 1) return true;
+  const list = getUnlockedStages();
+  if (list.includes(s)) return true;
+  if (s > 0 && typeof isStageMastered === "function" && isStageMastered(s - 1)) return true;
+  return false;
 }
 window.isStageUnlocked = isStageUnlocked;
 
@@ -1429,6 +1486,36 @@ function lockedStagePrompt(stageNum) {
   alert(T("🔒 Chặng này đang tạm khóa!\nBố mẹ có thể vào Bảng điều khiển phụ huynh để mở khóa hoặc đặt chặng này cho bé học nhé.", "🔒 This stage is currently locked!\nParents can unlock it in Parent Dashboard."));
 }
 window.lockedStagePrompt = lockedStagePrompt;
+
+function isActivityLocked(act) {
+  if (!act) return false;
+  if (typeof ls !== "undefined" && ls.get("blg_unlock_all", "0") === "1") return false;
+  if (act.stage !== undefined && act.stage !== null && typeof isStageUnlocked === "function") {
+    if (!isStageUnlocked(act.stage)) return true;
+  }
+  if (Array.isArray(act.prerequisites) && act.prerequisites.length > 0) {
+    for (const req of act.prerequisites) {
+      if (req.startsWith("stage_")) {
+        const stNum = parseInt(req.replace("stage_", ""), 10);
+        if (typeof isStageUnlocked === "function" && !isStageUnlocked(stNum)) return true;
+      } else if (req.startsWith("act_")) {
+        if (!isActivityMastered(req)) return true;
+      } else {
+        if (!isSkillMastered(req)) return true;
+      }
+    }
+  }
+  return false;
+}
+window.isActivityLocked = isActivityLocked;
+
+function lockedActPrompt(actId) {
+  const act = (window.ACTIVITIES_DATA || []).find(a => a.id === actId);
+  const title = act ? (act.title || act.id) : "Bài học này";
+  say(`Bài học "${title}" đang tạm khóa. Bé hãy hoàn thành các bài học trước để mở nhé!`, `This activity is locked. Complete previous lessons first!`);
+  alert(T(`🔒 Bài học "${title}" đang tạm khóa!\nBé hãy học tốt các bài trước để mở khóa bài này nhé! ⭐`, `🔒 This lesson is locked!\nComplete prerequisites to unlock! ⭐`));
+}
+window.lockedActPrompt = lockedActPrompt;
 
 let lastKidBtnSpeak = 0;
 function speakKidBtn(type){
@@ -1493,17 +1580,18 @@ async function todayLearning(stageNum){
       const titleVi = act.title || "";
       const titleEn = act.titleEn || act.title || "";
       const qCount = act.content ? (Array.isArray(act.content) ? act.content.length : 1) : 3;
+      const locked = isActivityLocked(act);
       return `
-        <button class="stage-act-card" 
-          onclick="playActivity('${act.id}')"
-          aria-label="${T(titleVi, titleEn)}">
-          <div class="stage-act-icon">${icon}</div>
+        <button class="stage-act-card ${locked ? "locked" : ""}" 
+          onclick="${locked ? `lockedActPrompt('${act.id}')` : `playActivity('${act.id}')`}"
+          aria-label="${T(titleVi, titleEn)} ${locked ? '(Khóa)' : ''}">
+          <div class="stage-act-icon">${locked ? "🔒" : icon}</div>
           <div class="stage-act-info">
             <div class="stage-act-title">${T(titleVi, titleEn)}</div>
             <div class="stage-act-sub">
               <span>⭐ ${qCount} ${T("câu hỏi", "questions")}</span>
               <span>•</span>
-              <span style="color:var(--ok, #16a34a)">${T("Học ngay 🚀", "Play 🚀")}</span>
+              <span style="color:${locked ? '#94a3b8' : 'var(--ok, #16a34a)'}">${locked ? T("Chưa mở 🔒", "Locked 🔒") : T("Học ngay 🚀", "Play 🚀")}</span>
             </div>
           </div>
         </button>
@@ -1854,6 +1942,10 @@ function __completeActSuccess(act, earnedStars){
   if(act.skill){
     ST.skills = ST.skills || {};
     ST.skills[act.skill] = (ST.skills[act.skill] || 0) + 1;
+  }
+  if(act && act.id){
+    ST.completedActs = ST.completedActs || {};
+    ST.completedActs[act.id] = (ST.completedActs[act.id] || 0) + 1;
   }
   svS();
 

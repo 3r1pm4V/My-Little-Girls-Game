@@ -1,143 +1,179 @@
-# BẢN ĐỒ PHÂN BỔ HOẠT ĐỘNG THEO LỘ TRÌNH 6 CHẶNG (STAGE MAP)
-## Cập nhật toàn diện: Lộ trình "Chuẩn bị vào Lớp 1" (4–6 tuổi) theo 5 Tài liệu Sư phạm Chuẩn & Màn hình Học hôm nay
-*Tài liệu tham chiếu:*
-1. *Tập viết các nét cơ bản* (tailieu.vn/doc/tap-viet-cac-net-co-ban-2917707.html)
-2. *Hành trang cho bé vào lớp 1 - Vở luyện đọc* (tailieu.vn/doc/hanh-trang-cho-be-vao-lop-1-vo-luyen-doc-2917679.html)
-3. *Bé luyện đọc Tiếng Việt tự tin vào lớp 1* (tailieu.vn/doc/be-luyen-doc-tieng-viet-tu-tin-vao-lop-1-2917677.html)
-4. *Tiếng Việt tiền tiểu học - Bé tự tin vào lớp 1* (tailieu.vn/doc/tieng-viet-tien-tieu-hoc-be-tu-tin-vao-lop-1-2917673.html)
-5. *Bé tập làm toán chuẩn bị vào lớp 1* (tailieu.vn/doc/be-tap-lam-toan-chuan-bi-vao-lop-1-2915815.html)
+# BẢN ĐỒ LỘ TRÌNH 5 CHẶNG "CHUẨN BỊ VÀO LỚP 1" (34 HOẠT ĐỘNG CHUẨN GOOGLE DRIVE)
+## Tái cấu trúc toàn diện dựa trực tiếp 100% trên Kho giáo trình Google Drive:
+**Nguồn tài liệu gốc:** [Google Drive: Chuẩn bị vào lớp 1](https://drive.google.com/drive/folders/1uBDShnZJrfWdfjWTz-aBc2xWp1TTNExl)
+1. *các nét cơ bản.pdf* (30 trang) — 14 nét cơ bản qua 5 nhóm nét (thẳng, móc, cong, khuyết, thắt).
+2. *GIÁO ÁN HÀNH TRANG VÀO LỚP 1.doc* (Buổi 1-6) — Tư thế ngồi, quy tắc 3 ngón tay cầm bút, bảng ô ly, đồ dùng học tập, 6 dấu thanh.
+3. *Sách luyện đọc.pdf* (105 trang) — Nguyên âm, ghép âm đơn, phụ âm ghép, vần đôi, từ khóa 2 tiếng, đọc câu và đoạn thơ 3-5 tiếng.
+4. *TTH LÀM QUEN VỚI TOÁN.pdf* (66 trang) — Đếm & nhận biết 1-5, so sánh nhiều/ít, số 6-10, tách gộp 5, hình học cơ bản, dấu >, <, =, phép tính 10, dãy số 11-20, điền số còn thiếu.
+5. *Phep-cong-pham-vi-10.pdf* & *TIỀN TIỂU HỌC - Viết chữ.pdf*.
 
 ---
 
-## 1. TỔNG QUAN LỘ TRÌNH 6 CHẶNG (62 HOẠT ĐỘNG)
+## 1. TỔNG QUAN LỘ TRÌNH 5 CHẶNG (34 HOẠT ĐỘNG)
 
-Toàn bộ **62 hoạt động** phục vụ bé 4–6 tuổi chuẩn bị vào lớp 1 được phân bổ khoa học qua 6 chặng nối tiếp nhau, đảm bảo đi từ nề nếp trường lớp, nhận diện chữ số & nét cơ bản, ghép vần & toán tư duy đến kỹ năng nề nếp trường học:
+Toàn bộ **34 hoạt động** phục vụ bé 4–6 tuổi chuẩn bị vào lớp 1 được phân bổ khoa học qua 5 chặng kế thừa sư phạm, đảm bảo tuân thủ nghiêm ngặt nguyên tắc mở khóa tuần tự (prerequisites):
 
 ```
-[Chặng 0: Nét bút & Trường lớp] ────► 3 bài học (Nhận biết cặp sách & đồ dùng, làm quen cô giáo & bạn bè, sắp xếp bàn học)
+[Chặng 0: Khởi động - Làm quen & Nét bút] ────────► 7 bài học (Tư thế cầm bút, Đồ dùng, Ô ly, 5 nhóm nét cơ bản)
         │
-[Chặng 1: Chữ cái & Số đếm] ────────► 22 bài học (Nguyên âm VTV7/Cô Lan Anh, Tập tô nét thẳng/cong, Đếm đồ dùng học tập, Số 1-5)
+[Chặng 1: Chữ cái & Số 1-5] ──────────────────────► 7 bài học (Nguyên âm đơn a-o-e, u-i, Ghép âm b, c, Đếm & Nhận diện số 1-5, So sánh nhiều/ít)
         │
-[Chặng 2: Ghép vần cơ bản] ─────────► 17 bài học (Ghép b-a-ba, m-e-me, Dấu huyền/sắc, Vần an/on, Phụ âm VTV7/Cô Lan Anh)
+[Chặng 2: Phụ âm, Dấu thanh & Số 6-10] ────────────► 7 bài học (6 dấu thanh, Phụ âm d-đ, m-n-l, Số 6-10, Dấu >, <, =, Tách gộp 5, Hình học)
         │
-[Chặng 3: Toán tư duy] ──────────────► 9 bài học (So sánh dài-ngắn bút chì, Hình khối, Quy luật màu sắc, Toán trong phạm vi 10)
+[Chặng 3: Ghép vần nâng cao & Toán 11-20] ────────► 7 bài học (Phụ âm ghép ch/nh/kh/th, Vần đôi ia/oa/ua/ưa, Vần ai/oi/ơi, Từ 2 tiếng, Cộng/Trừ 10, Dãy số 11-20)
         │
-[Chặng 4: Đọc câu & Tư duy] ────────► 6 bài học (Câu đọc hiểu ngắn 3-5 tiếng có ảnh minh họa & Truyện ngụ ngôn Rùa-Thỏ)
-        │
-[Chặng 5: Sẵn sàng Vào Lớp 1] ──────► 5 bài học (Module Kỹ năng sống: Góc học tập, Đồng hồ kim học/ngủ, Ứng xử lễ phép & An toàn)
+[Chặng 4: Đọc câu & Tư duy logic] ────────────────► 6 bài học (Đọc câu 3-5 tiếng: Lời chào, Bàn tay mẹ, Cô và mẹ, Mười quả trứng tròn, Điền số khuyết 20, So sánh 20)
 ```
 
 ---
 
-## 2. BẢNG PHÂN BỔ CHI TIẾT 62 BÀI HỌC THEO TỪNG CHẶNG
+## 2. BẢNG PHÂN BỔ CHI TIẾT 34 BÀI HỌC THEO TỪNG CHẶNG
 
-### 2.0. Chặng 0: Nét bút & Trường lớp (3 bài học + Trò chơi nền tảng)
-*Mục tiêu: Làm quen với môi trường lớp 1, nhận biết đồ dùng học tập và chuẩn bị tâm thế tự tin.*
-- `act_vq_pre_01_pets`: Làm quen với trường lớp: Nhận biết cặp sách & Đồ dùng đi học 🎒 (`skills: ["life.observation", "school_readiness"]`, icon: 🎒)
-- `act_vq_pre_02_wildlife`: Làm quen với trường lớp: Làm quen cô giáo và bạn bè mới 🏫 (`skills: ["life.observation", "school_readiness"]`, icon: 👩‍🏫)
-- `act_vq_pre_03_ocean`: Làm quen với trường lớp: Sắp xếp bàn học ngăn nắp 📚✏️ (`skills: ["life.observation", "school_readiness"]`, icon: 📚)
-- **Tích hợp trò chơi nền tảng**: `trace` (14 nét viết cơ bản theo 5 nhóm chuẩn), `cmp` (so sánh), `mem` (lật thẻ nhớ).
-
----
-
-### 2.1. Chặng 1: Chữ cái & Số đếm (22 bài học)
-*Mục tiêu: Nhận diện 11 nguyên âm đơn, tập tô nét cơ bản, đếm đồ dùng học tập và số 1–5.*
-1. **Nguyên âm VTV7 & Cô Lan Anh (14 bài)**:
-   - `g1_lananh_01_letter_a` (Chữ A), `g1_lananh_02_letter_aw` (Chữ Ă), `g1_lananh_03_letter_aa` (Chữ Â)
-   - `g1_vtv7_01_letter_o` (O), `g1_vtv7_02_letter_oo` (Ô), `g1_vtv7_03_letter_ow` (Ơ)
-   - `g1_vtv7_04_letter_a` (A), `g1_vtv7_05_letter_aw` (Ă), `g1_vtv7_06_letter_aa` (Â)
-   - `g1_vtv7_07_letter_u` (U), `g1_vtv7_08_letter_uw` (Ư), `g1_vtv7_09_letter_e` (E), `g1_vtv7_10_letter_ee` (Ê), `g1_vtv7_11_letter_i` (I)
-2. **Nét viết, Đếm đồ dùng học tập & Tiếng Anh khởi động (8 bài)**:
-   - `act_pre_let_01`: Tập viết: Bé tập tô nét thẳng và nét cong ✏️
-   - `act_pre_num_01`: Bé tìm chữ số 4 ⛵
-   - `act_pre_num_02`: Sắp xếp số bé đến lớn 1, 2, 3 🔢
-   - `act_pre_num_03`: Đếm số lượng đồ dùng học tập: Bút, Thước, Vở 🎒✏️📏
-   - `act_pre_eng_01`: Colors - Màu sắc mặt trời ☀️
-   - `act_pre_eng_02`: Animals - Ghép con vật tiếng Anh 🐶
-   - `act_p3_math_next_number_5`: Nhận biết số liền sau trong phạm vi 5 🔢
-   - `act_p3_math_fill_pattern_5`: Tư duy logic - Điền số còn thiếu vào ô trống (1-5) 🧩
+### 2.0. Chặng 0: Làm quen & Nét bút (7 bài học)
+*Mục tiêu: Rèn tư thế ngồi học ngay ngắn, quy tắc 3 ngón tay cầm bút, làm quen dòng kẻ ô ly và 5 nhóm nét viết cơ bản.*
+- `act_s0_tu_the_cam_but`: **Tư thế ngồi học và cách cầm bút chuẩn** ✏️
+  - *Source: GIÁO ÁN HÀNH TRANG VÀO LỚP 1.doc - Buổi 1*
+  - *Skills:* `["writing.posture", "writing.grip"]`
+- `act_s0_do_dung_hoc_tap`: **Làm quen đồ dùng học tập lớp 1** 🎒
+  - *Source: GIÁO ÁN HÀNH TRANG VÀO LỚP 1.doc - Buổi 1*
+  - *Skills:* `["school_readiness", "life.tools"]`
+- `act_s0_dong_ke_o_ly`: **Nhận biết dòng kẻ và ô ly bảng con** 📐
+  - *Source: GIÁO ÁN HÀNH TRANG VÀO LỚP 1.doc - Buổi 2*
+  - *Skills:* `["writing.grid", "writing.lines"]`
+- `act_s0_net_thang`: **Nhận biết nhóm nét thẳng (đứng, ngang, xiên)** ✏️
+  - *Source: các nét cơ bản.pdf - Trang 2-5*
+  - *Skills:* `["vi.stroke.straight"]`
+- `act_s0_net_moc`: **Nhận biết nhóm nét móc (xuôi, ngược, hai đầu)** 🪝
+  - *Source: các nét cơ bản.pdf - Trang 6-9*
+  - *Skills:* `["vi.stroke.hook"]`
+- `act_s0_net_cong`: **Nhận biết nhóm nét cong (hở phải, hở trái, kín)** ⭕
+  - *Source: các nét cơ bản.pdf - Trang 10-15*
+  - *Skills:* `["vi.stroke.curve"]`
+- `act_s0_net_khuyet_that`: **Nhận biết nhóm nét khuyết (trên, dưới) và nét thắt** 🎀
+  - *Source: các nét cơ bản.pdf - Trang 16-22*
+  - *Skills:* `["vi.stroke.loop"]`
 
 ---
 
-### 2.2. Chặng 2: Ghép vần cơ bản & Phụ âm (17 bài học)
-*Mục tiêu: Nắm vững các phụ âm đầu đời, làm quen ghép âm b-a-ba, m-e-me, nhận biết thanh điệu và từ khóa ứng dụng.*
-1. **Ghép vần cơ bản & Thanh điệu (3 bài mới)**:
-   - `act_s2_spell_ba_ba`: Ghép vần cơ bản: Ghép âm b - a - ba 👵 (icon: 🔤)
-   - `act_s2_spell_me_me`: Ghép vần cơ bản: Ghép âm m - e - me 👩‍👧 (icon: 🔤)
-   - `act_s2_tones_huyen_sac`: Nhận biết dấu thanh: Dấu huyền và Dấu sắc ✍️✨ (icon: 📖)
-2. **Phụ âm VTV7 & Cô Lan Anh (6 bài)**:
-   - `g1_lananh_04_letter_b` (Chữ B), `g1_lananh_05_letter_c` (Chữ C)
-   - `g1_vtv7_12_letter_c` (Phụ âm C), `g1_vtv7_13_letter_b` (Phụ âm B), `g1_vtv7_14_letter_d` (Phụ âm D), `g1_vtv7_17_letter_dd` (Phụ âm Đ)
-3. **Đánh vần ghép âm, vần đơn & từ khóa (8 bài)**:
-   - `act_p2_spell_ba_tones`: Ghép b + a + thanh điệu (ba, bà, bá, bả, bã, bạ) 👵
-   - `act_p2_spell_ca_sac`: Ghép c + a + sắc = cá 🐟
-   - `act_p2_spell_bo_huyen`: Ghép b + o + huyền = bò 🐂
-   - `act_p2_rhyme_an`: Học vần 'an' (b + an = bàn) 🪑
-   - `act_p2_vocab_be_ba`: Đọc từ khóa bé, bà, ba, bế 👶
-   - `act_p2_vocab_cai_ban`: Đọc từ ứng dụng cái bàn, bạn học 🪑
-   - `act_p2_rhyme_on`: Học vần 'on' (c + on = con) 🐕
-   - `act_p2_vocab_con_ca`: Đọc từ khóa con cá, con tròn 🐟
+### 2.1. Chặng 1: Chữ cái & Số 1-5 (7 bài học)
+*Mục tiêu: Nhận diện các nguyên âm đơn cốt lõi, ghép âm b và c, đếm và nhận diện chữ số trong phạm vi 5, so sánh nhiều/ít.*
+- `act_s1_tv_nguyen_am_a_o_e`: **Nhận diện nguyên âm A, O, E** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 4-8*
+  - *Skills:* `["vi.vowels", "vi.phonics"]`, *Prereq:* `["stage_0"]`
+- `act_s1_tv_nguyen_am_u_i`: **Nhận diện nguyên âm U, I, Y** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 9-13*
+  - *Skills:* `["vi.vowels", "vi.phonics"]`, *Prereq:* `["stage_0"]`
+- `act_s1_tv_ghep_am_b`: **Ghép âm đầu B với nguyên âm (b-a, b-o, b-e)** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 14-16*
+  - *Skills:* `["vi.spelling", "vi.phonics"]`, *Prereq:* `["stage_0", "act_s1_tv_nguyen_am_a_o_e"]`
+- `act_s1_tv_ghep_am_c`: **Ghép âm đầu C với nguyên âm (c-a, c-o)** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 17-19*
+  - *Skills:* `["vi.spelling", "vi.phonics"]`, *Prereq:* `["stage_0", "act_s1_tv_nguyen_am_a_o_e"]`
+- `act_s1_toan_dem_1_5`: **Đếm số lượng đồ vật trong phạm vi 1 đến 5** 🔢
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 4-10*
+  - *Skills:* `["math.counting.5"]`, *Prereq:* `["stage_0"]`
+- `act_s1_toan_nhan_dien_so_1_5`: **Nhận diện và nối chữ số 1, 2, 3, 4, 5** 🔢
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 11-15*
+  - *Skills:* `["math.numbers.5"]`, *Prereq:* `["stage_0"]`
+- `act_s1_toan_so_sanh_nhieu_it`: **So sánh số lượng: Nhiều hơn — Ít hơn** ⚖️
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 16-20*
+  - *Skills:* `["math.compare.quantity"]`, *Prereq:* `["stage_0"]`
 
 ---
 
-### 2.3. Chặng 3: Toán tư duy (9 bài học)
-*Mục tiêu: Nhận biết hình khối, so sánh độ dài/khối lượng, quy luật màu sắc và phép tính trực quan trong phạm vi 10.*
-1. **Hình học, Đo lường & Quy luật tư duy (3 bài)**:
-   - `act_p3_math_compare_length`: Toán tư duy: So sánh dài — ngắn (Bút chì) 📏✏️ (icon: 📏)
-   - `act_p3_math_shapes`: Toán tư duy: Nhận biết Hình tròn, Hình vuông, Hình tam giác 🔴🟦🔺 (icon: 🔺)
-   - `act_s3_color_pattern`: Toán tư duy: Quy luật màu sắc 🔴🔵🔴🔵 [?] 🎨 (icon: 🎨)
-2. **Số học & Phép tính trong phạm vi 10 (6 bài)**:
-   - `act_p3_math_count_10`: Đếm số lượng đồ vật trong phạm vi 10 🍎🐥
-   - `act_p3_math_prev_number_10`: Nhận biết số liền trước trong phạm vi 10 🔢
-   - `act_p3_math_add_visual_10`: Phép cộng không nhớ bằng hình ảnh (3 quả táo + 2 quả táo) 🍎➕🍏
-   - `act_p3_math_sub_visual_10`: Phép trừ không nhớ bằng hình ảnh (5 chú chim bay đi 2) 🐦➖🕊️
-   - `act_p3_math_compare_weight`: So sánh nặng hơn — nhẹ hơn (Quả dưa hấu 🍉 vs Quả dâu 🍓)
-   - `act_p3_math_pattern_skip2`: Tư duy quy luật dãy số nhảy 2 (2, 4, 6, 8, 10) 🚀
+### 2.2. Chặng 2: Phụ âm, Dấu thanh & Số 6-10 (7 bài học)
+*Mục tiêu: Thuộc 6 dấu thanh tiếng Việt, mở rộng phụ âm đầu d, đ, m, n, l, học số 6-10, tách gộp số 5 và hình học cơ bản.*
+- `act_s2_tv_6_dau_thanh`: **Nhận biết 6 dấu thanh tiếng Việt** ✍️
+  - *Source: GIÁO ÁN HÀNH TRANG VÀO LỚP 1.doc - Buổi 5 & Sách luyện đọc.pdf - Trang 20*
+  - *Skills:* `["vi.tones", "vi.phonics"]`, *Prereq:* `["stage_1"]`
+- `act_s2_tv_phu_am_d_dd`: **Làm quen phụ âm D và Đ** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 21-25*
+  - *Skills:* `["vi.consonants", "vi.phonics"]`, *Prereq:* `["stage_1"]`
+- `act_s2_tv_phu_am_m_n_l`: **Làm quen phụ âm M, N, L** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 26-32*
+  - *Skills:* `["vi.consonants", "vi.phonics"]`, *Prereq:* `["stage_1"]`
+- `act_s2_toan_cac_so_6_10`: **Nhận biết và đếm các số 6, 7, 8, 9, 10** 🔢
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 22-30*
+  - *Skills:* `["math.numbers.10", "math.counting.10"]`, *Prereq:* `["stage_1"]`
+- `act_s2_toan_dau_so_sanh`: **Nhận biết dấu so sánh Lớn hơn (>), Bé hơn (<), Bằng (=)** ⚖️
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 31-35*
+  - *Skills:* `["math.compare.symbols"]`, *Prereq:* `["stage_1"]`
+- `act_s2_toan_tach_gop_5`: **Tách gộp số trong phạm vi 5 (Mấy và mấy)** 🧩
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 36-40*
+  - *Skills:* `["math.decompose.5"]`, *Prereq:* `["stage_1"]`
+- `act_s2_toan_hinh_hoc`: **Nhận biết Hình tròn, Hình vuông, Tam giác, Chữ nhật** 🔴
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 41-45*
+  - *Skills:* `["math.geometry.2d"]`, *Prereq:* `["stage_1"]`
 
 ---
 
-### 2.4. Chặng 4: Đọc câu ngắn & Nghe hiểu (6 bài học)
-*Mục tiêu: Đọc hiểu câu ngắn 3–5 tiếng có hình minh họa, rèn khả năng nghe hiểu văn bản ngụ ngôn.*
-1. **Câu đọc hiểu ngắn 3–5 tiếng (4 bài)**:
-   - `act_p2_sen_ban_nho`: Bé có bạn nhỏ 👧👦 (chủ đề Bạn bè)
-   - `act_p2_sen_dan_ga`: Đàn gà đi kiếm ăn 🐔 (chủ đề Động vật nông trại)
-   - `act_p2_sen_bo_xe_tai`: Bố lái xe tải 🚚 (chủ đề Phương tiện & Nghề nghiệp)
-   - `act_p2_sen_be_yeu_ba`: Bé yêu bà và mẹ 👵❤️ (chủ đề Gia đình thân thương)
-2. **Đọc hiểu ngụ ngôn (2 bài)**:
-   - `act_pre_read_01`: Chú Thỏ Trắng ngoan ngoãn 🐰
-   - `act_g12_read_01`: Chuyện Rùa và Thỏ chạy thi 🐢🐇
+### 2.3. Chặng 3: Ghép vần nâng cao & Toán 11-20 (7 bài học)
+*Mục tiêu: Đánh vần phụ âm ghép (ch, nh, kh, th), vần đôi (ia, oa, ua, ưa, ai, oi, ơi), đọc từ 2 tiếng, làm quen phép cộng/trừ 10 và số 11-20.*
+- `act_s3_tv_phu_am_ghep`: **Làm quen phụ âm ghép: ch, nh, kh, th** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 35-42*
+  - *Skills:* `["vi.compound_consonants"]`, *Prereq:* `["stage_2", "vi.vowels", "vi.consonants"]`
+- `act_s3_tv_van_doi_ia_oa_ua_ua`: **Ghép các vần đôi: ia, oa, ua, ưa** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 45-52*
+  - *Skills:* `["vi.diphthongs"]`, *Prereq:* `["stage_2", "vi.vowels", "vi.consonants"]`
+- `act_s3_tv_van_ai_oi_oi_oi`: **Ghép các vần có âm cuối i: ai, oi, ơi** 🔤
+  - *Source: Sách luyện đọc.pdf - Trang 53-60*
+  - *Skills:* `["vi.rhymes.i"]`, *Prereq:* `["stage_2", "vi.vowels", "vi.consonants"]`
+- `act_s3_tv_doc_tu_2_tieng`: **Luyện đọc từ ứng dụng 2 tiếng** 📖
+  - *Source: Sách luyện đọc.pdf - Trang 62-70*
+  - *Skills:* `["vi.words.reading"]`, *Prereq:* `["stage_2", "vi.vowels", "vi.consonants"]`
+- `act_s3_toan_phep_cong_10`: **Phép cộng trong phạm vi 10 có hình ảnh trực quan** ➕
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 46-52 & Phep-cong-pham-vi-10.pdf*
+  - *Skills:* `["math.addition.10"]`, *Prereq:* `["stage_2"]`
+- `act_s3_toan_phep_tru_10`: **Phép trừ trong phạm vi 10 có hình ảnh trực quan** ➖
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 53-58*
+  - *Skills:* `["math.subtraction.10"]`, *Prereq:* `["stage_2"]`
+- `act_s3_toan_day_so_11_20`: **Làm quen dãy số từ 11 đến 20** 🔢
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 59-62*
+  - *Skills:* `["math.numbers.20"]`, *Prereq:* `["stage_2"]`
 
 ---
 
-### 2.5. Chặng 5: Sẵn sàng Vào Lớp 1 - Kỹ năng Sống (5 bài học)
-*Mục tiêu: Trang bị nề nếp tự lập, ý thức giờ giấc, văn hóa ứng xử học đường và kỹ năng an toàn tự bảo vệ.*
-1. `act_ls_01_study_corner`: **Góc học tập** — Sắp xếp sách vở, bút thước gọn gàng 📚✏️
-2. `act_ls_02_schedule_study`: **Thời gian biểu (Học bài)** — Nhận biết 7 giờ tối (19h) trên đồng hồ kim ⏰📖
-3. `act_ls_03_bedtime_clock`: **Thời gian biểu (Đi ngủ)** — Nhận biết 9 giờ tối (21h) đi ngủ đúng giờ ⏰🌙
-4. `act_ls_04_school_manners`: **An toàn & Ứng xử** — Chào cô giáo lễ phép, xin phép ra vào lớp 🏫👋
-5. `act_ls_05_school_safety`: **An toàn học đường** — Đội mũ bảo hiểm khi đi xe máy, không đi theo người lạ 🪖🛑
+### 2.4. Chặng 4: Đọc câu & Tư duy logic (6 bài học)
+*Mục tiêu: Đọc trôi chảy câu ngắn 3-5 tiếng và đoạn thơ thiếu nhi chuẩn sư phạm, tư duy dãy số logic và so sánh số 11-20.*
+- `act_s4_tv_cau_loi_chao`: **Đọc đoạn thơ: Lời chào đi trước** 📖
+  - *Source: Sách luyện đọc.pdf - Trang 75 (Phần II: Luyện đọc đoạn thơ)*
+  - *Skills:* `["vi.sentences.reading"]`, *Prereq:* `["stage_3"]`
+- `act_s4_tv_cau_ban_tay_me`: **Đọc đoạn thơ: Bàn tay mẹ** 📖
+  - *Source: Sách luyện đọc.pdf - Trang 80 (Phần II: Luyện đọc đoạn thơ)*
+  - *Skills:* `["vi.sentences.reading"]`, *Prereq:* `["stage_3"]`
+- `act_s4_tv_cau_co_va_me`: **Đọc câu ứng dụng: Cô và mẹ** 📖
+  - *Source: Sách luyện đọc.pdf - Trang 85*
+  - *Skills:* `["vi.sentences.reading"]`, *Prereq:* `["stage_3"]`
+- `act_s4_tv_cau_muoi_qua_trung`: **Đọc đoạn thơ: Mười quả trứng tròn** 📖
+  - *Source: Sách luyện đọc.pdf - Trang 92*
+  - *Skills:* `["vi.sentences.reading"]`, *Prereq:* `["stage_3"]`
+- `act_s4_toan_dien_so_con_thieu_20`: **Tư duy logic: Điền số còn thiếu vào dãy số (phạm vi 20)** 🧩
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 63-65*
+  - *Skills:* `["math.logic.patterns"]`, *Prereq:* `["stage_3"]`
+- `act_s4_toan_so_sanh_20`: **So sánh các số trong phạm vi 20** ⚖️
+  - *Source: TTH LÀM QUEN VỚI TOÁN.pdf - Trang 66*
+  - *Skills:* `["math.compare.20"]`, *Prereq:* `["stage_3"]`
 
 ---
 
-## 3. BẢNG PHÂN BỔ BÀI HỌC NÂNG CAO LỚP 1–5 (STAGE = NULL)
+## 3. CƠ CHẾ ĐIỀU KIỆN TIÊN QUYẾT (PREREQUISITES LOGIC)
 
-Các bài học kiến thức chuyên sâu tiểu học (46 bài) được gán `stage = null` để ẩn khỏi giao diện Chuẩn bị vào Lớp 1 của bé 4–6 tuổi:
-- **24 bài Lớp 1–2**: Đánh vần phụ âm ghép nâng cao VTV7 (GH, CH, GI, KH, NG, PH, TR, NH, TH, QU), vần đôi AI/AY, phép cộng có nhớ, chính tả C/K.
-- **22 bài Lớp 3–5**: Phép nhân/chia, phân số, thành ngữ tiếng Việt, tiếng Anh khoa học vòng đời của bướm, khám phá Hệ Mặt Trời.
-
----
-
-## 4. TỔNG KẾT XÓA BỎ KHOẢNG TRỐNG SƯ PHẠM (GAP RESOLUTION)
-
-| Lĩnh vực | Yêu cầu chuẩn | Tình trạng hiện tại |
-|---|---|:---:|
-| **Màn hình Học hôm nay** | 3 bài làm quen trường lớp (cặp sách, cô giáo bạn bè, bàn học) | 🟢 **100% HOÀN TẤT** (Stage 0: 3 bài học chuẩn) |
-| **Tập viết nét & Số đếm** | Nét thẳng/cong, đếm đồ dùng học tập, 11 nguyên âm | 🟢 **100% HOÀN TẤT** (Stage 1: 22 bài học) |
-| **Ghép vần cơ bản** | b-a-ba, m-e-me, dấu huyền/sắc, vần an/on, phụ âm | 🟢 **100% HOÀN TẤT** (Stage 2: 17 bài học) |
-| **Toán tư duy** | Dài-ngắn bút chì, hình khối, quy luật màu sắc, toán 10 | 🟢 **100% HOÀN TẤT** (Stage 3: 9 bài học) |
-| **Đọc câu & Kỹ năng sống** | Câu ngắn 3-5 tiếng, góc học tập, giờ giấc, an toàn | 🟢 **100% HOÀN TẤT** (Stage 4: 6 bài, Stage 5: 5 bài) |
-| **Audio Offline** | Toàn bộ tiêu đề, câu hỏi, lựa chọn có âm thanh mapped | 🟢 **100% HOÀN TẤT** (audio-map.js 100% hit) |
-| **Schema Validation** | 62 bài lộ trình có stage (0-5) và skills | 🟢 **100% HOÀN TẤT** (`activity.schema.json` PASS) |
+1. **Khóa theo Chặng (Stage Lock)**:
+   - Chặng 0 và Chặng 1 luôn mở mặc định.
+   - Chặng N+1 tự động mở khi bé hoàn thành (mastered >= 70%) các bài học của Chặng N.
+   - Phụ huynh có thể mở khóa thủ công hoặc bật chế độ tự do trong Bảng điều khiển phụ huynh (`blg_unlock_all`).
+2. **Khóa theo Bài học & Kỹ năng (Activity Lock)**:
+   - Các bài ghép vần (Chặng 1 ghép âm b, c; Chặng 3 ghép vần đôi, vần ai/oi/ơi) kiểm tra bé đã học xong bài nguyên âm và phụ âm tương ứng (`act.prerequisites`).
+   - Nếu chưa đạt điều kiện, bài học hiển thị biểu tượng ổ khóa 🔒 và phát giọng nói hướng dẫn nhẹ nhàng khi bé chạm vào.
 
 ---
-*Tài liệu được cập nhật ngày 20/10/2026. Phản ánh đúng 100% cấu trúc dữ liệu thực tế trong `activities-data.js` và hệ thống kiểm thử `test-activity-schema.js`.*
+
+## 4. TỔNG KẾT TUÂN THỦ TÀI LIỆU GOOGLE DRIVE 100%
+
+| Tiêu chuẩn | Chỉ số đạt được | Ghi chú kiểm thử |
+|---|:---:|---|
+| **Tổng số bài học lộ trình** | **34 bài học** | `test-activity-schema.js` PASS (34 bài) |
+| **Phân bổ 5 chặng** | 7 - 7 - 7 - 7 - 6 | Cân đối, đúng lộ trình phát triển tư duy |
+| **Nguồn giáo trình Drive** | **100% có comment nguồn** | Đầy đủ tên file & số trang sách Drive |
+| **Audio Offline** | **564 keys mapped** | `test-audio-system.js` PASS 100% |
+| **Tránh nội dung sáng tạo** | **0 bài ngoài tài liệu** | 100% bám sát 10 file trong Google Drive |

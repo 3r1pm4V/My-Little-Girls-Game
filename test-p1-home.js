@@ -164,19 +164,17 @@ const stage1Acts = getActivitiesByStage(1);
 const stage2Acts = getActivitiesByStage(2);
 const stage3Acts = getActivitiesByStage(3);
 const stage4Acts = getActivitiesByStage(4);
-const stage5Acts = getActivitiesByStage(5);
 
-assert.strictEqual(stage0Acts.length, 3, 'Chặng 0 phải có 3 bài học');
-assert.strictEqual(stage1Acts.length, 22, 'Chặng 1 phải có 22 bài học');
-assert.strictEqual(stage2Acts.length, 17, 'Chặng 2 phải có 17 bài học');
-assert.strictEqual(stage3Acts.length, 9, 'Chặng 3 phải có 9 bài học');
+assert.strictEqual(stage0Acts.length, 7, 'Chặng 0 phải có 7 bài học');
+assert.strictEqual(stage1Acts.length, 7, 'Chặng 1 phải có 7 bài học');
+assert.strictEqual(stage2Acts.length, 7, 'Chặng 2 phải có 7 bài học');
+assert.strictEqual(stage3Acts.length, 7, 'Chặng 3 phải có 7 bài học');
 assert.strictEqual(stage4Acts.length, 6, 'Chặng 4 phải có 6 bài học');
-assert.strictEqual(stage5Acts.length, 5, 'Chặng 5 phải có 5 bài học');
 
-const totalJourneyActs = stage0Acts.length + stage1Acts.length + stage2Acts.length + stage3Acts.length + stage4Acts.length + stage5Acts.length;
-assert.strictEqual(totalJourneyActs, 62, 'Tổng số bài qua 6 chặng phải là 62 bài làm quen cho bé 4–6 tuổi');
+const totalJourneyActs = stage0Acts.length + stage1Acts.length + stage2Acts.length + stage3Acts.length + stage4Acts.length;
+assert.strictEqual(totalJourneyActs, 34, 'Tổng số bài qua 5 chặng phải là 34 bài làm quen cho bé 4–6 tuổi');
 
-console.log(`✔ Dữ liệu 6 chặng kết nối chính xác: Chặng 0 (${stage0Acts.length}), Chặng 1 (${stage1Acts.length}), Chặng 2 (${stage2Acts.length}), Chặng 3 (${stage3Acts.length}), Chặng 4 (${stage4Acts.length}), Chặng 5 (${stage5Acts.length})!`);
+console.log(`✔ Dữ liệu 5 chặng kết nối chính xác: Chặng 0 (${stage0Acts.length}), Chặng 1 (${stage1Acts.length}), Chặng 2 (${stage2Acts.length}), Chặng 3 (${stage3Acts.length}), Chặng 4 (${stage4Acts.length})!`);
 
 // ----------------------------------------------------------------------------
 // TEST 5: Kiểm tra màn hình "Chơi tự do" (games())

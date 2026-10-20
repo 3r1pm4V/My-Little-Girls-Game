@@ -55,11 +55,11 @@ assert(AGE_TIERS.preschool.ageVi.includes('4–6 tuổi'), 'AGE_TIERS.preschool.
 assert(AGE_TIERS.preschool.ageEn.includes('4–6'), 'AGE_TIERS.preschool.ageEn phải là "Ages 4–6"');
 
 const journeyActs = getPreschoolJourneyActivities();
-assert.strictEqual(journeyActs.length, 62, `getPreschoolJourneyActivities phải trả về 62 bài (thực tế: ${journeyActs.length})`);
+assert.strictEqual(journeyActs.length, 34, `getPreschoolJourneyActivities phải trả về 34 bài (thực tế: ${journeyActs.length})`);
 
 // Kiểm tra 100% bài trong journeyActs đều có stage từ 0 đến 5
 journeyActs.forEach(act => {
-  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 5, 
+  assert(Number.isInteger(act.stage) && act.stage >= 0 && act.stage <= 4, 
     `Bài ${act.id} trong lộ trình bé phải có stage hợp lệ`);
   assert(act.stage !== null, `Bài ${act.id} không được có stage null`);
 });
@@ -72,7 +72,7 @@ assert.strictEqual(g35InJourney.length, 0, 'Tuyệt đối không có bài grade
 const hardMathInJourney = journeyActs.filter(a => a.id === 'act_g12_math_01' || a.id === 'act_g12_math_02' || a.id === 'act_g12_math_03');
 assert.strictEqual(hardMathInJourney.length, 0, 'Các bài toán lớp 1-2 không được có trong lộ trình của bé 4 tuổi');
 
-console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 4–6 tuổi (62 bài)!');
+console.log('✔ Kho dữ liệu activities-data.js chuẩn hóa chính xác cho bé 4–6 tuổi (34 bài)!');
 
 // ----------------------------------------------------------------------------
 // TEST 3: Mô phỏng hành vi app.js khi mở app mới hoàn toàn (empty localStorage)
@@ -121,7 +121,7 @@ if (!isTierSelectorOnNew) {
 } else {
   actsForNewKid = getActivitiesByTier(defaultTier);
 }
-assert.strictEqual(actsForNewKid.length, 62, 'Bé mới chỉ nhận 62 bài có stage 0–5');
+assert.strictEqual(actsForNewKid.length, 34, 'Bé mới chỉ nhận 34 bài có stage 0–4');
 console.log('✔ Mở app mới tinh: Mặc định preschool, ẩn bộ chọn tầng tuổi, hiển thị chuẩn 62 bài chặng 0–5');
 
 // ----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ if (!isTierSelectorOnLegacy) {
 } else {
   actsForLegacyKid = getActivitiesByTier(legacyTier);
 }
-assert.strictEqual(actsForLegacyKid.length, 62, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 62 bài chặng 0–5');
+assert.strictEqual(actsForLegacyKid.length, 34, 'Bé cũ ở giao diện mặc định vẫn chỉ nhận 34 bài chặng 0–4');
 
 // Khi phụ huynh vào cài đặt và bật cờ tầng tuổi
 lsLegacy.set("show_age_tiers", "1");
@@ -179,7 +179,7 @@ if (!isTierSelectorOnAfterParent) {
 } else {
   actsAfterParentEnabled = getActivitiesByTier(legacyTier);
 }
-assert.strictEqual(actsAfterParentEnabled.length, 45, 'Khi phụ huynh bật tầng tuổi, lấy đầy đủ 45 bài Lớp 1-2');
+assert.strictEqual(actsAfterParentEnabled.length, 43, 'Khi phụ huynh bật tầng tuổi, lấy đầy đủ 43 bài Lớp 1-2');
 console.log('✔ Tương thích 100% dữ liệu cũ: Không mất sao (120 ⭐), không mất huy hiệu, phụ huynh bật/tắt tầng tuổi mượt mà!');
 
 // ----------------------------------------------------------------------------

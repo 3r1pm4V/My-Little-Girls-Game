@@ -247,6 +247,13 @@
       "items": {
         "type": "string"
       }
+    },
+    "prerequisites": {
+      "type": "array",
+      "description": "Danh sách các mã kỹ năng hoặc mã chặng/bài học tiên quyết",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": true

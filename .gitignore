@@ -13,5 +13,6 @@ scratch_*.js
 extract_*.js
 .env
 .env.*
+drive_docs/
 
 

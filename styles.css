@@ -1148,6 +1148,17 @@ html.rm .confetti-cv, html.rm .fx {
 .stage-act-card:active {
   transform: scale(0.98);
 }
+.stage-act-card.locked {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  opacity: 0.85;
+}
+.stage-act-card.locked .stage-act-icon {
+  background: #f1f5f9;
+}
+.stage-act-card.locked .stage-act-title {
+  color: #64748b;
+}
 .stage-act-icon {
   font-size: 28px;
   width: 48px;
