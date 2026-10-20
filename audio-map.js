@@ -8,6 +8,7 @@
       .trim()
       .toLowerCase()
       .normalize("NFC")
+      .replace(/[\p{Extended_Pictographic}\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "")
       .replace(/[.,!?:;'"“”„…\-–—()\[\]{}]+/g, "")
       .replace(/\s+/g, " ")
       .trim();
@@ -27163,13 +27164,20 @@
       if (rawK in target) return target[rawK];
       const viK = "vi|" + rawK;
       if (viK in target) return target[viK];
+      const noVs = rawK.replace(/[\uFE0E-\uFE0F]/g, "");
+      if (noVs in target) return target[noVs];
+      if (("vi|" + noVs) in target) return target["vi|" + noVs];
+      const withVs = noVs + "\uFE0F";
+      if (withVs in target) return target[withVs];
+      if (("vi|" + withVs) in target) return target["vi|" + withVs];
       return undefined;
     },
     has(target, prop) {
       if (typeof prop !== "string") return prop in target;
       const nk = normKey(prop);
       const rawK = nk.replace(/^(vi|en)\|/, "");
-      return (prop in target) || (nk in target) || (rawK in target) || (("vi|" + rawK) in target);
+      const noVs = rawK.replace(/[\uFE0E-\uFE0F]/g, "");
+      return (prop in target) || (nk in target) || (rawK in target) || (("vi|" + rawK) in target) || (noVs in target) || (("vi|" + noVs) in target);
     }
   });
 })();

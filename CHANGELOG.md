@@ -7,6 +7,17 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **fix(P2-07: Emoji Stripping in normKey & Precache Group B Audio)**:
+  - Sửa lỗi trượt Map do Emoji trong audio-map.js (dòng 8–15 & 27164–27178):
+    - Bổ sung bộ lọc biểu tượng cảm xúc Unicode `\p{Extended_Pictographic}` và bộ chọn biến thể VS16 (`\uFE0E-\uFE0F`) vào hàm `normKey`.
+    - Nâng cấp Proxy tra cứu linh hoạt kiểm tra cả chuỗi không chứa/chứa mã biến thể `\uFE0F`.
+    - Kích hoạt chuẩn xác 49 tệp âm thanh bài học chất lượng cao của Chặng 0 & 1 (video quiz mầm non, thú cưng, chữ cái) vốn bị trượt sang Web Speech do dính emoji 🐶, 🐱, 🍎, ☀️...
+  - Nạp toàn bộ 8 tệp âm thanh Nhóm (b) vào danh sách `OPT_AUDIO` trong `sw.js` (dòng 208–296) theo thứ tự alphabet:
+    - `audio/syl_b_a_4.mp3` (10,029 B - âm tiết thanh Ngã "bã", hoàn thiện trọn vẹn 6 thanh điệu của BA).
+    - 7 tệp từ vựng / đáp án Chặng 1: `spell_w_chu_gau.mp3`, `spell_w_chu_meo.mp3`, `spell_w_cuon_sach2.mp3`, `spell_w_qua_cam.mp3`, `spell_w_qua_chanh.mp3`, `spell_w_qua_tao.mp3`, `vi_tau_hoa_ypennn.mp3` (tổng 8 tệp: 187,482 B ~ 183.09 KB).
+  - Nâng tổng số file trong `OPT_AUDIO` từ 268 lên 276 tệp (tổng dung lượng thực tế 12,962,234 bytes ~ 12.36 MB $\le$ 13 MB).
+  - Chạy `node test-sw-precache.js --fix`: tự động cập nhật `asset-hash: a33513f985518900` và tăng phiên bản Service Worker lên `bhv-v48`.
+  - Toàn bộ 16/16 test suites đạt chuẩn PASS 100%.
 - **fix(P2-07: Precache Number Audio 0–20 & Stage 0–1 Complements)**:
   - Bổ sung đầy đủ 26 file âm thanh cục bộ vào danh sách OPT_AUDIO trong sw.js (dòng 208–288) theo thứ tự alphabet:
     - 11 file số 0–10 dùng trực tiếp trong numMap (app.js dòng 3469–3481): vi_khong_1othrk.mp3, vi_mot_7ht4.mp3, vi_hai_27io.mp3, syl_b_a_0.mp3, vi_bon_79gf.mp3, vi_nam_2fug.mp3, vi_sau_2iqv.mp3, vi_bay_78d4.mp3, vi_tam_2jhc.mp3, vi_chin_1tikm.mp3, vi_muoi_2bqz3.mp3 (tổng 119,151 bytes ~ 116.36 KB).
