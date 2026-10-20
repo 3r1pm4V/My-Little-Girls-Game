@@ -1352,104 +1352,338 @@ const VN_STORIES = [
   }
 ];
 
-// 14 Nét viết cơ bản trong Tiền Tiểu Học (Theo giáo trình các nét cơ bản.pdf)
+// ========================================================
+// 5 NHÓM NÉT CƠ BẢN TIỀN TIỂU HỌC & CHUẨN BỊ VÀO LỚP 1
+// (Chuẩn GDPT 2018 - Vở tập viết các nét cơ bản)
+// ========================================================
+
+const VN_STROKE_GROUPS = [
+  {
+    id: "thang",
+    name: "Nét thẳng",
+    en: "Straight lines",
+    desc: "Thẳng đứng, ngang, xiên phải, xiên trái",
+    icon: "📏",
+    strokeIds: ["so_thang", "ngang", "xien_phai", "xien_trai"]
+  },
+  {
+    id: "cong",
+    name: "Nét cong",
+    en: "Curves",
+    desc: "Cong hở phải, cong hở trái, cong kín",
+    icon: "⭕",
+    strokeIds: ["cong_ho_phai", "cong_ho_trai", "cong_kin"]
+  },
+  {
+    id: "moc",
+    name: "Nét móc",
+    en: "Hooks",
+    desc: "Móc xuôi, móc ngược, móc 2 đầu",
+    icon: "🪝",
+    strokeIds: ["moc_xuoi", "moc_nguoc", "moc_2_dau"]
+  },
+  {
+    id: "khuyet",
+    name: "Nét khuyết",
+    en: "Loops",
+    desc: "Khuyết trên (l, b, h, k), khuyết dưới (g, y)",
+    icon: "➰",
+    strokeIds: ["khuyet_tren", "khuyet_duoi"]
+  },
+  {
+    id: "that",
+    name: "Nét thắt",
+    en: "Knots",
+    desc: "Thắt trên (r, s), thắt giữa (k)",
+    icon: "🎀",
+    strokeIds: ["that_dau", "that_giua"]
+  }
+];
+
 const VN_STROKES = [
+  // 1. Nhóm nét thẳng
   {
     id: "so_thang",
+    group: "thang",
+    groupName: "Nét thẳng",
     name: "Nét sổ thẳng",
     en: "Vertical stroke",
-    desc: "Kéo từ trên xuống dưới",
+    desc: "Kéo thẳng từ trên xuống dưới theo đường kẻ dọc",
     svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g1" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g1)"/><line x1="150" y1="50" x2="150" y2="320" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="150" cy="50" r="10" fill="#ff7aa8"/><path d="M142,185 L150,205 L158,185" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "ngang",
+    group: "thang",
+    groupName: "Nét thẳng",
     name: "Nét ngang",
     en: "Horizontal stroke",
-    desc: "Kéo từ trái sang phải",
+    desc: "Kéo ngang từ trái sang phải theo đường kẻ ngang",
     svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g2" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g2)"/><line x1="40" y1="185" x2="260" y2="185" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="40" cy="185" r="10" fill="#ff7aa8"/><path d="M140,177 L160,185 L140,193" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "xien_phai",
+    group: "thang",
+    groupName: "Nét thẳng",
     name: "Nét xiên phải",
     en: "Slant right stroke",
-    desc: "Kéo xiên từ trên xuống phải",
+    desc: "Kéo xiên từ góc trên bên trái xuống góc dưới bên phải",
     svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g3" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g3)"/><line x1="80" y1="50" x2="220" y2="320" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="80" cy="50" r="10" fill="#ff7aa8"/><path d="M145,170 L158,195 L165,178" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "xien_trai",
+    group: "thang",
+    groupName: "Nét thẳng",
     name: "Nét xiên trái",
     en: "Slant left stroke",
-    desc: "Kéo xiên từ trên xuống trái",
+    desc: "Kéo xiên từ góc trên bên phải xuống góc dưới bên trái",
     svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g4" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g4)"/><line x1="220" y1="50" x2="80" y2="320" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="220" cy="50" r="10" fill="#ff7aa8"/><path d="M155,170 L142,195 L135,178" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
-  {
-    id: "moc_xuoi",
-    name: "Nét móc xuôi",
-    en: "Hook up stroke",
-    desc: "Móc cong trên kéo xuống",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g5" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g5)"/><path d="M70,160 Q100,50 170,50 L170,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="70" cy="160" r="10" fill="#ff7aa8"/></svg>`
-  },
-  {
-    id: "moc_nguoc",
-    name: "Nét móc ngược",
-    en: "Hook down stroke",
-    desc: "Kéo thẳng xuống lượn móc lên",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g6" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g6)"/><path d="M130,50 L130,260 Q130,320 220,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="130" cy="50" r="10" fill="#ff7aa8"/></svg>`
-  },
-  {
-    id: "moc_2_dau",
-    name: "Nét móc hai đầu",
-    en: "Double hook stroke",
-    desc: "Móc trên rồi móc dưới",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g7" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g7)"/><path d="M60,180 Q80,50 140,50 L160,50 Q220,50 220,260 Q220,320 260,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="60" cy="180" r="10" fill="#ff7aa8"/></svg>`
-  },
+
+  // 2. Nhóm nét cong
   {
     id: "cong_ho_phai",
+    group: "cong",
+    groupName: "Nét cong",
     name: "Nét cong hở phải",
     en: "Open-right curve",
-    desc: "Như chữ C",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g8" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g8)"/><path d="M220,70 Q70,60 70,185 Q70,310 220,300" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="220" cy="70" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Uốn lượn cong sang trái (như chữ c)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g8" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g8)"/><path d="M220,70 Q70,60 70,185 Q70,310 220,300" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="220" cy="70" r="10" fill="#ff7aa8"/><path d="M145,68 L130,70 L140,82" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "cong_ho_trai",
+    group: "cong",
+    groupName: "Nét cong",
     name: "Nét cong hở trái",
     en: "Open-left curve",
-    desc: "Như chữ C ngược",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g9" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g9)"/><path d="M80,70 Q230,60 230,185 Q230,310 80,300" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="80" cy="70" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Uốn lượn cong sang phải (như chữ c ngược)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g9" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g9)"/><path d="M80,70 Q230,60 230,185 Q230,310 80,300" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="80" cy="70" r="10" fill="#ff7aa8"/><path d="M155,68 L170,70 L160,82" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "cong_kin",
+    group: "cong",
+    groupName: "Nét cong",
     name: "Nét cong kín",
     en: "Closed circle curve",
-    desc: "Như chữ O tròn",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g10" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g10)"/><ellipse cx="150" cy="185" rx="90" ry="125" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="150" cy="60" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Uốn lượn cong tròn khép kín (như quả trứng, chữ o)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g10" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g10)"/><ellipse cx="150" cy="185" rx="90" ry="125" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="150" cy="60" r="10" fill="#ff7aa8"/><path d="M125,62 L105,68 L120,80" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
+  },
+
+  // 3. Nhóm nét móc
+  {
+    id: "moc_xuoi",
+    group: "moc",
+    groupName: "Nét móc",
+    name: "Nét móc xuôi",
+    en: "Hook up stroke",
+    desc: "Móc cong trên đầu rồi kéo thẳng xuống (trong n, m, p)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g5" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g5)"/><path d="M70,160 Q100,50 170,50 L170,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="70" cy="160" r="10" fill="#ff7aa8"/><path d="M162,185 L170,205 L178,185" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
+    id: "moc_nguoc",
+    group: "moc",
+    groupName: "Nét móc",
+    name: "Nét móc ngược",
+    en: "Hook down stroke",
+    desc: "Kéo thẳng xuống dưới rồi lượn móc lên (trong i, u, ư, t, a)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g6" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g6)"/><path d="M130,50 L130,260 Q130,320 220,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="130" cy="50" r="10" fill="#ff7aa8"/><path d="M190,328 L210,320 L195,308" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
+  },
+  {
+    id: "moc_2_dau",
+    group: "moc",
+    groupName: "Nét móc",
+    name: "Nét móc hai đầu",
+    en: "Double hook stroke",
+    desc: "Móc xuôi ở trên rồi lượn móc ngược ở dưới (trong n, m, h)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g7" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g7)"/><path d="M60,180 Q80,50 140,50 L160,50 Q220,50 220,260 Q220,320 260,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="60" cy="180" r="10" fill="#ff7aa8"/><path d="M212,185 L220,205 L228,185" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
+  },
+
+  // 4. Nhóm nét khuyết
+  {
     id: "khuyet_tren",
+    group: "khuyet",
+    groupName: "Nét khuyết",
     name: "Nét khuyết trên",
     en: "Upper loop stroke",
-    desc: "Trong chữ l, b, h, k",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g11" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g11)"/><path d="M120,320 L120,180 Q120,40 170,40 Q215,40 175,135 L120,240" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="120" cy="320" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Xiên lên uốn vòng rồi kéo thẳng xuống (trong l, b, h, k)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g11" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g11)"/><path d="M120,320 L120,180 Q120,40 170,40 Q215,40 175,135 L120,240" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="120" cy="320" r="10" fill="#ff7aa8"/><path d="M185,55 L195,75 L175,70" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "khuyet_duoi",
+    group: "khuyet",
+    groupName: "Nét khuyết",
     name: "Nét khuyết dưới",
     en: "Lower loop stroke",
-    desc: "Trong chữ g, y",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g12" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g12)"/><path d="M170,50 L170,230 Q170,335 125,335 Q80,335 120,245 L170,165" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="170" cy="50" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Kéo thẳng xuống uốn vòng đáy rồi xiên lên (trong g, y)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g12" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g12)"/><path d="M170,50 L170,230 Q170,335 125,335 Q80,335 120,245 L170,165" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="170" cy="50" r="10" fill="#ff7aa8"/><path d="M100,310 L95,290 L115,295" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
+
+  // 5. Nhóm nét thắt
   {
     id: "that_dau",
+    group: "that",
+    groupName: "Nét thắt",
     name: "Nét thắt trên",
     en: "Top knot stroke",
-    desc: "Trong chữ r, s",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g13" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g13)"/><path d="M70,320 L70,120 Q90,55 140,75 Q165,95 130,115 L240,115" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="70" cy="320" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Xiên lên tạo vòng thắt nhỏ trên đầu (trong r, s)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g13" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g13)"/><path d="M70,320 L70,120 Q90,55 140,75 Q165,95 130,115 L240,115" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="70" cy="320" r="10" fill="#ff7aa8"/><path d="M190,107 L210,115 L190,123" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   },
   {
     id: "that_giua",
+    group: "that",
+    groupName: "Nét thắt",
     name: "Nét thắt giữa",
     en: "Middle knot stroke",
-    desc: "Trong chữ k",
-    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g14" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g14)"/><path d="M150,50 L150,150 Q195,150 195,190 Q195,225 150,225 Q105,225 105,190 Q105,150 150,150 L150,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="150" cy="50" r="10" fill="#ff7aa8"/></svg>`
+    desc: "Uốn vòng thắt ở giữa thân chữ (trong chữ k)",
+    svg: `<svg viewBox="0 0 300 370" width="100%" height="100%"><defs><pattern id="g14" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#d5e8f8" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#g14)"/><path d="M150,50 L150,150 Q195,150 195,190 Q195,225 150,225 Q105,225 105,190 Q105,150 150,150 L150,320" fill="none" stroke="#7a9bc2" stroke-width="14" stroke-dasharray="14 10" stroke-linecap="round"/><circle cx="150" cy="50" r="10" fill="#ff7aa8"/><path d="M142,270 L150,290 L158,270" fill="none" stroke="#ff7aa8" stroke-width="4" stroke-linecap="round"/></svg>`
   }
 ];
+
+// ========================================================
+// 5 NHÓM CHỮ CÁI TIẾNG VIỆT THEO ĐỘ KHÓ NÉT VIẾT
+// ========================================================
+const VN_LETTER_GROUPS = [
+  {
+    id: "group1",
+    name: "Nhóm 1: Nét cong",
+    nameEn: "Group 1: Curves",
+    desc: "Các chữ cái cấu tạo từ nét cong (c, o, ô, ơ, e, ê, x)",
+    letters: ["c", "o", "ô", "ơ", "e", "ê", "x"]
+  },
+  {
+    id: "group2",
+    name: "Nhóm 2: Nét cong + thẳng",
+    nameEn: "Group 2: Curve + Straight",
+    desc: "Các chữ cái phối hợp nét cong tròn và nét thẳng (a, ă, â, d, đ, q)",
+    letters: ["a", "ă", "â", "d", "đ", "q"]
+  },
+  {
+    id: "group3",
+    name: "Nhóm 3: Nét móc",
+    nameEn: "Group 3: Hooks",
+    desc: "Các chữ cái cấu tạo từ nét móc (i, u, ư, t, p, y, n, m, v, r, s)",
+    letters: ["i", "u", "ư", "t", "p", "y", "n", "m", "v", "r", "s"]
+  },
+  {
+    id: "group4",
+    name: "Nhóm 4: Nét khuyết",
+    nameEn: "Group 4: Loops",
+    desc: "Các chữ cái cấu tạo từ nét khuyết trên / dưới (l, b, h, k)",
+    letters: ["l", "b", "h", "k"]
+  },
+  {
+    id: "group5",
+    name: "Nhóm 5: Nét phối hợp",
+    nameEn: "Group 5: Combined Strokes",
+    desc: "Các chữ cái nét phối hợp phức tạp (g, v)",
+    letters: ["g", "v"]
+  }
+];
+
+// ========================================================
+// HƯỚNG DẪN THỨ TỰ TỪNG NÉT VIẾT (STROKE ORDER GUIDES)
+// Đặc biệt: Chữ a hướng dẫn viết nét cong tròn trước, nét móc ngược sau
+// ========================================================
+const LETTER_STROKE_GUIDES = {
+  "a": {
+    letter: "a",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong tròn ① trước, sau đó viết nét móc ngược ② nhé!",
+    ruleEn: "Trace the circle curve ① first, then the hook stroke ②!",
+    strokesCount: 2,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e", desc: "Uốn lượn cong tròn khép kín từ phải sang trái" },
+      { step: 2, name: "Nét móc ngược", color: "#0284c7", desc: "Kéo thẳng từ trên xuống rồi lượn móc lên" }
+    ],
+    svgGuide: `<svg viewBox="0 0 320 390" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2">
+      <!-- Nét 1: Nét cong tròn -->
+      <path d="M 182,185 C 160,165 110,175 100,215 C 90,250 130,265 175,260 C 185,258 185,200 182,185" fill="none" stroke="#f43f5e" stroke-width="5.5" stroke-dasharray="9 6" stroke-linecap="round"/>
+      <circle cx="182" cy="185" r="7" fill="#f43f5e"/>
+      <path d="M 145,168 L 135,170 L 142,178" fill="none" stroke="#f43f5e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="95" cy="180" r="14" fill="#f43f5e" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.2))"/>
+      <text x="95" y="185" fill="#fff" font-size="14" font-weight="900" text-anchor="middle">1</text>
+      <text x="95" y="160" fill="#881337" font-size="11" font-weight="800" text-anchor="middle">Nét cong tròn</text>
+
+      <!-- Nét 2: Nét móc ngược -->
+      <path d="M 184,172 L 184,248 Q 184,264 212,248" fill="none" stroke="#0284c7" stroke-width="5.5" stroke-dasharray="9 6" stroke-linecap="round"/>
+      <circle cx="184" cy="172" r="7" fill="#0284c7"/>
+      <path d="M 179,220 L 184,230 L 189,220" fill="none" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="225" cy="180" r="14" fill="#0284c7" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.2))"/>
+      <text x="225" y="185" fill="#fff" font-size="14" font-weight="900" text-anchor="middle">2</text>
+      <text x="225" y="160" fill="#0369a1" font-size="11" font-weight="800" text-anchor="middle">Nét móc ngược</text>
+    </svg>`
+  },
+  "ă": {
+    letter: "ă",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong tròn ① trước, nét móc ngược ②, rồi thêm dấu á ③ nhé!",
+    ruleEn: "Trace circle ①, hook ②, then breve accent ③!",
+    strokesCount: 3,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e" },
+      { step: 2, name: "Nét móc ngược", color: "#0284c7" },
+      { step: 3, name: "Dấu á", color: "#16a34a" }
+    ]
+  },
+  "â": {
+    letter: "â",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong tròn ① trước, nét móc ngược ②, rồi thêm mũ nón ③ nhé!",
+    ruleEn: "Trace circle ①, hook ②, then hat accent ③!",
+    strokesCount: 3,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e" },
+      { step: 2, name: "Nét móc ngược", color: "#0284c7" },
+      { step: 3, name: "Dấu mũ (nón)", color: "#16a34a" }
+    ]
+  },
+  "d": {
+    letter: "d",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong kín ① trước, sau đó kéo nét sổ thẳng cao 4 ô ly ② nhé!",
+    ruleEn: "Trace circle ① first, then vertical stem ②!",
+    strokesCount: 2,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e" },
+      { step: 2, name: "Nét sổ thẳng dài", color: "#0284c7" }
+    ]
+  },
+  "đ": {
+    letter: "đ",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong kín ① trước, nét sổ thẳng ②, rồi thêm nét ngang ③ nhé!",
+    ruleEn: "Trace circle ①, vertical stem ②, then crossbar ③!",
+    strokesCount: 3,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e" },
+      { step: 2, name: "Nét sổ thẳng dài", color: "#0284c7" },
+      { step: 3, name: "Nét ngang ngắn", color: "#16a34a" }
+    ]
+  },
+  "q": {
+    letter: "q",
+    group: "Nhóm 2: Nét cong + thẳng",
+    ruleVi: "Bé viết nét cong kín ① trước, sau đó kéo nét sổ thẳng xuống dưới ② nhé!",
+    ruleEn: "Trace circle ① first, then vertical stroke down ②!",
+    strokesCount: 2,
+    strokes: [
+      { step: 1, name: "Nét cong kín", color: "#f43f5e" },
+      { step: 2, name: "Nét sổ thẳng xuống", color: "#0284c7" }
+    ]
+  }
+};
+
+if (typeof window !== "undefined") {
+  window.VN_STROKE_GROUPS = VN_STROKE_GROUPS;
+  window.VN_STROKES = VN_STROKES;
+  window.VN_LETTER_GROUPS = VN_LETTER_GROUPS;
+  window.LETTER_STROKE_GUIDES = LETTER_STROKE_GUIDES;
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    VN_STROKE_GROUPS,
+    VN_STROKES,
+    VN_LETTER_GROUPS,
+    LETTER_STROKE_GUIDES
+  };
+}

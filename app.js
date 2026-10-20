@@ -3268,6 +3268,12 @@ function sayTrace(item, type = "letter"){
     const file = alphaMap[l];
     if(file){
       playSafeAudio(file, "Tưởng Vy");
+      if(l === "a" || (typeof LETTER_STROKE_GUIDES !== "undefined" && LETTER_STROKE_GUIDES[l])){
+        const g = (typeof LETTER_STROKE_GUIDES !== "undefined" && LETTER_STROKE_GUIDES[l]) ? LETTER_STROKE_GUIDES[l] : null;
+        const hintVi = g ? g.ruleVi : "Bé nhớ viết nét cong tròn trước, rồi viết nét móc ngược nhé!";
+        const hintEn = g ? g.ruleEn : "Trace the circle curve first, then the hook stroke!";
+        setTimeout(() => { say(hintVi, hintEn); }, 800);
+      }
       return;
     }
     const target = (window.AUDIO_MAP && (window.AUDIO_MAP[l] || window.AUDIO_MAP["chữ " + l])) || l;
@@ -3305,22 +3311,30 @@ function sayTrace(item, type = "letter"){
     }
   }
 }
-let trm=ls.get("trm","up"),lastTr="";
+let trm=ls.get("trm","g2"),lastTr="";
 const TR={
-  up:{items:()=>LET_ALL(),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayTrace(x,"letter")},
-  lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),vi:x=>`Tập viết chữ ${x}`,en:x=>`Trace letter ${x}`,say:x=>sayTrace(x,"letter")},
-  nu:{items:()=>[...Array(10).keys()].map(String),vi:x=>`Tập viết số ${x}`,en:x=>`Trace number ${x}`,say:x=>sayTrace(x,"number")},
-  net:{items:()=>VN_STROKES.map(s=>s.id),vi:x=>`Tập viết ${VN_STROKES.find(s=>s.id===x).name}`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>sayTrace(x,"stroke")}
+  net:{items:()=>VN_STROKES.map(s=>s.id),vi:x=>`Tập viết ${VN_STROKES.find(s=>s.id===x).name} (${VN_STROKES.find(s=>s.id===x).groupName})`,en:x=>`Trace ${VN_STROKES.find(s=>s.id===x).en}`,say:x=>sayTrace(x,"stroke")},
+  g1:{items:()=>(typeof VN_LETTER_GROUPS!=="undefined"?VN_LETTER_GROUPS[0].letters:["c","o","ô","ơ","e","ê","x"]),vi:x=>`Tập viết chữ ${x} (Nhóm 1: Nét cong)`,en:x=>`Trace letter ${x} (Curves)`,say:x=>sayTrace(x,"letter")},
+  g2:{items:()=>(typeof VN_LETTER_GROUPS!=="undefined"?VN_LETTER_GROUPS[1].letters:["a","ă","â","d","đ","q"]),vi:x=>`Tập viết chữ ${x} (Nhóm 2: Cong + Thẳng)`,en:x=>`Trace letter ${x} (Curve & Straight)`,say:x=>sayTrace(x,"letter")},
+  g3:{items:()=>(typeof VN_LETTER_GROUPS!=="undefined"?VN_LETTER_GROUPS[2].letters:["i","u","ư","t","p","y","n","m","v","r","s"]),vi:x=>`Tập viết chữ ${x} (Nhóm 3: Nét móc)`,en:x=>`Trace letter ${x} (Hooks)`,say:x=>sayTrace(x,"letter")},
+  g4:{items:()=>(typeof VN_LETTER_GROUPS!=="undefined"?VN_LETTER_GROUPS[3].letters:["l","b","h","k"]),vi:x=>`Tập viết chữ ${x} (Nhóm 4: Nét khuyết)`,en:x=>`Trace letter ${x} (Loops)`,say:x=>sayTrace(x,"letter")},
+  g5:{items:()=>(typeof VN_LETTER_GROUPS!=="undefined"?VN_LETTER_GROUPS[4].letters:["g","v"]),vi:x=>`Tập viết chữ ${x} (Nhóm 5: Nét phối hợp)`,en:x=>`Trace letter ${x} (Combined)`,say:x=>sayTrace(x,"letter")},
+  lo:{items:()=>LET_ALL().map(x=>x.toLowerCase()),vi:x=>`Tập viết chữ thường ${x}`,en:x=>`Trace lowercase ${x}`,say:x=>sayTrace(x,"letter")},
+  up:{items:()=>LET_ALL(),vi:x=>`Tập viết chữ in hoa ${x}`,en:x=>`Trace uppercase ${x}`,say:x=>sayTrace(x,"letter")},
+  nu:{items:()=>[...Array(10).keys()].map(String),vi:x=>`Tập viết số ${x}`,en:x=>`Trace number ${x}`,say:x=>sayTrace(x,"number")}
 };
-function trace(selItem){const md=TR[trm]||TR.up;
+function trace(selItem){const md=TR[trm]||TR.g2;
  const pool=md.items();let it=(selItem&&pool.includes(selItem))?selItem:null;
- if(!it){do{it=pick(pool)}while(it===lastTr&&pool.length>1)}lastTr=it;let col="#6b21a8",dn=false;
+ if(!it){if(trm==="g2"&&pool.includes("a")&&!lastTr){it="a"}else{do{it=pick(pool)}while(it===lastTr&&pool.length>1)}}lastTr=it;let col="#6b21a8",dn=false;
  const isNet=trm==="net";
- const guide=isNet?`<div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${VN_STROKES.find(s=>s.id===it).svg}</div>`:"";
+ const strokeGuide=(!isNet&&typeof LETTER_STROKE_GUIDES!=="undefined"&&LETTER_STROKE_GUIDES[it])?LETTER_STROKE_GUIDES[it]:null;
+ const guide=isNet?`<div style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${VN_STROKES.find(s=>s.id===it).svg}</div>`:(strokeGuide&&strokeGuide.svgGuide?strokeGuide.svgGuide:"");
  const sampleCard=isNet
-  ?`<div class="trace-sample-card" onclick="TR.net.say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU NÉT 🔊</span><span style="font-size:16px;font-weight:800;color:#184a86;margin-top:2px">${VN_STROKES.find(s=>s.id===it).name.replace("Nét ","")}</span></div>`
-  :`<div class="trace-sample-card" onclick="TR['${trm}'].say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">MẪU CHỮ 🔊</span><span class="trace-sample-letter">${it}</span></div>`;
- m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}])+`<div class="chips" style="margin:0 0 4px">${[["up","ABC"],["lo","abc"],["nu","123"],["net","Nét"]].map(([k,x])=>`<button class="pill${trm===k?" on":""}" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2 id="traceQ" role="button" tabindex="0" onclick="TR['${trm}'].say('${it}')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T(md.vi(it),md.en(it))}</h2><div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
+  ?`<div class="trace-sample-card" onclick="TR.net.say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">${VN_STROKES.find(s=>s.id===it).groupName||"MẪU NÉT"} 🔊</span><span style="font-size:16px;font-weight:800;color:#184a86;margin-top:2px">${VN_STROKES.find(s=>s.id===it).name.replace("Nét ","")}</span></div>`
+  :`<div class="trace-sample-card" onclick="TR['${trm}'].say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">${strokeGuide?strokeGuide.group:"MẪU CHỮ"} 🔊</span><span class="trace-sample-letter">${it}</span></div>`;
+ const hintBanner=strokeGuide?`<div style="background:linear-gradient(135deg,#fff0f5,#f0f9ff);border:2px solid #ff7aa8;border-radius:18px;padding:6px 14px;margin:4px auto 8px;max-width:340px;font-size:13.5px;color:#831843;line-height:1.35;box-shadow:0 3px 6px rgba(0,0,0,0.06);cursor:pointer" onclick="TR['${trm}'].say('${it}')">✍️ <b>${T("Thứ tự nét viết chữ "+it+":","Stroke order for "+it+":")}</b><br>${T(strokeGuide.ruleVi,strokeGuide.ruleEn)}</div>`:(isNet?`<div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:18px;padding:6px 14px;margin:4px auto 8px;max-width:340px;font-size:13px;color:#0369a1;line-height:1.3">📏 <b>${VN_STROKES.find(s=>s.id===it).groupName}:</b> ${VN_STROKES.find(s=>s.id===it).desc}</div>`:"");
+ const tabsConfig=[["net","14 Nét cơ bản"],["g1","Nhóm 1 (Cong)"],["g2","Nhóm 2 (Cong+Thẳng)"],["g3","Nhóm 3 (Móc)"],["g4","Nhóm 4 (Khuyết)"],["g5","Nhóm 5 (Phối hợp)"],["lo","abc"],["up","ABC"],["nu","123"]];
+ m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}])+`<div class="chips" style="margin:0 0 4px;overflow-x:auto;flex-wrap:nowrap;padding:4px 2px;justify-content:flex-start;max-width:680px">${tabsConfig.map(([k,x])=>`<button class="pill${trm===k?" on":""}" style="white-space:nowrap;font-size:14px;padding:6px 12px;min-height:48px;flex-shrink:0" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2 id="traceQ" role="button" tabindex="0" onclick="TR['${trm}'].say('${it}')" style="cursor:pointer;margin:4px 0" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T(md.vi(it),md.en(it))}</h2>${hintBanner}<div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
  const cv=m.querySelector("#cv"),gcv=m.querySelector("#guideCv"),bcv=m.querySelector("#bgCv");
  const W=cv.width=gcv.width=bcv.width=320,H=cv.height=gcv.height=bcv.height=390;
  const x=cv.getContext("2d"),gx=gcv.getContext("2d"),bx=bcv.getContext("2d");
