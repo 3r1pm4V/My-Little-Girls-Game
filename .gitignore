@@ -3,10 +3,13 @@
 Thumbs.db
 generate_audio.js
 generate_missing_audio.js
+generate_spelling_audio.js
 regenerate_syllables.js
 api_keys.json
 temp_yt/
 scratch_*.js
 extract_*.js
+.env
+.env.*
 
 

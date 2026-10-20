@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const API_KEY = 'vn_sk_36eb689920476e948285a849b44976ccdbf39b04df8e68ff';
+const API_KEY = process.env.VIENEU_API_KEY || '';
 const VOICE = 'Tưởng Vy';
 const AUDIO_DIR = path.join(__dirname, 'audio');
 

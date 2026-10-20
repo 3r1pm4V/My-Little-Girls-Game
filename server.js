@@ -6,8 +6,27 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
+// Tải biến môi trường từ .env cục bộ (nếu có)
+const envFile = path.join(__dirname, '.env');
+if (fs.existsSync(envFile)) {
+  try {
+    const lines = fs.readFileSync(envFile, 'utf8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx > 0) {
+          const k = trimmed.slice(0, eqIdx).trim();
+          const v = trimmed.slice(eqIdx + 1).trim().replace(/^['"]|['"]$/g, '');
+          if (!process.env[k]) process.env[k] = v;
+        }
+      }
+    }
+  } catch(e) {}
+}
+
 const PORT = process.env.PORT || 8000;
-const API_KEY = process.env.VIENEU_API_KEY || 'vn_sk_622f6140a9fb7f079e25fd9f5831a072b5fed9a195e4f499';
+const API_KEY = process.env.VIENEU_API_KEY || '';
 const DEFAULT_VOICE = 'Tưởng Vy';
 const AUDIO_DIR = path.join(__dirname, 'audio');
 
@@ -50,6 +69,9 @@ function getFileName(str) {
 }
 
 function fetchVieneuTTS(text, voice) {
+  if (!API_KEY) {
+    return Promise.reject(new Error('VIENEU_API_KEY chưa được cấu hình trong biến môi trường (.env hoặc hệ thống).'));
+  }
   const payload = JSON.stringify({
     model: 'vieneu-v4',
     input: text,

@@ -1,6 +1,6 @@
 const https = require('https');
 
-const API_KEY = process.env.VIENEU_API_KEY || 'vn_sk_622f6140a9fb7f079e25fd9f5831a072b5fed9a195e4f499';
+const API_KEY = process.env.VIENEU_API_KEY || '';
 const DEFAULT_VOICE = 'Tưởng Vy';
 
 exports.handler = async function(event, context) {
@@ -20,6 +20,17 @@ exports.handler = async function(event, context) {
       statusCode: 405,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ error: 'Method Not Allowed' })
+    };
+  }
+
+  if (!API_KEY) {
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ error: 'VIENEU_API_KEY environment variable is not configured in Netlify.' })
     };
   }
 
