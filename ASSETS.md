@@ -13,10 +13,12 @@ Dự án ưu tiên an toàn, giáo dục trẻ em, không thương mại hóa, c
   * Tên: HPTapViet và HPCham (bản quyền tác giả Hải Phòng / Bộ GD&ĐT chuẩn nét chữ tiểu học).
   * Mục đích: Luyện viết chữ đẹp, nét chấm tập tô, mẫu chữ chuẩn cho bé 5–6 tuổi và lớp 1.
   * Trạng thái: Lưu trữ nội bộ trong repo, nạp offline.
-* **Font Baloo 2**:
-  * Nguồn: Google Fonts (SIL Open Font License).
-  * Mục đích: Font chữ tròn trịa, thân thiện cho trẻ nhỏ.
-  * Kế hoạch (Task P2-03): Tải về lưu nội bộ trong repo để không phụ thuộc kết nối Google Fonts.
+* **Font Baloo 2 (`fonts/baloo2-600.woff2` & `fonts/baloo2-800.woff2`)**:
+  * Tác giả / Bản quyền: The Baloo 2 Project Authors (EkType, https://github.com/EkType/Baloo2).
+  * Nguồn gốc: Dự án mã nguồn mở Google Fonts (https://github.com/google/fonts/tree/main/ofl/baloo2).
+  * Giấy phép: **SIL Open Font License, Version 1.1** (Bằng chứng đính kèm nguyên văn tại [`fonts/OFL.txt`](fonts/OFL.txt)).
+  * Mục đích: Font chữ bo tròn thân thiện, dễ đọc cho trẻ 4–6 tuổi.
+  * Tối ưu hóa (Task P2-03): Subset chỉ giữ lại các dải ký tự Latin, Latin-Ext và Tiếng Việt; định dạng WOFF2 nén cao (weight 600: 31.2 KB, weight 800: 29.0 KB). Lưu trữ 100% nội bộ trong repo, nạp offline qua Service Worker precache.
 
 ---
 

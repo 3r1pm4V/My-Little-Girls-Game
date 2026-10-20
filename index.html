@@ -14,13 +14,10 @@
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="font-vn.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="img-core.js" as="script">
 <link rel="preload" href="data-vn.js" as="script">
 <link rel="preload" href="app.js" as="script">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css"></head><body>
 <div id="app"><header><button class="hb" id="hb" aria-label="Trang chủ"></button><button class="k-bc-back" id="backBtn" onclick="goBack()" style="display:none;min-height:64px;min-width:64px;padding:6px 14px;border-radius:24px;margin-left:4px" aria-label="Quay lại">🔙 <span class="bk-lbl">Quay lại</span></button><span class="sp"></span><button class="badge-btn" id="badgeBtn" onclick="showBadges()" title="Huy hiệu & Cấp độ của bé" aria-label="Bộ sưu tập huy hiệu">🏆 <span id="badgeCount">0</span></button><span class="stars" id="stars" onclick="showBadges()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')showBadges()" style="cursor:pointer" title="Điểm sao & Tiến độ của bé" aria-label="Xem điểm sao và cấp độ"></span></header><main id="m"></main></div>
 <div id="celebOverlay" class="celeb-overlay" style="display:none" onclick="if(event.target===this)closeCeleb()">

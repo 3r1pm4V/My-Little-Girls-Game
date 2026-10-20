@@ -7,6 +7,24 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-20
+- **feat(P2-03, P0-13, P2-07: Self-host Font Baloo 2 & SW Precache)**:
+  - **Tự host font Baloo 2 cục bộ (P2-03)**:
+    - Tải và subset font Baloo 2 (weights 600 SemiBold và 800 ExtraBold) sang định dạng WOFF2 chỉ giữ lại các bảng mã Latin, Latin-Ext và Tiếng Việt:
+      - `fonts/baloo2-600.woff2`: 31,228 bytes (~30.5 KB, giảm hơn 71% so với bản gốc 107 KB).
+      - `fonts/baloo2-800.woff2`: 29,028 bytes (~28.3 KB, giảm hơn 69% so với bản gốc 95 KB).
+    - Lưu trữ file giấy phép gốc SIL Open Font License 1.1 làm bằng chứng pháp lý tại `fonts/OFL.txt` (4,384 bytes).
+    - Thêm khai báo `@font-face` trong `styles.css` với `font-display: swap`.
+    - Gỡ bỏ hoàn toàn 3 thẻ link Google Fonts và preconnect (`fonts.googleapis.com`, `fonts.gstatic.com`) trong `index.html`.
+    - Siết chặt CSP trong `netlify.toml`: loại bỏ `https://*.google.com`, bổ sung header lưu cache vĩnh viễn cho `/fonts/*.woff2` (`Cache-Control: public, max-age=31536000, immutable`).
+    - Cập nhật thông tin bản quyền chi tiết trong `ASSETS.md`.
+  - **Tự động hóa quản lý cache Service Worker (P0-13 & P2-07 phần 1)**:
+    - Bổ sung bộ kiểm thử `test-sw-precache.js` kiểm tra tính toàn vẹn của danh sách precache `CORE` (17 tài nguyên) và `OPT` (4 file tải lười `stories-data.js`, `stories-catalog.js`, `img-s.js`, `img-o.js`).
+    - Cơ chế tự sinh mã băm tài nguyên: tính hash SHA-256 từ toàn bộ tài nguyên cốt lõi để phát hiện thay đổi và tự động bump cache version (`node test-sw-precache.js --fix`).
+    - Cập nhật `sw.js` (version `bhv-v45`): loại bỏ `FONT_HOSTS` và nhánh cross-origin font trong `shouldCache`, đảm bảo 100% request font là nội bộ cùng origin.
+    - Tích hợp `node test-sw-precache.js` vào quy trình CI tự động tại `.github/workflows/test.yml` và ghi quy trình bắt buộc vào `AGENTS.md` mục 4.
+  - **Kiểm thử & Xác minh**:
+    - Chạy toàn bộ 16/16 bộ test suites đạt 100% PASS.
+    - Kiểm tra thực tế bằng trình duyệt Chrome headless: Font Baloo 2 nạp thành công trong DOM (`document.fonts.check = True`), 0 request gửi tới các tên miền của Google, 0 lỗi CSP vi phạm.
 - **fix(UI & Audio: Home & Hover TTS)**:
   - **Khắc phục lỗi vỡ layout 3 nút lớn Trang chủ**:
     - Bổ sung dấu đóng ngoặc `}` bị thiếu trong `@keyframes bubbleFloatUp` tại `styles.css`. Khôi phục 100% hiển thị trực quan cho `.kid-home-menu`, `.kid-home-btn`, `.kid-btn-today`, `.kid-btn-games`, `.kid-btn-stickers`.

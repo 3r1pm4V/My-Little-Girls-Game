@@ -28,6 +28,7 @@ jobs:
 
       - name: Run all automated test suites
         run: |
+          node test-sw-precache.js
           node test-p6-quality-security.js
           node test-p5-stage-unlock.js
           node test-p5-profiles-settings.js

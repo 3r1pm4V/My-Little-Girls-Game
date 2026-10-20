@@ -51,7 +51,7 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 - [~] **P0-10 (P1)** Báo cáo audit: agent đã thay bằng bản redacted; còn cần chỉ giữ `docs/audit.md`, xóa `audit.md` ở root
 - [ ] **P0-11 (P2)** `server.js` mặc định phục vụ `index.html`; xử lý `test-local.html` (lệch bản)
 - [ ] **P0-12 (P1)** Xác minh nguồn gốc/giấy phép trong `ASSETS.md` (repo public): font HPTapViet/HPCham, thư mục `audio/` (có giọng VTV7?), điều khoản VieNeu, sprite `img-*.js`, truyện `truyencotich.top`. Chưa chắc → ghi `UNVERIFIED`, không đoán
-- [ ] **P0-13 (P1)** Kiểm tra `sw.js`: đã **bump version cache** sau các thay đổi JS/CSS/HTML của Phase 1 chưa? Nếu chưa, thiết bị đã cài PWA sẽ chạy bản cũ. Thêm bước bump vào quy trình mỗi task
+- [x] **P0-13 (P1)** Tự động hóa kiểm tra & bump cache `sw.js`: trang bị script `test-sw-precache.js`, bắt buộc chạy `node test-sw-precache.js --fix` trước mỗi commit đổi asset, tích hợp CI GitHub Actions (2026-10-20)
 
 ---
 
@@ -75,13 +75,13 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 
 ## D. PHASE 2 — Dọn kỹ thuật (không viết lại)
 
-- [ ] **P2-01 (P1)** Tách CSS inline (~80% `index.html`) ra `styles.css`; bump cache `sw.js`
-- [ ] **P2-02 (P1)** Chuyển ảnh nền base64 trong CSS thành file `.webp` riêng
-- [ ] **P2-03 (P1)** Tự host font "Baloo 2" (hiện nạp từ Google Fonts → offline sẽ lỗi, đồng thời có request ra ngoài)
+- [x] **P2-01 (P1)** Tách CSS inline (~80% `index.html`) ra `styles.css`; bump cache `sw.js` (2026-10-20)
+- [x] **P2-02 (P1)** Chuyển ảnh nền base64 trong CSS thành file `.webp` riêng (2026-10-20)
+- [x] **P2-03 (P1)** Tự host font "Baloo 2" (woff2 weight 600 & 800 subset Latin/Vietnamese trong `fonts/`), kèm giấy phép `fonts/OFL.txt`, xóa 3 thẻ Google Fonts trong `index.html`, siết CSP trong `netlify.toml`, xóa FONT_HOSTS trong `sw.js`, xác minh 0 request ra ngoài Google (2026-10-20)
 - [ ] **P2-04 (P2)** Thống nhất danh mục môn: schema `subject` (vietnamese, math, english, science, skills) lệch với UI (math, vietnamese, reading, game, logic, trace). Chốt bảng chuẩn trong `PLAN.md` mục 5 rồi sửa schema + CSS + data
 - [ ] **P2-05 (P2)** Chuyển `onclick` inline sang `addEventListener`; gom hàm toàn cục vào namespace `BLG`
 - [ ] **P2-06 (P2)** Chia `app.js` thành module theo chức năng (router, progress, audio, templates, parent) — giữ nguyên hành vi, test trước/sau
-- [ ] **P2-07 (P2)** Quản lý cache `sw.js`: tự sinh version từ hash, precache danh sách asset, trang offline dự phòng — audit: `CORE` thiếu `activities-data.js`, `stories-data.js`, `img-s.js`, `img-o.js`; version đổi tay (xem P0-13)
+- [~] **P2-07 (P2)** Quản lý cache `sw.js`: tự sinh version từ asset-hash (`test-sw-precache.js`), nạp precache `CORE` (17 file) + `OPT` (4 file tải lười), kiểm tra offline trên thiết bị để `[~]` (2026-10-20)
 - [ ] **P2-08 (P3)** Thêm `README.md` (cách chạy, cách thêm bài, cách deploy)
 - [ ] **P2-09 (P3)** Thêm lint nhẹ (ESLint cấu hình tối thiểu) chạy bằng `npx`, không đổi cách build
 - [ ] **P2-10 (P2)** `img-core.js` + `img-s.js` + `img-o.js` ≈ 4,3 MB ảnh base64 trong JS và `audio-map.js` ≈ 610 KB nạp đồng bộ: chuyển sang file thật/tải lazy, đo thời gian mở app trên máy của bé
@@ -172,3 +172,4 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 | 2026-10-20 | P5-06 | Mở khóa / bỏ qua chặng thủ công (Card 3B khu phụ huynh, chọn chặng hôm nay `setStageByParent`, mở khóa/khóa từng chặng, công tắc mở khóa tự do toàn bộ 6 chặng `blg_unlock_all`, hiển thị 🔒 và âm nhắc nhở); bump sw `bhv-v43`; 14/14 test PASS |
 | 2026-10-20 | Phase 6 (P6-01…P6-07) | Hoàn thành toàn bộ Phase 6: Video YouTube nocookie an toàn & bọc PIN gate cho mọi link thoát; CSP + Headers bảo mật trong `netlify.toml`; GitHub Actions CI `.github/workflows/test.yml` chạy 15 test suites; Audit Accessibility (ARIA, focus-visible, reduced-motion); Tối ưu hiệu năng máy yếu; Kế hoạch & checklist offline Android/iOS `docs/offline-testing-checklist.md`; Checklist release v1.0 `docs/release-v1.0-checklist.md`; 15/15 test PASS |
 | 2026-10-20 | Fix Home CSS & Hover Audio | Sửa lỗi vỡ khung 3 nút lớn Home (thiếu `}` ở `@keyframes bubbleFloatUp`), gỡ bỏ `onmouseenter` tránh giọng máy khi hover, chuẩn hóa `speakKidBtn` phát trực tiếp file MP3 VieNeu, bổ sung alias `audio-map.js`, bump sw `bhv-v44`; 15/15 test PASS |
+| 2026-10-20 | P2-03, P0-13, P2-07 (phần 1) | Tự host font Baloo 2 (woff2 600 & 800 subset) kèm fonts/OFL.txt; xóa 3 thẻ Google Fonts; siết CSP netlify.toml (0 request google); sw.js quản lý qua test-sw-precache.js --fix; CI test.yml; 16/16 test PASS |

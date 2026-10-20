@@ -5,6 +5,20 @@
 @font-face{font-family:"AnjaVN";src:url("font-vn.ttf") format("truetype");font-display:swap}
 @font-face{font-family:"HPTapViet";src:url("font-tapviet.ttf") format("truetype");font-display:swap}
 @font-face{font-family:"HPCham";src:url("font-tapviet-cham.ttf") format("truetype");font-display:swap}
+@font-face{
+  font-family:"Baloo 2";
+  font-style:normal;
+  font-weight:600;
+  src:url("fonts/baloo2-600.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Baloo 2";
+  font-style:normal;
+  font-weight:800;
+  src:url("fonts/baloo2-800.woff2") format("woff2");
+  font-display:swap;
+}
 .trace-sample-card{position:absolute;top:8px;left:8px;background:rgba(255,255,255,0.94);border:2px solid #b4d2f7;border-radius:14px;padding:3px 8px;box-shadow:0 3px 8px rgba(0,0,0,0.08);cursor:pointer;z-index:4;display:flex;flex-direction:column;align-items:center;transition:transform .12s}
 .trace-sample-card:active{transform:scale(.95)}
 .trace-sample-tag{font-size:10px;font-weight:800;color:#3b6da4;letter-spacing:0.5px}

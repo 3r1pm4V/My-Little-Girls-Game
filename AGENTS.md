@@ -40,6 +40,7 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 - Stack: HTML + CSS + JS thuần (script tag toàn cục), PWA (`manifest.webmanifest`, `sw.js`), deploy Netlify (`netlify.toml`, `netlify/functions`), chạy local bằng `run-local.bat` / `server.js`.
 - Thứ tự nạp script trong `index.html` (img-core → data-vn → activities-data → audio-map → app) **không được đảo** nếu chưa kiểm tra phụ thuộc.
 - Khi thêm/sửa asset (ảnh, âm thanh, font, file JS/CSS): **bump version cache trong `sw.js`** và kiểm tra app chạy offline.
+- Mọi task đổi file JS/CSS/HTML/asset phải chạy `node test-sw-precache.js --fix` trước khi commit.
 - Mọi tài nguyên phải chạy **offline**. Không thêm CDN mới; font/ảnh/âm thanh phải nằm trong repo.
 - File văn bản dùng **UTF-8, chuẩn hóa Unicode NFC** (tiếng Việt có dấu không được bị tách dấu).
 - Tránh file khổng lồ: file mới > 400 dòng thì tách module. Không nhúng ảnh base64 lớn vào CSS/HTML.
@@ -84,7 +85,7 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 ## 9. Test
 
 Các script có sẵn (xác nhận cách chạy và ghi vào `todo.md` task `P0-04`):
-`test-activity-schema.js`, `test-audio-system.js`, `test-dom-performance.js`, `test-scoring.js`, `test-local.html`.
+`test-sw-precache.js`, `test-activity-schema.js`, `test-audio-system.js`, `test-dom-performance.js`, `test-scoring.js`, `test-local.html`.
 - Chạy bằng Node: `node test-<tên>.js` (script nào cần trình duyệt thì mở `test-local.html` qua `run-local.bat`).
 - Thêm logic mới (chấm điểm, mastery, migrate dữ liệu) → **thêm test cùng lúc**.
 - Thêm nội dung mới → phải qua test schema.
