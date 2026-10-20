@@ -91,7 +91,8 @@
         "image_quiz",
         "fill_blank",
         "matching",
-        "drag_drop"
+        "drag_drop",
+        "trace"
       ]
     },
     "mediaSource": {

@@ -1888,6 +1888,13 @@ async function playActivity(actId){
     tierActivities();
     return;
   }
+  // Neu la bai tap to net hoac act.type === "trace"
+  if(act.type === "trace" || act.id === "act_pre_let_01" || act.interactiveGame === "trace"){
+    window.__traceFrom = "todayLearning";
+    trm = act.traceMode || "net";
+    trace(act.traceItem || "net_thang_dung");
+    return;
+  }
   if(!currentPlayingAct || currentPlayingAct.id !== actId){
     window.__actCurrentStep = 0;
     window.__actQuizStarted = false;
@@ -2009,11 +2016,13 @@ async function playActivity(actId){
       </div>
     ` : "";
     const optsHtml = (act.options || []).map((opt, idx) => `
-      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
-        <span class="act-opt-bullet">${idx + 1}</span>
-        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
-        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
-      </button>
+      <div class="act-opt-row">
+        <button type="button" class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
+          <span class="act-opt-bullet">${idx + 1}</span>
+          <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        </button>
+        <button type="button" class="act-opt-audio" onclick="say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </div>
     `).join("");
     bodyHtml = `
       ${storyBoxHtml}
@@ -2027,11 +2036,13 @@ async function playActivity(actId){
     const templateStr = act.content.template || "___";
     const blankHtml = templateStr.replace(/\[\s*\?\s*\]/g, `<span class="act-blank-slot" id="actBlankSlot">?</span>`);
     const optsHtml = (act.options || []).map((opt, idx) => `
-      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChooseBlank('${opt.id}', '${esc(opt.text)}', this)" aria-label="${opt.text}">
-        <span class="act-opt-bullet">${idx + 1}</span>
-        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
-        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
-      </button>
+      <div class="act-opt-row">
+        <button type="button" class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChooseBlank('${opt.id}', '${esc(opt.text)}', this)" aria-label="${opt.text}">
+          <span class="act-opt-bullet">${idx + 1}</span>
+          <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        </button>
+        <button type="button" class="act-opt-audio" onclick="say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </div>
     `).join("");
     bodyHtml = `
       ${mediaHtml}
@@ -2087,11 +2098,13 @@ async function playActivity(actId){
   } else {
     // Standard image_quiz / quiz
     const optsHtml = (act.options || []).map((opt, idx) => `
-      <button class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
-        <span class="act-opt-bullet">${idx + 1}</span>
-        <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
-        <button type="button" class="act-opt-audio" onclick="event.stopPropagation(); say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
-      </button>
+      <div class="act-opt-row">
+        <button type="button" class="act-opt-btn" data-id="${opt.id}" onclick="window.__actChoose('${opt.id}', this)" aria-label="${opt.text}">
+          <span class="act-opt-bullet">${idx + 1}</span>
+          <span style="flex:1">${T(opt.text, opt.textEn || opt.text)}</span>
+        </button>
+        <button type="button" class="act-opt-audio" onclick="say('${escSay(opt.text)}', '${escSay(opt.textEn || opt.text)}')" aria-label="${T("Nghe đọc đáp án " + (idx+1), "Listen to option " + (idx+1))}" title="${T("Nghe đọc","Listen")}">🔊</button>
+      </div>
     `).join("");
     bodyHtml = `
       ${mediaHtml}
@@ -2547,6 +2560,7 @@ function win(wr,next,vi,en){
   adv(rd.n>=(RL[cur]||ROUND)?result:next);
 }
 function games(){
+  window.__traceFrom = "games";
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chơi tự do","Free Play"),i:"🎮"}])}
   <div style="text-align:center;margin:8px 0 16px">
     <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Chơi tự do","Free Play")}</h2>
@@ -3333,7 +3347,10 @@ function trace(selItem){const md=TR[trm]||TR.g2;
   :`<div class="trace-sample-card" onclick="TR['${trm}'].say('${it}')" title="${T("Bấm để nghe đọc","Tap to listen")}"><span class="trace-sample-tag">${strokeGuide?strokeGuide.group:"MẪU CHỮ"} 🔊</span><span class="trace-sample-letter">${it}</span></div>`;
  const hintBanner=strokeGuide?`<div style="background:linear-gradient(135deg,#fff0f5,#f0f9ff);border:2px solid #ff7aa8;border-radius:18px;padding:6px 14px;margin:4px auto 8px;max-width:340px;font-size:13.5px;color:#831843;line-height:1.35;box-shadow:0 3px 6px rgba(0,0,0,0.06);cursor:pointer" onclick="TR['${trm}'].say('${it}')">✍️ <b>${T("Thứ tự nét viết chữ "+it+":","Stroke order for "+it+":")}</b><br>${T(strokeGuide.ruleVi,strokeGuide.ruleEn)}</div>`:(isNet?`<div style="background:#f0f9ff;border:2px solid #7dd3fc;border-radius:18px;padding:6px 14px;margin:4px auto 8px;max-width:340px;font-size:13px;color:#0369a1;line-height:1.3">📏 <b>${VN_STROKES.find(s=>s.id===it).groupName}:</b> ${VN_STROKES.find(s=>s.id===it).desc}</div>`:"");
  const tabsConfig=[["net","14 Nét cơ bản"],["g1","Nhóm 1 (Cong)"],["g2","Nhóm 2 (Cong+Thẳng)"],["g3","Nhóm 3 (Móc)"],["g4","Nhóm 4 (Khuyết)"],["g5","Nhóm 5 (Phối hợp)"],["lo","abc"],["up","ABC"],["nu","123"]];
- m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}])+`<div class="chips" style="margin:0 0 4px;overflow-x:auto;flex-wrap:nowrap;padding:4px 2px;justify-content:flex-start;max-width:680px">${tabsConfig.map(([k,x])=>`<button class="pill${trm===k?" on":""}" style="white-space:nowrap;font-size:14px;padding:6px 12px;min-height:48px;flex-shrink:0" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2 id="traceQ" role="button" tabindex="0" onclick="TR['${trm}'].say('${it}')" style="cursor:pointer;margin:4px 0" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T(md.vi(it),md.en(it))}</h2>${hintBanner}<div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
+ const traceBc = (window.__traceFrom === "todayLearning")
+    ? [{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"todayLearning",t:T("Học hôm nay","Today's Learning"),i:"🎒"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}]
+    : [{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Tập viết chữ & nét","Trace"),i:"✍️"}];
+  m.innerHTML=kbc(traceBc)+`<div class="chips" style="margin:0 0 4px;overflow-x:auto;flex-wrap:nowrap;padding:4px 2px;justify-content:flex-start;max-width:680px">${tabsConfig.map(([k,x])=>`<button class="pill${trm===k?" on":""}" style="white-space:nowrap;font-size:14px;padding:6px 12px;min-height:48px;flex-shrink:0" onclick="trm='${k}';ls.set('trm',trm);trace()">${x}</button>`).join("")}</div><h2 id="traceQ" role="button" tabindex="0" onclick="TR['${trm}'].say('${it}')" style="cursor:pointer;margin:4px 0" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T(md.vi(it),md.en(it))}</h2>${hintBanner}<div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden"><canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas><canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>${guide}<canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>${sampleCard}</div><div class="chips" style="gap:8px;margin:8px 0;align-items:center">${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c=>`<button class="chip" style="background:${c};border:3px solid ${c===col?"#fff":"transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}<button class="pill" id="btn-clear" title="${T("Xóa để viết lại","Erase")}">🧼 ${T("Tẩy","Clear")}</button><button class="pill" id="ok">✔ ${T("Xong","Done")}</button></div><div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">${pool.map(x=>`<button class="pill${x===it?" on":""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet?VN_STROKES.find(s=>s.id===x).name.replace("Nét ",""):x}</button>`).join("")}</div>`;
  const cv=m.querySelector("#cv"),gcv=m.querySelector("#guideCv"),bcv=m.querySelector("#bgCv");
  const W=cv.width=gcv.width=bcv.width=320,H=cv.height=gcv.height=bcv.height=390;
  const x=cv.getContext("2d"),gx=gcv.getContext("2d"),bx=bcv.getContext("2d");
@@ -3365,7 +3382,11 @@ function trace(selItem){const md=TR[trm]||TR.g2;
   m.querySelector("#ok").onclick=e=>{
    e.currentTarget.disabled=true;
    ST.traceCount=(ST.traceCount||0)+1;svS();checkBadges();
-   triggerCelebration(T("Bé viết đẹp quá!","Great Writing!"),T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!","Wonderful tracing, +1 ⭐!"),"✍️","⭐",()=>win(0,trace,"",""));
+   if(typeof updateProgress === "function"){
+      updateProgress("vi.trace.strokes", true);
+    }
+    const returnFn = (window.__traceFrom === "todayLearning") ? () => todayLearning(1) : trace;
+    triggerCelebration(T("Bé viết đẹp quá!","Great Writing!"),T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!","Wonderful tracing, +1 ⭐!"),"✍️","⭐",()=>win(0,returnFn,"",""));
   };
  md.say(it);catSet("pointing")}
 const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);const alt=ALT_MAP[key]||(OBJ[key]?OBJ[key].vi:key);return I["s_"+key]?`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})" role="img" aria-label="${alt}"></span>`:`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="${alt}">`};

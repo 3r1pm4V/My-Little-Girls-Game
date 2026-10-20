@@ -66,7 +66,9 @@ const ACTIVITIES_DATA = [
     subject: "vietnamese",
     skill: "Tập tô nét cơ bản (thẳng, cong)",
     skills: ["vi.trace.strokes"],
-    type: "image_quiz",
+    type: "trace",
+    traceMode: "net",
+    traceItem: "net_thang_dung",
     difficulty: 1,
     content: {
       question: "Bé chọn nét nào là nét thẳng đứng kéo từ trên xuống dưới? ✏️",
