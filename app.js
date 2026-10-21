@@ -3413,8 +3413,7 @@ function match(){
 function getVisualCardName(k) {
   if (!k) return "";
   const item = (typeof EXA !== "undefined" && EXA[k]) ? EXA[k] : null;
-  const img = item ? item.img : k;
-  const defaultText = item ? item.t : k;
+  if (item && item.t) return item.t;
 
   const VISUAL_NAMES_VI = {
     "k_book": "Cuốn sách",
@@ -3423,39 +3422,11 @@ function getVisualCardName(k) {
     "heart": "Trái tim",
     "ball": "Quả bóng",
     "👟": "Đôi giày",
-    "🛋️": "Ghế sofa",
-    "🔔": "Cái chuông",
-    "🍼": "Bình sữa",
-    "👕": "Cái áo",
-    "🎨": "Hộp màu",
-    "🌾": "Bông lúa",
-    "🤫": "Suỵt im lặng",
-    "⚖️": "Cái cân",
-    "🧣": "Khăn quàng",
-    "👓": "Kính mắt",
-    "🥛": "Ly nước",
-    "☁️": "Đám mây",
-    "🏹": "Cung tên",
-    "👒": "Nón lá",
-    "🧃": "Hộp nước",
-    "😭": "Mặt khóc",
-    "🍞": "Ổ bánh mì",
-    "✍️": "Cây bút",
-    "🙏": "Chắp tay",
-    "🪭": "Cái quạt",
-    "🧺": "Cái rổ",
-    "🍉": "Dưa hấu",
-    "📺": "Ti vi",
-    "💇": "Cắt tóc",
-    "🌱": "Mầm cây",
-    "🪙": "Đồng tiền",
-    "🚲": "Xe đạp",
-    "🍃": "Chiếc lá",
-    "🌭": "Xúc xích"
+    "gift": "Hộp quà"
   };
 
-  if (VISUAL_NAMES_VI[img]) return VISUAL_NAMES_VI[img];
-  return defaultText;
+  if (VISUAL_NAMES_VI[k]) return VISUAL_NAMES_VI[k];
+  return k;
 }
 window.getVisualCardName = getVisualCardName;
 
