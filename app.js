@@ -182,37 +182,39 @@ function loadScriptTag(src) {
 }
 
 async function loadStories() {
-  if (window.FAIRY_STORIES && window.STORY_CATALOG) {
+  if (typeof window !== "undefined" && window.FAIRY_STORIES && window.STORY_CATALOG) {
     return window.FAIRY_STORIES;
   }
   const isFileProto = typeof window !== "undefined" && window.location && window.location.protocol === "file:";
 
-  if (!window.FAIRY_STORIES) {
+  if (typeof window !== "undefined" && !window.FAIRY_STORIES) {
     if (isFileProto) {
       await loadScriptTag("stories-data.js");
     } else {
       try {
         const sModule = await import('./stories-data.js');
-        window.FAIRY_STORIES = sModule.default || sModule.FAIRY_STORIES || window.FAIRY_STORIES;
-        if (sModule.FAIRY_CATEGORIES) window.FAIRY_CATEGORIES = sModule.FAIRY_CATEGORIES || window.FAIRY_CATEGORIES;
-      } catch(e) {
+        if (sModule && sModule.FAIRY_STORIES) window.FAIRY_STORIES = sModule.FAIRY_STORIES;
+        if (sModule && sModule.FAIRY_CATEGORIES) window.FAIRY_CATEGORIES = sModule.FAIRY_CATEGORIES;
+      } catch(e) {}
+      if (!window.FAIRY_STORIES) {
         await loadScriptTag("stories-data.js");
       }
     }
   }
-  if (!window.STORY_CATALOG) {
+  if (typeof window !== "undefined" && !window.STORY_CATALOG) {
     if (isFileProto) {
       await loadScriptTag("stories-catalog.js");
     } else {
       try {
         const cModule = await import('./stories-catalog.js');
-        window.STORY_CATALOG = cModule.default || cModule.STORY_CATALOG || window.STORY_CATALOG;
-      } catch(e) {
+        if (cModule && cModule.STORY_CATALOG) window.STORY_CATALOG = cModule.STORY_CATALOG;
+      } catch(e) {}
+      if (!window.STORY_CATALOG) {
         await loadScriptTag("stories-catalog.js");
       }
     }
   }
-  return window.FAIRY_STORIES;
+  return (typeof window !== "undefined" && window.FAIRY_STORIES) || [];
 }
 window.loadStories = loadStories;
 
@@ -5317,14 +5319,29 @@ async function importAudio(list){let ok=0;const bad=[];
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
 let curCat="vn",curStorySearch="",readingStory=null,storyPlay=false;
 const STORY_BATCH_SIZE=14;
-var FAIRY_STORIES = (typeof window !== "undefined" && window.FAIRY_STORIES) || [];
-var FAIRY_CATEGORIES = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || [];
-var STORY_CATALOG = (typeof window !== "undefined" && window.STORY_CATALOG) || [];
+function getFairyStories() {
+  return (typeof window !== "undefined" && window.FAIRY_STORIES) || (typeof FAIRY_STORIES !== "undefined" && FAIRY_STORIES) || [];
+}
+function getFairyCategories() {
+  const c = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || (typeof FAIRY_CATEGORIES !== "undefined" && FAIRY_CATEGORIES);
+  return (c && c.length) ? c : [
+    { id: "vn", name: "Cổ tích Việt Nam", en: "Vietnamese Tales", icon: "🇻🇳", desc: "Kho tàng truyện dân gian Việt Nam" },
+    { id: "world", name: "Cổ tích Thế giới", en: "World Tales", icon: "🌍", desc: "Những câu chuyện cổ tích kinh điển thế giới" },
+    { id: "fable", name: "Truyện ngụ ngôn", en: "Fables", icon: "🦊", desc: "Bài học cuộc sống sâu sắc" },
+    { id: "bedtime", name: "Truyện kể bé nghe", en: "Bedtime Stories", icon: "🌙", desc: "Những câu chuyện dịu dàng giúp bé ngủ ngon" }
+  ];
+}
+function getStoryCatalog() {
+  const cat = (typeof window !== "undefined" && window.STORY_CATALOG) || (typeof STORY_CATALOG !== "undefined" && STORY_CATALOG) || [];
+  if (cat && cat.length) return cat;
+  const fStories = getFairyStories();
+  return fStories.length ? fStories : [];
+}
 let storyRenderedCount=STORY_BATCH_SIZE;
 
 function storyCardHtml(s){
-  const fStories = (typeof window !== "undefined" && window.FAIRY_STORIES) || FAIRY_STORIES || [];
-  const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
+  const fStories = getFairyStories();
+  const fCats = getFairyCategories();
   const curated = fStories.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
   const icon=curated?curated.icon:(fCats.find(c=>c.id===s.cat)?.icon||"📖");
   const isAudio=!!curated;
@@ -5363,9 +5380,7 @@ async function storyL(catId, page, search){
     await loadStories();
   }
 
-  const catalog = (typeof STORY_CATALOG !== "undefined" && Array.isArray(STORY_CATALOG) && STORY_CATALOG.length)
-    ? STORY_CATALOG
-    : (typeof FAIRY_STORIES !== "undefined" && Array.isArray(FAIRY_STORIES) ? FAIRY_STORIES : []);
+  const catalog = getStoryCatalog();
 
   if (!catalog.length) {
     m.innerHTML = `${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kho truyện cổ tích","Stories"),i:"📖"}])}
@@ -5415,8 +5430,8 @@ async function storyL(catId, page, search){
 
   function renderStoryItems(reset=false){
     if(reset) storyRenderedCount=STORY_BATCH_SIZE;
-    const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
-    const cat = fCats.find(c=>c.id===curCat) || fCats[0] || { icon: "📖", name: "Truyện cổ tích", en: "Fairy Tales" };
+    const fCats = getFairyCategories();
+    const cat = fCats.find(c=>c.id===curCat) || fCats[0];
 
     // Cập nhật trạng thái nút danh mục
     const chips=document.getElementById("storyChips");
@@ -5503,7 +5518,7 @@ async function storyL(catId, page, search){
     </div>
 
     <div class="chips" id="storyChips" style="margin-bottom:10px">
-      ${FAIRY_CATEGORIES.map(c=>`
+      ${getFairyCategories().map(c=>`
         <button class="pill${c.id===curCat&&!curStorySearch?" on":""}" data-cat="${c.id}" onclick="window.switchStoryCat('${c.id}')">
           ${c.icon} ${T(c.name,c.en)} (${getCatCount(c.id)})
         </button>
@@ -5524,16 +5539,14 @@ async function storyDetail(id){
     m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang tải truyện...","Loading story...")}</p></div>`;
     await loadStories();
   }
-  const catalog = (typeof STORY_CATALOG !== "undefined" && Array.isArray(STORY_CATALOG) && STORY_CATALOG.length)
-    ? STORY_CATALOG
-    : (typeof FAIRY_STORIES !== "undefined" && Array.isArray(FAIRY_STORIES) ? FAIRY_STORIES : []);
+  const catalog = getStoryCatalog();
   const s=catalog.find(x=>x.id===id);
   if(!s){storyL();return;}
 
-  const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+  const fStories = getFairyStories();
+  const curated=fStories.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
   if(curated){storyRead(curated.id);return;}
-
-  const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
+  const fCats = getFairyCategories();
   const cat = fCats.find(c=>c.id===s.cat) || fCats[0] || { icon: "📖", name: "Truyện cổ tích", en: "Fairy Tales" };
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"storyL",a:s.cat,t:T(cat.name,cat.en),i:"📖"},{t:esc(s.title.length>18?s.title.slice(0,18)+"…":s.title),i:"✨"}])}
   <div class="story-view">
@@ -5570,7 +5583,7 @@ async function storyRead(id){
     m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang chuẩn bị trang sách...","Preparing storybook...")}</p></div>`;
     await loadStories();
   }
-  const fStories = (typeof window !== "undefined" && window.FAIRY_STORIES) || FAIRY_STORIES || [];
+  const fStories = getFairyStories();
   const s = fStories.find(x=>x.id===id) || fStories[0] || { id, title: "Truyện cổ tích", content: [], moral: "" };
   ST.storyCount=(ST.storyCount||0)+1;svS();checkBadges();
   storyPlay=false;A.pause();if(SS)SS.cancel();
@@ -5600,14 +5613,14 @@ async function storyRead(id){
       setTimeout(()=>{if(storyPlay&&readingIdx===i)nextP(i+1);},waitMs);
     })(0);
   };
-  const tctMatch=typeof STORY_CATALOG!=="undefined"&&STORY_CATALOG.find(sc=>sc.audio&&(sc.id===s.id||sc.title.toLowerCase().includes(s.title.toLowerCase())||s.title.toLowerCase().includes(sc.title.toLowerCase())));
+  const tctMatch=getStoryCatalog().find(sc=>sc.audio&&(sc.id===s.id||sc.title.toLowerCase().includes(s.title.toLowerCase())||s.title.toLowerCase().includes(sc.title.toLowerCase())));
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"storyL",a:s.cat,t:T("Truyện cổ tích","Stories"),i:"📖"},{t:esc(s.title.length>18?s.title.slice(0,18)+"…":s.title),i:"🎙️"}])}
   <div class="story-view">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
       <span style="font-size:48px">${s.icon}</span>
       <div>
         <h2 style="margin:0;cursor:default;color:var(--acc)">${s.title}</h2>
-        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${(()=>{ const fc=(typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || []; const found=fc.find(c=>c.id===s.cat)||{name:"Truyện cổ tích",en:"Fairy Tales"}; return T(found.name, found.en); })()}</small>
+        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${(()=>{ const found=getFairyCategories().find(c=>c.id===s.cat)||{name:"Truyện cổ tích",en:"Fairy Tales"}; return T(found.name, found.en); })()}</small>
       </div>
     </div>
     ${tctMatch?`
