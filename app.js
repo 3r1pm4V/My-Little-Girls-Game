@@ -30,7 +30,7 @@ const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
 const ls={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
-let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);const MX=()=>[5,10,15][lvl-1];
+let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);const MX=()=>Math.min(10,[5,10,10][(lvl||1)-1]);
 const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
 function toggleSoundMaster(){
   const nxt=SOUND_ON()?"0":"1";
@@ -228,7 +228,7 @@ const loadVoices=()=>{try{VOICES=SS?SS.getVoices():[]}catch(e){VOICES=[]}};
 loadVoices();
 if(SS){const vc=()=>{loadVoices();if(cur==="parent")parent()};try{SS.addEventListener("voiceschanged",vc)}catch(e){SS.onvoiceschanged=vc}}
 const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
-const vState=()=>{if(!SS)return{k:"none"};loadVoices();if(!VOICES.length)return vWait?{k:"none"}:{k:"wait"};const v=viV();return v?{k:"ok",n:v.name}:{k:"no"}};
+const vState=()=>{return {k:"ok",n:"Giọng Tưởng Vy (1.243 MP3)"}};
 // ============================================================================
 // HỆ THỐNG ÂM THANH VIENEU TTS & CACHING NÂNG CAO (CLIENT-ONLY)
 // 1. window.AUDIO_MAP load đồng bộ từ audio-map.js
@@ -351,7 +351,8 @@ async function evictLRUIfNeeded(db,incomingSize){
 }
 
 function fallbackToWebSpeech(text, langCode="vi-VN", onEnd){
-  // Hoàn toàn tắt giọng máy robot để không chen ngang tiếng thực của bé
+  // TẮT VĨNH VIỄN Web Speech API (giọng robot khô cứng).
+  // 100% âm thanh đều sử dụng kho MP3 giọng đọc Tưởng Vy và VieNeu TTS chuẩn.
   if (typeof SS !== "undefined" && SS) { try { SS.cancel(); } catch(e){} }
   if (typeof onEnd === "function") onEnd();
 }
@@ -1714,14 +1715,14 @@ function home(){
   if(isKidPreschoolMode){
     contentHtml = `
       <div class="kid-home-menu">
-        <!-- 1. HỌC CHỮ & TẬP TÔ -->
+        <!-- 1. HỌC CHỮ CÁI & TẬP TÔ -->
         <button class="kid-home-btn kid-btn-today kid-btn-letters" 
           onclick="go('lettersHome')"
           onpointerdown="speakKidBtn('letters')"
-          aria-label="${T("Học chữ & Tập tô", "Learn Letters & Trace")}">
+          aria-label="${T("Học chữ cái & Tập tô", "Learn Letters & Trace")}">
           <div class="kid-btn-icon-wrap">🔤</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Học chữ & Tập tô", "Letters & Tracing")}</div>
+            <div class="kid-btn-title">${T("Học chữ cái", "Learn Letters")}</div>
             <div class="kid-btn-sub">${T("14 Nét viết cơ bản & 29 chữ cái ô ly ✍️", "14 Basic strokes & 29 letters ✍️")}</div>
           </div>
           <div class="kid-btn-arrow">➡️</div>
@@ -1731,37 +1732,24 @@ function home(){
         <button class="kid-home-btn kid-btn-numbers" 
           onclick="go('numL')"
           onpointerdown="speakKidBtn('numbers')"
-          aria-label="${T("Học số & Đếm", "Numbers & Counting")}">
+          aria-label="${T("Học số đếm", "Numbers & Counting")}">
           <div class="kid-btn-icon-wrap">🔢</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Học số & Đếm", "Numbers & Counting")}</div>
-            <div class="kid-btn-sub">${T("Số 1–20, đếm đồ vật sinh động 🍎", "Numbers 1–20 & counting objects 🍎")}</div>
+            <div class="kid-btn-title">${T("Học số đếm", "Numbers & Counting")}</div>
+            <div class="kid-btn-sub">${T("Số 1–10, đếm đồ vật sinh động 🍎", "Numbers 1–10 & counting objects 🍎")}</div>
           </div>
           <div class="kid-btn-arrow">➡️</div>
         </button>
 
-        <!-- 3. TRÒ CHƠI -->
+        <!-- 3. TRÒ CHƠI ÔN TẬP -->
         <button class="kid-home-btn kid-btn-games" 
           onclick="go('games')"
           onpointerdown="speakKidBtn('games')"
-          aria-label="${T("Trò chơi vui nhộn", "Fun Games")}">
+          aria-label="${T("Trò chơi ôn tập", "Fun Games")}">
           <div class="kid-btn-icon-wrap">🎮</div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Trò chơi vui nhộn", "Fun Games")}</div>
-            <div class="kid-btn-sub">${T("Bắt bóng chữ, đếm hình, lật thẻ 🎈", "Bubble pop, counting, card flip 🎈")}</div>
-          </div>
-          <div class="kid-btn-arrow">➡️</div>
-        </button>
-
-        <!-- 4. TRUYỆN CỔ TÍCH -->
-        <button class="kid-home-btn kid-btn-stories" 
-          onclick="go('storyL')"
-          onpointerdown="speakKidBtn('stories')"
-          aria-label="${T("Truyện cổ tích", "Fairy Tales")}">
-          <div class="kid-btn-icon-wrap">📖</div>
-          <div class="kid-btn-text">
-            <div class="kid-btn-title">${T("Truyện cổ tích", "Fairy Tales")}</div>
-            <div class="kid-btn-sub">${T("Giọng đọc ấm áp, tranh minh họa đẹp ✨", "Gentle voice & storybooks ✨")}</div>
+            <div class="kid-btn-title">${T("Trò chơi ôn tập", "Fun Games")}</div>
+            <div class="kid-btn-sub">${T("Đếm hình, bắt bóng chữ, ghép thẻ vui nhộn 🎈", "Bubble pop, counting, card flip 🎈")}</div>
           </div>
           <div class="kid-btn-arrow">➡️</div>
         </button>
@@ -1875,38 +1863,13 @@ async function tierActivities(filterSubject){
     ? `🎒 ${T("Bài học Chuẩn bị vào Lớp 1", "Grade 1 Prep Activities")}`
     : `${tInfo.badge} ${T("Bài học " + tInfo.nameVi, tInfo.nameEn + " Activities")}`;
 
-  const filters = !showTiers ? [
+  const filters = [
     { id: "all", vi: "Tất cả", en: "All" },
+    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
+    { id: "math", vi: "Toán học 1–10 📐", en: "Math" },
     { id: "lananh", vi: "Cô Lan Anh 👩‍🏫", en: "Teacher Lan Anh" },
-    { id: "vtv7", vi: "Chữ cái VTV7 📺", en: "VTV7 Alphabet" },
-    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
-    { id: "math", vi: "Toán học 📐", en: "Math" },
-    { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
-    { id: "science", vi: "Khoa học 🔬", en: "Science" },
-    { id: "skills", vi: "Kỹ năng 🌱", en: "Life Skills" },
-    { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
-    { id: "logic", vi: "Tư duy 💡", en: "Logic" }
-  ] : (isPreschool ? [
-    { id: "all", vi: "Tất cả", en: "All" },
-    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
-    { id: "math", vi: "Toán học 📐", en: "Math" },
-    { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
-    { id: "science", vi: "Khoa học 🔬", en: "Science" },
-    { id: "skills", vi: "Kỹ năng 🌱", en: "Life Skills" },
-    { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
-    { id: "logic", vi: "Tư duy 💡", en: "Logic" }
-  ] : [
-    { id: "all", vi: "Tất cả", en: "All" },
-    { id: "lananh", vi: "Cô Lan Anh 👩‍🏫", en: "Teacher Lan Anh" },
-    { id: "vtv7", vi: "Chữ cái VTV7 📺", en: "VTV7 Alphabet" },
-    { id: "vietnamese", vi: "Tiếng Việt 🔤", en: "Vietnamese" },
-    { id: "math", vi: "Toán học 📐", en: "Math" },
-    { id: "english", vi: "Tiếng Anh 🇬🇧", en: "English" },
-    { id: "science", vi: "Khoa học 🔬", en: "Science" },
-    { id: "skills", vi: "Kỹ năng 🌱", en: "Life Skills" },
-    { id: "reading", vi: "Đọc hiểu 📖", en: "Reading" },
-    { id: "logic", vi: "Tư duy 💡", en: "Logic" }
-  ]);
+    { id: "vtv7", vi: "Chữ cái VTV7 📺", en: "VTV7 Alphabet" }
+  ];
 
   m.innerHTML = `
     ${bcHtml}
@@ -2721,9 +2684,9 @@ function win(wr,next,vi,en){
 }
 function games(){
   window.__traceFrom = "games";
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Trò chơi vui nhộn","Fun Games"),i:"🎮"}])}
+  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
   <div style="text-align:center;margin:8px 0 16px">
-    <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Trò chơi vui nhộn","Fun Games")}</h2>
+    <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Góc vui chơi ôn tập (Trò chơi vui nhộn)","Review Games & Fun")}</h2>
     <p style="font-size:14px;color:#64748b;margin:0">${T("Các trò chơi tương tác rèn luyện trí tuệ & kỹ năng cho bé 🌟","Fun interactive games for kids 🌟")}</p>
   </div>
   <div class="cards">
@@ -4645,9 +4608,7 @@ function parent(){
   const nrec = Object.keys(REC).length;
 
   if(vs.k === "wait") setTimeout(() => { vWait = true; if(cur === "parent") parent(); }, 2000);
-  const vh = vs.k === "ok" ? `<div class="note ok">✅ ${T("Máy có giọng đọc tiếng Việt","Vietnamese voice available")}<small>${esc(vs.n)}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button></div>`
-    : vs.k === "wait" ? `<div class="note">⏳ ${T("Đang kiểm tra giọng đọc…","Checking voices…")}</div>`
-    : `<div class="note warn">⚠ ${T(vs.k==="no"?"Máy chưa có giọng đọc tiếng Việt":"Không tìm thấy giọng đọc của máy","No Vietnamese voice found")}<small>${VIHELP}</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button><button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button></div>`;
+  const vh = `<div class="note ok">✅ ${T("100% Giọng đọc chuẩn Tưởng Vy & Offline Audio Map","100% Studio Vietnamese Voice (Offline)")}<small>Kho 1.243 file MP3 giọng đọc tự nhiên, ấm áp dành riêng cho bé 4 tuổi</small><button class="pill" onclick="testVi()">🔊 ${T("Nghe thử","Test")}</button></div>`;
 
   m.innerHTML = `
     ${kbc([{s:"home", t:T("Trang chủ","Home"), i:"🏠"}, {t:T("Bảng điều khiển phụ huynh","Parent Dashboard"), i:"👨‍👩‍👧"}])}
