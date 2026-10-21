@@ -1314,8 +1314,20 @@ function pwaGuide(){
 }
 function card(f,vis,vi,en,subject="default"){
   const cls = subject !== "default" ? `card card-${subject}` : "card";
-  return`<button class="${cls}" onclick="go('${f}')"><div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
+  const safeVi = String(vi).replace(/'/g, "\\'");
+  return`<button class="${cls}" onclick="go('${f}')" onpointerdown="speakCardTitle('${safeVi}')"><div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
 }
+function speakCardTitle(vi){
+  if(!SOUND_ON()||!vi)return;
+  const map=window.AUDIO_MAP||{};
+  const audio=map[vi]||map["vi|"+vi];
+  if(audio){
+    playSafeAudio(audio,"Mai Anh");
+  }else{
+    say(vi,vi);
+  }
+}
+window.speakCardTitle=speakCardTitle;
 
 /* ========================================================
    TASK P1-04: LỘ TRÌNH 6 CHẶNG & HỌC HÔM NAY DÀNH CHO BÉ
@@ -2841,6 +2853,7 @@ function bubbleGame(isReplay) {
   function announceTarget() {
     playBubbleLetter(targetLetter);
   }
+  say("Trò chơi Bắt bóng chữ. Bé hãy chạm vào các quả bóng có chữ cái đúng nhé!", "Pop the bubbles with matching letters!");
 
   window.__bgReplayAudio = function() {
     announceTarget();
@@ -3120,7 +3133,7 @@ function match(){
     </div>
   `;
 
-  say("Ghép chữ với hình nhé. Bé có thể chạm vào chữ rồi chạm vào hình, hoặc kéo dây để nối nhé!", "Match letter and picture. Tap to connect or drag a line!");
+  say("Trò chơi Ghép chữ và hình. Bé chạm vào chữ cái rồi chạm vào hình tương ứng để nối nhé!", "Match letter and picture. Tap to connect or drag a line!");
   catSet("thinking");
 
   const wrapEl = m.querySelector("#dragWrap");
@@ -3217,6 +3230,12 @@ function match(){
     if (!tapSelectedCard) {
       tapSelectedCard = cardEl;
       cardEl.classList.add("tap-selected");
+      if (cardEl.dataset.side === "left") {
+        const lKey = String(cardEl.dataset.l || "").toLowerCase();
+        playSafeAudio("audio/alpha_vi_" + lKey + ".mp3", "Mai Anh");
+      } else if (cardEl.dataset.side === "right") {
+        say(cardEl.dataset.t, cardEl.dataset.t);
+      }
       return;
     }
     if (tapSelectedCard === cardEl) {
@@ -3226,6 +3245,12 @@ function match(){
       tapSelectedCard.classList.remove("tap-selected");
       tapSelectedCard = cardEl;
       cardEl.classList.add("tap-selected");
+      if (cardEl.dataset.side === "left") {
+        const lKey = String(cardEl.dataset.l || "").toLowerCase();
+        playSafeAudio("audio/alpha_vi_" + lKey + ".mp3", "Mai Anh");
+      } else if (cardEl.dataset.side === "right") {
+        say(cardEl.dataset.t, cardEl.dataset.t);
+      }
       return;
     }
     const prev = tapSelectedCard;
@@ -3386,7 +3411,7 @@ function match(){
 }
 function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
  m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Lật thẻ trí nhớ","Memory"),i:"🃏"}])+`<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
- say("Tìm hai hình giống nhau","Find two that are the same");catSet("thinking");
+ say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");catSet("thinking");
  m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(EXA[k].img);say(EXA[k].t,EXA[k].t);
   if(!a){a=b;return}
   if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
