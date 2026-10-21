@@ -230,7 +230,7 @@ const loadVoices=()=>{try{VOICES=SS?SS.getVoices():[]}catch(e){VOICES=[]}};
 loadVoices();
 if(SS){const vc=()=>{loadVoices();if(cur==="parent")parent()};try{SS.addEventListener("voiceschanged",vc)}catch(e){SS.onvoiceschanged=vc}}
 const viV=()=>VOICES.find(v=>/^vi([-_]|$)/i.test(v.lang||""));
-const vState=()=>{return {k:"ok",n:"Giọng Tưởng Vy (1.243 MP3)"}};
+const vState=()=>{return {k:"ok",n:"Giọng Trúc Ly (VieNeu 48kHz)"}};
 // ============================================================================
 // HỆ THỐNG ÂM THANH VIENEU TTS & CACHING NÂNG CAO (CLIENT-ONLY)
 // 1. window.AUDIO_MAP load đồng bộ từ audio-map.js
@@ -400,7 +400,7 @@ window.addEventListener("keydown",handleAutoplayUnlock,{passive:true});
 // Đảm bảo không bao giờ gọi TTS API trước khi check Map và Local DB
 // Không fallback giọng máy khi bị chặn bởi chính sách Autoplay của trình duyệt
 // ============================================================================
-async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
+async function playSafeAudio(text, voice="Trúc Ly", onEnd){
   let finished=false;
   const finishOnce=()=>{
     if(finished)return;
@@ -505,7 +505,7 @@ async function playSafeAudio(text, voice="Tưởng Vy", onEnd){
         const res=await fetch('/api/tts',{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({text:cleanKey,voice:voice||'Tưởng Vy'}),
+          body:JSON.stringify({text:cleanKey,voice:voice||'Trúc Ly'}),
           signal:controller.signal
         });
         clearTimeout(timeoutId);
@@ -577,7 +577,7 @@ function say(vi,en){
   if(SS){try{SS.cancel()}catch(e){}}
   const LG=ql||lang;
   if(LG==="vi"&&vi){
-    playSafeAudio(vi, "Tưởng Vy", ()=>{
+    playSafeAudio(vi, "Trúc Ly", ()=>{
       if(my===tok){busy=false;busyEnd=Date.now()}
     });
     return;
@@ -595,7 +595,7 @@ function say(vi,en){
     if(i>=q.length){fin();return}
     let d=0;
     const nt=()=>{if(my!==tok)return;if(d++)return;if(i+1>=q.length){fin();return}setTimeout(()=>{if(my===tok)nx(i+1)},300/RATE)};
-    playSafeAudio(q[i][0], "Tưởng Vy", nt);
+    playSafeAudio(q[i][0], "Trúc Ly", nt);
   })(0);
 }
 let AC;
@@ -1525,13 +1525,13 @@ function speakKidBtn(type){
   } else if(type === 'numbers'){
     say("Học số và tập đếm nào!", "Let's learn numbers and counting!");
   } else if(type === 'today'){
-    playSafeAudio("audio/ui_home_btn_today.mp3", "Tưởng Vy");
+    playSafeAudio("audio/ui_home_btn_today.mp3", "Trúc Ly");
   } else if(type === 'games'){
-    playSafeAudio("audio/ui_home_btn_games.mp3", "Tưởng Vy");
+    playSafeAudio("audio/ui_home_btn_games.mp3", "Trúc Ly");
   } else if(type === 'stories'){
     say("Cùng nghe đọc truyện cổ tích nào!", "Let's listen to fairy tales!");
   } else if(type === 'stickers'){
-    playSafeAudio("audio/ui_home_btn_stickers.mp3", "Tưởng Vy");
+    playSafeAudio("audio/ui_home_btn_stickers.mp3", "Trúc Ly");
   }
 }
 window.speakKidBtn = speakKidBtn;
@@ -2835,7 +2835,7 @@ function bubbleGame(isReplay) {
     const lKey = String(letter).toLowerCase();
     const map = window.AUDIO_MAP || {};
     const audioPath = (l === "vi" ? alphaMap[lKey] : null) || map[letter] || map["vi|" + letter] || map[lKey] || map["vi|" + lKey] || ("audio/alpha_vi_" + lKey + ".mp3");
-    playSafeAudio(audioPath, "Tưởng Vy");
+    playSafeAudio(audioPath, "Trúc Ly");
   }
 
   function announceTarget() {
@@ -3428,7 +3428,7 @@ function sayTrace(item, type = "letter"){
     };
     const file = alphaMap[l];
     if(file){
-      playSafeAudio(file, "Tưởng Vy");
+      playSafeAudio(file, "Trúc Ly");
       if(l === "a" || (typeof LETTER_STROKE_GUIDES !== "undefined" && LETTER_STROKE_GUIDES[l])){
         const g = (typeof LETTER_STROKE_GUIDES !== "undefined" && LETTER_STROKE_GUIDES[l]) ? LETTER_STROKE_GUIDES[l] : null;
         const hintVi = g ? g.ruleVi : "Bé nhớ viết nét cong tròn trước, rồi viết nét móc ngược nhé!";
@@ -3438,7 +3438,7 @@ function sayTrace(item, type = "letter"){
       return;
     }
     const target = (window.AUDIO_MAP && (window.AUDIO_MAP[l] || window.AUDIO_MAP["chữ " + l])) || l;
-    playSafeAudio(target, "Tưởng Vy");
+    playSafeAudio(target, "Trúc Ly");
   } else if(type === "number"){
     const n = String(item);
     const numMap = {
@@ -3455,7 +3455,7 @@ function sayTrace(item, type = "letter"){
       "10": "audio/vi_muoi_2bqz3.mp3"
     };
     if(numMap[n]){
-      playSafeAudio(numMap[n], "Tưởng Vy");
+      playSafeAudio(numMap[n], "Trúc Ly");
       return;
     }
     sayN(+n);
@@ -3465,7 +3465,7 @@ function sayTrace(item, type = "letter"){
       const strokeKey = s.name.toLowerCase();
       const strokeAudio = window.AUDIO_MAP && (window.AUDIO_MAP[strokeKey] || window.AUDIO_MAP["vi|" + strokeKey]);
       if(strokeAudio){
-        playSafeAudio(strokeAudio, "Tưởng Vy");
+        playSafeAudio(strokeAudio, "Trúc Ly");
       } else {
         say(s.name, s.en);
       }

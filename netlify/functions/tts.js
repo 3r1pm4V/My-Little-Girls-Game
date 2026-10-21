@@ -1,7 +1,7 @@
 const https = require('https');
 
 const API_KEY = process.env.VIENEU_API_KEY || '';
-const DEFAULT_VOICE = 'Tưởng Vy';
+const DEFAULT_VOICE = 'Trúc Ly';
 
 exports.handler = async function(event, context) {
   if (event.httpMethod === 'OPTIONS') {
