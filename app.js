@@ -1753,6 +1753,19 @@ function home(){
           </div>
           <div class="kid-btn-arrow">➡️</div>
         </button>
+
+        <!-- 4. TRUYỆN CỔ TÍCH -->
+        <button class="kid-home-btn kid-btn-stories" 
+          onclick="go('storyL')"
+          onpointerdown="speakKidBtn('stories')"
+          aria-label="${T("Truyện cổ tích", "Fairy Tales")}">
+          <div class="kid-btn-icon-wrap">📖</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title">${T("Truyện cổ tích", "Fairy Tales")}</div>
+            <div class="kid-btn-sub">${T("Giọng đọc ấm áp, tranh minh họa đẹp ✨", "Gentle voice & storybooks ✨")}</div>
+          </div>
+          <div class="kid-btn-arrow">➡️</div>
+        </button>
       </div>
 
       <div style="text-align:center;margin:4px 0 16px">
