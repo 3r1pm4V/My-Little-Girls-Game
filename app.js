@@ -1,18 +1,18 @@
 const I=IMG,m=document.getElementById("m");
-I["vocab_anh_trai"]="img/vocab/vocab_anh_trai.jpg";
-I["vocab_ao_mua"]="img/vocab/vocab_ao_mua.jpg";
-I["vocab_an_toan"]="img/vocab/vocab_an_toan.jpg";
-I["vocab_an_com"]="img/vocab/vocab_an_com.jpg";
-I["vocab_an_banh"]="img/vocab/vocab_an_banh.jpg";
-I["vocab_am_ap"]="img/vocab/vocab_am_ap.jpg";
-I["vocab_am_thanh"]="img/vocab/vocab_am_thanh.jpg";
-I["vocab_ba_me"]="img/vocab/vocab_ba_me.jpg";
-I["vocab_bup_be"]="img/vocab/vocab_bup_be.jpg";
-I["count_apple"]="img/vocab/count_apple.jpg";
-I["count_ball"]="img/vocab/count_ball.jpg";
-I["count_star"]="img/vocab/count_star.jpg";
-I["count_flower"]="img/vocab/count_flower.jpg";
-I["count_bear"]="img/vocab/count_bear.jpg";
+I["vocab_anh_trai"]="img/vocab/.png";
+I["vocab_ao_mua"]="img/vocab/.png";
+I["vocab_an_toan"]="img/vocab/.png";
+I["vocab_an_com"]="img/vocab/.png";
+I["vocab_an_banh"]="img/vocab/.png";
+I["vocab_am_ap"]="img/vocab/.png";
+I["vocab_am_thanh"]="img/vocab/.png";
+I["vocab_ba_me"]="img/vocab/.png";
+I["vocab_bup_be"]="img/vocab/.png";
+I["count_apple"]="img/vocab/.png";
+I["count_ball"]="img/vocab/.png";
+I["count_star"]="img/vocab/.png";
+I["count_flower"]="img/vocab/.png";
+I["count_bear"]="img/vocab/.png";
 const ALT_MAP={
   vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
