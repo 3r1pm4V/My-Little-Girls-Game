@@ -3123,8 +3123,8 @@ function match(){
             <div class="drag-card right" data-side="right" data-p="${c.k}" data-p-letter="${c.L}" data-t="${c.ex.t}" tabindex="0" role="button" aria-label="${T(c.ex.t, c.ex.t)}">
               <div class="drag-card-dot" aria-hidden="true"></div>
               <div class="drag-card-pic">
-                ${im(c.ex.img)}
-                <span>${c.ex.t}</span>
+                <div class="drag-card-img-box">${im(c.ex.img)}</div>
+                <span class="drag-card-txt">${c.ex.t}</span>
               </div>
             </div>
           `).join("")}
