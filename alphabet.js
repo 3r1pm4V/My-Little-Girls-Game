@@ -76,7 +76,7 @@ var sayAs = function(l, vi, en) {
 var spr = function(k, z) {
   var curLang = (typeof lang !== "undefined") ? lang : "vi";
   if (curLang === "vi" && LET_VI.includes(k)) {
-    return '<span class="let-vn-big" style="height:' + z + '">' + k + '</span>';
+    return '<span class="let-vn-big" style="min-height:' + z + '">' + k + '</span>';
   }
   var key = curLang === "en" ? k : ((typeof I !== "undefined" && I["vi_" + k]) ? "vi_" + k : k);
   var alt = (typeof ALT_MAP !== "undefined" && ALT_MAP[key]) || (OBJ[key] ? OBJ[key].vi : key);
@@ -86,7 +86,7 @@ var spr = function(k, z) {
   if (typeof I !== "undefined" && I[key]) {
     return '<img class="spf" data-sk="' + key + '" data-z="' + z + '" src="' + I[key] + '" style="height:' + z + '" alt="' + alt + '">';
   }
-  return '<span class="spr-emoji" style="font-size:calc(' + z + ' * 0.65);line-height:1;display:inline-flex;align-items:center;justify-content:center;height:' + z + ';width:' + z + '" role="img" aria-label="' + alt + '">' + k + '</span>';
+  return '<span class="spr-emoji" style="font-size:calc(' + z + ' * 0.82);line-height:1;display:inline-flex;align-items:center;justify-content:center;height:' + z + ';width:' + z + '" role="img" aria-label="' + alt + '">' + k + '</span>';
 };
 
 function upSpr() {
@@ -140,7 +140,7 @@ function letD(L) {
   ]) +
   '<div class="stage">' +
     '<button class="nav" onclick="letD(\'' + arr[(i + arr.length - 1) % arr.length] + '\')">' + im("btn_back") + '</button>' +
-    '<button onclick="sayAs(\'' + (curLang === "vi" ? "vi" : "en") + '\',\'' + L + '\',\'' + L + '\');rp(this)">' + spr(L, "clamp(150px,30vw,230px)") + '</button>' +
+    '<button onclick="sayAs(\'' + (curLang === "vi" ? "vi" : "en") + '\',\'' + L + '\',\'' + L + '\');rp(this)">' + spr(L, "clamp(120px,25vw,190px)") + '</button>' +
     '<button class="nav" onclick="letD(\'' + arr[(i + 1) % arr.length] + '\')">' + im("btn_next") + '</button>' +
   '</div>' +
   '<div style="text-align:center;margin:6px 0 10px">' +

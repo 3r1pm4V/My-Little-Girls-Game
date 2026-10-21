@@ -23,7 +23,7 @@ const ALT_MAP={
   btn_back:"Nút quay lại",btn_next:"Nút tiếp theo",btn_home:"Nút trang chủ",kite:"Con diều",
   rocket:"Tàu tên lửa",pencil:"Bút chì",confetti:"Pháo hoa giấy sắc màu"
 };
-const im=(n,c="",alt="")=>I[n]?`<img class="${c}" src="${I[n]}" alt="${alt||ALT_MAP[n]||(OBJ[n]?OBJ[n].vi:n)}" loading="lazy" decoding="async">`:`<span class="${c}" style="font-size:1.4em;line-height:1;display:inline-block">${n}</span>`;
+const im=(n,c="",alt="")=>I[n]?`<img class="${c}" src="${I[n]}" alt="${alt||ALT_MAP[n]||(OBJ[n]?OBJ[n].vi:n)}" loading="lazy" decoding="async">`:`<span class="im-emoji ${c}" role="img" aria-label="${alt||ALT_MAP[n]||(OBJ[n]?OBJ[n].vi:n)}">${n}</span>`;
 const imL=(L,c="")=>{if(lang==="vi"&&LET_VI.includes(L))return`<span class="let-vn ${c}">${L}</span>`;const k=lang==="en"?L:(I["vi_"+L]?"vi_"+L:L);return im(k,c,`Chữ cái ${L}`)};
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
