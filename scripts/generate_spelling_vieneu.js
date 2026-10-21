@@ -77,12 +77,14 @@ function buildCandidateList() {
       for (let t = 0; t < 6; t++) {
         const s = d.VN_SPELL.syl(cObj, vObj, t);
         const fileName = `spell_${c}_${v}_${t}.mp3`;
-        const spoken = s.spell.replace(/\s*-\s*/g, ' ').trim();
+        const spoken = s.spell.replace(/\s*-\s*/g, ', ').trim() + '.';
+        const spaced = s.spell.replace(/\s*-\s*/g, ' ').trim();
         list.push({
           c, v, t,
           text: s.text,
           spellText: s.spell,
           spoken,
+          spaced,
           fileName,
           key: `spell_${c}_${v}_${t}`,
           lananhKey: `lananh_spell_${c}_${v}_${t}`
@@ -222,7 +224,8 @@ async function main() {
       } catch (err) {
         process.stdout.write(`LỖI!\n`);
         console.warn(`    ⚠ Lỗi: ${err.message}`);
-        if (err.message.includes('Daily token limit reached')) {
+        const isQuota = err.message.includes('Daily token limit reached') || err.message.includes('Insufficient tokens') || err.message.includes('insufficient_quota') || err.message.includes('403');
+        if (isQuota) {
           console.log(`    ⚠ Key #${(keyIndex % keys.length) + 1} đã hết hạn mức ngày, loại khỏi vòng xoay.`);
           keys.splice(keyIndex % keys.length, 1);
           if (keys.length === 0) {
@@ -266,7 +269,7 @@ async function main() {
     updatedAt: new Date().toISOString(),
     localTime: new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }),
     keysExhausted: keys.length === 0,
-    resetTimeUTC: "2026-10-20T17:00:00.000Z",
+    resetTimeUTC: (() => { const n = new Date(); const r = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate(), 17, 0, 0)); if (n.getUTCHours() >= 17) r.setUTCDate(r.getUTCDate() + 1); return r.toISOString(); })(),
     resetTimeLocal: "00:00 ngày mai (GMT+7)",
     generatedInRun: successCount,
     totalRemainingFiles: remainingCandidates.length,

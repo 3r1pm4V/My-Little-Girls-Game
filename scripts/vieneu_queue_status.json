@@ -1,21 +1,12 @@
 {
-  "updatedAt": "2026-10-20T08:20:44.894Z",
-  "localTime": "15:20:44 20/10/2026",
+  "updatedAt": "2026-10-21T00:56:55.628Z",
+  "localTime": "07:56:55 21/10/2026",
   "keysExhausted": true,
-  "resetTimeUTC": "2026-10-20T17:00:00.000Z",
-  "resetTimeLocal": "00:00 ngày mai (GMT+7)",
-  "generatedInRun": 263,
-  "totalRemainingFiles": 463,
+  "resetTimeUTC": "2026-10-21T17:00:00.000Z",
+  "resetTimeLocal": "00:00 ngày mai (22/10/2026 GMT+7)",
+  "generatedInRun": 440,
+  "totalRemainingFiles": 23,
   "remainingConsonants": [
-    "v",
-    "x",
-    "ch",
-    "gi",
-    "kh",
-    "nh",
-    "ph",
-    "qu",
-    "th",
     "tr"
   ]
 }
