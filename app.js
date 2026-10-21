@@ -1,5 +1,9 @@
 const I=IMG,m=document.getElementById("m");
+I["vocab_anh_trai"]="img/vocab/vocab_anh_trai.jpg";
+I["vocab_ao_mua"]="img/vocab/vocab_ao_mua.jpg";
+I["vocab_an_toan"]="img/vocab/vocab_an_toan.jpg";
 const ALT_MAP={
+  vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
   cat_thinking:"Chú mèo con đang suy nghĩ",cat_celebrate:"Chú mèo con chúc mừng",cat_pointing:"Chú mèo con hướng dẫn",
   apple:"Quả táo",ball:"Quả bóng",star:"Ngôi sao",gstar:"Ngôi sao vàng thưởng điểm",flower:"Bông hoa",
@@ -23,7 +27,7 @@ const LET_ALL=()=>lang==="en"?LET_EN:LET_VI;
 const LET=LET_VI;
 const byL=L=>Object.keys(OBJ).filter(k=>OBJ[k].L===L);
 const HARD=new Set(["quill","x-ray","yacht","igloo","jelly"]),NOPLAY="QXYZ",PO=Object.keys(OBJ).filter(k=>!HARD.has(k)&&!NOPLAY.includes(OBJ[k].L)),PL=LET_EN.filter(L=>PO.some(k=>OBJ[k].L===L)),byP=L=>PO.filter(k=>OBJ[k].L===L);
-const VT="A|👦|Anh trai;A|🌧️|Áo mưa;A|🛡️|An toàn;Ă|🍚|Ăn cơm;Ă|🥪|Ăn bánh;Â|☀️|Ấm áp;Â|🔊|Âm thanh;B|👨‍👩‍👧|Ba mẹ;B|k_doll|Búp bê;B|🥖|Bánh mì;C|cat|Con mèo;C|🥕|Cà rốt;C|🥣|Cái bát;D|watermelone|Dưa hấu;D|👶|Da dẻ;D|🏫|Dạy học;Đ|e_lamp|Đèn ngủ;Đ|👟|Đôi giày;Đ|ball|Đá bóng;E|e_baby|Em bé;E|k_bird|Én bạc;Ê|🛋️|Êm ái;Ê|📐|Ê ke;G|bear|Gấu bông;G|🐓|Gà trống;G|🪑|Ghế ngồi;H|flower|Hoa hồng;H|🌾|Hạt gạo;H|k_book|Học bài;I|🤫|Im lặng;I|⚖️|Ít nhiều;K|k_candy|Kẹo ngọt;K|🧣|Khăn mặt;K|👓|Kính mắt;L|k_pig|Lợn con;L|leaf|Lá cây;L|🥛|Ly nước;M|👩‍👧|Mẹ hiền;M|☁️|Mây trắng;M|🏹|Mũi tên;N|house|Nhà cửa;N|👒|Nón lá;N|🧃|Nước uống;O|e_bee|Ong mật;O|😭|Oa oa;Ô|car|Ô tô;Ô|🍞|Ổ bánh;Ô|✍️|Ôn bài;Ơ|🙏|Ơn trời;Ơ|🗣️|Ơi gọi;P|🍜|Phở bò;P|🎬|Phim hoạt hình;P|✉️|Phong bì;Q|apple|Quả táo;Q|gift|Quà tặng;Q|🪭|Quạt nan;R|🧺|Rổ rá;R|k_turtle|Rùa chậm;R|🔔|Rung chuông;S|🥛|Sữa tươi;S|k_book|Sách truyện;S|🐛|Sâu bướm;T|🍉|Trái cây;T|📺|Tivi;T|💇|Tóc tai;U|🍼|Uống sữa;U|🧣|Ủ ấm;Ư|👕|Ướt áo;Ư|🌱|Ươm mầm;V|elephant|Voi to;V|🎨|Vẽ tranh;V|🪙|Vàng bạc;X|🚲|Xe đạp;X|🍃|Xanh lá;X|🌭|Xúc xích;Y|❤️|Yêu quý;Y|👩‍⚕️|Y tá;Y|🥣|Yến mạch".split(";");
+const VT="A|vocab_anh_trai|Anh trai;A|vocab_ao_mua|Áo mưa;A|vocab_an_toan|An toàn;Ă|🍚|Ăn cơm;Ă|🥪|Ăn bánh;Â|☀️|Ấm áp;Â|🔊|Âm thanh;B|👨‍👩‍👧|Ba mẹ;B|k_doll|Búp bê;B|🥖|Bánh mì;C|cat|Con mèo;C|🥕|Cà rốt;C|🥣|Cái bát;D|watermelone|Dưa hấu;D|👶|Da dẻ;D|🏫|Dạy học;Đ|e_lamp|Đèn ngủ;Đ|👟|Đôi giày;Đ|ball|Đá bóng;E|e_baby|Em bé;E|k_bird|Én bạc;Ê|🛋️|Êm ái;Ê|📐|Ê ke;G|bear|Gấu bông;G|🐓|Gà trống;G|🪑|Ghế ngồi;H|flower|Hoa hồng;H|🌾|Hạt gạo;H|k_book|Học bài;I|🤫|Im lặng;I|⚖️|Ít nhiều;K|k_candy|Kẹo ngọt;K|🧣|Khăn mặt;K|👓|Kính mắt;L|k_pig|Lợn con;L|leaf|Lá cây;L|🥛|Ly nước;M|👩‍👧|Mẹ hiền;M|☁️|Mây trắng;M|🏹|Mũi tên;N|house|Nhà cửa;N|👒|Nón lá;N|🧃|Nước uống;O|e_bee|Ong mật;O|😭|Oa oa;Ô|car|Ô tô;Ô|🍞|Ổ bánh;Ô|✍️|Ôn bài;Ơ|🙏|Ơn trời;Ơ|🗣️|Ơi gọi;P|🍜|Phở bò;P|🎬|Phim hoạt hình;P|✉️|Phong bì;Q|apple|Quả táo;Q|gift|Quà tặng;Q|🪭|Quạt nan;R|🧺|Rổ rá;R|k_turtle|Rùa chậm;R|🔔|Rung chuông;S|🥛|Sữa tươi;S|k_book|Sách truyện;S|🐛|Sâu bướm;T|🍉|Trái cây;T|📺|Tivi;T|💇|Tóc tai;U|🍼|Uống sữa;U|🧣|Ủ ấm;Ư|👕|Ướt áo;Ư|🌱|Ươm mầm;V|elephant|Voi to;V|🎨|Vẽ tranh;V|🪙|Vàng bạc;X|🚲|Xe đạp;X|🍃|Xanh lá;X|🌭|Xúc xích;Y|❤️|Yêu quý;Y|👩‍⚕️|Y tá;Y|🥣|Yến mạch".split(";");
 const EXA={};Object.keys(OBJ).forEach(k=>EXA[k]={img:k,t:OBJ[k].en,L:OBJ[k].L,l:"en",hard:HARD.has(k)||NOPLAY.includes(OBJ[k].L)});
 VT.forEach((s,i)=>{const[L,img,t]=s.split("|");EXA["v"+i]={img,t,L,l:"vi",hard:false}});
 const exL=(L,l)=>Object.keys(EXA).filter(k=>EXA[k].l===l&&EXA[k].L===L),exP=l=>Object.keys(EXA).filter(k=>EXA[k].l===l&&!EXA[k].hard),exPL=l=>(l==="vi"?LET_VI:LET_EN).filter(L=>exP(l).some(k=>EXA[k].L===L)),exPK=(l,L)=>exP(l).filter(k=>EXA[k].L===L);
