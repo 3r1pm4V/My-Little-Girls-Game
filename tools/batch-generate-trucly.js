@@ -1,13 +1,13 @@
 /**
  * tools/batch-generate-trucly.js
- * Script tự động hóa sinh âm thanh giọng Trúc Ly 48kHz từ CIT Voice Studio local API (http://127.0.0.1:8001)
+ * Script tự động hóa sinh âm thanh giọng Mai Anh (hoặc Trúc Ly) 48kHz từ CIT Voice Studio local API (http://127.0.0.1:8001)
  *
  * Cách chạy:
- *   node tools/batch-generate-trucly.js --phonics        (Sinh 46 âm đánh vần: 29 chữ cái mầm non, 11 phụ âm ghép, 6 thanh điệu)
- *   node tools/batch-generate-trucly.js --priority       (Sinh ~200 file cốt lõi: chữ cái, số đếm, lời khen, từ vựng)
- *   node tools/batch-generate-trucly.js --plan           (Sinh 157 file theo danh sách chốt docs/vieneu-generation-plan.md)
- *   node tools/batch-generate-trucly.js --all            (Sinh toàn bộ ~4.400 file tiếng Việt)
- *   node tools/batch-generate-trucly.js --limit 10       (Chỉ thử nghiệm 10 file đầu tiên)
+ *   node tools/batch-generate-trucly.js                  (Sinh toàn bộ: chữ cái, ghép âm, số, từ vựng, ví dụ, menu)
+ *   node tools/batch-generate-trucly.js --voice "Mai Anh" --speed 0.9
+ *   node tools/batch-generate-trucly.js --phonics        (Chỉ sinh 46 âm đánh vần & chữ cái)
+ *   node tools/batch-generate-trucly.js --plan           (Sinh 157 chuỗi cốt lõi theo plan)
+ *   node tools/batch-generate-trucly.js --all            (Toàn bộ danh mục tiếng Việt)
  */
 
 const fs = require('fs');
@@ -15,68 +15,67 @@ const path = require('path');
 const vm = require('vm');
 
 const API_URL = 'http://127.0.0.1:8001/api/tts/generate';
-const VOICE_ID = 'Trúc Ly';
 const AUDIO_DIR = path.join(__dirname, '..', 'audio');
 
 // Đọc tham số dòng lệnh
 const args = process.argv.slice(2);
+const voiceIdx = args.indexOf('--voice');
+const VOICE_ID = voiceIdx >= 0 ? args[voiceIdx + 1] : 'Mai Anh';
+const speedIdx = args.indexOf('--speed');
+const speedVal = speedIdx >= 0 ? parseFloat(args[speedIdx + 1]) : 0.9;
 const isPhonics = args.includes('--phonics');
 const isAll = args.includes('--all');
 const isPlan = args.includes('--plan');
-const isPriority = args.includes('--priority') || (!isAll && !isPlan && !isPhonics);
 const limitIdx = args.indexOf('--limit');
 const limitCount = limitIdx >= 0 ? parseInt(args[limitIdx + 1], 10) : 0;
-const speedIdx = args.indexOf('--speed');
-const speedVal = speedIdx >= 0 ? parseFloat(args[speedIdx + 1]) : 0.95;
 
 // ============================================================================
-// BẢNG PHÁT ÂM ĐÁNH VẦN MẦM NON & TIỂU HỌC (GDPT 2018 - VTV7 - CÔ LAN ANH)
-// Tránh TTS đọc tắt/tiếng Pháp (bê, xê, dê, e-lờ...) hoặc ngắc ngứ (ă, â).
+// BẢNG PHÁT ÂM CHUẨN ĐỔI MỚI (BỘ GD&ĐT - CÔNG NGHỆ GIÁO DỤC - VTV7)
 // ============================================================================
 const PHONETIC_MAP = {
-  // 29 chữ cái tiếng Việt chuẩn sư phạm
-  'alpha_vi_a.mp3': { text: 'a', speed: 0.88, desc: 'Chữ a' },
-  'alpha_vi_aw.mp3': { text: 'á', speed: 0.88, desc: 'Chữ ă (phát âm á ngắn)' },
-  'alpha_vi_aa.mp3': { text: 'ớ', speed: 0.88, desc: 'Chữ â (phát âm ớ ngắn)' },
-  'alpha_vi_b.mp3': { text: 'bờ', speed: 0.88, desc: 'Chữ b (âm bờ)' },
-  'alpha_vi_c.mp3': { text: 'cờ', speed: 0.88, desc: 'Chữ c (âm cờ)' },
-  'alpha_vi_d.mp3': { text: 'dờ', speed: 0.88, desc: 'Chữ d (âm dờ)' },
-  'alpha_vi_dd.mp3': { text: 'đờ', speed: 0.88, desc: 'Chữ đ (âm đờ)' },
-  'alpha_vi_e.mp3': { text: 'e', speed: 0.88, desc: 'Chữ e' },
-  'alpha_vi_ee.mp3': { text: 'ê', speed: 0.88, desc: 'Chữ ê' },
-  'alpha_vi_g.mp3': { text: 'gờ', speed: 0.88, desc: 'Chữ g (âm gờ)' },
-  'alpha_vi_h.mp3': { text: 'hờ', speed: 0.88, desc: 'Chữ h (âm hờ)' },
-  'alpha_vi_i.mp3': { text: 'i', speed: 0.88, desc: 'Chữ i' },
-  'alpha_vi_k.mp3': { text: 'cờ', speed: 0.88, desc: 'Chữ k (âm cờ)' },
-  'alpha_vi_l.mp3': { text: 'lờ', speed: 0.88, desc: 'Chữ l (âm lờ)' },
-  'alpha_vi_m.mp3': { text: 'mờ', speed: 0.88, desc: 'Chữ m (âm mờ)' },
-  'alpha_vi_n.mp3': { text: 'nờ', speed: 0.88, desc: 'Chữ n (âm nờ)' },
-  'alpha_vi_o.mp3': { text: 'o', speed: 0.88, desc: 'Chữ o' },
-  'alpha_vi_oo.mp3': { text: 'ô', speed: 0.88, desc: 'Chữ ô' },
-  'alpha_vi_ow.mp3': { text: 'ơ', speed: 0.88, desc: 'Chữ ơ' },
-  'alpha_vi_p.mp3': { text: 'pờ', speed: 0.88, desc: 'Chữ p (âm pờ)' },
-  'alpha_vi_q.mp3': { text: 'cu', speed: 0.88, desc: 'Chữ q (phát âm cu theo chuẩn đổi mới)' },
-  'alpha_vi_r.mp3': { text: 'rờ', speed: 0.88, desc: 'Chữ r (âm rờ)' },
-  'alpha_vi_s.mp3': { text: 'sờ', speed: 0.88, desc: 'Chữ s (âm sờ)' },
-  'alpha_vi_t.mp3': { text: 'tờ', speed: 0.88, desc: 'Chữ t (âm tờ)' },
-  'alpha_vi_u.mp3': { text: 'u', speed: 0.88, desc: 'Chữ u' },
-  'alpha_vi_uw.mp3': { text: 'ư', speed: 0.88, desc: 'Chữ ư' },
-  'alpha_vi_v.mp3': { text: 'vờ', speed: 0.88, desc: 'Chữ v (âm vờ)' },
-  'alpha_vi_x.mp3': { text: 'xờ', speed: 0.88, desc: 'Chữ x (âm xờ)' },
-  'alpha_vi_y.mp3': { text: 'i', speed: 0.88, desc: 'Chữ y (âm i)' },
+  // 29 chữ cái tiếng Việt
+  'alpha_vi_a.mp3': { text: 'a', speed: 0.9, desc: 'Chữ a' },
+  'alpha_vi_aw.mp3': { text: 'á', speed: 0.9, desc: 'Chữ ă (phát âm á ngắn)' },
+  'alpha_vi_aa.mp3': { text: 'ớ', speed: 0.9, desc: 'Chữ â (phát âm ớ ngắn)' },
+  'alpha_vi_b.mp3': { text: 'bờ', speed: 0.9, desc: 'Chữ b (âm bờ)' },
+  'alpha_vi_c.mp3': { text: 'cờ', speed: 0.9, desc: 'Chữ c (âm cờ)' },
+  'alpha_vi_d.mp3': { text: 'dờ', speed: 0.9, desc: 'Chữ d (âm dờ)' },
+  'alpha_vi_dd.mp3': { text: 'đờ', speed: 0.9, desc: 'Chữ đ (âm đờ)' },
+  'alpha_vi_e.mp3': { text: 'e', speed: 0.9, desc: 'Chữ e' },
+  'alpha_vi_ee.mp3': { text: 'ê', speed: 0.9, desc: 'Chữ ê' },
+  'alpha_vi_g.mp3': { text: 'gờ', speed: 0.9, desc: 'Chữ g (âm gờ)' },
+  'alpha_vi_h.mp3': { text: 'hờ', speed: 0.9, desc: 'Chữ h (âm hờ)' },
+  'alpha_vi_i.mp3': { text: 'i', speed: 0.9, desc: 'Chữ i' },
+  'alpha_vi_k.mp3': { text: 'cờ', speed: 0.9, desc: 'Chữ k (âm cờ)' },
+  'alpha_vi_l.mp3': { text: 'lờ', speed: 0.9, desc: 'Chữ l (âm lờ)' },
+  'alpha_vi_m.mp3': { text: 'mờ', speed: 0.9, desc: 'Chữ m (âm mờ)' },
+  'alpha_vi_n.mp3': { text: 'nờ', speed: 0.9, desc: 'Chữ n (âm nờ)' },
+  'alpha_vi_o.mp3': { text: 'o', speed: 0.9, desc: 'Chữ o' },
+  'alpha_vi_oo.mp3': { text: 'ô', speed: 0.9, desc: 'Chữ ô' },
+  'alpha_vi_ow.mp3': { text: 'ơ', speed: 0.9, desc: 'Chữ ơ' },
+  'alpha_vi_p.mp3': { text: 'pờ', speed: 0.9, desc: 'Chữ p (âm pờ)' },
+  'alpha_vi_q.mp3': { text: 'cu', speed: 0.9, desc: 'Chữ q (phát âm cu theo chuẩn đổi mới)' },
+  'alpha_vi_r.mp3': { text: 'rờ', speed: 0.9, desc: 'Chữ r (âm rờ)' },
+  'alpha_vi_s.mp3': { text: 'sờ', speed: 0.9, desc: 'Chữ s (âm sờ)' },
+  'alpha_vi_t.mp3': { text: 'tờ', speed: 0.9, desc: 'Chữ t (âm tờ)' },
+  'alpha_vi_u.mp3': { text: 'u', speed: 0.9, desc: 'Chữ u' },
+  'alpha_vi_uw.mp3': { text: 'ư', speed: 0.9, desc: 'Chữ ư' },
+  'alpha_vi_v.mp3': { text: 'vờ', speed: 0.9, desc: 'Chữ v (âm vờ)' },
+  'alpha_vi_x.mp3': { text: 'xờ', speed: 0.9, desc: 'Chữ x (âm xờ)' },
+  'alpha_vi_y.mp3': { text: 'i', speed: 0.9, desc: 'Chữ y (âm i)' },
 
   // 11 Phụ âm ghép
-  'alpha_vi_ch.mp3': { text: 'chờ', speed: 0.88, desc: 'Phụ âm ghép ch' },
-  'alpha_vi_gh.mp3': { text: 'gờ', speed: 0.88, desc: 'Phụ âm ghép gh' },
-  'alpha_vi_gi.mp3': { text: 'dờ', speed: 0.88, desc: 'Phụ âm ghép gi' },
-  'alpha_vi_kh.mp3': { text: 'khờ', speed: 0.88, desc: 'Phụ âm ghép kh' },
-  'alpha_vi_ng.mp3': { text: 'ngờ', speed: 0.88, desc: 'Phụ âm ghép ng' },
-  'alpha_vi_ngh.mp3': { text: 'ngờ', speed: 0.88, desc: 'Phụ âm ghép ngh' },
-  'alpha_vi_nh.mp3': { text: 'nhờ', speed: 0.88, desc: 'Phụ âm ghép nh' },
-  'alpha_vi_ph.mp3': { text: 'phờ', speed: 0.88, desc: 'Phụ âm ghép ph' },
-  'alpha_vi_qu.mp3': { text: 'quờ', speed: 0.88, desc: 'Phụ âm ghép qu' },
-  'alpha_vi_th.mp3': { text: 'thờ', speed: 0.88, desc: 'Phụ âm ghép th' },
-  'alpha_vi_tr.mp3': { text: 'trờ', speed: 0.88, desc: 'Phụ âm ghép tr' },
+  'alpha_vi_ch.mp3': { text: 'chờ', speed: 0.9, desc: 'Phụ âm ghép ch' },
+  'alpha_vi_gh.mp3': { text: 'gờ', speed: 0.9, desc: 'Phụ âm ghép gh' },
+  'alpha_vi_gi.mp3': { text: 'dờ', speed: 0.9, desc: 'Phụ âm ghép gi' },
+  'alpha_vi_kh.mp3': { text: 'khờ', speed: 0.9, desc: 'Phụ âm ghép kh' },
+  'alpha_vi_ng.mp3': { text: 'ngờ', speed: 0.9, desc: 'Phụ âm ghép ng' },
+  'alpha_vi_ngh.mp3': { text: 'ngờ', speed: 0.9, desc: 'Phụ âm ghép ngh' },
+  'alpha_vi_nh.mp3': { text: 'nhờ', speed: 0.9, desc: 'Phụ âm ghép nh' },
+  'alpha_vi_ph.mp3': { text: 'phờ', speed: 0.9, desc: 'Phụ âm ghép ph' },
+  'alpha_vi_qu.mp3': { text: 'quờ', speed: 0.9, desc: 'Phụ âm ghép qu' },
+  'alpha_vi_th.mp3': { text: 'thờ', speed: 0.9, desc: 'Phụ âm ghép th' },
+  'alpha_vi_tr.mp3': { text: 'trờ', speed: 0.9, desc: 'Phụ âm ghép tr' },
 
   // 6 Thanh điệu tiếng Việt
   'tone_khong_dau.mp3': { text: 'thanh ngang', speed: 0.9, desc: 'Thanh ngang' },
@@ -96,7 +95,7 @@ async function checkServer() {
   }
 }
 
-async function generateAudio(text, outPath, speed = 0.95) {
+async function generateAudio(text, outPath, speed = speedVal) {
   const payload = {
     text: text,
     voice_id: VOICE_ID,
@@ -193,30 +192,61 @@ function getCoreItems(map) {
     }
   }
 
-  // 1. Toàn bộ âm đánh vần & chữ cái mầm non tinh chỉnh
+  // 1. GHÉP ÂM: Toàn bộ 29 chữ cái, 11 phụ âm ghép, 6 thanh điệu
   for (const [fileName, conf] of Object.entries(PHONETIC_MAP)) {
     addItem(conf.text, path.join(AUDIO_DIR, fileName), conf.speed, conf.desc);
   }
 
-  // 2. Số đếm 0 - 20
+  // 2. SỐ ĐẾM: 0 - 20 (chữ, số và đường dẫn trực tiếp)
   const numbersVi = 'không,một,hai,ba,bốn,năm,sáu,bảy,tám,chín,mười,mười một,mười hai,mười ba,mười bốn,mười lăm,mười sáu,mười bảy,mười tám,mười chín,hai mươi'.split(',');
+  const numberDirectFiles = {
+    '0': 'vi_khong_1othrk.mp3', '1': 'vi_mot_7ht4.mp3', '2': 'vi_hai_27io.mp3', '3': 'syl_b_a_0.mp3',
+    '4': 'vi_bon_79gf.mp3', '5': 'vi_nam_2fug.mp3', '6': 'vi_sau_2iqv.mp3', '7': 'vi_bay_78d4.mp3',
+    '8': 'vi_tam_2jhc.mp3', '9': 'vi_chin_1tikm.mp3', '10': 'vi_muoi_2bqz3.mp3'
+  };
   numbersVi.forEach((nText, i) => {
-    addItem(nText, null, 0.9);
-    addItem(String(i), null, 0.9);
+    const directFile = numberDirectFiles[String(i)];
+    if (directFile) addItem(nText, path.join(AUDIO_DIR, directFile), speedVal, `Số ${i} (${nText})`);
+    addItem(nText, null, speedVal, `Số ${nText}`);
+    addItem(String(i), null, speedVal, `Số ${i}`);
   });
 
-  // 3. Lời khen thưởng & nhắc nhở
-  const praises = [
-    'Giỏi quá!', 'Hoan hô!', 'Tuyệt vời!', 'Bé giỏi lắm!', 'Đúng rồi!', 'Siêu quá!',
-    'Bé thông minh quá!', 'Hay quá!', 'Mèo thích quá!',
-    'Thử lại nhé', 'Gần đúng rồi, bé thử lại nào', 'Không sao, bé thử lại nhé',
-    'Chào bé! Mình cùng học nhé', 'Bé nghe xong truyện rồi!'
+  // 3. MENU & ĐIỀU HƯỚNG & NÚT BẤM CHÍNH
+  const menuItems = [
+    { text: 'Hôm nay học gì', file: 'audio/ui_home_btn_today.mp3' },
+    { text: 'Trò chơi luyện tập', file: 'audio/ui_home_btn_games.mp3' },
+    { text: 'Tủ sticker của bé', file: 'audio/ui_home_btn_stickers.mp3' },
+    { text: 'Trang chủ', file: 'audio/ui_nav_home.mp3' },
+    { text: 'Chữ cái', file: 'audio/ui_nav_letters.mp3' },
+    { text: 'Bé tập đếm số', file: 'audio/ui_nav_numbers.mp3' },
+    { text: 'Kho truyện cổ tích', file: 'audio/ui_nav_stories.mp3' },
+    { text: 'Góc phụ huynh', file: 'audio/ui_nav_parent.mp3' },
+    { text: 'Học số và tập đếm nào!', file: null },
+    { text: 'Cùng nghe đọc truyện cổ tích nào!', file: null },
+    { text: 'Chào bé! Mình cùng học nhé', file: null },
+    { text: 'Bé nghe xong truyện rồi!', file: null },
+    { text: 'Giỏi quá!', file: null },
+    { text: 'Hoan hô!', file: null },
+    { text: 'Tuyệt vời!', file: null },
+    { text: 'Bé giỏi lắm!', file: null },
+    { text: 'Đúng rồi!', file: null },
+    { text: 'Siêu quá!', file: null },
+    { text: 'Bé thông minh quá!', file: null },
+    { text: 'Hay quá!', file: null },
+    { text: 'Mèo thích quá!', file: null },
+    { text: 'Thử lại nhé', file: null },
+    { text: 'Gần đúng rồi, bé thử lại nào', file: null },
+    { text: 'Không sao, bé thử lại nhé', file: null }
   ];
-  praises.forEach(p => addItem(p, null, 0.95));
+  menuItems.forEach(m => addItem(m.text, m.file ? path.join(__dirname, '..', m.file) : null, speedVal, m.text));
 
-  // 4. Từ vựng minh họa 29 chữ cái (VT trong alphabet.js)
+  // 4. TOÀN BỘ CÁC TỪ VỰNG & VÍ DỤ MINH HỌA (VT 29 chữ cái + OBJ tiếng Việt)
   const vtList = 'Anh trai,Áo mưa,An toàn,Ăn cơm,Ăn bánh,Ấm áp,Âm thanh,Ba mẹ,Búp bê,Bánh mì,Con mèo,Cà rốt,Cái bát,Dưa hấu,Da dẻ,Dạy học,Đèn ngủ,Đôi giày,Đá bóng,Em bé,Én bạc,Êm ái,Ê ke,Gấu bông,Gà trống,Ghế ngồi,Hoa hồng,Hạt gạo,Học bài,Im lặng,Ít nhiều,Kẹo ngọt,Khăn mặt,Kính mắt,Lợn con,Lá cây,Ly nước,Mẹ hiền,Mây trắng,Mũi tên,Nhà cửa,Nón lá,Nước uống,Ong mật,Oa oa,Ô tô,Ổ bánh,Ôn bài,Ơn trời,Ới gọi,Phở bò,Phim hoạt hình,Phong bì,Quả táo,Quà tặng,Quạt nan,Rổ rá,Rùa chậm,Rung chuông,Sữa tươi,Sách truyện,Sâu bướm,Trái cây,Tivi,Tóc tai,Uống sữa,Ủ ấm,Ướt áo,Ươm mầm,Voi to,Vẽ tranh,Vàng bạc,Xe đạp,Xanh lá,Xúc xích,Yêu quý,Y tá,Yến mạch'.split(',');
-  vtList.forEach(v => addItem(v, null, 0.92));
+  vtList.forEach(v => addItem(v, null, speedVal, `Từ vựng: ${v}`));
+
+  // Từ vựng đồ vật / con vật chuẩn từ alphabet.js OBJ
+  const objViList = 'kiến,quả táo,quả bóng,con gấu,xe hơi,con mèo,con chó,bánh donut,quả trứng,con voi,bông hoa,con ếch,hộp quà,chùm nho,cái mũ,ngôi nhà,cây kem,nhà băng,thạch,nước ép,chìa khóa,con diều,chiếc lá,sư tử,quả xoài,mặt trăng,tổ chim,quyển vở,bạch tuộc,quả cam,gấu trúc,bút chì,nữ hoàng,bút lông,cầu vồng,tên lửa,ngôi sao,mặt trời,tàu hỏa,cái cây,cái ô,kỳ lân,bình hoa,núi lửa,dưa hấu,cá voi,ảnh X-quang,đàn xylophone,du thuyền,yo-yo,ngựa vằn,khóa kéo'.split(',');
+  objViList.forEach(o => addItem(o, null, speedVal, `Đồ vật: ${o}`));
 
   // 5. Thêm các mục từ kế hoạch 157 chuỗi
   getPlanItems().forEach(it => {
@@ -254,7 +284,7 @@ function getAllViItems(map) {
 
 async function main() {
   console.log('================================================================');
-  console.log(`  BẮT ĐẦU TIẾN TRÌNH SINH ÂM THANH GIỌNG "${VOICE_ID}" (48 kHz)`);
+  console.log(`  BẮT ĐẦU TIẾN TRÌNH SINH ÂM THANH GIỌNG "${VOICE_ID}" (Tốc độ: ${speedVal})`);
   console.log('================================================================');
 
   const isUp = await checkServer();
@@ -269,7 +299,7 @@ async function main() {
   let items = [];
 
   if (isPhonics) {
-    console.log('Chế độ: --phonics (46 âm đánh vần: 29 chữ cái mầm non, 11 phụ âm ghép, 6 thanh điệu)');
+    console.log('Chế độ: --phonics (46 âm đánh vần: 29 chữ cái, 11 phụ âm ghép, 6 thanh điệu)');
     items = getPhonicsItems();
   } else if (isPlan) {
     console.log('Chế độ: --plan (157 chuỗi theo kế hoạch)');
@@ -278,7 +308,7 @@ async function main() {
     console.log('Chế độ: --all (Toàn bộ danh mục tiếng Việt trong game)');
     items = getAllViItems(map);
   } else {
-    console.log('Chế độ: --priority (Chữ cái, Phonics, Số đếm, Lời khen, Từ vựng cốt lõi)');
+    console.log('Chế độ: Toàn bộ từ, ví dụ, số, ghép âm, menu');
     items = getCoreItems(map);
   }
 
@@ -297,7 +327,7 @@ async function main() {
     const item = items[i];
     const pct = Math.round(((i + 1) / items.length) * 100);
     const label = item.desc || item.text;
-    process.stdout.write(`[${i + 1}/${items.length}] (${pct}%) Đang đọc: "${label}" (Text: "${item.text}") ... `);
+    process.stdout.write(`[${i + 1}/${items.length}] (${pct}%) "${label}" (Text: "${item.text}") ... `);
 
     try {
       const bytes = await generateAudio(item.text, item.file, item.speed || speedVal);
@@ -308,8 +338,8 @@ async function main() {
       process.stdout.write(`LỖI: ${err.message}\n`);
     }
 
-    // Nghỉ nhẹ 80ms giữa các câu để GPU/CPU ổn định
-    await new Promise(r => setTimeout(r, 80));
+    // Nghỉ nhẹ 70ms giữa các câu để server ổn định
+    await new Promise(r => setTimeout(r, 70));
   }
 
   const durationSec = ((Date.now() - t0) / 1000).toFixed(1);

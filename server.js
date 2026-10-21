@@ -27,7 +27,7 @@ if (fs.existsSync(envFile)) {
 
 const PORT = process.env.PORT || 8000;
 const API_KEY = process.env.VIENEU_API_KEY || '';
-const DEFAULT_VOICE = 'Trúc Ly';
+const DEFAULT_VOICE = 'Mai Anh';
 const AUDIO_DIR = path.join(__dirname, 'audio');
 
 if (!fs.existsSync(AUDIO_DIR)) {

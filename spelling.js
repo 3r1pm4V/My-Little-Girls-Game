@@ -28,7 +28,7 @@ function playConsonant(c, r) {
   var cFile = (c === "đ" ? "dd" : c);
   var consKey = "cons_" + cFile;
   var target = (window.AUDIO_MAP && (window.AUDIO_MAP[consKey] || window.AUDIO_MAP["cons_" + c] || window.AUDIO_MAP[r])) || ("audio/alpha_vi_" + cFile + ".mp3");
-  playSafeAudio(target, "Trúc Ly");
+  playSafeAudio(target, "Mai Anh");
 }
 
 // 3. PHÁT ÂM NGUYÊN ÂM
@@ -36,7 +36,7 @@ function playVowel(v) {
   var vNormMap = { "a": "a", "e": "e", "ê": "ee", "i": "i", "o": "o", "ô": "oo", "ơ": "ow", "u": "u", "ư": "uw" };
   var vFile = vNormMap[v] || v;
   var target = (window.AUDIO_MAP && (window.AUDIO_MAP[v] || window.AUDIO_MAP["vi|" + v])) || ("audio/alpha_vi_" + vFile + ".mp3");
-  playSafeAudio(target, "Trúc Ly");
+  playSafeAudio(target, "Mai Anh");
 }
 
 // 4. PHÁT ÂM TIẾNG GHÉP HOÀN CHỈNH
@@ -57,7 +57,7 @@ function playSyllable(text, c, v, toneIdx, spellText) {
   });
   var sylKey = "syl_" + c + "_" + v + "_" + toneIdx;
   var target = (window.AUDIO_MAP && (window.AUDIO_MAP[text] || window.AUDIO_MAP["vi|" + text] || window.AUDIO_MAP[sylKey])) || ("audio/" + sylKey + ".mp3");
-  playSafeAudio(target, "Trúc Ly");
+  playSafeAudio(target, "Mai Anh");
 }
 
 // 5. ĐÁNH VẦN TỪNG BƯỚC (COMPOSITE AUDIO SEQUENCER HOẶC AUDIO ĐƠN)
@@ -86,7 +86,7 @@ function playSpell(c, v, toneIdx, finalWord, spellText) {
   var map = window.AUDIO_MAP || {};
   var targetAudio = map[lananhKey] || map[spellKey] || map[spoken] || map["vi|" + spoken] || getAudio(spoken);
   if (targetAudio && typeof targetAudio === "string" && (targetAudio.startsWith("audio/") || targetAudio.startsWith("http"))) {
-    playSafeAudio(targetAudio, "Trúc Ly", fin);
+    playSafeAudio(targetAudio, "Mai Anh", fin);
     return;
   }
 
@@ -151,7 +151,7 @@ function playLessonAudio(audioUrl, fallbackText) {
   busy = true;
   var fin = function() { if (my === tok) { busy = false; busyEnd = Date.now(); } };
   var target = audioUrl ? (getAudio(audioUrl) || audioUrl) : fallbackText;
-  playSafeAudio(target, "Trúc Ly", fin);
+  playSafeAudio(target, "Mai Anh", fin);
 }
 
 // 8. MÀN HÌNH ĐÁNH VẦN & LUYỆN ĐỌC (readL)
