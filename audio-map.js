@@ -35211,6 +35211,16 @@
   "vi|Y tá": "audio/vocab_y_ta.mp3",
   "Yến mạch": "audio/vocab_yen_mach.mp3",
   "vi|Yến mạch": "audio/vocab_yen_mach.mp3",
+  "Cuốn sách": "audio/cuon_sach.mp3",
+  "vi|Cuốn sách": "audio/cuon_sach.mp3",
+  "Quyển sách": "audio/cuon_sach.mp3",
+  "vi|Quyển sách": "audio/cuon_sach.mp3",
+  "Trái tim": "audio/trai_tim.mp3",
+  "vi|Trái tim": "audio/trai_tim.mp3",
+  "Đôi giày": "audio/doi_giay.mp3",
+  "vi|Đôi giày": "audio/doi_giay.mp3",
+  "Hộp quà": "audio/hop_qua.mp3",
+  "vi|Hộp quà": "audio/hop_qua.mp3",
   // ========================================================
   // ÂM THANH GÓC VUI CHƠI (GIỌNG MAI ANH 48kHz)
   // ========================================================

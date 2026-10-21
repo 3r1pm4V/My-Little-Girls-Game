@@ -3409,10 +3409,60 @@ function match(){
   say("Ghép chữ với hình nhé. Bé có thể chạm vào chữ rồi chạm vào hình, hoặc kéo dây để nối nhé!", "Match letter and picture. Tap to connect or drag a line!");
   catSet("thinking");
 }
+
+function getVisualCardName(k) {
+  if (!k) return "";
+  const item = (typeof EXA !== "undefined" && EXA[k]) ? EXA[k] : null;
+  const img = item ? item.img : k;
+  const defaultText = item ? item.t : k;
+
+  const VISUAL_NAMES_VI = {
+    "k_book": "Cuốn sách",
+    "notebook": "Quyển vở",
+    "❤️": "Trái tim",
+    "heart": "Trái tim",
+    "ball": "Quả bóng",
+    "👟": "Đôi giày",
+    "🛋️": "Ghế sofa",
+    "🔔": "Cái chuông",
+    "🍼": "Bình sữa",
+    "👕": "Cái áo",
+    "🎨": "Hộp màu",
+    "🌾": "Bông lúa",
+    "🤫": "Suỵt im lặng",
+    "⚖️": "Cái cân",
+    "🧣": "Khăn quàng",
+    "👓": "Kính mắt",
+    "🥛": "Ly nước",
+    "☁️": "Đám mây",
+    "🏹": "Cung tên",
+    "👒": "Nón lá",
+    "🧃": "Hộp nước",
+    "😭": "Mặt khóc",
+    "🍞": "Ổ bánh mì",
+    "✍️": "Cây bút",
+    "🙏": "Chắp tay",
+    "🪭": "Cái quạt",
+    "🧺": "Cái rổ",
+    "🍉": "Dưa hấu",
+    "📺": "Ti vi",
+    "💇": "Cắt tóc",
+    "🌱": "Mầm cây",
+    "🪙": "Đồng tiền",
+    "🚲": "Xe đạp",
+    "🍃": "Chiếc lá",
+    "🌭": "Xúc xích"
+  };
+
+  if (VISUAL_NAMES_VI[img]) return VISUAL_NAMES_VI[img];
+  return defaultText;
+}
+window.getVisualCardName = getVisualCardName;
+
 function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
  m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Lật thẻ trí nhớ","Memory"),i:"🃏"}])+`<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
  say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");catSet("thinking");
- m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(EXA[k].img);say(EXA[k].t,EXA[k].t);
+ m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(EXA[k].img);const cardName=getVisualCardName(k);say(cardName,cardName);
   if(!a){a=b;return}
   if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
   else{miss++;lock=true;sfxNo();const p=a;a=null;setTimeout(()=>{p.innerHTML=b.innerHTML=im("gstar");lock=false},1200)}})}
