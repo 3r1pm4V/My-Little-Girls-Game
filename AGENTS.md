@@ -34,6 +34,7 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 - ❌ Hiển thị cho bé: điểm trừ, mặt buồn/âm thanh chê, đếm ngược gây áp lực, "mất chuỗi ngày", popup chặn màn hình khó tắt, nút mua/xin thêm.
 - ❌ Bỏ qua lỗi test. Không comment-out hoặc sửa test cho "xanh" mà không giải thích trong PR/commit.
 - ❌ Đoán nội dung giáo dục. Nếu không chắc chữ/dấu/phép tính/phát âm đúng hay sai → ghi `TODO(parent-review)` và hỏi.
+- ❌ **TỰ Ý ĐẨY CODE LÊN GITHUB (GIT PUSH)**: Tuyệt đối **không tự động đẩy lên GitHub (`git push`)**. Chỉ commit lưu tại local repository. Chỉ được phép chạy `git push` khi chủ dự án có yêu cầu rõ ràng trong cuộc trò chuyện (ví dụ: "deploy lên github giúp mình", "hãy push lên github").
 
 ## 4. Ràng buộc kỹ thuật
 
@@ -80,7 +81,8 @@ Lộ trình đầy đủ: `PLAN.md`. Việc đã/đang/sẽ làm: `todo.md`.
 2. Sửa nhỏ, từng bước; mỗi commit làm một việc: `<type>(<id>): <mô tả>` (type: feat, fix, content, refactor, docs, test, chore).
 3. Chạy test (mục 9). Tự kiểm tra thủ công bằng danh sách ở mục 10.
 4. Cập nhật `todo.md` (đổi `[ ]` → `[x]`, ghi ngày), thêm dòng vào `CHANGELOG.md`.
-5. Báo cáo cuối phiên: đã làm gì, file đổi, cách kiểm tra, rủi ro/việc còn lại. Không báo "xong" nếu chưa chạy test.
+5. **Chỉ commit ở local, KHÔNG tự động `git push`**: Mọi commit giữ ở Git local; chỉ khi nào chủ dự án yêu cầu ("đẩy lên github giúp mình", "hãy push code") thì mới thực hiện `git push origin ...`.
+6. Báo cáo cuối phiên: đã làm gì, file đổi, cách kiểm tra, rủi ro/việc còn lại. Không báo "xong" nếu chưa chạy test.
 
 ## 9. Test
 

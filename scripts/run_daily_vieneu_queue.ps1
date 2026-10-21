@@ -1,5 +1,5 @@
 # scripts/run_daily_vieneu_queue.ps1
-# Script tự động tiếp tục hàng đợi âm thanh VieNeu và cập nhật Git local & remote
+# Script tự động tiếp tục hàng đợi âm thanh VieNeu và cập nhật Git local (không push lên remote)
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectDir = Split-Path -Parent $ScriptDir
@@ -16,10 +16,9 @@ node scripts/generate_vocab_vieneu.js *>> $LogFile
 Write-Host "=== CẬP NHẬT SERVICE WORKER & PRECACHE ==="
 node test-sw-precache.js --fix *>> $LogFile
 
-Write-Host "=== LƯU COMMIT VÀ ĐẨY LÊN GITHUB ==="
+Write-Host "=== LƯU COMMIT VÀO GIT LOCAL (KHÔNG PUSH LÊN GITHUB) ==="
 git add audio/ audio-map.js sw.js scripts/vieneu_queue_status.json *>> $LogFile
 git commit -m "chore(audio): auto-sync daily generated vieneu spelling audios" *>> $LogFile
-git push origin main *>> $LogFile
 
 $EndTimestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 Add-Content -Path $LogFile -Value "[$EndTimestamp] [VieNeu Auto Queue] Hoàn tất phiên sinh âm thanh.`n"
