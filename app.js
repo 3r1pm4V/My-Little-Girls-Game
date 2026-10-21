@@ -5317,11 +5317,16 @@ async function importAudio(list){let ok=0;const bad=[];
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
 let curCat="vn",curStorySearch="",readingStory=null,storyPlay=false;
 const STORY_BATCH_SIZE=14;
+var FAIRY_STORIES = (typeof window !== "undefined" && window.FAIRY_STORIES) || [];
+var FAIRY_CATEGORIES = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || [];
+var STORY_CATALOG = (typeof window !== "undefined" && window.STORY_CATALOG) || [];
 let storyRenderedCount=STORY_BATCH_SIZE;
 
 function storyCardHtml(s){
-  const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
-  const icon=curated?curated.icon:(FAIRY_CATEGORIES.find(c=>c.id===s.cat)?.icon||"📖");
+  const fStories = (typeof window !== "undefined" && window.FAIRY_STORIES) || FAIRY_STORIES || [];
+  const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
+  const curated = fStories.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
+  const icon=curated?curated.icon:(fCats.find(c=>c.id===s.cat)?.icon||"📖");
   const isAudio=!!curated;
   const clickFn=isAudio?`go('storyRead','${curated.id}')`:`go('storyDetail','${s.id}')`;
   return `
@@ -5410,7 +5415,8 @@ async function storyL(catId, page, search){
 
   function renderStoryItems(reset=false){
     if(reset) storyRenderedCount=STORY_BATCH_SIZE;
-    const cat=FAIRY_CATEGORIES.find(c=>c.id===curCat)||FAIRY_CATEGORIES[0];
+    const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
+    const cat = fCats.find(c=>c.id===curCat) || fCats[0] || { icon: "📖", name: "Truyện cổ tích", en: "Fairy Tales" };
 
     // Cập nhật trạng thái nút danh mục
     const chips=document.getElementById("storyChips");
@@ -5527,7 +5533,8 @@ async function storyDetail(id){
   const curated=FAIRY_STORIES.find(fs=>fs.id===s.id||fs.title.toLowerCase()===s.title.toLowerCase());
   if(curated){storyRead(curated.id);return;}
 
-  const cat=FAIRY_CATEGORIES.find(c=>c.id===s.cat)||FAIRY_CATEGORIES[0];
+  const fCats = (typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || [];
+  const cat = fCats.find(c=>c.id===s.cat) || fCats[0] || { icon: "📖", name: "Truyện cổ tích", en: "Fairy Tales" };
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"storyL",a:s.cat,t:T(cat.name,cat.en),i:"📖"},{t:esc(s.title.length>18?s.title.slice(0,18)+"…":s.title),i:"✨"}])}
   <div class="story-view">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -5563,7 +5570,8 @@ async function storyRead(id){
     m.innerHTML = `<div class="loading-box"><div class="spinner"></div><p style="font-size:18px;font-weight:800;color:var(--acc)">${T("Đang chuẩn bị trang sách...","Preparing storybook...")}</p></div>`;
     await loadStories();
   }
-  const s=FAIRY_STORIES.find(x=>x.id===id)||FAIRY_STORIES[0];
+  const fStories = (typeof window !== "undefined" && window.FAIRY_STORIES) || FAIRY_STORIES || [];
+  const s = fStories.find(x=>x.id===id) || fStories[0] || { id, title: "Truyện cổ tích", content: [], moral: "" };
   ST.storyCount=(ST.storyCount||0)+1;svS();checkBadges();
   storyPlay=false;A.pause();if(SS)SS.cancel();
   let readingIdx=-1;
@@ -5599,7 +5607,7 @@ async function storyRead(id){
       <span style="font-size:48px">${s.icon}</span>
       <div>
         <h2 style="margin:0;cursor:default;color:var(--acc)">${s.title}</h2>
-        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${T(FAIRY_CATEGORIES.find(c=>c.id===s.cat).name,FAIRY_CATEGORIES.find(c=>c.id===s.cat).en)}</small>
+        <small style="opacity:.8;font-size:15px">Nguồn: truyencotich.top · ${(()=>{ const fc=(typeof window !== "undefined" && window.FAIRY_CATEGORIES) || FAIRY_CATEGORIES || []; const found=fc.find(c=>c.id===s.cat)||{name:"Truyện cổ tích",en:"Fairy Tales"}; return T(found.name, found.en); })()}</small>
       </div>
     </div>
     ${tctMatch?`
@@ -5623,7 +5631,22 @@ async function storyRead(id){
   </div>`;
   say(s.title, s.title);
 }
-const V={home,lettersHome,todayLearning,numL,numP,letL,letD,letP,cmp,games,mis,cmpS,match,mem,trace,gate,parent,rec:recS,readL,math10,storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity};
+const V={
+  home,lettersHome,todayLearning,
+  get numL(){return(typeof window!=="undefined"&&window.numL)||(typeof globalThis!=="undefined"&&globalThis.numL);},
+  get numP(){return(typeof window!=="undefined"&&window.numP)||(typeof globalThis!=="undefined"&&globalThis.numP);},
+  get letL(){return(typeof window!=="undefined"&&window.letL)||(typeof globalThis!=="undefined"&&globalThis.letL);},
+  get letD(){return(typeof window!=="undefined"&&window.letD)||(typeof globalThis!=="undefined"&&globalThis.letD);},
+  get letP(){return(typeof window!=="undefined"&&window.letP)||(typeof globalThis!=="undefined"&&globalThis.letP);},
+  get cmp(){return(typeof window!=="undefined"&&window.cmp)||(typeof globalThis!=="undefined"&&globalThis.cmp);},
+  games,
+  get mis(){return(typeof window!=="undefined"&&window.mis)||(typeof globalThis!=="undefined"&&globalThis.mis);},
+  get cmpS(){return(typeof window!=="undefined"&&window.cmpS)||(typeof globalThis!=="undefined"&&globalThis.cmpS);},
+  match,mem,trace,gate,parent,rec:recS,
+  get readL(){return(typeof window!=="undefined"&&window.readL)||(typeof globalThis!=="undefined"&&globalThis.readL);},
+  get math10(){return(typeof window!=="undefined"&&window.math10)||(typeof globalThis!=="undefined"&&globalThis.math10);},
+  storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity
+};
 const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
 async function need(k){
   if(window["__"+k])return true;
