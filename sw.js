@@ -1,11 +1,11 @@
-// asset-hash: c05bd590d211f9f8
+// asset-hash: b2e65af00443f073
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v77";
+const C = "bhv-v79";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [
   "./", "index.html", "styles.css", "bg.webp",
-  "app.js", "data-vn.js", "activities-data.js", "audio-map.js", "img-core.js", "progress.js", "games/count-game.js",
+  "app.js", "data-vn.js", "activities-data.js", "audio-map.js", "img-core.js", "progress.js", "games/count-game.js", "alphabet.js", "numbers.js", "spelling.js",
   "font-vn.ttf", "font-tapviet.ttf", "font-tapviet-cham.ttf",
   "fonts/baloo2-600.woff2", "fonts/baloo2-800.woff2",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"

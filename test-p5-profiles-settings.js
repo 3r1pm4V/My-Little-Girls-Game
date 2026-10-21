@@ -142,6 +142,12 @@ const actData = fs.readFileSync(path.join(__dirname, 'activities-data.js'), 'utf
 vm.runInContext(imgCore, sandbox);
 vm.runInContext(dataVn, sandbox);
 vm.runInContext(actData, sandbox);
+    const alphaJs = fs.readFileSync(path.join(__dirname, "alphabet.js"), "utf8");
+    const numJs = fs.readFileSync(path.join(__dirname, "numbers.js"), "utf8");
+    const spellJs = fs.readFileSync(path.join(__dirname, "spelling.js"), "utf8");
+    vm.runInContext(alphaJs, sandbox);
+    vm.runInContext(numJs, sandbox);
+    vm.runInContext(spellJs, sandbox);
 vm.runInContext(appCode, sandbox);
 
 console.log("✓ Môi trường Sandbox và app.js khởi tạo thành công");

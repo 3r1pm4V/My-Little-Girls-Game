@@ -29,23 +29,7 @@ const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
 const ls={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const NV="không,một,hai,ba,bốn,năm,sáu,bảy,tám,chín,mười,mười một,mười hai,mười ba,mười bốn,mười lăm,mười sáu,mười bảy,mười tám,mười chín,hai mươi".split(","),NE="zero,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen,twenty".split(",");
-const LV="a,ă,â,b,c,d,đ,e,ê,g,h,i,k,l,m,n,o,ô,ơ,p,q,r,s,t,u,ư,v,x,y".split(",");
-const OBJ={};"ant|ant|kiến;apple|apple|quả táo;ball|ball|quả bóng;bear|bear|con gấu;car|car|xe hơi;cat|cat|con mèo;dog|dog|con chó;donut|donut|bánh donut;egg|egg|quả trứng;elephant|elephant|con voi;flower|flower|bông hoa;frog|frog|con ếch;gift|gift|hộp quà;grape|grape|chùm nho;hat|hat|cái mũ;house|house|ngôi nhà;ice_cream|ice cream|cây kem;igloo|igloo|nhà băng;jelly|jelly|thạch;juice|juice|nước ép;key|key|chìa khóa;kite|kite|con diều;leaf|leaf|chiếc lá;lion|lion|sư tử;mango|mango|quả xoài;moon|moon|mặt trăng;nest|nest|tổ chim;notebook|notebook|quyển vở;octopus|octopus|bạch tuộc;orange|orange|quả cam;panda|panda|gấu trúc;pencil|pencil|bút chì;queen|queen|nữ hoàng;quill|quill|bút lông;rainbow|rainbow|cầu vồng;rocket|rocket|tên lửa;star|star|ngôi sao;sun|sun|mặt trời;train|train|tàu hỏa;tree|tree|cái cây;umbrella|umbrella|cái ô;unicorn|unicorn|kỳ lân;vase|vase|bình hoa;volcano|volcano|núi lửa;watermelone|watermelon|dưa hấu;whale|whale|cá voi;x-ray|x-ray|ảnh X-quang;xylophone|xylophone|đàn xylophone;yacht|yacht|du thuyền;yo-yo|yo-yo|yo-yo;zebra|zebra|ngựa vằn;zipper|zipper|khóa kéo".split(";").forEach(s=>{const[k,e,v]=s.split("|");OBJ[k]={en:e,vi:v,L:k[0].toUpperCase()}});
-const LET_VI="A,Ă,Â,B,C,D,Đ,E,Ê,G,H,I,K,L,M,N,O,Ô,Ơ,P,Q,R,S,T,U,Ư,V,X,Y".split(",");
-const LET_EN="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const LET_ALL=()=>lang==="en"?LET_EN:LET_VI;
-const LET=LET_VI;
-const byL=L=>Object.keys(OBJ).filter(k=>OBJ[k].L===L);
-const HARD=new Set(["quill","x-ray","yacht","igloo","jelly"]),NOPLAY="QXYZ",PO=Object.keys(OBJ).filter(k=>!HARD.has(k)&&!NOPLAY.includes(OBJ[k].L)),PL=LET_EN.filter(L=>PO.some(k=>OBJ[k].L===L)),byP=L=>PO.filter(k=>OBJ[k].L===L);
-const VT="A|vocab_anh_trai|Anh trai;A|vocab_ao_mua|Áo mưa;A|vocab_an_toan|An toàn;Ă|vocab_an_com|Ăn cơm;Ă|vocab_an_banh|Ăn bánh;Â|vocab_am_ap|Ấm áp;Â|vocab_am_thanh|Âm thanh;B|vocab_ba_me|Ba mẹ;B|vocab_bup_be|Búp bê;B|🥖|Bánh mì;C|cat|Con mèo;C|🥕|Cà rốt;C|🥣|Cái bát;D|watermelone|Dưa hấu;D|👶|Da dẻ;D|🏫|Dạy học;Đ|e_lamp|Đèn ngủ;Đ|👟|Đôi giày;Đ|ball|Đá bóng;E|e_baby|Em bé;E|k_bird|Én bạc;Ê|🛋️|Êm ái;Ê|📐|Ê ke;G|bear|Gấu bông;G|🐓|Gà trống;G|🪑|Ghế ngồi;H|flower|Hoa hồng;H|🌾|Hạt gạo;H|k_book|Học bài;I|🤫|Im lặng;I|⚖️|Ít nhiều;K|k_candy|Kẹo ngọt;K|🧣|Khăn mặt;K|👓|Kính mắt;L|k_pig|Lợn con;L|leaf|Lá cây;L|🥛|Ly nước;M|👩‍👧|Mẹ hiền;M|☁️|Mây trắng;M|🏹|Mũi tên;N|house|Nhà cửa;N|👒|Nón lá;N|🧃|Nước uống;O|e_bee|Ong mật;O|😭|Oa oa;Ô|car|Ô tô;Ô|🍞|Ổ bánh;Ô|✍️|Ôn bài;Ơ|🙏|Ơn trời;Ơ|🗣️|Ơi gọi;P|🍜|Phở bò;P|🎬|Phim hoạt hình;P|✉️|Phong bì;Q|apple|Quả táo;Q|gift|Quà tặng;Q|🪭|Quạt nan;R|🧺|Rổ rá;R|k_turtle|Rùa chậm;R|🔔|Rung chuông;S|🥛|Sữa tươi;S|k_book|Sách truyện;S|🐛|Sâu bướm;T|🍉|Trái cây;T|📺|Tivi;T|💇|Tóc tai;U|🍼|Uống sữa;U|🧣|Ủ ấm;Ư|👕|Ướt áo;Ư|🌱|Ươm mầm;V|elephant|Voi to;V|🎨|Vẽ tranh;V|🪙|Vàng bạc;X|🚲|Xe đạp;X|🍃|Xanh lá;X|🌭|Xúc xích;Y|❤️|Yêu quý;Y|👩‍⚕️|Y tá;Y|🥣|Yến mạch".split(";");
-const EXA={};Object.keys(OBJ).forEach(k=>EXA[k]={img:k,t:OBJ[k].en,L:OBJ[k].L,l:"en",hard:HARD.has(k)||NOPLAY.includes(OBJ[k].L)});
-VT.forEach((s,i)=>{const[L,img,t]=s.split("|");EXA["v"+i]={img,t,L,l:"vi",hard:false}});
-const exL=(L,l)=>Object.keys(EXA).filter(k=>EXA[k].l===l&&EXA[k].L===L),exP=l=>Object.keys(EXA).filter(k=>EXA[k].l===l&&!EXA[k].hard),exPL=l=>(l==="vi"?LET_VI:LET_EN).filter(L=>exP(l).some(k=>EXA[k].L===L)),exPK=(l,L)=>exP(l).filter(k=>EXA[k].L===L);
 let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
-const sayAs=(l,vi,en)=>{const o=ql;ql=l;say(vi,en);ql=o};
-const exLD=L=>{const v=exL(L,"vi"),e=exL(L,"en");return lang==="vi"?(v.length?v.slice(0,3):e.slice(0,2)):lang==="en"?e.slice(0,3):[...v.slice(0,2),...e.slice(0,2)]};
-const COUNT=["count_star","count_apple","count_ball","count_star","count_flower","count_bear","apple","donut","grape","orange"];
 let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);const MX=()=>[5,10,15][lvl-1];
 const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
 function toggleSoundMaster(){
@@ -2694,29 +2678,6 @@ window.__nextAct = function(){
   }
 };
 
-const sayN=n=>say(NV[n],NE[n]);
-function cnt(b,i){sayN(i);b.style.animation="none";void b.offsetWidth;b.style.animation="pop .4s"}
-function numL(n=1){const o=COUNT[n%COUNT.length];
- ST.numCount=(ST.numCount||0)+1;svS();checkBadges();
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Học số","Numbers"),i:"🔢"}],`<button class="pill" onclick="go('numP')">🎮 ${T("Chơi","Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n+20)%21})">${im("btn_back")}</button><button class="bignum${n>9?" two":""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n+1)%21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='numL';trm='nu';ls.set('trm','nu');trace('${n}')" style="background:#0284c7;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(2,132,199,0.3);border-radius:24px">✍️ ${T("Bé tập tô số " + n, "Trace number " + n)}</button></div><div class="objs">${n?Array.from({length:n},(_,i)=>`<button class="ob" onclick="cnt(this,${i+1})">${im(o)}</button>`).join(""):"<span>Không có gì · Nothing</span>"}</div><div class="chips" style="gap:10px">${[...Array(21).keys()].map(i=>`<button class="chip ${i==n?"on":""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`).join("")}</div>`;if(!isBackNav)sayN(n)}
-function numP(){if(!R(0,2))return numF();const n=R(1,MX()),o=pick(COUNT),c=new Set([n]);while(c.size<3)c.add(R(1,MX()));
- quiz(T("Có bao nhiêu?","How many?"),"Có bao nhiêu?","How many?",`<div class="objs">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:clamp(48px,11vw,72px)"')}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
-function letL(){const arr=LET_ALL();m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chữ cái","Letters"),i:"🔤"}],`<button class="pill" onclick="go('letP')">🎮 ${T("Chơi","Play")}</button>`)}<h2 id="letLQ" role="button" tabindex="0" onclick="say('Chạm vào chữ cái nhé','Tap a letter')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Chạm vào chữ cái","Tap a letter")}</h2><div class="lgrid">${arr.map(L=>`<button onclick="go('letD','${L}')">${imL(L)}</button>`).join("")}</div>`;sayPrompt("letL","Chạm vào chữ cái nhé","Tap a letter",180000);need("s")}
-function letD(L){const arr=LET_ALL(),i=arr.indexOf(L),it=exLD(L),fb=lang==="vi"&&!exL(L,"vi").length;
- ST.letCount=(ST.letCount||0)+1;svS();checkBadges();
- m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Chữ "+L,"Letter "+L),i:"✨"}])}<div class="stage"><button class="nav" onclick="letD('${arr[(i+arr.length-1)%arr.length]}')">${im("btn_back")}</button><button onclick="sayAs('${lang==="vi"?"vi":"en"}','${L}','${L}');rp(this)">${spr(L,"clamp(150px,30vw,230px)")}</button><button class="nav" onclick="letD('${arr[(i+1)%arr.length]}')">${im("btn_next")}</button></div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='letD';trm=getGroupForLetter('${L}');ls.set('trm',trm);trace('${L.toLowerCase()}')" style="background:#ec4899;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(236,72,153,0.3);border-radius:24px">✍️ ${T("Bé tập tô chữ " + L, "Trace letter " + L)}</button></div>${fb?`<div class="note">${T(`Chữ ${L} ít dùng trong tiếng Việt, thường gặp ở từ mượn. Mình xem từ tiếng Anh nhé`,`The letter ${L} is rare in Vietnamese. Here are English words`)}</div>`:""}<div class="pair">${it.map(k=>{const x=EXA[k];return`<button onclick="sayAs('${x.l}','${x.t}','${x.t}');rp(this)">${spr(x.img,"100px")}<span>${x.t}</span>${lang==="both"||x.l!==lang?`<small>${x.l==="vi"?"🇻🇳":"🇬🇧"}</small>`:""}</button>`}).join("")}</div>`;sayAs(lang==="vi"?"vi":"en",L,L);need("s").then(upSpr)}
-function sayL(L){if(lang==="en"){const it=exLD(L),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t);say(L,`${L}${e.length?". "+e.join(". "):""}`);return}const it=exLD(L),v=it.filter(k=>EXA[k].l==="vi").map(k=>EXA[k].t),e=it.filter(k=>EXA[k].l==="en").map(k=>EXA[k].t),fb=lang==="vi"&&!v.length;
- say(`${L}${v.length?". "+v.join(". "):""}`,`${L}${!fb&&e.length?". "+e.join(". "):""}`)}
-function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
- quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
-
-function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const more=R(0,1)==0,o1=pick(COUNT),o2=pick(COUNT);
- const right=a==b?"eq":more?(a>b?"a":"b"):(a<b?"a":"b"),grp=(n,o)=>`<div class="grp">${Array.from({length:n},()=>im(o)).join("")}</div>`;
- const q=more?["Bên nào NHIỀU hơn?","Which has MORE?"]:["Bên nào ÍT hơn?","Which has FEWER?"];
- quiz(T(q[0],q[1]),q[0],q[1],"",[{k:"a",h:grp(a,o1)},{k:"eq",h:`<span class="ans">=</span>${T("Bằng nhau","Same")}`},{k:"b",h:grp(b,o2)}],right,cmp,()=>{
-  if(a==b)return[`<div class="eq">${a} = ${b}</div>`,`${NV[a]} bằng ${NV[b]}. Hai bên bằng nhau!`,`${NE[a]} equals ${NE[b]}. They are the same!`];
-  const w=right=="a"?a:b,l=right=="a"?b:a;
-  return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
 function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");
  const QBC={numP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"numL",t:T("Học số","Numbers"),i:"🔢"},{t:T("Đố đếm số","Quiz"),i:"❓"}],letP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Đố chữ cái","Quiz"),i:"❓"}],mis:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Số còn thiếu","Missing"),i:"🔢"}],cmpS:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Dấu so sánh","Signs"),i:"⚖️"}],math10:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Toán 10","Math 10"),i:"➕"}],cmp:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("So sánh","Compare"),i:"⚖️"}]};
  const bcHtml=kbc(QBC[cur]||[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Câu đố","Quiz"),i:"❓"}]);
@@ -2735,11 +2696,6 @@ function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(
    const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next);
   }
   else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn chỗ này nè","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
-function numF(){const n=R(0,MX()),c=new Set([n]);while(c.size<3)c.add(R(0,MX()));
- quiz(T(`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`),`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`,"",shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
-function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k]);while(c.size<3){const o=pick(exP(l));if(EXA[o].L!==L)c.add(o)}
- quiz(T(`Hình nào bắt đầu bằng chữ ${L}?`,`Which starts with ${L}?`),`Hình nào bắt đầu bằng chữ ${LV[LET.indexOf(L)]}?`,`Which one starts with ${L}?`,imL(L,"big"),shuf([...c]).map(v=>({k:v,h:im(EXA[v].img)})),k,letP,()=>["",l==="vi"?`${LV[LET.indexOf(L)]}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
-
 function result(){
   const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
   const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
@@ -2779,85 +2735,6 @@ function games(){
     ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
   </div>`;
   sayPrompt("games","Bé chọn trò chơi nhé","Pick a game to play",180000);
-}
-
-function letP(){if(!R(0,2))return letO();const l=ql=qL(),k=pick(exP(l)),L=EXA[k].L,c=new Set([L]);while(c.size<3)c.add(pick(exPL(l)));
- quiz(T("Chữ cái đầu tiên là gì?","What letter does it start with?"),"Chữ cái đầu tiên là gì?","What letter does it start with?",im(EXA[k].img,"big"),shuf([...c]).map(v=>({k:v,h:imL(v)})),L,letP,()=>["",l==="vi"?`${LET_VI.indexOf(L)>=0?LV[LET_VI.indexOf(L)]:L}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
-
-function cmp(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const more=R(0,1)==0,o1=pick(COUNT),o2=pick(COUNT);
- const right=a==b?"eq":more?(a>b?"a":"b"):(a<b?"a":"b"),grp=(n,o)=>`<div class="grp">${Array.from({length:n},()=>im(o)).join("")}</div>`;
- const q=more?["Bên nào NHIỀU hơn?","Which has MORE?"]:["Bên nào ÍT hơn?","Which has FEWER?"];
- quiz(T(q[0],q[1]),q[0],q[1],"",[{k:"a",h:grp(a,o1)},{k:"eq",h:`<span class="ans">=</span>${T("Bằng nhau","Same")}`},{k:"b",h:grp(b,o2)}],right,cmp,()=>{
-  if(a==b)return[`<div class="eq">${a} = ${b}</div>`,`${NV[a]} bằng ${NV[b]}. Hai bên bằng nhau!`,`${NE[a]} equals ${NE[b]}. They are the same!`];
-  const w=right=="a"?a:b,l=right=="a"?b:a;
-  return[`<div class="eq">${a} ${a>b?">":"<"} ${b}</div>`,`${NV[w]} ${more?"nhiều":"ít"} hơn ${NV[l]}`,`${NE[w]} is ${more?"more":"fewer"} than ${NE[l]}`]},"cmp")}
-function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");
- const QBC={numP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"numL",t:T("Học số","Numbers"),i:"🔢"},{t:T("Đố đếm số","Quiz"),i:"❓"}],letP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Đố chữ cái","Quiz"),i:"❓"}],mis:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Số còn thiếu","Missing"),i:"🔢"}],cmpS:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Dấu so sánh","Signs"),i:"⚖️"}],math10:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Toán 10","Math 10"),i:"➕"}],cmp:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("So sánh","Compare"),i:"⚖️"}]};
- const bcHtml=kbc(QBC[cur]||[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Câu đố","Quiz"),i:"❓"}]);
- m.innerHTML=`${bcHtml}<h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
- document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
- m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
-  if(b.dataset.k==String(right)){
-   done=true;b.classList.add("good");sfxOk();fx();
-   if(wr){rd.st=0}else{rd.st++;rd.f++}
-   if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
-   if(cur==="numP"||cur==="mis")ST.numCount=(ST.numCount||0)+1;
-   if(cur==="letP")ST.letCount=(ST.letCount||0)+1;
-   if(cur==="math10")ST.mathCount=(ST.mathCount||0)+1;
-   rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");
-   stars++;ls.set("stars",stars);head();checkBadges();
-   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next);
-  }
-  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn chỗ này nè","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
-function numF(){const n=R(0,MX()),c=new Set([n]);while(c.size<3)c.add(R(0,MX()));
- quiz(T(`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`),`Tìm số ${NV[n]}`,`Find the number ${NE[n]}`,"",shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,numP,()=>["",NV[n],NE[n]])}
-function letO(){const l=ql=qL(),L=pick(exPL(l)),k=pick(exPK(l,L)),c=new Set([k]);while(c.size<3){const o=pick(exP(l));if(EXA[o].L!==L)c.add(o)}
- quiz(T(`Hình nào bắt đầu bằng chữ ${L}?`,`Which starts with ${L}?`),`Hình nào bắt đầu bằng chữ ${LV[LET.indexOf(L)]}?`,`Which one starts with ${L}?`,imL(L,"big"),shuf([...c]).map(v=>({k:v,h:im(EXA[v].img)})),k,letP,()=>["",l==="vi"?`${LV[LET.indexOf(L)]}. ${EXA[k].t}`:"",l==="en"?`${L}. ${EXA[k].t}`:""])}
-
-function result(){
-  const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
-  const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
-  stars += starCount;
-  ls.set("stars", stars);
-  recordDailyActivity();
-  head();
-  checkBadges();
-
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Kết quả","Results"),i:"🏆"}])}<div class="stage">${im("trophy","big")}</div><h2>${T("Hoàn thành!","All done!")}</h2>${lv?`<h2>${lv}</h2>`:""}<div class="eq">${f} / ${N}</div><div class="objs">${Array.from({length:3},(_,i)=>im("gstar").replace("<img",`<img style="width:56px;${i<starCount?"":"filter:grayscale(1);opacity:.35"}"`)).join("")}</div><div class="stage"><button class="nav" onclick="go('${g}')">${im("btn_replay")}</button><button class="nav" onclick="go('home')">${im("btn_home")}</button></div>`;
-  ql=null;catSet("celebrate");fx();
-  triggerCelebration(T("Hoàn thành xuất sắc!","All Done!"),T(`Bé làm đúng ${f} trên ${N} câu và nhận được ${starCount} sao! Giỏi quá!`,`You got ${f} out of ${N} right and earned ${starCount} stars!`),"🏆",Array(starCount).fill("⭐").join(""));
-  say(`Bé làm đúng ${NV[f]} trên ${NV[N]} câu, thưởng bé ${starCount} sao. Giỏi lắm!`,`You got ${NE[f]} out of ${NE[N]}, you earned ${starCount} stars. Great job!`);
-}
-function setLv(v){lvl=v;ls.set("lvl",v);home();tok++;if(SS)SS.cancel()}
-function win(wr,next,vi,en){
-  if(wr){rd.st=0}else{rd.st++;rd.f++}
-  if(rd.st>(ST.maxStreak||0)){ST.maxStreak=rd.st;svS();}
-  rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();checkBadges();
-  sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");
-  const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);
-  adv(rd.n>=(RL[cur]||ROUND)?result:next);
-}
-function games(){
-  window.__traceFrom = "games";
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Chơi tự do","Free Play"),i:"🎮"}])}
-  <div style="text-align:center;margin:8px 0 16px">
-    <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Chơi tự do","Free Play")}</h2>
-    <p style="font-size:14px;color:#64748b;margin:0">${T("Các trò chơi vui nhộn rèn luyện trí tuệ & kỹ năng cho bé 🌟","Fun learning games and creative activities 🌟")}</p>
-  </div>
-  <div class="cards">
-    ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
-    ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
-    ${card("letL",imL("A")+imL("B"),"Khám phá chữ cái","Alphabet Letters","vietnamese")}
-    ${card("numL","<b>1 2 3</b>","Học số đếm","Numbers & Count","math")}
-    ${card("trace",im("pencil")+"<b>Aa1</b>","Tập viết chữ & nét","Handwriting practice","trace")}
-    ${card("readL","<b>ĐỌC</b>","Đánh vần & Đọc","Reading","reading")}
-    ${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}
-    ${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}
-    ${card("mem",im("cat")+im("cat"),"Lật thẻ ghi nhớ","Memory","logic")}
-    ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
-    ${card("storyL","<b>📖 ✨</b>","Truyện cổ tích","Stories","reading")}
-  </div>`;
-  sayPrompt("games","Bé chọn trò chơi tự do nhé! Rất nhiều trò vui!","Pick a fun game to play!",180000);
 }
 
 /* ========================================================
@@ -3200,10 +3077,6 @@ function renderBubbleWin(score, total) {
   say("Hoan hô bé! Bé bắt bóng chữ rất siêu! Thưởng bé ba sao vàng!", "Hooray! You are a bubble popping champion! You earned three stars!");
 }
 
-function mis(){const mx=Math.max(MX(),6),s=R(1,mx-4),h=R(1,3),n=s+h,c=new Set([n]);while(c.size<3)c.add(R(1,mx));
- quiz(T("Số nào còn thiếu?","Which number is missing?"),"Số nào còn thiếu?","Which number is missing?",`<div class="objs">${[0,1,2,3,4].map(i=>`<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">${i==h?"?":s+i}</span>`).join("")}</div>`,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),n,mis,()=>["",NV[n],NE[n]])}
-function cmpS(){let a=R(1,Math.min(MX(),10)),b=R(1,Math.min(MX(),10));if(!R(0,3))b=a;const o1=pick(COUNT),o2=pick(COUNT),g=(n,o)=>`<div class="grp" style="flex:1">${Array.from({length:n},()=>im(o)).join("")}</div>`,s=a>b?">":a<b?"<":"=";
- quiz(T("Chọn dấu đúng","Pick the right sign"),"Chọn dấu đúng","Pick the right sign",`<div class="stage" style="gap:6px">${g(a,o1)}<span style="font-size:70px;font-weight:800;color:var(--acc)">?</span>${g(b,o2)}</div>`,[">","=","<"].map(v=>({k:v,h:`<span class="ans">${v==">"?"&gt;":v=="<"?"&lt;":"="}</span>`})),s,cmpS,()=>[`<div class="eq">${a} ${s} ${b}</div>`,...(a==b?[`${NV[a]} bằng ${NV[b]}`,`${NE[a]} equals ${NE[b]}`]:[`${NV[a]} ${a>b?"nhiều":"ít"} hơn ${NV[b]}`,`${NE[a]} is ${a>b?"more":"fewer"} than ${NE[b]}`])])}
 function match(){
   const l = ql = qL();
   const allLetters = exPL(l);
@@ -3686,8 +3559,6 @@ function trace(selItem){const md=TR[trm]||TR.g2;
     triggerCelebration(T("Bé viết đẹp quá!","Great Writing!"),T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!","Wonderful tracing, +1 ⭐!"),"✍️","⭐",()=>win(0,returnFn,"",""));
   };
  md.say(it);catSet("pointing")}
-const spr=(k,z)=>{if(lang==="vi"&&LET_VI.includes(k))return`<span class="let-vn-big" style="height:${z}">${k}</span>`;const key=lang==="en"?k:(I["vi_"+k]?"vi_"+k:k);const alt=ALT_MAP[key]||(OBJ[key]?OBJ[key].vi:key);if(I["s_"+key])return`<span class="spr" style="--z:${z};background-image:url(${I["s_"+key]})" role="img" aria-label="${alt}"></span>`;if(I[key])return`<img class="spf" data-sk="${key}" data-z="${z}" src="${I[key]}" style="height:${z}" alt="${alt}">`;return`<span class="spr-emoji" style="font-size:calc(${z} * 0.65);line-height:1;display:inline-flex;align-items:center;justify-content:center;height:${z};width:${z}" role="img" aria-label="${alt}">${k}</span>`};
-function rp(b){const s=b.querySelector(".spr");if(s){s.style.animation="none";void s.offsetWidth;s.style.animation=""}}
 let ST;try{ST=JSON.parse(ls.get("st",""))||{}}catch(e){ST={}}ST.n=ST.n||0;ST.f=ST.f||0;ST.w=ST.w||{};
 const svS=()=>ls.set("st",JSON.stringify(ST)),sta=ok=>{ST.n++;if(ok)ST.f++;svS()};
 function stw(r){const l=cur==="letP"?"Chữ "+(OBJ[r]?OBJ[r].L:r):(cur==="numP"||cur==="mis")?"Số "+r:"";if(l){ST.w[l]=(ST.w[l]||0)+1;svS()}}
@@ -5469,314 +5340,6 @@ async function importAudio(list){let ok=0;const bad=[];
   try{await putRec(k,bl);ok++}catch(e){bad.push(f.name+" (lỗi lưu)")}}
  recS();const r=document.getElementById("rmsg");
  if(r)r.textContent=(ok?`✅ Đã nhập ${ok} file`:"")+(bad.length?(ok?". ":"")+`⚠ ${ok?"Bỏ qua":"Không nhập được"} ${bad.length} file: `+bad.slice(0,6).join(", ")+(bad.length>6?"…":""):"")}
-let curTone = 0;
-function playConsonant(c, r){
-  const cFile = (c === "đ" ? "dd" : c);
-  const consKey = "cons_" + cFile;
-  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[consKey] || window.AUDIO_MAP["cons_" + c] || window.AUDIO_MAP[r])) || `audio/alpha_vi_${cFile}.mp3`;
-  playSafeAudio(target, "Tưởng Vy");
-}
-function playVowel(v){
-  const vNormMap = { "a": "a", "e": "e", "ê": "ee", "i": "i", "o": "o", "ô": "oo", "ơ": "ow", "u": "u", "ư": "uw" };
-  const vFile = vNormMap[v] || v;
-  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[v] || window.AUDIO_MAP["vi|" + v])) || `audio/alpha_vi_${vFile}.mp3`;
-  playSafeAudio(target, "Tưởng Vy");
-}
-function playSyllable(text, c, v, toneIdx, spellText){
-  curTone = toneIdx;
-  const headEl = document.querySelector(".spell-head");
-  if(headEl){
-    headEl.innerHTML = `<span>${c}</span><span style="color:var(--acc2)">+</span><span>${v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline;color:var(--acc)">${text}</span>`;
-  }
-  const subEl = document.querySelector(".spell-sub");
-  if(subEl){
-    subEl.innerHTML = `🔊 Đánh vần: <b>${spellText}</b>`;
-    subEl.onclick = () => playSpell(c, v, toneIdx, text, spellText);
-  }
-  document.querySelectorAll(".syl-btn").forEach((btn, i) => {
-    btn.classList.toggle("active", i === toneIdx);
-    btn.classList.toggle("on", i === toneIdx);
-  });
-  const sylKey = `syl_${c}_${v}_${toneIdx}`;
-  const target = (window.AUDIO_MAP && (window.AUDIO_MAP[text] || window.AUDIO_MAP["vi|" + text] || window.AUDIO_MAP[sylKey])) || `audio/${sylKey}.mp3`;
-  playSafeAudio(target, "Tưởng Vy");
-}
-function playSpell(c, v, toneIdx, finalWord, spellText){
-  A.pause(); A.onended = null; A.onerror = null;
-  if(SS){ try{ SS.cancel(); } catch(e){} }
-  const my = ++tok;
-  busy = true;
-
-  const lananhKey = `lananh_spell_${c}_${v}_${toneIdx}`;
-  const spellKey = `spell_${c}_${v}_${toneIdx}`;
-  const spoken = spellText.replace(/\s*-\s*/g, " ").trim();
-  const subEl = document.querySelector(".spell-sub");
-  if(subEl){
-    subEl.innerHTML = `🔊 Đánh vần: <b style="color:var(--ok);font-size:1.15em">▶ ${spellText}</b>`;
-  }
-  const fin = () => {
-    if(my === tok){
-      busy = false;
-      busyEnd = Date.now();
-      if(subEl) subEl.innerHTML = `🔊 Đánh vần: <b>${spellText}</b>`;
-    }
-  };
-
-  // 1. Nếu có file âm thanh trọn câu (Cô Lan Anh hoặc VieNeu TTS)
-  const map = window.AUDIO_MAP || {};
-  const targetAudio = map[lananhKey] || map[spellKey] || map[spoken] || map["vi|" + spoken] || getAudio(spoken);
-  if(targetAudio && typeof targetAudio === "string" && (targetAudio.startsWith("audio/") || targetAudio.startsWith("http"))){
-    playSafeAudio(targetAudio, "Tưởng Vy", fin);
-    return;
-  }
-
-  // 2. Ghép chuỗi âm thanh sư phạm tự nhiên (Composite Audio Sequencer)
-  // [Phụ âm] -> [Nguyên âm] -> [Tiếng gốc] (-> [Dấu thanh] -> [Tiếng hoàn chỉnh])
-  const cFile = (c === "đ" ? "dd" : c);
-  const vNormMap = { "a": "a", "e": "e", "ê": "ee", "i": "i", "o": "o", "ô": "oo", "ơ": "ow", "u": "u", "ư": "uw" };
-  const vFile = vNormMap[v] || v;
-  const toneFiles = ["tone_khong_dau.mp3", "tone_huyen.mp3", "tone_sac.mp3", "tone_hoi.mp3", "tone_nga.mp3", "tone_nang.mp3"];
-
-  const seq = [
-    `audio/alpha_vi_${cFile}.mp3`,
-    `audio/alpha_vi_${vFile}.mp3`,
-    `audio/syl_${c}_${v}_0.mp3`
-  ];
-
-  if(toneIdx > 0 && toneIdx < toneFiles.length){
-    seq.push(`audio/${toneFiles[toneIdx]}`);
-    seq.push(`audio/syl_${c}_${v}_${toneIdx}.mp3`);
-  }
-
-  let step = 0;
-  function playNext(){
-    if(my !== tok) return;
-    if(step >= seq.length){
-      fin();
-      return;
-    }
-    const currentSrc = seq[step++];
-    A.onended = () => {
-      if(my !== tok) return;
-      setTimeout(playNext, 120);
-    };
-    A.onerror = () => {
-      if(my !== tok) return;
-      playNext();
-    };
-    A.src = currentSrc;
-    A.play().catch(() => {
-      if(my !== tok) return;
-      playNext();
-    });
-  }
-
-  playNext();
-}
-function pickConsonant(c, r){
-  curC = c;
-  curTone = 0;
-  if(typeof VN_SPELL !== "undefined" && VN_SPELL.valid && !VN_SPELL.valid(curC, curV)){
-    const firstValid = VN_SPELL.V.find(v => VN_SPELL.valid(curC, v.v));
-    if(firstValid) curV = firstValid.v;
-  }
-  readL();
-  playConsonant(c, r);
-}
-const CO_LAN_ANH_CONSONANTS = {
-  "b": "bicX1RNzHos", "c": "uP9Ri14I28o", "d": "SqjCwJRONfU", "đ": "4c7ApUvxNKk",
-  "g": "5AIIGSfthV8", "k": "kdrjFqjp9NY", "kh": "Pq6pxF1l2vg", "m": "UqfYtYRHmpY",
-  "n": "477qRox5TWA", "ng": "82YileKSdiI", "nh": "6tHKEPP-sYU", "x": "4bq-lpEQI7U"
-};
-const CO_LAN_ANH_LESSONS = {
-  1: "YLM9IUypgqQ", 2: "ww5wazKT7Ck", 3: "iEPpruHON1w", 4: "-O8EgkNBARE",
-  5: "aqsjf0zKbXQ", 6: "2P0sVhYOvCw", 7: "kXk2vyXFXFY", 8: "czZBOWlGlaE",
-  9: "6zfx2E3jizM", 10: "zJPfge__mUE", 11: "dojtsCRfbfU", 12: "FohTBERmiZc",
-  13: "8560ssT_ing", 14: "Ag0Lt6Yvpkc", 15: "SHA2WEoc1js", 16: "JNhEKiIESlU",
-  17: "hWy3TdFUAYA", 18: "d1TePylBOLQ", 19: "85TMOE5Npzo", 20: "U9FTdd6eBwA",
-  21: "cIinEyjGUQ8", 22: "-15lFJeyxMc", 23: "jsDx9X1nwS0", 24: "D3KgV4yfagM",
-  25: "04w8wNfFliw", 26: "YJ8Ms45Ttio", 27: "_9mHo5uIlvA", 28: "y2bFgBHTxUk"
-};
-function playLessonAudio(audioUrl, fallbackText){
-  const my = ++tok;
-  busy = true;
-  const fin = () => { if(my === tok){ busy = false; busyEnd = Date.now(); } };
-
-  const target = audioUrl ? (getAudio(audioUrl) || audioUrl) : fallbackText;
-  playSafeAudio(target, "Tưởng Vy", fin);
-}
-let readTab="spell",curC="b",curV="a",curLes=1,curStory=0;
-function readL(tab){
-  if(tab)readTab=tab;
-  const tabs=[["spell","🔤 Ghép tiếng","Spelling"],["lessons","📚 28 Bài Vần","Phonics"],["stories","📖 Tập đọc trơn","Stories"]];
-  let body="";
-  if(readTab==="spell"){
-    if(typeof VN_SPELL !== "undefined" && VN_SPELL.valid && !VN_SPELL.valid(curC, curV)){
-      const firstValid = VN_SPELL.V.find(v => VN_SPELL.valid(curC, v.v));
-      if(firstValid) curV = firstValid.v;
-    }
-    const cObj=VN_SPELL.C.find(x=>x.c===curC)||VN_SPELL.C[0];
-    const vObj=VN_SPELL.V.find(x=>x.v===curV)||VN_SPELL.V[0];
-    const syls=[0,1,2,3,4,5].map(t=>VN_SPELL.syl(cObj,vObj,t));
-    if(curTone >= syls.length) curTone = 0;
-    const curSyl=syls[curTone];
-    const ytClip=CO_LAN_ANH_CONSONANTS[cObj.c];
-    const ytBadge=ytClip
-      ?`<div style="margin:4px auto"><a href="https://www.youtube.com/watch?v=${ytClip}" target="_blank" rel="noopener" class="pill" style="font-size:13px;padding:3px 12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;background:#e74c3c;color:#fff;font-weight:700;box-shadow:0 3px 0 #922b21">▶ Video Cô Lan Anh dạy chữ ${cObj.c.toUpperCase()}</a></div>`
-      :"";
-    const meanBadge=curSyl.hasMeaning
-      ?`<div style="background:#eafaf1;border:2px solid var(--ok);color:#196f3d;border-radius:18px;display:inline-block;padding:3px 14px;font-size:15px;font-weight:700;margin:4px auto">💡 Từ ví dụ: <b>${curSyl.ex}</b></div>`
-      :`<div style="background:#fff3cd;border:2px solid #f39c12;color:#856404;border-radius:18px;display:inline-block;padding:3px 14px;font-size:13px;font-weight:600;margin:4px auto">⚠ Tiếng này ít dùng trong tiếng Việt</div>`;
-    body=`<div class="spell-board">
-      <div class="spell-head"><span>${cObj.c}</span><span style="color:var(--acc2)">+</span><span>${vObj.v}</span><span style="color:var(--ok)">=</span><span style="font-size:1.15em;text-decoration:underline;color:var(--acc)">${curSyl.text}</span></div>
-      ${meanBadge}
-      ${ytBadge}
-      <div class="spell-sub" style="cursor:pointer" onclick="playSpell('${cObj.c}','${vObj.v}',${curTone},'${curSyl.text}','${curSyl.spell}')">🔊 Đánh vần: <b>${curSyl.spell}</b></div>
-      <div class="syl-grid">
-        ${syls.map((s,idx)=>{
-          const isAct=idx===curTone;
-          const opStyle=s.hasMeaning?"":"opacity:0.4;";
-          const exText=s.hasMeaning?`<span class="syl-ex" style="display:block;font-size:11px;color:var(--ok);font-weight:700;line-height:1.1;margin-top:2px">${s.ex}</span>`:`<span class="syl-ex" style="display:block;font-size:10px;color:#888;font-style:italic;line-height:1.1;margin-top:2px">ít dùng</span>`;
-          return `<button class="syl-btn${isAct?" active on":""}" style="${opStyle}" onclick="playSyllable('${s.text}','${cObj.c}','${vObj.v}',${idx},'${s.spell}');rp(this)"><b class="n" style="font-size:28px">${s.text}</b><small>${VN_SPELL.TONES[idx].n}</small>${exText}</button>`;
-        }).join("")}
-      </div>
-    </div>
-    <div style="margin:10px 0 4px"><b>1. Chọn Phụ âm:</b></div>
-    <div class="chips" style="gap:10px">${VN_SPELL.C.map(x=>`<button class="chip ${x.c===curC?"on":""}" style="width:auto;min-width:48px;min-height:48px;border-radius:18px;padding:4px 12px;font-size:22px;margin:2px" onclick="pickConsonant('${x.c}','${x.r}')">${x.c}</button>`).join("")}</div>
-    <div style="margin:12px 0 4px"><b>2. Chọn Nguyên âm:</b></div>
-    <div class="chips" style="gap:10px">${VN_SPELL.V.map(x=>{
-      const ok=VN_SPELL.valid(curC,x.v);
-      const dis=ok?"":"opacity:0.22;pointer-events:none;filter:grayscale(1);";
-      return `<button class="chip ${x.v===curV?"on":""}" style="width:50px;height:50px;min-width:48px;min-height:48px;font-size:22px;margin:2px;${dis}" ${ok?`onclick="curV='${x.v}';curTone=0;readL();playVowel('${x.v}')"`:"disabled"}>${x.v}</button>`;
-    }).join("")}</div>`;
-  }else if(readTab==="lessons"){
-    const L=VN_LESSONS.find(x=>x.id===curLes)||VN_LESSONS[0];
-    const ytLes=CO_LAN_ANH_LESSONS[L.id];
-    const ytLesBtn=ytLes
-      ?`<a href="https://www.youtube.com/watch?v=${ytLes}" target="_blank" rel="noopener" class="pill" style="font-size:13px;padding:3px 10px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;background:#e74c3c;color:#fff;font-weight:700;box-shadow:0 3px 0 #922b21">▶ Video Cô Lan Anh</a>`
-      :"";
-    const rhymeList=(L.rhymes||[]).map(r=>typeof r==="string"?r:(r.rhyme||""));
-    const highlightRhymes=(text)=>{
-      let res=esc(text);
-      rhymeList.forEach(rh=>{
-        if(!rh)return;
-        const re=new RegExp("("+rh+")","gi");
-        res=res.replace(re,'<b style="color:var(--acc);text-decoration:underline">$1</b>');
-      });
-      return res;
-    };
-    body=`<div class="chips" style="max-height:85px;overflow-y:auto;padding:2px">
-      ${VN_LESSONS.map(l=>{
-        const shortRhymes=(l.rhymes||[]).map(r=>typeof r==="string"?r:r.rhyme).join("-");
-        return `<button class="pill ${l.id===curLes?"on":""}" style="font-size:15px;padding:3px 8px;margin:2px" onclick="curLes=${l.id};readL()">
-          ${l.id<=28?"Bài "+l.id+" ("+shortRhymes+")":l.title}
-        </button>`;
-      }).join("")}
-    </div>
-    <div class="lesson-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-        <h3 style="margin:0;font-size:24px;color:var(--acc)">${L.title}</h3>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-          ${ytLesBtn}
-          <button class="pill on" style="font-size:14px;padding:4px 12px" onclick="playLessonAudio('${L.sentenceAudio||""}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">🔊 Nghe cô đọc câu mẫu</button>
-        </div>
-      </div>
-
-      <div style="font-weight:800;margin:6px 0 4px;color:var(--ink)">1. Đánh vần Vần (Cô Lan Anh):</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-        ${(L.rhymes||[]).map(r=>{
-          const rName=typeof r==="string"?r:r.rhyme;
-          const rFormula=typeof r==="string"?`Vần ${r}`:(r.formula||rName);
-          const rAudioSpell=typeof r==="object"?r.audioSpell:"";
-          const rAudioRhyme=typeof r==="object"?r.audioRhyme:"";
-          return `
-            <div class="rhyme-box" onclick="playLessonAudio('${rAudioSpell}','${rFormula}');rp(this)">
-              <div class="rhyme-big">${rName}</div>
-              <div class="rhyme-formula">👉 ${rFormula}</div>
-              <div style="display:flex;gap:4px;margin-top:6px;justify-content:center;flex-wrap:wrap">
-                <button class="pill" style="font-size:13px;padding:2px 8px" onclick="event.stopPropagation();playLessonAudio('${rAudioRhyme}','${rName}');rp(this)">🔊 Đọc: ${rName}</button>
-                <button class="pill on" style="font-size:13px;padding:2px 8px" onclick="event.stopPropagation();playLessonAudio('${rAudioSpell}','${rFormula}');rp(this)">🔤 Đánh vần</button>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-
-      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">2. Đánh vần tiếng & Từ mẫu (Cô Lan Anh):</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:12px">
-        ${(L.words||[]).map(w=>{
-          const wText=typeof w==="string"?w:w.word;
-          const wSpell=typeof w==="string"?w:w.spell;
-          const wAudio=typeof w==="object"?w.audio:"";
-          return `
-            <div class="spell-sample" onclick="playLessonAudio('${wAudio}','${wSpell.replace(/'/g,"\\'")}');rp(this)">
-              <div>
-                <b>${wText}</b>
-                <div style="font-size:14px;color:var(--ink);opacity:.85;margin-top:2px">Đánh vần: ${wSpell}</div>
-              </div>
-              <span style="font-size:24px">🔊</span>
-            </div>
-          `;
-        }).join("")}
-      </div>
-
-      <div style="font-weight:800;margin:10px 0 6px;color:var(--ink)">3. Câu luyện đọc ứng dụng (Cô Lan Anh):</div>
-      <div class="story-box" style="margin:4px 0;font-size:21px;cursor:pointer;background:var(--card);border:3px solid var(--ok);line-height:1.6" onclick="playLessonAudio('${L.sentenceAudio||""}','${L.sentence.replace(/'/g,"\\'")}');rp(this)">
-        <div style="display:flex;align-items:flex-start;gap:10px">
-          <span style="font-size:28px">📖</span>
-          <div>
-            <div>${highlightRhymes(L.sentence)}</div>
-            <div style="font-size:14px;color:var(--ok);font-weight:700;margin-top:6px">▶ Bấm vào đây để nghe cô đọc câu mẫu</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-    playLessonAudio(L.sentenceAudio || "", L.title);
-  }else{
-    const S=VN_STORIES[curStory]||VN_STORIES[0];
-    body=`<div class="chips">${VN_STORIES.map((s,idx)=>`<button class="pill ${idx===curStory?"on":""}" onclick="curStory=${idx};readL()">${s.title}</button>`).join("")}</div>
-    <div class="story-box">
-      <h3 style="margin:0 0 10px;color:var(--acc);text-align:center">${S.title}</h3>
-      ${S.sentences.map(st=>`<div class="story-line" onclick="say('${st}','${st}')"><span>🔊</span><span>${st}</span></div>`).join("")}
-      <div style="text-align:center;margin-top:12px"><button class="pill on" onclick="say('${S.sentences.join(". ")}','${S.sentences.join(". ")}')">🔊 Nghe đọc toàn bài</button></div>
-    </div>`;
-    say(S.title, S.title);
-  }
-  const lanAnhBanner = `
-    <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:8px 14px;margin:8px auto 12px;max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:8px">
-      <div style="font-size:13.5px;font-weight:700;color:#92400e;text-align:left">
-        👩‍🏫 <b>Bài học Đánh vần Cô Lan Anh (Lớp 1)</b><br>
-        <span style="font-size:12px;color:#b45309;font-weight:500">Video sinh động, nhận biết mặt chữ và bài tập ghép vần</span>
-      </div>
-      <button class="pill on" onclick="go('tierActLanAnh')" style="font-size:13px;padding:6px 14px;background:#ea580c;color:#fff;border:0;flex-shrink:0">Học ngay ▶</button>
-    </div>
-  `;
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Đánh vần & Luyện đọc","Reading & Phonics"),i:"📚"}])}
-  <h2 id="readLQ" role="button" tabindex="0" onclick="say('Đánh vần và luyện đọc nhé','Reading and phonics')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Đánh vần & Luyện đọc","Reading & Phonics")}</h2>
-  ${lanAnhBanner}
-  <div class="chips" style="margin-bottom:10px">${tabs.map(([k,vi,en])=>`<button class="pill${readTab===k?" on":""}" onclick="readL('${k}')">${T(vi,en)}</button>`).join("")}</div>
-  ${body}`;
-  sayPrompt("readL","Đánh vần và luyện đọc nhé","Reading and phonics",180000);
-}
-function math10(){
-  const isAdd=lvl===1?true:R(0,1)===0;
-  let a,b,res;
-  if(isAdd){
-    const max=lvl===1?5:10;
-    a=R(1,max-1);b=R(1,max-a);res=a+b;
-  }else{
-    const max=lvl===1?5:10;
-    a=R(2,max);b=R(1,a-1);res=a-b;
-  }
-  const op=isAdd?"+":"-",o=pick(COUNT);
-  const c=new Set([res]);
-  while(c.size<3){c.add(R(1,10))}
-  const qVi=isAdd?`${NV[a]} cộng ${NV[b]} bằng mấy?`:`${NV[a]} trừ ${NV[b]} bằng mấy?`;
-  const qEn=isAdd?`What is ${NE[a]} plus ${NE[b]}?`:`What is ${NE[a]} minus ${NE[b]}?`;
-  const grp=(n)=>`<span style="display:inline-flex;flex-wrap:wrap;gap:2px;max-width:130px;justify-content:center">${Array.from({length:n},()=>im(o,"")).join("").replace(/<img/g,'<img style="width:34px"')}</span>`;
-  const visual=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto">${grp(a)}<b style="font-size:44px;color:var(--acc)">${op}</b>${grp(b)}<b style="font-size:44px;color:var(--acc)">= ?</b></div>`;
-  quiz(T(`${a} ${op} ${b} = ?`,`${a} ${op} ${b} = ?`),qVi,qEn,visual,shuf([...c]).map(v=>({k:v,h:`<span class="ans">${v}</span>`})),res,math10,()=>[`<div class="eq">${a} ${op} ${b} = ${res}</div>`,`${qVi.replace("bằng mấy?","bằng")} ${NV[res]}!`,`${qEn.replace("What is ","").replace("?"," equals")} ${NE[res]}!`]);
-}
 const normStr=s=>(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
 let curCat="vn",curStorySearch="",readingStory=null,storyPlay=false;
 const STORY_BATCH_SIZE=14;
@@ -6112,7 +5675,6 @@ async function need(k){
     }
   })();
 }
-function upSpr(){m.querySelectorAll("img.spf").forEach(e=>{const k=e.dataset.sk;if(!I["s_"+k])return;const s=document.createElement("span");s.className="spr";s.style.cssText=`--z:${e.dataset.z};background-image:url(${I["s_"+k]})`;e.replaceWith(s)})}
 const SFX=()=>SOUND_ON()&&ls.get("sfx","1")!=="0";
 const rmOn=()=>{const p=ls.get("rm","auto");return p==="1"||(p==="auto"&&!!window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)};
 const applyRM=()=>document.documentElement.classList.toggle("rm",rmOn());

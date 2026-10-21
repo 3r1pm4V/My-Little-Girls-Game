@@ -9,7 +9,10 @@ console.log('================================================================');
 console.log('  CHẠY TEST SUITE: TASK P1-05 & P1-06');
 console.log('================================================================\n');
 
-const appJs = fs.readFileSync('app.js', 'utf8');
+const appJs = fs.readFileSync("app.js", "utf8") +
+  (fs.existsSync("alphabet.js") ? fs.readFileSync("alphabet.js", "utf8") : "") +
+  (fs.existsSync("numbers.js") ? fs.readFileSync("numbers.js", "utf8") : "") +
+  (fs.existsSync("spelling.js") ? fs.readFileSync("spelling.js", "utf8") : "");
 
 // ----------------------------------------------------------------------------
 // TEST 1: Kiểm tra P1-05 — Tự đọc đề và nút 🔊 nghe lại trên mọi màn hình
