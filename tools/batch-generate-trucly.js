@@ -55,7 +55,7 @@ const PHONETIC_MAP = {
   'alpha_vi_oo.mp3': { text: 'ô', speed: 0.88, desc: 'Chữ ô' },
   'alpha_vi_ow.mp3': { text: 'ơ', speed: 0.88, desc: 'Chữ ơ' },
   'alpha_vi_p.mp3': { text: 'pờ', speed: 0.88, desc: 'Chữ p (âm pờ)' },
-  'alpha_vi_q.mp3': { text: 'quờ', speed: 0.88, desc: 'Chữ q (âm quờ)' },
+  'alpha_vi_q.mp3': { text: 'cu', speed: 0.88, desc: 'Chữ q (phát âm cu theo chuẩn đổi mới)' },
   'alpha_vi_r.mp3': { text: 'rờ', speed: 0.88, desc: 'Chữ r (âm rờ)' },
   'alpha_vi_s.mp3': { text: 'sờ', speed: 0.88, desc: 'Chữ s (âm sờ)' },
   'alpha_vi_t.mp3': { text: 'tờ', speed: 0.88, desc: 'Chữ t (âm tờ)' },
