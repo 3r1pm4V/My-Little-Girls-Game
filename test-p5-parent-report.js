@@ -14,7 +14,7 @@ const stylesCss = fs.readFileSync(path.join(__dirname, 'styles.css'), 'utf8');
 const swCode = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf8');
 
 // Audit 1: Cache bumped to bhv-v41 or higher
-assert.ok(/bhv-v(?:4[1-9]|[5-9]\d)/.test(swCode), "sw.js cache version phải là bhv-v41 trở lên");
+assert.ok(/bhv-v(?:4[1-9]|[5-9]\d|\d{3,})/.test(swCode), "sw.js cache version phải là bhv-v41 trở lên");
 console.log("✓ Audit sw.js: Cache version xác nhận");
 
 // Audit 2: Function presence in app.js

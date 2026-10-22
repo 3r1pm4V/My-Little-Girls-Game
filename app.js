@@ -1,3 +1,40 @@
+
+// ========================================================
+// BẢO VỆ CẢM ỨNG CHO TRẺ EM (CHỐNG ZOOM 2 NGÓN, CHỐNG GIẬT TRANG PWA)
+// ========================================================
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  // 1. Chống pinch-to-zoom trên iOS Safari bằng gesture events
+  document.addEventListener("gesturestart", function(e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener("gesturechange", function(e) { e.preventDefault(); }, { passive: false });
+  document.addEventListener("gestureend", function(e) { e.preventDefault(); }, { passive: false });
+
+  // 2. Chống zoom đa điểm từ 2 ngón tay trở lên
+  document.addEventListener("touchstart", function(e) {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.addEventListener("touchmove", function(e) {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // 3. Chống bóng ma kéo ảnh mặc định của trình duyệt khi bé giữ ngón tay
+  document.addEventListener("dragstart", function(e) {
+    if (e.target && e.target.nodeName === "IMG") {
+      e.preventDefault();
+    }
+  });
+
+  // 4. Chống menu ngữ cảnh (popup copy/lưu ảnh) khi bé giữ lâu trên màn hình
+  window.addEventListener("contextmenu", function(e) {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    e.preventDefault();
+  }, { passive: false });
+}
+
 const I=IMG,m=document.getElementById("m");
 I["vocab_anh_trai"]="img/vocab/vocab_anh_trai.png";
 I["vocab_ao_mua"]="img/vocab/vocab_ao_mua.png";
