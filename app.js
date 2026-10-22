@@ -3214,9 +3214,10 @@ function fruitSlash(isReplay) {
 
   function resizeCanvas() {
     if (!arenaEl || !canvasEl) return;
-    const rect = arenaEl.getBoundingClientRect();
-    canvasEl.width = rect.width;
-    canvasEl.height = rect.height;
+    const w = arenaEl.clientWidth || 360;
+    const h = arenaEl.clientHeight || 420;
+    canvasEl.width = w;
+    canvasEl.height = h;
   }
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas, { passive: true });
@@ -3224,27 +3225,33 @@ function fruitSlash(isReplay) {
   function spawnFruit() {
     if (!arenaEl) return;
     const w = arenaEl.clientWidth || 360;
-    const h = arenaEl.clientHeight || 400;
+    const h = arenaEl.clientHeight || 420;
     const item = pick(FRUITS);
-    const radius = 32;
-    const spawnX = radius + 20 + Math.random() * Math.max(40, w - radius * 2 - 40);
+    const radius = 35; // bán kính quả 35px (đường kính 70px)
+
+    // Điểm xuất phát ở đáy, trải đều từ 15% đến 85% chiều ngang sàn
+    const spawnX = radius + 30 + Math.random() * Math.max(20, w - radius * 2 - 60);
     const spawnY = h + radius;
 
-    const targetApexY = h * (isGentleMode ? (0.2 + Math.random() * 0.25) : (0.15 + Math.random() * 0.25));
+    // Đỉnh bay (apex) nằm trong khoảng 20% - 40% tính từ đỉnh xuống
+    const targetApexY = h * (isGentleMode ? (0.22 + Math.random() * 0.2) : (0.16 + Math.random() * 0.2));
     const g = isGentleMode ? 0.28 : 0.42;
     const distY = spawnY - targetApexY;
     const initialVy = -Math.sqrt(2 * g * distY);
+
+    // Độ lệch ngang mềm mại hướng về vùng trung tâm (không bị bay văng ra rìa màn hình)
     const centerDist = (w / 2) - spawnX;
-    const initialVx = (centerDist / (Math.abs(initialVy) / g)) * (0.8 + Math.random() * 0.4);
+    const totalFlyTime = Math.abs(initialVy) / g;
+    const initialVx = (centerDist / totalFlyTime) * (0.35 + Math.random() * 0.35);
 
     const el = document.createElement("div");
     el.className = "fs-fruit";
     el.innerHTML = item.emoji;
-    el.dataset.fid = ++fruitUid;
+    el.style.transform = `translate3d(${spawnX - radius}px, ${spawnY - radius}px, 0)`;
     arenaEl.appendChild(el);
 
     fruits.push({
-      id: fruitUid,
+      id: ++fruitUid,
       type: item,
       el,
       x: spawnX,
@@ -3253,7 +3260,7 @@ function fruitSlash(isReplay) {
       vy: initialVy,
       g,
       rot: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * (isGentleMode ? 3 : 5),
+      rotSpeed: (Math.random() - 0.5) * (isGentleMode ? 2.5 : 4.5),
       radius,
       sliced: false
     });
@@ -3301,6 +3308,7 @@ function fruitSlash(isReplay) {
     el.style.clipPath = side === "left"
       ? "polygon(0 0, 50% 0, 50% 100%, 0 100%)"
       : "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)";
+    el.style.transform = `translate3d(${f.x - 35}px, ${f.y - 35}px, 0)`;
     arenaEl.appendChild(el);
 
     const sign = side === "left" ? -1 : 1;
@@ -3318,7 +3326,7 @@ function fruitSlash(isReplay) {
 
   function createSplashes(x, y, color) {
     if (!arenaEl) return;
-    const count = 9;
+    const count = 10;
     for (let i = 0; i < count; i++) {
       const el = document.createElement("div");
       el.className = "fs-juice";
@@ -3326,6 +3334,7 @@ function fruitSlash(isReplay) {
       el.style.width = size + "px";
       el.style.height = size + "px";
       el.style.backgroundColor = color;
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       arenaEl.appendChild(el);
 
       const angle = Math.random() * Math.PI * 2;
@@ -3347,8 +3356,7 @@ function fruitSlash(isReplay) {
     const el = document.createElement("div");
     el.className = "fs-pop-text";
     el.textContent = text;
-    el.style.left = x + "px";
-    el.style.top = y + "px";
+    el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     arenaEl.appendChild(el);
     setTimeout(() => {
       if (el.parentNode) el.parentNode.removeChild(el);
@@ -3379,13 +3387,14 @@ function fruitSlash(isReplay) {
       const f = fruits[i];
       if (f.sliced) continue;
       const d = distToSegment(f.x, f.y, x1, y1, x2, y2);
-      if (d <= f.radius * 1.3) {
+      if (d <= f.radius * 1.25) {
         sliceFruit(f);
       }
     }
   }
 
   function handlePointerDown(e) {
+    if (e.cancelable) e.preventDefault();
     isPointerDown = true;
     const pos = getCanvasPos(e);
     lastPointerPos = pos;
@@ -3396,6 +3405,7 @@ function fruitSlash(isReplay) {
 
   function handlePointerMove(e) {
     if (!isPointerDown) return;
+    if (e.cancelable) e.preventDefault();
     const pos = getCanvasPos(e);
     trail.push({ x: pos.x, y: pos.y, t: performance.now() });
 
@@ -3411,10 +3421,10 @@ function fruitSlash(isReplay) {
   }
 
   if (canvasEl) {
-    canvasEl.addEventListener("pointerdown", handlePointerDown);
-    canvasEl.addEventListener("pointermove", handlePointerMove);
-    canvasEl.addEventListener("pointerup", handlePointerUp);
-    canvasEl.addEventListener("pointercancel", handlePointerUp);
+    canvasEl.addEventListener("pointerdown", handlePointerDown, { passive: false });
+    canvasEl.addEventListener("pointermove", handlePointerMove, { passive: false });
+    canvasEl.addEventListener("pointerup", handlePointerUp, { passive: false });
+    canvasEl.addEventListener("pointercancel", handlePointerUp, { passive: false });
   }
 
   function loop() {
@@ -3425,7 +3435,7 @@ function fruitSlash(isReplay) {
 
     const now = performance.now();
     const w = arenaEl.clientWidth || 360;
-    const h = arenaEl.clientHeight || 400;
+    const h = arenaEl.clientHeight || 420;
 
     frameCount++;
     const spawnRate = isGentleMode ? 85 : 60;
@@ -3465,7 +3475,7 @@ function fruitSlash(isReplay) {
       half.rot += half.rotSpeed;
 
       if (half.el) {
-        half.el.style.transform = `translate3d(${half.x - 32}px, ${half.y - 32}px, 0) rotate(${half.rot}deg)`;
+        half.el.style.transform = `translate3d(${half.x - 35}px, ${half.y - 35}px, 0) rotate(${half.rot}deg)`;
       }
 
       if (half.y > h + 100) {

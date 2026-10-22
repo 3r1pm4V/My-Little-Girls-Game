@@ -1307,13 +1307,16 @@ html.rm .confetti-cv, html.rm .fx {
 .fs-title-icon{font-size:clamp(24px,5vw,30px);line-height:1}
 .fs-arena{position:relative;width:100%;height:clamp(380px,62vh,520px);background:radial-gradient(ellipse at center bottom,#1e1b4b 0%,#0f172a 100%);border-radius:24px;overflow:hidden;box-shadow:0 12px 30px -6px rgba(0,0,0,0.35);border:3.5px solid #4338ca;touch-action:none;user-select:none}
 .fs-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:auto;z-index:10;touch-action:none}
-.fs-fruit{position:absolute;font-size:clamp(54px,13vw,72px);line-height:1;display:inline-flex;align-items:center;justify-content:center;transform-origin:center center;pointer-events:none;z-index:2;will-change:transform}
-.fs-half{position:absolute;font-size:clamp(54px,13vw,72px);line-height:1;display:inline-flex;align-items:center;justify-content:center;pointer-events:none;z-index:3;will-change:transform}
-.fs-juice{position:absolute;border-radius:50%;pointer-events:none;z-index:4;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
-.fs-pop-text{position:absolute;font-weight:900;font-size:clamp(16px,4vw,22px);color:#fde047;text-shadow:0 2px 8px rgba(0,0,0,0.8);pointer-events:none;z-index:5;animation:fsPopText .6s ease-out forwards}
+.fs-fruit{position:absolute;top:0;left:0;width:70px;height:70px;font-size:clamp(52px,12vw,68px);line-height:1;display:flex;align-items:center;justify-content:center;transform-origin:center center;pointer-events:none;z-index:2;will-change:transform}
+.fs-half{position:absolute;top:0;left:0;width:70px;height:70px;font-size:clamp(52px,12vw,68px);line-height:1;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:3;will-change:transform}
+.fs-juice{position:absolute;top:0;left:0;border-radius:50%;pointer-events:none;z-index:4;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
+.fs-pop-text{position:absolute;top:0;left:0;font-weight:900;font-size:clamp(16px,4vw,22px);color:#fde047;text-shadow:0 2px 8px rgba(0,0,0,0.8);pointer-events:none;z-index:5;animation:fsPopText .6s ease-out forwards}
 .fs-hint-overlay{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.55);color:#fff;font-size:clamp(12px,3vw,14.5px);font-weight:700;padding:6px 14px;border-radius:20px;pointer-events:none;z-index:12;animation:pulse 2s infinite}
 @keyframes fsPopText{
   0%{transform:translate(-50%,-50%) scale(0.6);opacity:0}
+  30%{transform:translate(-50%,-70%) scale(1.2);opacity:1}
+  100%{transform:translate(-50%,-100%) scale(1);opacity:0}
+}
   30%{transform:translate(-50%,-70%) scale(1.2);opacity:1}
   100%{transform:translate(-50%,-100%) scale(1);opacity:0}
 }
