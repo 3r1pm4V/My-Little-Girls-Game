@@ -3075,6 +3075,469 @@ function renderBubbleWin(score, total) {
   say("Hoan hô bé! Bé bắt bóng chữ rất siêu! Thưởng bé ba sao vàng!", "Hooray! You are a bubble popping champion! You earned three stars!");
 }
 
+/* ========================================================
+   TRÒ CHƠI CHÉM TRÁI CÂY (FRUIT SLASH) CHO BÉ
+   Hỗ trợ cả vuốt (swipe) vệt kiếm phát sáng lẫn chạm (tap)
+   trực tiếp, tách 2 nửa quả kèm giọt nước bắn ngọt ngào.
+   Phát âm tên từng loại quả khi chém trúng.
+   ======================================================== */
+let fsActiveAnim = null;
+
+function fruitSlash(isReplay) {
+  if (fsActiveAnim) {
+    cancelAnimationFrame(fsActiveAnim);
+    fsActiveAnim = null;
+  }
+
+  const TARGET_SCORE = 10;
+  let score = 0;
+  let isGentleMode = true;
+  let frameCount = 0;
+  let fruitUid = 0;
+  const fruits = [];
+  const halves = [];
+  const juices = [];
+  const trail = [];
+  let isPointerDown = false;
+  let lastPointerPos = null;
+
+  const FRUITS = [
+    { id: "watermelon", emoji: "🍉", nameVi: "Dưa hấu", nameEn: "Watermelon", color: "#ef4444" },
+    { id: "apple", emoji: "🍎", nameVi: "Quả táo", nameEn: "Apple", color: "#dc2626" },
+    { id: "banana", emoji: "🍌", nameVi: "Quả chuối", nameEn: "Banana", color: "#eab308" },
+    { id: "strawberry", emoji: "🍓", nameVi: "Quả dâu", nameEn: "Strawberry", color: "#f43f5e" },
+    { id: "orange", emoji: "🍊", nameVi: "Quả cam", nameEn: "Orange", color: "#f97316" },
+    { id: "grape", emoji: "🍇", nameVi: "Quả nho", nameEn: "Grapes", color: "#8b5cf6" },
+    { id: "mango", emoji: "🥭", nameVi: "Quả xoài", nameEn: "Mango", color: "#f59e0b" },
+    { id: "pineapple", emoji: "🍍", nameVi: "Quả dứa", nameEn: "Pineapple", color: "#fbbf24" },
+    { id: "avocado", emoji: "🥑", nameVi: "Quả bơ", nameEn: "Avocado", color: "#84cc16" },
+    { id: "peach", emoji: "🍑", nameVi: "Quả đào", nameEn: "Peach", color: "#fb7185" }
+  ];
+
+  const bcHtml = kbc([
+    { s: "home", t: T("Trang chủ", "Home"), i: "🏠" },
+    { s: "games", t: T("Trò chơi", "Games"), i: "🎮" },
+    { t: T("Chém trái cây", "Fruit Slash"), i: "🍉" }
+  ]);
+
+  m.innerHTML = `
+    ${bcHtml}
+    <div class="fs-wrap" id="fsWrap">
+      <div class="fs-target-bar">
+        <div class="fs-target-info">
+          <span class="fs-title-icon">🍉</span>
+          <span style="font-weight:800;font-size:clamp(16px,4vw,20px);color:#1e293b">
+            ${T("Chém trái cây", "Fruit Slash")}
+          </span>
+          <button class="pill" onclick="window.__fsReplayIntro()" style="font-size:13.5px;padding:3px 10px;min-height:38px;border-radius:18px">
+            🔊 ${T("Nghe lại", "Listen")}
+          </button>
+          <button class="pill" id="fsSpeedBtn" onclick="window.__fsToggleSpeed()" style="font-size:13.5px;padding:3px 10px;min-height:38px;border-radius:18px" title="${T("Đổi tốc độ bay chậm hoặc nhanh", "Toggle gentle or fast speed")}">
+            🐢 ${T("Bay chậm", "Gentle")}
+          </button>
+        </div>
+        <div class="bubble-score-badge" style="background:#fef3c7;color:#b45309;border-color:#fde68a">
+          🍉 <span id="fsScore">0</span> / ${TARGET_SCORE}
+        </div>
+      </div>
+      <div class="fs-arena" id="fsArena">
+        <div class="fs-hint-overlay" id="fsHintOverlay">
+          <span>👆 ${T("Vuốt hoặc chạm vào quả để chém nhé!", "Swipe or tap fruits to slice!")}</span>
+        </div>
+        <canvas class="fs-canvas" id="fsCanvas"></canvas>
+      </div>
+    </div>
+  `;
+
+  const arenaEl = m.querySelector("#fsArena");
+  const canvasEl = m.querySelector("#fsCanvas");
+  const scoreEl = m.querySelector("#fsScore");
+  const speedBtn = m.querySelector("#fsSpeedBtn");
+  const hintOverlay = m.querySelector("#fsHintOverlay");
+  const ctx = canvasEl ? canvasEl.getContext("2d") : null;
+
+  function announceIntro() {
+    say("Trò chơi Chém trái cây! Bé hãy vuốt ngón tay hoặc chạm để chém các loại quả thơm ngon nhé!", "Fruit Slash game! Swipe or tap to slice delicious fruits!");
+    catSet("thinking");
+  }
+
+  window.__fsReplayIntro = announceIntro;
+
+  window.__fsToggleSpeed = function() {
+    isGentleMode = !isGentleMode;
+    if (speedBtn) {
+      speedBtn.innerHTML = isGentleMode ? `🐢 ${T("Bay chậm", "Gentle")}` : `⚡ ${T("Bay nhanh", "Fast")}`;
+    }
+    sfxTap();
+  };
+
+  announceIntro();
+
+  function resizeCanvas() {
+    if (!arenaEl || !canvasEl) return;
+    const rect = arenaEl.getBoundingClientRect();
+    canvasEl.width = rect.width;
+    canvasEl.height = rect.height;
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas, { passive: true });
+
+  function spawnFruit() {
+    if (!arenaEl) return;
+    const w = arenaEl.clientWidth || 360;
+    const h = arenaEl.clientHeight || 400;
+    const item = pick(FRUITS);
+    const radius = 32;
+    const spawnX = radius + 20 + Math.random() * Math.max(40, w - radius * 2 - 40);
+    const spawnY = h + radius;
+
+    const targetApexY = h * (isGentleMode ? (0.2 + Math.random() * 0.25) : (0.15 + Math.random() * 0.25));
+    const g = isGentleMode ? 0.28 : 0.42;
+    const distY = spawnY - targetApexY;
+    const initialVy = -Math.sqrt(2 * g * distY);
+    const centerDist = (w / 2) - spawnX;
+    const initialVx = (centerDist / (Math.abs(initialVy) / g)) * (0.8 + Math.random() * 0.4);
+
+    const el = document.createElement("div");
+    el.className = "fs-fruit";
+    el.innerHTML = item.emoji;
+    el.dataset.fid = ++fruitUid;
+    arenaEl.appendChild(el);
+
+    fruits.push({
+      id: fruitUid,
+      type: item,
+      el,
+      x: spawnX,
+      y: spawnY,
+      vx: initialVx,
+      vy: initialVy,
+      g,
+      rot: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * (isGentleMode ? 3 : 5),
+      radius,
+      sliced: false
+    });
+  }
+
+  function sliceFruit(f) {
+    if (f.sliced) return;
+    f.sliced = true;
+
+    if (hintOverlay && hintOverlay.style.display !== "none") {
+      hintOverlay.style.display = "none";
+    }
+
+    if (f.el && f.el.parentNode) {
+      f.el.parentNode.removeChild(f.el);
+    }
+
+    sfxOk();
+    say(f.type.nameVi, f.type.nameEn);
+
+    createHalf(f, "left");
+    createHalf(f, "right");
+    createSplashes(f.x, f.y, f.type.color);
+    createPopText(f.x, f.y, `+1 ${f.type.nameVi}`);
+
+    score++;
+    if (scoreEl) scoreEl.textContent = score;
+
+    if (score >= TARGET_SCORE) {
+      if (fsActiveAnim) {
+        cancelAnimationFrame(fsActiveAnim);
+        fsActiveAnim = null;
+      }
+      setTimeout(() => {
+        renderFruitWin(score, TARGET_SCORE);
+      }, 700);
+    }
+  }
+
+  function createHalf(f, side) {
+    if (!arenaEl) return;
+    const el = document.createElement("div");
+    el.className = "fs-half";
+    el.innerHTML = f.type.emoji;
+    el.style.clipPath = side === "left"
+      ? "polygon(0 0, 50% 0, 50% 100%, 0 100%)"
+      : "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)";
+    arenaEl.appendChild(el);
+
+    const sign = side === "left" ? -1 : 1;
+    halves.push({
+      el,
+      x: f.x,
+      y: f.y,
+      vx: f.vx * 0.4 + sign * (3 + Math.random() * 2),
+      vy: f.vy * 0.5 - (2 + Math.random() * 2),
+      g: 0.45,
+      rot: f.rot,
+      rotSpeed: sign * (6 + Math.random() * 6)
+    });
+  }
+
+  function createSplashes(x, y, color) {
+    if (!arenaEl) return;
+    const count = 9;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.className = "fs-juice";
+      const size = 7 + Math.random() * 7;
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.style.backgroundColor = color;
+      arenaEl.appendChild(el);
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 3.5 + Math.random() * 5.5;
+      juices.push({
+        el,
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        alpha: 1,
+        fade: 0.04 + Math.random() * 0.03
+      });
+    }
+  }
+
+  function createPopText(x, y, text) {
+    if (!arenaEl) return;
+    const el = document.createElement("div");
+    el.className = "fs-pop-text";
+    el.textContent = text;
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    arenaEl.appendChild(el);
+    setTimeout(() => {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 600);
+  }
+
+  function distToSegment(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const l2 = dx * dx + dy * dy;
+    if (l2 === 0) return Math.hypot(px - x1, py - y1);
+    let t = ((px - x1) * dx + (py - y1) * dy) / l2;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+  }
+
+  function getCanvasPos(e) {
+    if (!canvasEl) return { x: 0, y: 0 };
+    const rect = canvasEl.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function checkSlice(x1, y1, x2, y2) {
+    for (let i = 0; i < fruits.length; i++) {
+      const f = fruits[i];
+      if (f.sliced) continue;
+      const d = distToSegment(f.x, f.y, x1, y1, x2, y2);
+      if (d <= f.radius * 1.3) {
+        sliceFruit(f);
+      }
+    }
+  }
+
+  function handlePointerDown(e) {
+    isPointerDown = true;
+    const pos = getCanvasPos(e);
+    lastPointerPos = pos;
+    trail.length = 0;
+    trail.push({ x: pos.x, y: pos.y, t: performance.now() });
+    checkSlice(pos.x, pos.y, pos.x, pos.y);
+  }
+
+  function handlePointerMove(e) {
+    if (!isPointerDown) return;
+    const pos = getCanvasPos(e);
+    trail.push({ x: pos.x, y: pos.y, t: performance.now() });
+
+    if (lastPointerPos) {
+      checkSlice(lastPointerPos.x, lastPointerPos.y, pos.x, pos.y);
+    }
+    lastPointerPos = pos;
+  }
+
+  function handlePointerUp() {
+    isPointerDown = false;
+    lastPointerPos = null;
+  }
+
+  if (canvasEl) {
+    canvasEl.addEventListener("pointerdown", handlePointerDown);
+    canvasEl.addEventListener("pointermove", handlePointerMove);
+    canvasEl.addEventListener("pointerup", handlePointerUp);
+    canvasEl.addEventListener("pointercancel", handlePointerUp);
+  }
+
+  function loop() {
+    if (!arenaEl || !arenaEl.isConnected) {
+      fsActiveAnim = null;
+      return;
+    }
+
+    const now = performance.now();
+    const w = arenaEl.clientWidth || 360;
+    const h = arenaEl.clientHeight || 400;
+
+    frameCount++;
+    const spawnRate = isGentleMode ? 85 : 60;
+    if (frameCount % spawnRate === 0 && score < TARGET_SCORE) {
+      spawnFruit();
+      if (Math.random() < 0.35 && score < TARGET_SCORE - 1) {
+        setTimeout(spawnFruit, 180);
+      }
+    }
+
+    for (let i = fruits.length - 1; i >= 0; i--) {
+      const f = fruits[i];
+      if (f.sliced) {
+        fruits.splice(i, 1);
+        continue;
+      }
+      f.x += f.vx;
+      f.y += f.vy;
+      f.vy += f.g;
+      f.rot += f.rotSpeed;
+
+      if (f.el) {
+        f.el.style.transform = `translate3d(${f.x - f.radius}px, ${f.y - f.radius}px, 0) rotate(${f.rot}deg)`;
+      }
+
+      if (f.y > h + f.radius * 2 && f.vy > 0) {
+        if (f.el && f.el.parentNode) f.el.parentNode.removeChild(f.el);
+        fruits.splice(i, 1);
+      }
+    }
+
+    for (let i = halves.length - 1; i >= 0; i--) {
+      const half = halves[i];
+      half.x += half.vx;
+      half.y += half.vy;
+      half.vy += half.g;
+      half.rot += half.rotSpeed;
+
+      if (half.el) {
+        half.el.style.transform = `translate3d(${half.x - 32}px, ${half.y - 32}px, 0) rotate(${half.rot}deg)`;
+      }
+
+      if (half.y > h + 100) {
+        if (half.el && half.el.parentNode) half.el.parentNode.removeChild(half.el);
+        halves.splice(i, 1);
+      }
+    }
+
+    for (let i = juices.length - 1; i >= 0; i--) {
+      const j = juices[i];
+      j.x += j.vx;
+      j.y += j.vy;
+      j.vy += 0.2;
+      j.alpha -= j.fade;
+
+      if (j.el) {
+        j.el.style.transform = `translate3d(${j.x}px, ${j.y}px, 0)`;
+        j.el.style.opacity = Math.max(0, j.alpha);
+      }
+
+      if (j.alpha <= 0) {
+        if (j.el && j.el.parentNode) j.el.parentNode.removeChild(j.el);
+        juices.splice(i, 1);
+      }
+    }
+
+    if (ctx && canvasEl) {
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
+      while (trail.length > 0 && now - trail[0].t > 180) {
+        trail.shift();
+      }
+
+      if (trail.length > 1) {
+        for (let i = 1; i < trail.length; i++) {
+          const p0 = trail[i - 1];
+          const p1 = trail[i];
+          const ageRatio = 1 - (now - p1.t) / 180;
+          if (ageRatio <= 0) continue;
+
+          ctx.beginPath();
+          ctx.moveTo(p0.x, p0.y);
+          ctx.lineTo(p1.x, p1.y);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.85 * ageRatio})`;
+          ctx.lineWidth = 7 * ageRatio;
+          ctx.lineCap = "round";
+          ctx.shadowColor = "#38bdf8";
+          ctx.shadowBlur = 12;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(p0.x, p0.y);
+          ctx.lineTo(p1.x, p1.y);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${0.45 * ageRatio})`;
+          ctx.lineWidth = 14 * ageRatio;
+          ctx.stroke();
+        }
+      }
+    }
+
+    fsActiveAnim = requestAnimationFrame(loop);
+  }
+
+  fsActiveAnim = requestAnimationFrame(loop);
+}
+window.fruitSlash = fruitSlash;
+
+function renderFruitWin(score, total) {
+  const starCount = 3;
+  stars += starCount;
+  ls.set("stars", stars);
+  head();
+  checkBadges();
+
+  const starsHtml = Array.from({length: 3}, (_, i) =>
+    im("gstar").replace("<img", `<img style="width:56px;${i < starCount ? "" : "filter:grayscale(1);opacity:.35"}"`)
+  ).join("");
+
+  const bcHtml = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Kết quả","Results"), i:"🏆"}
+  ]);
+
+  m.innerHTML = `${bcHtml}
+  <div class="cg-wrap">
+    <div class="cg-result-card">
+      <div class="cg-result-trophy">🍉 🏆 🍓</div>
+      <h2>${T("Bé là Cao thủ chém trái cây!","Fruit Slash Champion!")}</h2>
+      <div class="cg-result-stars">${starsHtml}</div>
+      <div class="cg-result-score">${T(`Bé đã chém đúng ${score} quả trái cây thơm ngon!`, `You sliced ${score} delicious fruits!`)}</div>
+      <p class="cg-result-msg">${T("Bé phản xạ rất nhanh, nhận biết các loại quả thật siêu! Thưởng bé 3 sao vàng! 🌟", "Amazing reflexes and fruit knowledge! You earned 3 stars! 🌟")}</p>
+      <div class="cg-result-btns">
+        <button class="cg-btn-replay" onclick="fruitSlash(true)" style="background:#059669;border-color:#047857">
+          🔄 ${T("Chém tiếp nào!","Play Again")}
+        </button>
+        <button class="cg-btn-back" onclick="go('games')">
+          🔙 ${T("Quay lại trò chơi","Back to Games")}
+        </button>
+      </div>
+    </div>
+  </div>`;
+
+  sfxFanfare();
+  fx();
+  catSet("celebrate");
+  say("Hoan hô bé! Bé là cao thủ chém trái cây rất siêu! Thưởng bé ba sao vàng!", "Hooray! You are a fruit slashing champion! You earned three stars!");
+}
+window.renderFruitWin = renderFruitWin;
+
+
 function match(){
   const l = ql = qL();
   const allLetters = exPL(l);
@@ -5728,7 +6191,7 @@ const V={
   match,mem,trace,gate,parent,rec:recS,
   get readL(){return(typeof window!=="undefined"&&window.readL)||(typeof globalThis!=="undefined"&&globalThis.readL);},
   get math10(){return(typeof window!=="undefined"&&window.math10)||(typeof globalThis!=="undefined"&&globalThis.math10);},
-  storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity
+  storyL,storyRead,storyDetail,pwaGuide,badges:showBadges,countGame,fruitSlash,bubbleGame,tierActivities,tierActLanAnh,tierActVtv7,tierActMath,tierActWord,tierActRead,playActivity
 };
 const LAZY={s:"./img-s.js",o:"./img-o.js"},LP={};
 async function need(k){
