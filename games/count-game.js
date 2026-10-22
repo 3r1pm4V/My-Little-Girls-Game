@@ -150,7 +150,7 @@ function renderCountQuestion() {
       <div class="cg-prompt" id="cgPrompt" onclick="say('${viPrompt}', '${enPrompt}')" title="${_T("Bấm để nghe lại câu hỏi", "Tap to listen again")}">
         <span>🔊</span> ${_T(viPrompt, enPrompt)}
       </div>
-      <div class="cg-items-box">
+      <div class="cg-items-box ${count > 10 ? "dense" : ""}">
         ${itemsHtml}
       </div>
       <div class="cg-hint-text">${_T("💡 Chạm vào từng hình để bé cùng đếm nhé!", "💡 Tap each item to count together!")}</div>

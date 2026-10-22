@@ -154,10 +154,11 @@ function cmpS() {
 
 // 9. TRÒ CHƠI SỐ CÒN THIẾU TRONG DÃY (mis)
 function mis() {
-  var mx = Math.max(MX(), 6), s = R(1, mx - 4), h = R(1, 3), n = s + h, c = new Set([n]);
-  while (c.size < 3) c.add(R(1, mx));
-  var objsHtml = '<div class="objs">' + [0, 1, 2, 3, 4].map(function(i) {
-    return '<span style="font-size:64px;font-weight:800;padding:0 10px;color:var(--acc)">' + (i == h ? "?" : (s + i)) + '</span>';
+  // Nâng phạm vi số còn thiếu lên tới 20
+  var mx = 20, s = R(1, 16), h = R(1, 3), n = s + h, c = new Set([n]);
+  while (c.size < 3) c.add(R(1, 20));
+  var objsHtml = '<div class="objs" style="display:flex;justify-content:center;align-items:center;flex-wrap:nowrap;gap:4px">' + [0, 1, 2, 3, 4].map(function(i) {
+    return '<span style="font-size:clamp(34px,8.5vw,52px);font-weight:800;padding:0 6px;color:var(--acc)">' + (i == h ? "?" : (s + i)) + '</span>';
   }).join("") + '</div>';
 
   quiz(

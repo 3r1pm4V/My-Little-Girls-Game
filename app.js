@@ -13,8 +13,15 @@ I["count_ball"]="img/vocab/count_ball.png";
 I["count_star"]="img/vocab/count_star.png";
 I["count_flower"]="img/vocab/count_flower.png";
 I["count_bear"]="img/vocab/count_bear.png";
+I["vocab_banh_mi"]="img/vocab/vocab_banh_mi.png";
+I["vocab_ca_rot"]="img/vocab/vocab_ca_rot.png";
+I["vocab_cai_bat"]="img/vocab/vocab_cai_bat.png";
+I["vocab_dong_ho"]="img/vocab/vocab_dong_ho.png";
+I["vocab_khan_mat"]="img/vocab/vocab_khan_mat.png";
+I["vocab_kinh_mat"]="img/vocab/vocab_kinh_mat.png";
+I["vocab_non_la"]="img/vocab/vocab_non_la.png";
 const ALT_MAP={
-  vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
+  vocab_banh_mi:"Bánh mì",vocab_ca_rot:"Cà rốt",vocab_cai_bat:"Cái bát",vocab_dong_ho:"Đồng hồ",vocab_khan_mat:"Khăn mặt",vocab_kinh_mat:"Kính mắt",vocab_non_la:"Nón lá",vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
   cat_thinking:"Chú mèo con đang suy nghĩ",cat_celebrate:"Chú mèo con chúc mừng",cat_pointing:"Chú mèo con hướng dẫn",
   apple:"Quả táo",ball:"Quả bóng",star:"Ngôi sao",gstar:"Ngôi sao vàng thưởng điểm",flower:"Bông hoa",
@@ -2907,7 +2914,7 @@ function bubbleGame(isReplay) {
       </div>
     `;
 
-    const bubbleRadius = 40;
+    const bubbleRadius = 48;
     const spawnX = bubbleRadius + Math.random() * Math.max(60, skyWidth - bubbleRadius * 2);
     const spawnY = skyHeight + 50;
 
@@ -3071,7 +3078,7 @@ function renderBubbleWin(score, total) {
 function match(){
   const l = ql = qL();
   const allLetters = exPL(l);
-  const Ls = shuf(allLetters).slice(0, 3);
+  const Ls = shuf(allLetters).slice(0, 5);
   const items = Ls.map(L => {
     const k = pick(exPK(l, L));
     return { L, k, ex: EXA[k] };
@@ -3430,13 +3437,42 @@ function getVisualCardName(k) {
 }
 window.getVisualCardName = getVisualCardName;
 
-function mem(){const l=ql=qL(),ks=shuf(exP(l)).slice(0,3),cs=shuf([...ks,...ks]);let a=null,lock=false,left=3,miss=0;
- m.innerHTML=kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Lật thẻ trí nhớ","Memory"),i:"🃏"}])+`<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:520px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
- say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");catSet("thinking");
- m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{if(lock||b.disabled||b===a)return;const k=b.dataset.c;b.innerHTML=im(EXA[k].img);const cardName=getVisualCardName(k);say(cardName,cardName);
-  if(!a){a=b;return}
-  if(a.dataset.c===k){[a,b].forEach(x=>{x.disabled=true;x.classList.add("good")});a=null;sfxOk();if(!--left)setTimeout(()=>win(miss>2?1:0,mem,"",""),900)}
-  else{miss++;lock=true;sfxNo();const p=a;a=null;setTimeout(()=>{p.innerHTML=b.innerHTML=im("gstar");lock=false},1200)}})}
+function mem(){
+  const l=ql=qL();
+  const pairCount = R(5, 8); // Ngẫu nhiên 5 đến 8 bộ thẻ lật tăng độ thử thách
+  const available = exP(l);
+  const ks = shuf(available).slice(0, Math.min(pairCount, available.length));
+  const cs = shuf([...ks, ...ks]);
+  let a = null, lock = false, left = ks.length, miss = 0;
+  m.innerHTML = kbc([
+    {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+    {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
+    {t:T("Lật thẻ trí nhớ","Memory"), i:"🃏"}
+  ]) + `<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:620px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
+  say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");
+  catSet("thinking");
+  m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{
+    if(lock||b.disabled||b===a) return;
+    const k = b.dataset.c;
+    b.innerHTML = im(EXA[k].img);
+    const cardName = getVisualCardName(k);
+    say(cardName, cardName);
+    if(!a){ a = b; return; }
+    if(a.dataset.c === k){
+      [a, b].forEach(x => { x.disabled = true; x.classList.add("good"); });
+      a = null;
+      sfxOk();
+      if(!--left) setTimeout(() => win(miss > Math.floor(ks.length * 0.7) ? 1 : 0, mem, "", ""), 900);
+    } else {
+      miss++;
+      lock = true;
+      sfxNo();
+      const p = a;
+      a = null;
+      setTimeout(() => { p.innerHTML = b.innerHTML = im("gstar"); lock = false; }, 1100);
+    }
+  });
+}
 function sayTrace(item, type = "letter"){
   if(!SOUND_ON()) return;
   if(type === "letter"){
@@ -5230,18 +5266,7 @@ function parent(){
         <div class="dash-card-title">⚙️ ${T("Cài đặt tập trung hệ thống","Centralized System Settings")}</div>
         <div style="margin-bottom:8px">${vh}</div>
 
-        <!-- 1. GIỚI HẠN THỜI GIAN HẰNG NGÀY -->
-        <div class="settings-group">
-          <div class="settings-group-title">⏰ ${T("Giới hạn thời gian màn hình mỗi ngày:","Daily Screen Time Limit:")}</div>
-          <div class="settings-group-desc">${T("Tự động nhắc bé nghỉ ngơi giữ mắt sáng khi hết giờ:","Automatically prompts child to rest eyes when limit is reached:")}</div>
-          <div class="chips" style="margin-top:4px">
-            ${[0, 15, 30, 45, 60].map(mVal => `
-              <button class="pill ${dailyLimit === mVal ? "on" : ""}" onclick="setDailyLimit(${mVal})">
-                ${mVal === 0 ? T("Không giới hạn","No limit") : mVal + " " + T("phút","mins")}
-              </button>
-            `).join("")}
-          </div>
-        </div>
+        
 
         <!-- 2. NGÔN NGỮ HIỂN THỊ & PHÁT ÂM -->
         <div class="settings-group">
@@ -5287,7 +5312,6 @@ function parent(){
           <div class="chips" style="margin-top:4px">
             <button class="pill" onclick="changeParentPin()">🔑 ${T("Đổi mã PIN phụ huynh","Change PIN")}</button>
             <button class="pill" onclick="go('rec')">🎙 ${T("Thu giọng bố mẹ","Record voice")}</button>
-            <button class="pill" onclick="testVi()">🔊 ${T("Nghe thử giọng máy","Test speech")}</button>
           </div>
         </div>
       </div>
