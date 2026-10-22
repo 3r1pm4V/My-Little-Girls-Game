@@ -1,4 +1,5 @@
 
+    
 // ========================================================
 // BẢO VỆ CẢM ỨNG CHO TRẺ EM (CHỐNG ZOOM 2 NGÓN, CHỐNG GIẬT TRANG PWA)
 // ========================================================
@@ -2762,6 +2763,7 @@ function games(){
   </div>
   <div class="cards">
     ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
+    ${card("fruitSlash","<b>🍉 🗡️ 🍓</b>","Chém trái cây","Fruit Slash","game")}
     ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
     ${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}
     ${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}
