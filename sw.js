@@ -1,6 +1,6 @@
-// asset-hash: 2dae1e40e9b0e75e
+// asset-hash: f74fa272443b4c7a
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v100";
+const C = "bhv-v101";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [

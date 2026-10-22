@@ -1317,3 +1317,13 @@ html.rm .confetti-cv, html.rm .fx {
   30%{transform:translate(-50%,-70%) scale(1.2);opacity:1}
   100%{transform:translate(-50%,-100%) scale(1);opacity:0}
 }
+
+.trace-hint-banner{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#fff0f5,#f0f9ff);border:2.5px solid #ff7aa8;border-radius:20px;padding:8px 14px;margin:4px auto 8px;max-width:340px;box-shadow:0 3px 8px rgba(0,0,0,0.06);cursor:pointer;text-align:left;transition:transform .12s}
+.trace-hint-banner:active{transform:scale(.98)}
+.trace-hint-banner.net{background:#f0f9ff;border-color:#7dd3fc}
+.trace-hint-sample{font-family:"HPTapViet",cursive,sans-serif;font-size:46px;line-height:1;color:#184a86;min-width:36px;text-align:center;flex-shrink:0}
+.trace-hint-sample-svg{width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.trace-hint-text{flex:1;line-height:1.35}
+.trace-hint-title{font-size:13.5px;color:#831843;margin-bottom:2px}
+.trace-hint-banner.net .trace-hint-title{color:#0369a1}
+.trace-hint-desc{font-size:12.5px;color:#475569;font-weight:600}
