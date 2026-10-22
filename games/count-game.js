@@ -29,8 +29,9 @@ let cgState = {
   total: 5,
   questions: [],
   answered: false,
-  countedItems: new Set()
-};
+  countedItems: new Set(),
+    countedCount: 0
+  };
 
 let cgContainer = null;
 
@@ -106,6 +107,7 @@ function renderCountQuestion() {
 
   cgState.answered = false;
   cgState.countedItems = new Set();
+  cgState.countedCount = 0;
   const q = questions[qIndex];
   const item = q.item;
   const count = q.target;
@@ -124,9 +126,9 @@ function renderCountQuestion() {
   }).join("");
 
   const itemsHtml = Array.from({ length: count }, (_, i) => {
-    return `<button class="cg-item-btn" data-i="${i + 1}" onclick="window.__cgCountTap(this, ${i + 1})" aria-label="${i + 1}">
+    return `<button class="cg-item-btn" data-i="${i + 1}" onclick="window.__cgCountTap(this)" aria-label="${item.nameVi}">
       ${item.emoji}
-      <span class="cg-badge">${i + 1}</span>
+      <span class="cg-badge"></span>
     </button>`;
   }).join("");
 
@@ -276,14 +278,32 @@ function renderCountResult() {
 
 // Cài đặt các hàm xử lý tương tác toàn cục
 if (typeof window !== "undefined") {
-  window.__cgCountTap = function(btn, num) {
+  window.__cgCountTap = function(btn) {
     if (_rmOn()) return;
     _sfxTap();
-    btn.classList.add("counted");
     btn.style.animation = "pop .3s ease";
     setTimeout(() => { btn.style.animation = ""; }, 300);
-    cgState.countedItems.add(num);
-    _sayN(num);
+
+    const badge = btn.querySelector(".cg-badge");
+    // Nếu hình này đã được đếm rồi: đọc lại số đã đếm của hình đó
+    if (btn.classList.contains("counted")) {
+      const existingNum = parseInt(btn.dataset.countedNum, 10);
+      if (existingNum) {
+        _sayN(existingNum);
+      }
+      return;
+    }
+
+    // Nếu hình này chưa được đếm: bắt đầu từ 1 và đếm tới (+1 cho mỗi hình mới)
+    cgState.countedCount = (cgState.countedCount || 0) + 1;
+    const currentNum = cgState.countedCount;
+    btn.classList.add("counted");
+    btn.dataset.countedNum = currentNum;
+    if (badge) {
+      badge.textContent = currentNum;
+    }
+    cgState.countedItems.add(currentNum);
+    _sayN(currentNum);
   };
 
   window.__cgChoose = function(chosen, btn) {

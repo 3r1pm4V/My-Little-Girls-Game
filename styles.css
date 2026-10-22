@@ -353,11 +353,11 @@ button:active,.card:active,.opt:active,.chip:active,.pill:active,.syl-btn:active
 .cg-items-box{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;min-height:115px;padding:10px;background:linear-gradient(135deg,rgba(255,245,248,0.7),rgba(235,245,255,0.7));border-radius:20px;border:2px dashed var(--acc2);margin-bottom:8px}
 .cg-item-btn{font-size:clamp(44px,11vw,64px);line-height:1;background:none;border:none;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:center;padding:4px;transition:transform .15s}
 .cg-item-btn:active{transform:scale(1.25) rotate(5deg)}
-.cg-item-btn .cg-badge{position:absolute;top:-4px;right:-4px;background:var(--acc);color:#fff;font-size:var(--font-sm);font-weight:800;border-radius:50%;width:22px;height:22px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.cg-item-btn .cg-badge{position:absolute;top:-4px;right:-4px;background:var(--acc);color:#fff;font-size:var(--font-sm);font-weight:800;border-radius:12px;min-width:22px;height:22px;padding:0 3px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
 .cg-item-btn.counted .cg-badge{display:flex;animation:popIn .2s}
 .cg-items-box.dense{gap:6px;min-height:125px}
 .cg-items-box.dense .cg-item-btn{font-size:clamp(28px,7vw,40px);padding:2px}
-.cg-items-box.dense .cg-badge{width:19px;height:19px;font-size:10.5px;top:-3px;right:-3px}
+.cg-items-box.dense .cg-badge{min-width:19px;height:19px;font-size:10.5px;border-radius:10px;padding:0 2px;top:-3px;right:-3px}
 .cg-hint-text{font-size:var(--font-sm);color:#706e80;margin-top:2px}
 .cg-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
 .cg-opt-btn{background:var(--card);border:4.5px solid var(--acc2);border-radius:24px;min-height:76px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 0 #0002;transition:transform .12s,background .12s,border-color .12s;cursor:pointer;font-family:inherit}
