@@ -1,33 +1,14 @@
 // Máy chủ kiểm tra cục bộ (Local Development Server)
-// Tích hợp API VieNeu TTS giọng đọc Tưởng Vy (vieneu-v4)
+// Tích hợp Local CIT Voice Studio (http://127.0.0.1:8001, giọng Mai Anh, tốc độ 0.9)
 const http = require('http');
-const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-// Tải biến môi trường từ .env cục bộ (nếu có)
-const envFile = path.join(__dirname, '.env');
-if (fs.existsSync(envFile)) {
-  try {
-    const lines = fs.readFileSync(envFile, 'utf8').split('\n');
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const eqIdx = trimmed.indexOf('=');
-        if (eqIdx > 0) {
-          const k = trimmed.slice(0, eqIdx).trim();
-          const v = trimmed.slice(eqIdx + 1).trim().replace(/^['"]|['"]$/g, '');
-          if (!process.env[k]) process.env[k] = v;
-        }
-      }
-    }
-  } catch(e) {}
-}
-
 const PORT = process.env.PORT || 8000;
-const API_KEY = process.env.VIENEU_API_KEY || '';
-const DEFAULT_VOICE = 'Mai Anh';
+const CIT_API_URL = process.env.CIT_TTS_URL || 'http://127.0.0.1:8001/api/tts/generate';
+const DEFAULT_VOICE = process.env.CIT_VOICE_ID || 'Mai Anh';
+const DEFAULT_SPEED = parseFloat(process.env.CIT_SPEED || '0.9');
 const AUDIO_DIR = path.join(__dirname, 'audio');
 
 if (!fs.existsSync(AUDIO_DIR)) {
@@ -62,44 +43,31 @@ function getFileName(str) {
   }
   const safeName = str.toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
     .replace(/[^a-z0-9]/g, "_")
     .replace(/_+/g, "_")
     .slice(0, 24);
   return `vi_${safeName}_${Math.abs(hash).toString(36)}.mp3`;
 }
 
-function fetchVieneuTTS(text, voice) {
-  if (!API_KEY) {
-    return Promise.reject(new Error('VIENEU_API_KEY chưa được cấu hình trong biến môi trường (.env hoặc hệ thống).'));
+async function fetchLocalCitTTS(text, voice) {
+  const payload = {
+    text: text,
+    voice_id: voice || DEFAULT_VOICE,
+    format: 'mp3',
+    speed: DEFAULT_SPEED,
+    temperature: 0.65
+  };
+  const res = await fetch(CIT_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(`Local CIT TTS ${res.status}: ${errText}`);
   }
-  const payload = JSON.stringify({
-    model: 'vieneu-v4',
-    input: text,
-    voice: voice || DEFAULT_VOICE
-  });
-  return new Promise((resolve, reject) => {
-    const req = https.request({
-      hostname: 'api.vieneu.io',
-      path: '/api/v1/audio/speech',
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
-      }
-    }, res => {
-      const chunks = [];
-      res.on('data', c => chunks.push(c));
-      res.on('end', () => {
-        const buf = Buffer.concat(chunks);
-        if (res.statusCode === 200) resolve(buf);
-        else reject(new Error(`Vieneu API ${res.statusCode}: ${buf.toString()}`));
-      });
-    });
-    req.on('error', reject);
-    req.write(payload);
-    req.end();
-  });
+  return Buffer.from(await res.arrayBuffer());
 }
 
 function normAudioKey(s) {
@@ -139,7 +107,6 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -150,7 +117,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // API TTS endpoint
+  // API TTS endpoint kết nối trực tiếp với Local CIT Voice Studio (Mai Anh, tốc độ 0.9)
   if (pathname === '/api/tts' && req.method === 'POST') {
     let body = '';
     req.on('data', c => body += c);
@@ -176,16 +143,16 @@ const server = http.createServer(async (req, res) => {
           return;
         }
 
-        console.log(`[TTS] Đang sinh giọng đọc cho: "${text}" (Giọng ${voice})...`);
-        const buf = await fetchVieneuTTS(text, voice);
+        console.log(`[CIT TTS] Đang sinh giọng đọc cho: "${text}" (Giọng ${voice}, tốc độ ${DEFAULT_SPEED})...`);
+        const buf = await fetchLocalCitTTS(text, voice);
         fs.writeFileSync(filePath, buf);
         updateAudioMap(`vi|${text}`, relUrl);
 
-        console.log(`[TTS] -> Lưu thành công: ${relUrl} (${buf.length} bytes)`);
+        console.log(`[CIT TTS] -> Lưu thành công: ${relUrl} (${buf.length} bytes)`);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ url: relUrl, cached: false }));
       } catch (err) {
-        console.error('[TTS Error]', err.message);
+        console.error('[CIT TTS Error]', err.message);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));
       }
@@ -193,14 +160,12 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Serve static files
   if (pathname === '/' || pathname === '') {
-    pathname = '/test-local.html';
+    pathname = '/index.html';
   }
 
   const filePath = path.join(__dirname, pathname);
 
-  // Prevent directory traversal
   if (!filePath.startsWith(__dirname)) {
     res.writeHead(403, { 'Content-Type': 'text/plain' });
     res.end('Forbidden');
@@ -231,8 +196,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`🎉 Local Test Server đang chạy tại:`);
-  console.log(`👉 http://localhost:${PORT}/test-local.html`);
   console.log(`👉 http://localhost:${PORT}/index.html`);
-  console.log(`🎙 Tích hợp API VieNeu TTS giọng: ${DEFAULT_VOICE}`);
+  console.log(`🎙 Tích hợp Local CIT Voice Studio (${DEFAULT_VOICE} - ${DEFAULT_SPEED}x)`);
   console.log(`======================================================\n`);
 });

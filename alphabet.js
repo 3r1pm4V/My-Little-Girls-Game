@@ -117,9 +117,9 @@ function letL() {
     { s: "home", t: T("Trang chủ", "Home"), i: "🏠" },
     { t: T("Chữ cái", "Letters"), i: "🔤" }
   ], '<button class="pill" onclick="go(\'letP\')">🎮 ' + T("Chơi", "Play") + '</button>') +
-  '<h2 id="letLQ" role="button" tabindex="0" onclick="say(\'Chạm vào chữ cái nhé\',\'Tap a letter\')" style="cursor:pointer" title="' + T("Bấm để nghe đọc lại", "Tap to listen again") + '">🔊 ' + T("Chạm vào chữ cái", "Tap a letter") + '</h2>' +
+  '<h2 id="letLQ" role="button" tabindex="0" onclick="say(\'Bé hãy chạm vào các chữ cái xinh xinh nhé!\',\'Tap a letter\')" style="cursor:pointer" title="' + T("Bấm để nghe đọc lại", "Tap to listen again") + '">🔊 ' + T("Bé hãy chạm vào các chữ cái xinh xinh nhé!", "Tap a letter") + '</h2>' +
   '<div class="lgrid">' + arr.map(function(L) { return '<button onclick="go(\'letD\',\'' + L + '\')">' + imL(L) + '</button>'; }).join("") + '</div>';
-  sayPrompt("letL", "Chạm vào chữ cái nhé", "Tap a letter", 180000);
+  sayPrompt("letL", "Bé hãy chạm vào các chữ cái xinh xinh nhé!", "Tap a letter", 180000);
   need("s");
 }
 
@@ -182,8 +182,8 @@ function letP() {
   var k = pick(exP(l)), L = EXA[k].L, c = new Set([L]);
   while (c.size < 3) c.add(pick(exPL(l)));
   quiz(
-    T("Chữ cái đầu tiên là gì?", "What letter does it start with?"),
-    "Chữ cái đầu tiên là gì?",
+    T("Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?", "What letter does it start with?"),
+    "Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?",
     "What letter does it start with?",
     im(EXA[k].img, "big"),
     shuf(Array.from(c)).map(function(v) { return { k: v, h: imL(v) }; }),
@@ -209,8 +209,8 @@ function letO() {
     if (EXA[o].L !== L) c.add(o);
   }
   quiz(
-    T("Hình nào bắt đầu bằng chữ " + L + "?", "Which starts with " + L + "?"),
-    "Hình nào bắt đầu bằng chữ " + LV[LET.indexOf(L)] + "?",
+    T("Hình nào bắt đầu bằng chữ " + L + " đáng yêu?", "Which starts with " + L + "?"),
+    "Hình nào bắt đầu bằng chữ " + LV[LET.indexOf(L)] + " đáng yêu?",
     "Which one starts with " + L + "?",
     imL(L, "big"),
     shuf(Array.from(c)).map(function(v) { return { k: v, h: im(EXA[v].img) }; }),

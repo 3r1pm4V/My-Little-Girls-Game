@@ -53,39 +53,45 @@ const _rmOn = () => (typeof window !== "undefined" && window.rmOn ? window.rmOn(
 const _getNV = (idx) => (typeof window !== "undefined" && window.NV && window.NV[idx] ? window.NV[idx] : idx);
 const _getNE = (idx) => (typeof window !== "undefined" && window.NE && window.NE[idx] ? window.NE[idx] : idx);
 
-function initCountQuestions() {
+function generateSingleCountQuestion(index = 0) {
   const pool = _shuf([...COUNT_ITEMS_POOL]);
-  const nums = _shuf([1, 2, 3, 4, 5, 6, 7]).slice(0, 5);
+  const item = pool[index % pool.length];
+  const maxRange = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 10;
+  const cap = Math.min(12, Math.max(5, maxRange));
+  const target = _R(1, cap);
+  const c = new Set([target]);
+
+  while (c.size < 4) {
+    const offset = _pick([-2, -1, 1, 2, 3]);
+    let cand = target + offset;
+    if (cand < 1) cand = target + _R(1, 3);
+    if (cand > cap) cand = Math.max(1, target - _R(1, 3));
+    if (cand >= 1 && cand <= cap && cand !== target) c.add(cand);
+    else c.add(_R(1, cap));
+  }
+
+  return {
+    item,
+    target,
+    options: _shuf([...c]),
+    attempted: false
+  };
+}
+
+function initCountQuestions() {
   const questions = [];
-
-  for (let i = 0; i < 5; i++) {
-    const item = pool[i % pool.length];
-    const target = nums[i];
-    const c = new Set([target]);
-
-    while (c.size < 3) {
-      const offset = _pick([-2, -1, 1, 2, 3]);
-      let cand = target + offset;
-      if (cand < 1) cand = target + _R(1, 3);
-      if (cand > 9) cand = target - _R(1, 3);
-      if (cand >= 1 && cand <= 9 && cand !== target) c.add(cand);
-    }
-
-    questions.push({
-      item,
-      target,
-      options: _shuf([...c]),
-      attempted: false
-    });
+  for (let i = 0; i < 6; i++) {
+    questions.push(generateSingleCountQuestion(i));
   }
 
   cgState = {
     qIndex: 0,
     score: 0,
-    total: 5,
+    total: 6,
     questions,
     answered: false,
-    countedItems: new Set()
+    countedItems: new Set(),
+    countedCount: 0
   };
 }
 
@@ -111,7 +117,7 @@ function renderCountQuestion() {
   const q = questions[qIndex];
   const item = q.item;
   const count = q.target;
-  const viPrompt = `Có bao nhiêu ${item.nameVi}?`;
+  const viPrompt = `Có bao nhiêu ${item.nameVi} xinh xinh ở đây? Bé hãy chạm vào từng bạn ấy để đếm cùng cô nhé!`;
   const enPrompt = `How many ${item.nameEn}?`;
 
   const bcHtml = _kbc([
@@ -333,12 +339,23 @@ if (typeof window !== "undefined") {
         fb.className = "cg-feedback good";
         fb.innerHTML = `🎉 ${_T(praise[0], praise[1])} ${_T("Đúng rồi!", "That's right!")} ⭐`;
       }
-      _say(`${praise[0]} Có ${_getNV(q.target)} ${q.item.nameVi}.`, `${praise[1]} There are ${_getNE(q.target)} ${q.item.nameEn}.`);
+      _say(`Chính xác! Có tất cả ${_getNV(q.target)}!`, `${praise[1]} There are ${_getNE(q.target)} ${q.item.nameEn}.`);
 
       setTimeout(() => {
+        if (typeof window !== "undefined" && typeof window.__endlessNext === "function") {
+          if (typeof window.stars === "number" && window.ls) {
+            window.stars++;
+            window.ls.set("stars", window.stars);
+            if (window.head) window.head();
+          }
+          window.__endlessNext();
+          return;
+        }
         cgState.qIndex++;
+        cgState.questions.push(generateSingleCountQuestion(cgState.qIndex));
+        cgState.total = cgState.questions.length;
         renderCountQuestion();
-      }, 1250);
+      }, 1150);
     } else {
       q.attempted = true;
       btn.classList.add("bad");
@@ -347,9 +364,9 @@ if (typeof window !== "undefined") {
       _catSet("sad");
       if (fb) {
         fb.className = "cg-feedback bad";
-        fb.innerHTML = `💡 ${_T("Bé đếm lại cẩn thận rồi chọn nhé!", "Count again carefully and try!")}`;
+        fb.innerHTML = `💡 ${_T("Ồ, chưa đúng rồi. Bé hãy chậm rãi chạm vào từng hình một để đếm lại nhé!", "Count again carefully and try!")}`;
       }
-      _say("Bé thử đếm lại nhé", "Try counting again");
+      _say("Ồ, chưa đúng rồi. Bé hãy chậm rãi chạm vào từng hình một để đếm lại nhé!", "Try counting again");
       setTimeout(() => {
         _catSet("thinking");
       }, 900);

@@ -24,6 +24,7 @@ function cnt(b, i) {
 
 // 4. MÀN HÌNH HỌC SỐ ĐẾM 0–20 (numL)
 function numL(n) {
+  var isExplicitTap = (typeof n !== "undefined");
   if (typeof n === "undefined") n = 1;
   var o = COUNT[n % COUNT.length];
   if (typeof ST !== "undefined") {
@@ -46,7 +47,7 @@ function numL(n) {
     { t: T("Học số", "Numbers"), i: "🔢" }
   ], `<button class="pill" onclick="go('numP')">🎮 ${T("Chơi", "Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n + 20) % 21})">${im("btn_back")}</button><button class="bignum${n > 9 ? " two" : ""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n + 1) % 21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='numL';trm='nu';ls.set('trm','nu');trace('${n}')" style="background:#0284c7;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(2,132,199,0.3);border-radius:24px">✍️ ${T("Bé tập tô số " + n, "Trace number " + n)}</button></div><div class="objs${n <= 3 ? " objs-few" : ""}">${objsHtml}</div><div class="chips" style="gap:10px">${chipsHtml}</div>`;
 
-  if (typeof isBackNav === "undefined" || !isBackNav) sayN(n);
+  if (isExplicitTap && (typeof isBackNav === "undefined" || !isBackNav)) sayN(n);
 }
 
 // 5. TRÒ CHƠI ĐỐ ĐẾM SỐ: CÓ BAO NHIÊU? (numP)
@@ -92,8 +93,8 @@ function cmp() {
     return '<div class="grp">' + Array.from({ length: n }, function() { return im(o); }).join("") + '</div>';
   };
   var q = more
-    ? ["Bên nào NHIỀU hơn?", "Which has MORE?"]
-    : ["Bên nào ÍT hơn?", "Which has FEWER?"];
+    ? ["Bên nào nhiều hơn nhỉ?", "Which has MORE?"]
+    : ["Bên nào ít hơn ta?", "Which has FEWER?"];
 
   quiz(
     T(q[0], q[1]),
@@ -109,12 +110,12 @@ function cmp() {
     cmp,
     function() {
       if (a === b) {
-        return ['<div class="eq">' + a + ' = ' + b + '</div>', NV[a] + ' bằng ' + NV[b] + '. Hai bên bằng nhau!', NE[a] + ' equals ' + NE[b] + '. They are the same!'];
+        return ['<div class="eq">' + a + ' = ' + b + '</div>', NV[a] + ' bằng ' + NV[b] + '. Hai bên cân bằng nhau thật đẹp!', NE[a] + ' equals ' + NE[b] + '. They are the same!'];
       }
       var w = (right === "a" ? a : b), l = (right === "a" ? b : a);
       return [
         '<div class="eq">' + a + ' ' + (a > b ? ">" : "<") + ' ' + b + '</div>',
-        NV[w] + ' ' + (more ? "nhiều" : "ít") + ' hơn ' + NV[l],
+        more ? (NV[w] + ' đông vui hơn!') : (NV[w] + ' ít hơn một chút!'),
         NE[w] + ' is ' + (more ? "more" : "fewer") + ' than ' + NE[l]
       ];
     },
@@ -133,8 +134,8 @@ function cmpS() {
   var s = (a > b ? ">" : (a < b ? "<" : "="));
 
   quiz(
-    T("Chọn dấu đúng", "Pick the right sign"),
-    "Chọn dấu đúng",
+    T("Chọn chiếc cầu đúng nối hai bên nhé!", "Pick the right sign"),
+    "Chọn chiếc cầu đúng nối hai bên nhé!",
     "Pick the right sign",
     '<div class="stage" style="gap:6px">' + g(a, o1) + '<span style="font-size:70px;font-weight:800;color:var(--acc)">?</span>' + g(b, o2) + '</div>',
     [">", "=", "<"].map(function(v) {
@@ -145,31 +146,50 @@ function cmpS() {
     function() {
       return [
         '<div class="eq">' + a + ' ' + s + ' ' + b + '</div>',
-        (a === b) ? (NV[a] + ' bằng ' + NV[b]) : (NV[a] + ' ' + (a > b ? "nhiều" : "ít") + ' hơn ' + NV[b]),
+        (a === b) ? (NV[a] + ' bằng ' + NV[b] + '. Hai bên cân bằng nhau thật đẹp!') : (a > b ? (NV[a] + ' đông vui hơn!') : (NV[a] + ' ít hơn một chút!')),
         (a === b) ? (NE[a] + ' equals ' + NE[b]) : (NE[a] + ' is ' + (a > b ? "more" : "fewer") + ' than ' + NE[b])
       ];
     }
   );
 }
 
-// 9. TRÒ CHƠI SỐ CÒN THIẾU TRONG DÃY (mis)
+// 9. TRÒ CHƠI SỐ CÒN THIẾU TRONG DÃY: ĐOÀN TÀU SÂU RÓM & BÓNG BAY SỐ (mis)
 function mis() {
-  // Nâng phạm vi số còn thiếu lên tới 20
-  var mx = 20, s = R(1, 16), h = R(1, 3), n = s + h, c = new Set([n]);
-  while (c.size < 3) c.add(R(1, 20));
-  var objsHtml = '<div class="objs" style="display:flex;justify-content:center;align-items:center;flex-wrap:nowrap;gap:4px">' + [0, 1, 2, 3, 4].map(function(i) {
-    return '<span style="font-size:clamp(34px,8.5vw,52px);font-weight:800;padding:0 6px;color:var(--acc)">' + (i == h ? "?" : (s + i)) + '</span>';
-  }).join("") + '</div>';
+  // Nâng phạm vi số còn thiếu lên tới 20 (+20% độ khó: 4 lựa chọn đáp án, bước nhảy 1 hoặc 2), chạy random giao diện Sâu róm hoặc Bóng bay
+  var rangeMax = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 20;
+  var mx = Math.max(5, rangeMax);
+  var step = (mx >= 10 && R(0, 3) === 0) ? 2 : 1;
+  var s = R(1, Math.max(1, mx - 4 * step)), h = R(1, 3), n = s + h * step, c = new Set([n]);
+  while (c.size < 4) c.add(R(1, mx));
+  var isCaterpillar = R(0, 1) === 0;
+  var objsHtml = isCaterpillar
+    ? '<div class="rv-caterpillar-wrap" style="margin:10px auto">' +
+        '<div class="rv-caterpillar-head">🐛</div>' +
+        [0, 1, 2, 3, 4].map(function(i) {
+          var isMys = (i == h);
+          return '<div class="rv-caterpillar-body' + (isMys ? ' mystery' : '') + '"><span>' + (isMys ? "?" : (s + i * step)) + '</span></div>';
+        }).join("") +
+      '</div>'
+    : '<div class="rv-balloons-seq-wrap" style="margin:10px auto">' +
+        [0, 1, 2, 3, 4].map(function(i) {
+          var isMys = (i == h);
+          return '<div class="rv-seq-balloon' + (isMys ? ' mystery' : '') + '"><span>' + (isMys ? "?" : (s + i * step)) + '</span></div>';
+        }).join("") +
+      '</div>';
+
+  var misQVi = isCaterpillar
+    ? "Đoàn tàu sâu róm thiếu một toa rồi! Bé tìm giúp số còn thiếu nhé!"
+    : "Quả bóng bay nào đang vắng mặt? Bé đoán xem đó là số mấy?";
 
   quiz(
-    T("Số nào còn thiếu?", "Which number is missing?"),
-    "Số nào còn thiếu?",
+    T("Ô số nào đang trốn mất nhỉ?", "Which number is missing?"),
+    misQVi,
     "Which number is missing?",
     objsHtml,
     shuf(Array.from(c)).map(function(v) { return { k: v, h: '<span class="ans">' + v + '</span>' }; }),
     n,
     mis,
-    function() { return ["", NV[n], NE[n]]; }
+    function() { return ["", "Giỏi lắm! Số " + (NV[n] || String(n)) + " đã xuất hiện rồi!", NE[n] || String(n)]; }
   );
 }
 

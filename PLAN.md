@@ -228,3 +228,33 @@ Cho app:
 3. Prompt mở đầu mỗi phiên, ví dụ:
    > Đọc AGENTS.md và todo.md. Hôm nay làm task P1-03. Tóm tắt kế hoạch (≤ 5 dòng) và danh sách file sẽ sửa, chờ mình xác nhận rồi mới code.
 4. Cuối phiên: yêu cầu agent cập nhật `todo.md` + `CHANGELOG.md` và báo cáo theo `AGENTS.md` mục 8.
+
+---
+
+## 10. Kiểm tra nền & Đối chiếu 12 bước mở rộng Góc Vui Chơi (Cập nhật 2026-10-23)
+
+### 10.1. Hiện trạng các chế độ & Khóa lưu trữ (Bước 0)
+- **Khóa `localStorage` đang dùng (hỗ trợ xuất/nhập JSON schemaVersion 2 qua `exportData` / `importData`)**:
+  - Tiến độ & thưởng: `stars`, `badges`, `stickers_unlocked`, `st` (thống kê đúng/sai/lỗi), `blg.progress.v2` (mastery theo kỹ năng), `bhv_act_stats`, `bhv_events`, `bhv_offscreen_done`.
+  - Hồ sơ & cài đặt phụ huynh: `bhv_profiles`, `bhv_active_profile_id`, `bhv_pdata_*`, `kid_name`, `kid_avatar`, `ageTier`, `show_age_tiers`, `blg_stage`, `blg_unlocked_stages`, `blg_unlock_all`, `daily_limit_minutes`, `study_sec_YYYY-MM-DD`, `lang`, `rate2`, `sfx`, `sound_master`, `rm`, `season_theme`, `number_range_max`.
+- **Cơ sở dữ liệu `IndexedDB`**:
+  - `bhv` (store `rec`): lưu giọng bố mẹ thu âm.
+  - `bhv_tts_cache`: bộ nhớ đệm âm thanh TTS LRU (giới hạn 50MB).
+  - `bhv_drawings` (store `artworks`): lưu tự động tối đa 20 bản vẽ đang làm dở của bé (tô màu SVG & bút phát sáng).
+
+### 10.2. Bảng đối chiếu 12 bước (Bước nào ĐÃ CÓ để bỏ qua không làm trùng vs. Bước nào MỚI)
+| Bước | Nội dung yêu cầu | Trạng thái trong Repo | Quyết định thực thi |
+|------|------------------|-----------------------|---------------------|
+| **Bước 0** | Kiểm tra nền, liệt kê chế độ & khóa lưu trữ, xác nhận sao lưu/khôi phục | Đã xác minh (`test-p5-parent-backup.js` PASS 100%) | Ghi nhận tại mục 10 này |
+| **Bước 1** | Chuỗi song ngữ & Chủ đề giao diện theo mùa (`Mùa thu`, `Mùa xuân`, `Mặc định`) trong màn phụ huynh | Chưa có chủ đề mùa | **Thực hiện mới** (`season_theme` + CSS variables trong `styles.css` & `parent()`) |
+| **Bước 2** | Tô màu theo vùng SVG (6 tranh nét) & Bút phát sáng nền tối (giới hạn điểm cho máy yếu) | Chưa có | **Thực hiện mới** (`artStudioGame` trong `games/creative-games.js`) |
+| **Bước 3** | Nối chấm theo số (`1..N`) & Tự vẽ cho bé xem (dữ liệu tọa độ lưu dạng cấu hình) | Chưa có | **Thực hiện mới** (`connectDotsGame` trong `games/creative-games.js`) |
+| **Bước 4** | Vẽ theo trí nhớ (ẩn sau 2–3 giây, nút xem lại) & Học vẽ từng bước | Đã có `trace` tập tô chữ/nét; chưa có Vẽ theo trí nhớ & Vẽ hình từng bước | **Thực hiện mới** (`memoryStepDrawGame` trong `games/creative-games.js`, giữ nguyên `trace` cũ) |
+| **Bước 5** | Gộp nhóm đồ vật & Khung mười ô (`2×5` Ten-Frame chạm đặt chấm) | Đếm vật (`countGame`), Số còn thiếu (`mis`), Cộng trong 10 (`math10`) **ĐÃ CÓ**; Khung mười ô `2×5` chưa có | **Bỏ qua phần đã có**, chỉ thêm mới **Khung mười ô `2×5`** (`tenFrameGame`) |
+| **Bước 6** | So sánh hai nhóm đồ vật, xếp màu & hình khối | **ĐÃ TỒN TẠI ĐẦY ĐỦ** (`cmp`, `cmpS`, `sizeCompareGame`, `colorShapeGame` trong `games/toddler-games.js`) | **Bỏ qua (không làm lại)** theo đúng quy tắc |
+| **Bước 7** | Nối cặp giống nhau trên lưới `2×2` / `3×2` (luôn giải được, có Hoàn tác & Gợi ý) | Đã có `match` nối 2 cột; chưa có lưới `2×2` / `3×2` kèm nút Hoàn tác & Gợi ý | **Thực hiện mới** (`pairLinkGridGame` trong `games/creative-games.js`) |
+| **Bước 8** | Sổ sticker thưởng & sao lưu/khôi phục tương thích ngược | **ĐÃ TỒN TẠI** (`showBadges('stickers')`, `stickers_unlocked`, tích hợp trong `LSK`/`LSV`) | **Bổ sung** `stickers_unlocked` vào `LSK`/`LSV` để sao lưu trọn vẹn |
+| **Bước 9** | Lưu tự động bản vẽ vào IndexedDB (tối đa 20 bản, nút xóa trong màn phụ huynh) | Chưa có cho Tô màu SVG & Bút phát sáng | **Thực hiện mới** (`bhv_drawings` IndexedDB trong `games/creative-games.js` + nút xóa trong `parent()`) |
+| **Bước 10** | Báo cáo tiến độ & Hẹn giờ chơi trong màn hình phụ huynh | **ĐÃ TỒN TẠI ĐẦY ĐỦ** (`progress.js`, `Analytics`, biểu đồ 7 ngày, `daily_limit_minutes`, `#timeLimitModal`) | **Bỏ qua (không làm lại)** theo đúng quy tắc |
+| **Bước 11** | Chọn khoảng số (`1–5`, `1–10`, `1–20`) trong màn phụ huynh gắn với bộ sinh câu hỏi | Chưa có bộ chọn khoảng số trần trong màn phụ huynh | **Thực hiện mới** (`getNumberRangeMax`, `setNumberRangeMax` + unit test kiểm chứng) |
+| **Bước 12** | Đóng gói PWA (`sw.js`), kiểm tra offline & cập nhật tài liệu | Cần đồng bộ cho module mới `games/creative-games.js` | **Thực hiện** (`node test-sw-precache.js --fix` + chạy toàn bộ 18 test suites) |

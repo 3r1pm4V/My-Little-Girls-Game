@@ -285,20 +285,18 @@ function readL(tab) {
         '</div>' +
       '</div>' +
     '</div>';
-    playLessonAudio(L.sentenceAudio || "", L.title);
   } else {
     var S = (typeof VN_STORIES !== "undefined" && VN_STORIES[curStory]) || (typeof VN_STORIES !== "undefined" ? VN_STORIES[0] : { title: "", sentences: [] });
     body = '<div class="chips">' + (typeof VN_STORIES !== "undefined" ? VN_STORIES.map(function(s, idx) {
       return '<button class="pill ' + (idx === curStory ? "on" : "") + '" onclick="curStory=' + idx + ';readL()">' + s.title + '</button>';
     }).join("") : "") + '</div>' +
     '<div class="story-box">' +
-      '<h3 style="margin:0 0 10px;color:var(--acc);text-align:center">' + S.title + '</h3>' +
+      '<h3 style="margin:0 0 10px;color:var(--acc);text-align:center;cursor:pointer" onclick="say(\'' + S.title + '\',\'' + S.title + '\')">🔊 ' + S.title + '</h3>' +
       (S.sentences || []).map(function(st) {
         return '<div class="story-line" onclick="say(\'' + st + '\',\'' + st + '\')"><span>🔊</span><span>' + st + '</span></div>';
       }).join("") +
       '<div style="text-align:center;margin-top:12px"><button class="pill on" onclick="say(\'' + (S.sentences || []).join(". ") + '\',\'' + (S.sentences || []).join(". ") + '\')">🔊 Nghe đọc toàn bài</button></div>' +
     '</div>';
-    say(S.title, S.title);
   }
 
   var lanAnhBanner = '<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:8px 14px;margin:8px auto 12px;max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:8px">' +

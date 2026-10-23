@@ -89,6 +89,8 @@
 }
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d2744;--card:#2c3a60;--ink:#fff1de;--ov:.15;--surface:#1e293b;--surface-alt:#334155;--border:#475569;--border-light:#334155;--text-muted:#94a3b8}}
 :root[data-theme="dark"]{--bg:#1d2744;--card:#2c3a60;--ink:#fff1de;--ov:.15;--surface:#1e293b;--surface-alt:#334155;--border:#475569;--border-light:#334155;--text-muted:#94a3b8}
+:root[data-season="autumn"],html.theme-autumn{--bg:#ffedd5;--primary:#d97706;--primary-dark:#b45309;--primary-light:#fef3c7;--primary-bg:#fffbeb;--primary-border:#fcd34d;--accent:#ea580c;--acc:#ea580c}
+:root[data-season="spring"],html.theme-spring{--bg:#dcfce7;--primary:#16a34a;--primary-dark:#15803d;--primary-light:#f0fdf4;--primary-bg:#f0fdf4;--primary-border:#86efac;--accent:#ec4899;--acc:#ec4899}
 *{box-sizing:inherit;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overscroll-behavior:none;overscroll-behavior-y:none;overscroll-behavior-x:none;touch-action:manipulation;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 body{background:var(--bg);color:var(--ink);font-family:"Baloo 2",ui-rounded,"Comic Sans MS",system-ui,sans-serif;font-weight:600;overflow:hidden;position:relative}
@@ -1456,4 +1458,588 @@ html.rm .confetti-cv, html.rm .fx {
   .opts:not(.mem) .opt{min-height:clamp(90px,16vh,120px)}
 
   #cat{width:clamp(60px,11vh,100px)}
+}
+
+/* ========================================================
+   TRÒ CHƠI MẦM NON RV APPSTUDIOS EDITION (toddler-games.js)
+   - Dải ruy-băng vàng nổi bật cho thẻ game (.game-cards .card)
+   - Giỏ màu, Ghép 2 nửa con vật, Hình bóng, Đếm & So sánh,
+     Đoàn tàu sâu róm, Bóng bay số & Hỗ trợ Tablet Dọc/Ngang
+   ======================================================== */
+.game-cards .card {
+  position: relative;
+  border: 4px solid #fff !important;
+  background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.2), inset 0 2px 0 rgba(255,255,255,0.9);
+  border-radius: 26px;
+  padding-bottom: 14px;
+}
+.game-cards .card > div:not(.vis) {
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 100%);
+  color: #7c2d12;
+  padding: 5px 10px;
+  border-radius: 14px;
+  border: 2px solid #eab308;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  font-weight: 900;
+  width: 96%;
+  margin: 4px auto 0;
+}
+
+.rv-game-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 6px 16px;
+  user-select: none;
+}
+.rv-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rv-prompt {
+  margin: 0;
+  font-size: clamp(18px, 4.2vw, 24px);
+  color: #1e293b;
+  cursor: pointer;
+  flex: 1;
+  text-align: left;
+}
+.rv-ribbon-blue {
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+  font-weight: 900;
+  font-size: clamp(17px, 4vw, 23px);
+  padding: 8px 20px;
+  border-radius: 22px;
+  border: 3px solid #fff;
+  box-shadow: 0 6px 14px rgba(29, 78, 216, 0.3);
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+}
+.rv-round-badge {
+  background: #fef3c7;
+  color: #b45309;
+  border: 2.5px solid #f59e0b;
+  font-weight: 900;
+  font-size: 17px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Giỏ màu (Ảnh 2) */
+.rv-cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.rv-item-card {
+  background: #fff;
+  border: 4px solid #2563eb;
+  border-radius: 22px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 128px;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.16);
+  cursor: grab;
+  transition: transform 0.18s, opacity 0.25s, border-color 0.18s;
+  touch-action: none;
+}
+.rv-item-card.selected {
+  border-color: #f59e0b;
+  transform: scale(1.06) translateY(-4px);
+  box-shadow: 0 12px 24px rgba(245, 158, 11, 0.35);
+}
+.rv-item-card.sorted {
+  opacity: 0.18;
+  pointer-events: none;
+  transform: scale(0.85);
+  background: #334155;
+}
+.rv-item-emoji {
+  font-size: clamp(48px, 10vw, 72px);
+  line-height: 1;
+}
+.rv-item-label {
+  font-size: clamp(12px, 2.8vw, 15px);
+  font-weight: 800;
+  color: #334155;
+  text-align: center;
+}
+
+.rv-baskets-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  background: linear-gradient(180deg, #ecfccb 0%, #bef264 100%);
+  border: 3px solid #84cc16;
+  border-radius: 26px;
+  padding: 16px 14px 14px;
+  margin-top: 4px;
+}
+.rv-mascot-buddy {
+  font-size: clamp(54px, 11vw, 84px);
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.18));
+}
+.rv-baskets-row {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.rv-basket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.18s;
+}
+.rv-basket:hover, .rv-basket.pop-good {
+  transform: scale(1.06);
+}
+.rv-basket-rim {
+  width: 100%;
+  height: 20px;
+  background: var(--b-color, #22c55e);
+  border: 3px solid var(--b-dark, #15803d);
+  border-radius: 14px;
+  box-shadow: inset 0 3px 4px rgba(255,255,255,0.45);
+  z-index: 2;
+}
+.rv-basket-body {
+  width: 90%;
+  min-height: 96px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--b-color, #22c55e),
+    var(--b-color, #22c55e) 16px,
+    var(--b-dark, #15803d) 16px,
+    var(--b-dark, #15803d) 19px
+  );
+  border: 3px solid var(--b-dark, #15803d);
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 6px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+}
+.rv-basket-collected {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 36px;
+}
+.rv-basket-mini-item {
+  font-size: 28px;
+  line-height: 1;
+  background: #fff;
+  border-radius: 10px;
+  padding: 2px 4px;
+  animation: pop 0.35s ease;
+}
+.rv-basket-title {
+  background: rgba(255,255,255,0.92);
+  color: #0f172a;
+  font-weight: 900;
+  font-size: clamp(12px, 2.8vw, 15px);
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+/* Ghép 2 nửa con vật & Hình khuyết trên quả (Ảnh 5) */
+.rv-half-boards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.rv-half-board, .rv-cutout-board {
+  border: 6px solid #fff;
+  border-radius: 26px;
+  padding: 16px 10px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  cursor: pointer;
+  position: relative;
+}
+.rv-half-graphic {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rv-emoji-left-half, .rv-emoji-right-shadow {
+  position: absolute;
+  inset: 0;
+  font-size: 108px;
+  line-height: 128px;
+  text-align: center;
+  user-select: none;
+}
+.rv-emoji-left-half {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  z-index: 2;
+}
+.rv-emoji-right-shadow {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  filter: brightness(0) opacity(0.38);
+  transition: filter 0.3s, transform 0.3s;
+}
+.rv-half-board.completed .rv-emoji-right-shadow {
+  filter: none;
+  animation: pop 0.4s ease;
+}
+.rv-board-caption {
+  margin-top: 8px;
+  background: rgba(255,255,255,0.9);
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-weight: 900;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+.rv-tray-box {
+  background: #fff;
+  border: 5px solid #22c55e;
+  border-radius: 26px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+  flex-wrap: wrap;
+  min-height: 120px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+.rv-half-piece, .rv-cutout-piece, .rv-shadow-piece, .rv-shape-piece {
+  width: 104px;
+  height: 104px;
+  border-radius: 22px;
+  background: #f8fafc;
+  border: 3px dashed #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.18s, border-color 0.18s;
+}
+.rv-half-piece.selected, .rv-cutout-piece.selected, .rv-shadow-piece.selected, .rv-shape-piece.selected {
+  border: 4px solid #f59e0b;
+  background: #fef3c7;
+  transform: scale(1.08);
+}
+.rv-half-piece.sorted, .rv-cutout-piece.sorted, .rv-shadow-piece.sorted, .rv-shape-piece.sorted {
+  opacity: 0.15;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+.rv-emoji-right-half {
+  font-size: 88px;
+  line-height: 1;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  transform: translateX(-16%);
+}
+
+/* Quả khuyết hình học (Ảnh 5 phải) */
+.rv-cutout-fruit-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rv-cutout-fruit {
+  font-size: 112px;
+  line-height: 1;
+}
+.rv-cutout-hole, .rv-cutout-filled-piece {
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.rv-cutout-filled-piece {
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.rv-cutout-board.completed .rv-cutout-filled-piece {
+  opacity: 1;
+  animation: pop 0.4s ease;
+}
+.rv-shape-svg {
+  width: 76px;
+  height: 76px;
+}
+
+/* Hình bóng & Hình dạng (Ảnh 1) */
+.rv-slots-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.rv-shadow-slot, .rv-shape-slot {
+  background: #fff;
+  border: 4px solid #bae6fd;
+  border-radius: 24px;
+  padding: 14px 8px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.rv-shadow-emoji {
+  font-size: clamp(56px, 11vw, 82px);
+  line-height: 1;
+  filter: brightness(0) opacity(0.42);
+  transition: filter 0.3s;
+}
+.rv-shadow-slot.completed .rv-shadow-emoji {
+  filter: none;
+  animation: pop 0.4s ease;
+}
+.rv-shadow-slot.completed, .rv-shape-slot.filled {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+.rv-piece-emoji {
+  font-size: clamp(54px, 10vw, 76px);
+  line-height: 1;
+}
+.rv-shape-silhouette {
+  width: 78px;
+  height: 78px;
+}
+.rv-shadow-label, .rv-shape-slot-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+}
+
+/* Lưới 4 ô To & Nhỏ / Tìm hình khác biệt (Ảnh 4 trái) */
+.rv-quad-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+.rv-center-qmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  border: 4px solid #fff;
+  font-size: 38px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  z-index: 3;
+  pointer-events: none;
+}
+.rv-quad-card {
+  background: #fff;
+  border: 5px solid #38bdf8;
+  border-radius: 26px;
+  min-height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(2, 132, 199, 0.15);
+  transition: transform 0.15s, border-color 0.2s, background 0.2s;
+}
+.rv-quad-card:active {
+  transform: scale(0.96);
+}
+.rv-quad-card.good, .rv-compare-card.good, .rv-choice-btn.good, .rv-num-choice-btn.good {
+  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+}
+
+/* Đếm và So sánh 2 bên (Ảnh 4 phải) */
+.rv-compare-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.rv-compare-card {
+  background: #fff;
+  border: 5px solid #38bdf8;
+  border-radius: 28px;
+  min-height: 230px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.rv-compare-items-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+}
+.rv-compare-item {
+  font-size: clamp(44px, 8.5vw, 64px);
+  line-height: 1;
+}
+.rv-compare-count-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 900;
+  font-size: 22px;
+  padding: 2px 16px;
+  border-radius: 16px;
+  margin-top: 8px;
+}
+
+/* Quy luật hình còn thiếu & Đoàn tàu Sâu róm / Bóng bay số (Ảnh 1) */
+.rv-pattern-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.rv-pattern-box {
+  width: clamp(72px, 16vw, 104px);
+  height: clamp(72px, 16vw, 104px);
+  background: #fff;
+  border: 4px solid #38bdf8;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(42px, 9vw, 60px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+.rv-pattern-mystery {
+  background: #64748b;
+  color: #fff;
+  border-color: #334155;
+  font-weight: 900;
+}
+.rv-choice-btn, .rv-num-choice-btn {
+  min-width: 96px;
+  min-height: 92px;
+  border-radius: 24px;
+  border: 4px solid #38bdf8;
+  background: #fff;
+  font-size: 48px;
+  font-weight: 900;
+  color: #0284c7;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+
+.rv-caterpillar-wrap, .rv-balloons-seq-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  padding: 16px 8px;
+  overflow-x: auto;
+}
+.rv-caterpillar-head {
+  font-size: clamp(54px, 11vw, 78px);
+  line-height: 1;
+  margin-right: -6px;
+  z-index: 2;
+}
+.rv-caterpillar-body {
+  width: clamp(58px, 13vw, 84px);
+  height: clamp(58px, 13vw, 84px);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+  border: 4px solid #15803d;
+  color: #fff;
+  font-size: clamp(28px, 6.5vw, 44px);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 12px rgba(22, 163, 74, 0.3);
+}
+.rv-caterpillar-body.mystery, .rv-seq-balloon.mystery {
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+  border-color: #475569;
+  color: #fef08a;
+}
+.rv-seq-balloon {
+  width: clamp(58px, 13vw, 84px);
+  height: clamp(68px, 15vw, 96px);
+  border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+  background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+  border: 4px solid #991b1b;
+  color: #fff;
+  font-size: clamp(28px, 6.5vw, 44px);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 14px rgba(220, 38, 38, 0.3);
+}
+
+.shake-bad {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Tablet Landscape co giãn cho các trò RV AppStudios mới */
+@media (orientation:landscape) and (min-width:800px) and (max-height:900px) {
+  .rv-game-wrap { max-width: 1020px; gap: 10px; padding: 2px 8px 8px; }
+  .rv-item-card { min-height: clamp(96px, 18dvh, 135px); }
+  .rv-basket-body { min-height: clamp(76px, 15dvh, 108px); }
+  .rv-half-board, .rv-cutout-board { min-height: clamp(140px, 28dvh, 210px); padding: 10px; }
+  .rv-quad-card { min-height: clamp(110px, 24dvh, 165px); }
+  .rv-compare-card { min-height: clamp(160px, 34dvh, 240px); }
 }

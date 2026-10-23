@@ -6,6 +6,21 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-10-23
+- **feat(games: Add Creative Art, Montessori Ten-Frame, Pair-Link Grid, Seasonal Themes & Number Range 1–5/10/20)**:
+  - **Kiểm tra nền & Đối chiếu 12 bước (`PLAN.md` mục 10)**: Ghi nhận đầy đủ các chế độ và khóa lưu trữ hiện có; bỏ qua các bước đã tồn tại (`So sánh nhóm`, `Xếp màu/hình khối`, `Báo cáo tiến độ & Hẹn giờ chơi`, `Sổ sticker`) để tránh trùng lặp.
+  - **Module độc lập `games/creative-games.js`**:
+    - `artStudioGame`: Tô màu theo vùng bằng SVG (6 bức tranh nét thân thuộc: Ngôi nhà, Bươm bướm, Bông hoa, Chú cá, Tên lửa, Thuyền buồm; bảng 8 màu song ngữ) & Bút phát sáng trên nền tối (giới hạn tối đa 320 điểm vẽ để máy yếu luôn mượt).
+    - Tự động lưu bản vẽ đang làm dở vào IndexedDB `bhv_drawings` (tối đa 20 bản vẽ, tự động xóa bản cũ nhất khi đầy, có nút mở lại tranh đang tô dở và nút xóa toàn bộ bản vẽ trong màn hình phụ huynh).
+    - `connectDotsGame`: Nối chấm theo thứ tự số `1..N` (tự điều chỉnh theo khoảng số phụ huynh chọn, gợi ý chấm sáng khi chạm nhầm, nối xong tự hiện hình và tô màu) kèm chế độ **Tự vẽ cho bé xem**.
+    - `memoryStepDrawGame`: Vẽ theo trí nhớ (hiện nét mẫu 2.4 giây rồi ẩn, nút Xem lại nét mẫu, chấm dung sai rộng luôn khích lệ bé) & Học vẽ từng bước.
+    - `tenFrameGame`: Khung mười ô (`2×5` Ten-Frame) giúp bé chạm đặt thêm chấm trực quan để gộp đủ số lượng trong phạm vi 5 hoặc 10.
+    - `pairLinkGridGame`: Nối cặp giống nhau trên lưới `2×2` và `3×2` (đảm bảo 100% giải được, có nút **Hoàn tác** và nút **Gợi ý một cặp**).
+  - **Cài đặt Phụ huynh (`app.js`, `styles.css`, `numbers.js`, `games/count-game.js`)**:
+    - Thêm bộ chọn **Chủ đề màu sắc theo mùa** (`Mặc định`, `Mùa thu ấm áp`, `Mùa xuân tươi mát`) bằng biến CSS.
+    - Thêm bộ chọn **Khoảng số tối đa** (`1–5`, `1–10`, `1–20`) đồng bộ với `MX()`, `mis()`, `countGame()`, `connectDotsGame()`, `tenFrameGame()`.
+  - **Trích xuất danh sách giọng đọc hướng dẫn (`danh-sach-giong-doc-huong-dan.txt`)**: Tổng hợp đầy đủ các câu thoại hướng dẫn, lời khen, khích lệ theo từng màn hình/trò chơi để phụ huynh dễ dàng biên tập.
+
 ### 2026-10-20
 - **refactor(P2-06: Modularize countGame into games/count-game.js)**:
   - Tách toàn bộ logic trò chơi Đếm hình chọn số từ `app.js` (dòng 2544–2830) sang module độc lập `games/count-game.js`.

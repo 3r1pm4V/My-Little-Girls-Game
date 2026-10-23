@@ -1,18 +1,18 @@
-// asset-hash: 5954a9a7e5c6a7e5
+// asset-hash: b83aed4f60ad06d5
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v105";
+const C = "bhv-v118";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [
   "./", "index.html", "styles.css", "bg.webp",
-  "app.js", "data-vn.js", "activities-data.js", "audio-map.js", "img-core.js", "progress.js", "games/count-game.js", "alphabet.js", "numbers.js", "spelling.js",
+  "app.js", "data-vn.js", "activities-data.js", "audio-map.js", "img-core.js", "progress.js", "games/count-game.js", "games/toddler-games.js", "games/creative-games.js", "alphabet.js", "numbers.js", "spelling.js",
   "font-vn.ttf", "font-tapviet.ttf", "font-tapviet-cham.ttf",
   "fonts/baloo2-600.woff2", "fonts/baloo2-800.woff2",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"
 ];
 
 // Nạp lười bằng import() trong app.js: tải cố gắng hết sức lúc cài, thiếu file KHÔNG làm hỏng việc cài SW.
-const OPT = ["stories-data.js", "stories-catalog.js", "img-s.js", "img-o.js"];
+const OPT = ["stories-data.js", "stories-catalog.js", "img-s.js", "img-o.js", "coloring/mnvh_kitty_reading.webp", "coloring/mnvh_kitty_dancing.webp", "coloring/mnvh_daisy_flower.webp", "coloring/mnvh_tulip_garden.webp", "coloring/mnvh_cute_cat.webp", "coloring/mnvh_happy_dog.webp", "coloring/mnvh_singing_bird.webp", "coloring/mnvh_little_bee.webp", "coloring/mnvh_cute_rabbit.webp", "coloring/mnvh_little_snail.webp", "coloring/mnvh_butterfly.webp", "coloring/mnvh_seahorse.webp", "coloring/mnvh_dairy_cow.webp", "coloring/mnvh_cute_car.webp", "coloring/mnvh_airplane.webp"];
 
 // Gói âm thanh offline bé 4 tuổi (Home + Chặng 0 & 1, ~11.85 MB)
 const OPT_AUDIO = [

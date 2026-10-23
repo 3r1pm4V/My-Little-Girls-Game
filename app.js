@@ -75,17 +75,84 @@ const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
 const ls={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
-let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);const MX=()=>Math.min(10,[5,10,10][(lvl||1)-1]);
+let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);
+function getNumberRangeMax(){const v=parseInt(ls.get("number_range_max","10"),10);return(v===5||v===10||v===20)?v:10}
+function setNumberRangeMax(v){if(v===5||v===10||v===20){ls.set("number_range_max",String(v));if(cur==="parent")parent()}}
+window.getNumberRangeMax=getNumberRangeMax;window.setNumberRangeMax=setNumberRangeMax;
+function getSeasonTheme(){return ls.get("season_theme","default")}
+function applySeasonTheme(){const t=getSeasonTheme();if(typeof document!=="undefined"&&document.documentElement&&document.documentElement.classList){document.documentElement.classList.toggle("theme-autumn",t==="autumn");document.documentElement.classList.toggle("theme-spring",t==="spring")}}
+function setSeasonTheme(t){ls.set("season_theme",t||"default");applySeasonTheme();if(cur==="parent")parent()}
+window.getSeasonTheme=getSeasonTheme;window.setSeasonTheme=setSeasonTheme;applySeasonTheme();
+const MX=()=>Math.min(getNumberRangeMax(),[5,10,20][(lvl||1)-1]||10);
 const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
+const BGM_ON=()=>SOUND_ON()&&ls.get("bgm_on","1")!=="0";
+let bgmTimer=null,bgmNoteIdx=0;
+const BGM_MELODY=[
+  // Giai điệu đàn hộp nhạc nhẹ nhàng, ấm áp cho bé (Pentatonic C Major)
+  [523.25, 0.45], [659.25, 0.45], [783.99, 0.45], [659.25, 0.45],
+  [880.00, 0.45], [783.99, 0.45], [659.25, 0.90], [0, 0.45],
+  [587.33, 0.45], [659.25, 0.45], [783.99, 0.45], [587.33, 0.45],
+  [523.25, 0.90], [0, 0.45], [392.00, 0.45], [0, 0.45],
+  [523.25, 0.45], [659.25, 0.45], [783.99, 0.45], [1046.50, 0.45],
+  [880.00, 0.45], [783.99, 0.45], [659.25, 0.90], [0, 0.45],
+  [587.33, 0.45], [783.99, 0.45], [659.25, 0.45], [587.33, 0.45],
+  [523.25, 1.10], [0, 0.90]
+];
+function startBgmLoop(){
+  if(bgmTimer||!BGM_ON())return;
+  if(typeof window==="undefined"||(!window.AudioContext&&!window.webkitAudioContext))return;
+  bgmTimer=setInterval(()=>{
+    if(!BGM_ON()||(typeof document!=="undefined"&&document.hidden))return;
+    try{
+      AC=AC||new(window.AudioContext||window.webkitAudioContext)();
+      if(AC.state==="suspended")AC.resume().catch(()=>{});
+      if(AC.state!=="running")return;
+      const [freq,dur]=BGM_MELODY[bgmNoteIdx%BGM_MELODY.length];
+      bgmNoteIdx++;
+      if(freq>0){
+        const isSpeaking=busy||(A&&!A.paused&&A.currentTime>0);
+        const vol=isSpeaking?0.010:0.042;
+        const now=AC.currentTime;
+        const osc=AC.createOscillator();
+        const g=AC.createGain();
+        osc.type="sine";
+        osc.frequency.setValueAtTime(freq,now);
+        g.gain.setValueAtTime(0.001,now);
+        g.gain.linearRampToValueAtTime(vol,now+0.04);
+        g.gain.exponentialRampToValueAtTime(0.0008,now+dur);
+        osc.connect(g);
+        g.connect(AC.destination);
+        osc.start(now);
+        osc.stop(now+dur+0.02);
+      }
+    }catch(e){}
+  }, 480);
+}
+function stopBgmLoop(){
+  if(bgmTimer){clearInterval(bgmTimer);bgmTimer=null;}
+}
+function toggleBgm(){
+  ls.set("bgm_on",ls.get("bgm_on","1")!=="0"?"0":"1");
+  if(BGM_ON())startBgmLoop();else stopBgmLoop();
+  head();
+  if(cur==="parent")parent();
+}
+window.BGM_ON=BGM_ON;window.startBgmLoop=startBgmLoop;window.stopBgmLoop=stopBgmLoop;window.toggleBgm=toggleBgm;
+if(typeof document!=="undefined"){
+  const unlockBgm=()=>{if(BGM_ON())startBgmLoop();};
+  document.addEventListener("pointerdown",unlockBgm,{passive:true});
+  document.addEventListener("keydown",unlockBgm,{passive:true});
+}
 function toggleSoundMaster(){
   const nxt=SOUND_ON()?"0":"1";
   ls.set("sound_master",nxt);
   if(!SOUND_ON()){
+    stopBgmLoop();
     A.pause();
     if(SS){try{SS.cancel()}catch(e){}}
   } else {
     sfxOk();
-    say("Đã bật âm thanh","Sound is on");
+    startBgmLoop();
   }
   head();
   if(cur==="parent")parent();
@@ -622,10 +689,14 @@ function say(vi,en){
   if(SS){try{SS.cancel()}catch(e){}}
   const LG=ql||lang;
   if(LG==="vi"&&vi){
-    playSafeAudio(vi, "Mai Anh", ()=>{
-      if(my===tok){busy=false;busyEnd=Date.now()}
-    });
-    return;
+    const hasFull=window.AUDIO_MAP&&(window.AUDIO_MAP[vi]||(typeof window.__normAudioKey==="function"&&window.AUDIO_MAP[window.__normAudioKey(vi)]));
+    const parts=hasFull?[vi]:vi.split(/[.!?…]+\s*/).map(s=>s.trim()).filter(Boolean);
+    if(parts.length<=1){
+      playSafeAudio(vi, "Mai Anh", ()=>{
+        if(my===tok){busy=false;busyEnd=Date.now()}
+      });
+      return;
+    }
   }
   const sp=(t,l)=>{
     if(!t)return[];
@@ -1077,15 +1148,13 @@ if(spEl){
   spEl.onclick = () => { RATE = RATE < .5 ? .6 : RATE < .7 ? .85 : .4; ls.set("rate2", RATE); head(); say("Bé nghe nhé","Listen"); };
 }
 function fx(){if(rmOn())return;const e=document.createElement("img");e.src=I.confetti;e.className="fx";document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}
-const PR=[["Giỏi quá!","Great job!"],["Hoan hô!","Hooray!"],["Tuyệt vời!","Wonderful!"],["Bé giỏi lắm!","Well done!"],["Đúng rồi!","That's right!"],["Siêu quá!","Awesome!"],["Bé thông minh quá!","So smart!"],["Hay quá!","Fantastic!"],["Mèo thích quá!","The kitty loves it!"]];
-const ER=[["Thử lại nhé","Try again"],["Gần đúng rồi, bé thử lại nào","Almost! Try again"],["Không sao, bé thử lại nhé","It's okay, try again"]];
+const PR=[["Wow, giỏi quá!","Great job!"],["Hoan hô bé yêu!","Hooray!"],["Tuyệt vời ông mặt trời!","Wonderful!"],["Bé thật xuất sắc!","Well done!"],["Chuẩn luôn rồi!","That's right!"],["Siêu phết!","Awesome!"],["Bé thông minh lắm nha!","So smart!"],["Hay quá đi mất!","Fantastic!"],["Mèo con cũng phải trầm trồ khen bé đấy!","The kitty loves it!"]];
+const ER=[["Không sao, thử lại lần nữa nhé!","Try again"],["Gần đúng rồi, cố lên tí nữa nào!","Almost! Try again"],["Bình tĩnh nhé, chúng mình thử lại xem sao.","It's okay, try again"]];
 let stk=[{s:"home"}],pend=0,isBackNav=false,promptCooldown={};
 function sayPrompt(key,vi,en,cd=180000){
-  if(isBackNav)return;
-  const now=Date.now();
-  if(promptCooldown[key]&&(now-promptCooldown[key]<cd))return;
-  promptCooldown[key]=now;
-  say(vi,en);
+  // Tắt tự động phát giọng đọc lặp đi lặp lại khi ra vào các màn hình / menu option.
+  // Giữ nhạc nền nhẹ nhàng; giọng đọc chỉ phát khi bé bấm trực tiếp vào chữ, số hoặc biểu tượng 🔊.
+  if(BGM_ON())startBgmLoop();
 }
 /* ========================================================
    ERROR BOUNDARY & SAFE RENDERING
@@ -1247,6 +1316,9 @@ function show(s,a,isBack=false){
   if(cur==="playActivity" && s!=="playActivity"){
     Analytics.checkAndRecordAbandon("nav_" + s);
   }
+  if((s==="home"||s==="games"||s==="parent"||s==="gate") && typeof window!=="undefined"){
+    window.__endlessNext = null;
+  }
   if(!V[s])s="home";
   cur=s;ql=null;tok++;sc++;busy=false;lastSig="";dupN=0;
   A.pause();if(SS)SS.cancel();
@@ -1363,14 +1435,8 @@ function card(f,vis,vi,en,subject="default"){
   return`<button class="${cls}" onclick="go('${f}')" onpointerdown="speakCardTitle('${safeVi}')"><div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
 }
 function speakCardTitle(vi){
-  if(!SOUND_ON()||!vi)return;
-  const map=window.AUDIO_MAP||{};
-  const audio=map[vi]||map["vi|"+vi];
-  if(audio){
-    playSafeAudio(audio,"Mai Anh");
-  }else{
-    say(vi,vi);
-  }
+  // Chỉ phát hiệu ứng chạm nhẹ và nhạc nền khi bấm chọn thẻ menu, không đọc lặp lại tiêu đề option.
+  if(BGM_ON())startBgmLoop();
 }
 window.speakCardTitle=speakCardTitle;
 
@@ -1574,22 +1640,8 @@ window.getGroupForLetter = getGroupForLetter;
 
 let lastKidBtnSpeak = 0;
 function speakKidBtn(type){
-  const now = Date.now();
-  if(now - lastKidBtnSpeak < 600) return;
-  lastKidBtnSpeak = now;
-  if(type === 'letters'){
-    say("Học chữ cái và tập tô nét nhé!", "Let's learn letters and trace!");
-  } else if(type === 'numbers'){
-    say("Học số và tập đếm nào!", "Let's learn numbers and counting!");
-  } else if(type === 'today'){
-    playSafeAudio("audio/ui_home_btn_today.mp3", "Mai Anh");
-  } else if(type === 'games'){
-    playSafeAudio("audio/ui_home_btn_games.mp3", "Mai Anh");
-  } else if(type === 'stories'){
-    say("Cùng nghe đọc truyện cổ tích nào!", "Let's listen to fairy tales!");
-  } else if(type === 'stickers'){
-    playSafeAudio("audio/ui_home_btn_stickers.mp3", "Mai Anh");
-  }
+  // Chỉ khởi động nhạc nền khi bé chạm vào các nút menu chính, tránh lặp lại câu dẫn mỗi lần ra vào.
+  if(BGM_ON())startBgmLoop();
 }
 window.speakKidBtn = speakKidBtn;
 
@@ -1740,7 +1792,7 @@ function lettersHome(){
       </div>
     </div>
   `;
-  sayPrompt("letters_home", "Bé chọn 14 nét viết cơ bản, bảng chữ cái, hoặc tập đánh vần nhé!", "Choose basic strokes, alphabet, or phonics!", 180000);
+  sayPrompt("letters_home", "Bé muốn học chữ cái, tập viết nét hay đánh vần nào? Chọn một mục nhé!", "Choose basic strokes, alphabet, or phonics!", 180000);
 }
 window.lettersHome = lettersHome;
 
@@ -1869,7 +1921,7 @@ function home(){
     : "Fun Learning";
 
   m.innerHTML = `
-    <div class="hero"><button onclick="say('Chào bé! Mình cùng học nhé','Hello! Let\\'s learn together')" aria-label="${T("Nghe chào","Hear greeting")}" style="background:none;border:none;cursor:pointer;padding:0;display:inline-block">${im("cat_idle")}</button><h1>Bé học vui<small>${subTitle}</small></h1></div>
+    <div class="hero"><button onclick="say('Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!','Hello! Let\\'s learn together')" aria-label="${T("Nghe chào","Hear greeting")}" style="background:none;border:none;cursor:pointer;padding:0;display:inline-block">${im("cat_idle")}</button><h1>Bé học vui<small>${subTitle}</small></h1></div>
     ${tierSelectorHtml}
     ${contentHtml}
     <p style="margin-top:16px">
@@ -1878,9 +1930,9 @@ function home(){
     </p>
   `;
   if(isKidPreschoolMode){
-    sayPrompt("home", "Chào bé! Mình cùng học nhé", "Hello! Let\'s learn together", 300000);
+    sayPrompt("home", "Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!", "Hello! Let\'s learn together", 300000);
   } else {
-    sayPrompt("home", "Chào bé! Mình cùng học nhé", "Hello! Let's learn together", 300000);
+    sayPrompt("home", "Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!", "Hello! Let's learn together", 300000);
   }
   need("s");
 }
@@ -2728,9 +2780,9 @@ function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(
    if(cur==="math10")ST.mathCount=(ST.mathCount||0)+1;
    rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");
    stars++;ls.set("stars",stars);head();checkBadges();
-   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);adv(rd.n>=(RL[cur]||ROUND)?result:next);
+   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);const isEndless=(cur==="mis"||cur==="cmpS"||cur==="cmp");adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
   }
-  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn chỗ này nè","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
+  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn kỹ chỗ này xem nào...","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
 function result(){
   const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
   const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
@@ -2752,25 +2804,36 @@ function win(wr,next,vi,en){
   rd.n++;sta(!wr);stars++;ls.set("stars",stars);head();checkBadges();
   sfxOk();fx();catSet(rd.st>=3?"celebrate":"happy");
   const p=pick(PR);say(p[0]+" "+vi,p[1]+" "+en);
-  adv(rd.n>=(RL[cur]||ROUND)?result:next);
+  const isEndless=(cur==="match"||cur==="mem");
+  adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
 }
 function games(){
   window.__traceFrom = "games";
   m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
-  <div style="text-align:center;margin:8px 0 16px">
+  <div style="text-align:center;margin:6px 0 12px">
     <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Góc vui chơi ôn tập (Trò chơi vui nhộn)","Review Games & Fun")}</h2>
-    <p style="font-size:14px;color:#64748b;margin:0">${T("Các trò chơi tương tác rèn luyện trí tuệ & kỹ năng cho bé 🌟","Fun interactive games for kids 🌟")}</p>
+    <p style="font-size:14px;color:#64748b;margin:0 0 8px">${T("Các trò chơi tương tác chạy ngẫu nhiên cho bé 🌟","Randomized fun games 🌟")}</p>
+    <button class="pill on" onclick="go('randomMixGame',true)" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-weight:900;font-size:15px;padding:8px 20px;border:3px solid #fff;border-radius:26px">🎲 ${T("Hộp Quà Bất Ngờ (Chơi Ngẫu Nhiên)","Play Random Mix")}</button>
   </div>
   <div class="cards game-cards">
     ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
-    ${card("fruitSlash","<b>🍉 🗡️ 🍓</b>","Chém trái cây","Fruit Slash","game")}
     ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
-    ${card("mis","<b>1 2 ? 4</b>","Số còn thiếu","Missing number","math")}
-    ${card("match",im("apple")+imL("A"),"Ghép chữ và hình","Match","vietnamese")}
+    ${card("match",im("apple")+imL("A"),"Nối chữ & Hình đối lập","Smart Wire Match","vietnamese")}
+    ${card("mis","<b>🐛 1 ? 3</b>","Đoàn tàu & Bóng bay số","Number Train & Missing","math")}
     ${card("mem",im("cat")+im("cat"),"Lật thẻ ghi nhớ","Memory","game")}
     ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
+    ${card("colorShapeGame","<b>🧺 🐸 ⭐</b>","Giỏ màu & Hình dạng","Colors & Shapes","game")}
+    ${card("puzzleGame","<b>🐧 🧩 🐌</b>","Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
+    ${card("sizeCompareGame","<b>🐞 🍇 ⚖️</b>","To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
+    ${card("oddSpotGame","<b>🔍 🐞 🐠</b>","Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
+    ${card("fruitSlash","<b>🍉 🗡️ 🍓</b>","Chém trái cây","Fruit Slash","game")}
+    ${card("artStudioGame","<b>🎨 🖌️ ✨</b>","Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
+    ${card("connectDotsGame","<b>🔢 1→2→3 ⭐</b>","Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
+    ${card("memoryStepDrawGame","<b>🧠 ✍️ 👣</b>","Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
+    ${card("tenFrameGame","<b>🔟 🍎 🟢</b>","Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
+    ${card("pairLinkGridGame","<b>🔗 🍎 ↔ 🍎</b>","Nối cặp giống nhau","Pair Link Grid","logic")}
   </div>`;
-  sayPrompt("games","Bé chọn trò chơi nhé","Pick a game to play",180000);
+  sayPrompt("games","Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!","Pick a game to play",180000);
 }
 
 /* ========================================================
@@ -2830,13 +2893,13 @@ function bubbleGame(isReplay) {
 
   const l = ql = qL();
   const pool = (l === "vi" ? LET_VI : LET_EN).slice();
-  const TARGET_SCORE = 10;
+  const TARGET_SCORE = 12;
   let score = 0;
   let targetLetter = pick(pool);
   let isGentleMode = true;
-  let baseSpeed = 0.65;
+  let baseSpeed = 0.80;
   let spawnCounter = 0;
-  let spawnInterval = 75;
+  let spawnInterval = 62;
   let frameCount = 0;
   let bubbleUid = 0;
   const bubbles = [];
@@ -2899,7 +2962,6 @@ function bubbleGame(isReplay) {
   function announceTarget() {
     playBubbleLetter(targetLetter);
   }
-  say("Trò chơi Bắt bóng chữ. Bé hãy chạm vào các quả bóng có chữ cái đúng nhé!", "Pop the bubbles with matching letters!");
 
   window.__bgReplayAudio = function() {
     announceTarget();
@@ -2917,7 +2979,7 @@ function bubbleGame(isReplay) {
       btn.innerHTML = isGentleMode ? `🐢 ${T("Bay chậm","Gentle")}` : `🐇 ${T("Bay nhanh","Fast")}`;
     }
     baseSpeed = isGentleMode ? 0.65 : 1.35;
-    say(isGentleMode ? "Bóng bay chậm cho bé dễ bắt nhé" : "Bóng bay nhanh hơn nào!");
+    say(isGentleMode ? "Bóng bay chầm chậm cho bé dễ bắt nè." : "Tăng tốc nào! Bóng bay nhanh hơn rồi đây!");
   };
 
   announceTarget();
@@ -2996,23 +3058,22 @@ function bubbleGame(isReplay) {
           if (idx !== -1) bubbles.splice(idx, 1);
         }, 320);
 
-        baseSpeed = isGentleMode ? Math.min(0.85, 0.65 + score * 0.02) : Math.min(2.5, 1.35 + score * 0.1);
-        spawnInterval = isGentleMode ? 75 : Math.max(50, 80 - score * 3);
+        baseSpeed = isGentleMode ? Math.min(1.05, 0.80 + score * 0.025) : Math.min(2.8, 1.55 + score * 0.12);
+        spawnInterval = isGentleMode ? 62 : Math.max(42, 68 - score * 3);
 
-        if (score < TARGET_SCORE) {
-          if (score % 2 === 0) {
-            const nextL = pick(pool.filter(c => c !== targetLetter));
-            setTargetLetter(nextL);
-          }
-        } else {
+        if (score % 2 === 0) {
+          const nextL = pick(pool.filter(c => c !== targetLetter));
+          setTargetLetter(nextL);
+        }
+        if (score >= TARGET_SCORE && typeof window !== "undefined" && typeof window.__endlessNext === "function") {
           cancelAnimationFrame(bgActiveAnim);
           bgActiveAnim = null;
-          sfxTingTing();
-          fx();
-          catSet("celebrate");
-          setTimeout(() => {
-            renderBubbleWin(score, TARGET_SCORE);
-          }, 600);
+          stars++; ls.set("stars", stars); head();
+          sfxTingTing(); fx(); catSet("celebrate");
+          setTimeout(() => { window.__endlessNext(); }, 650);
+        } else if (score % TARGET_SCORE === 0) {
+          stars += 2; ls.set("stars", stars); head(); checkBadges();
+          sfxTingTing(); fx(); catSet("celebrate");
         }
       } else {
         bubbleObj.state = "deflating";
@@ -3128,7 +3189,7 @@ function fruitSlash(isReplay) {
     fsActiveAnim = null;
   }
 
-  const TARGET_SCORE = 10;
+  const TARGET_SCORE = 12;
   let score = 0;
   let isGentleMode = true;
   let frameCount = 0;
@@ -3196,7 +3257,7 @@ function fruitSlash(isReplay) {
   const ctx = canvasEl ? canvasEl.getContext("2d") : null;
 
   function announceIntro() {
-    say("Trò chơi Chém trái cây! Bé hãy vuốt ngón tay hoặc chạm để chém các loại quả thơm ngon nhé!", "Fruit Slash game! Swipe or tap to slice delicious fruits!");
+    say("Trò chơi Chém trái cây! Bé hãy lướt ngón tay thật nhanh qua những quả trái cây ngon lành nhé!", "Fruit Slash game! Swipe or tap to slice delicious fruits!");
     catSet("thinking");
   }
 
@@ -3233,9 +3294,9 @@ function fruitSlash(isReplay) {
     const spawnX = radius + 30 + Math.random() * Math.max(20, w - radius * 2 - 60);
     const spawnY = h + radius;
 
-    // Đỉnh bay (apex) nằm trong khoảng 20% - 40% tính từ đỉnh xuống
-    const targetApexY = h * (isGentleMode ? (0.22 + Math.random() * 0.2) : (0.16 + Math.random() * 0.2));
-    const g = isGentleMode ? 0.28 : 0.42;
+    // Đỉnh bay (apex) nằm trong khoảng 20% - 40% tính từ đỉnh xuống (+20% tốc độ cho bé)
+    const targetApexY = h * (isGentleMode ? (0.18 + Math.random() * 0.2) : (0.14 + Math.random() * 0.18));
+    const g = isGentleMode ? 0.34 : 0.50;
     const distY = spawnY - targetApexY;
     const initialVy = -Math.sqrt(2 * g * distY);
 
@@ -3289,14 +3350,19 @@ function fruitSlash(isReplay) {
     score++;
     if (scoreEl) scoreEl.textContent = score;
 
-    if (score >= TARGET_SCORE) {
+    if (score >= TARGET_SCORE && typeof window !== "undefined" && typeof window.__endlessNext === "function") {
       if (fsActiveAnim) {
         cancelAnimationFrame(fsActiveAnim);
         fsActiveAnim = null;
       }
+      stars += 2; ls.set("stars", stars); head();
+      sfxFanfare(); fx(); catSet("celebrate");
       setTimeout(() => {
-        renderFruitWin(score, TARGET_SCORE);
-      }, 700);
+        window.__endlessNext();
+      }, 650);
+    } else if (score % TARGET_SCORE === 0) {
+      stars += 2; ls.set("stars", stars); head(); checkBadges();
+      sfxFanfare(); fx(); catSet("celebrate");
     }
   }
 
@@ -3582,24 +3648,96 @@ function renderFruitWin(score, total) {
   sfxFanfare();
   fx();
   catSet("celebrate");
-  say("Hoan hô bé! Bé là cao thủ chém trái cây rất siêu! Thưởng bé ba sao vàng!", "Hooray! You are a fruit slashing champion! You earned three stars!");
+  say("Hoan hô bé yêu! Bé là cao thủ chém trái cây siêu đẳng! Tặng bé ba ngôi sao lấp lánh!", "Hooray! You are a fruit slashing champion! You earned three stars!");
 }
 window.renderFruitWin = renderFruitWin;
 
 
 function match(){
+  const forcedMode = arguments[0];
   const l = ql = qL();
-  const allLetters = exPL(l);
-  const Ls = shuf(allLetters).slice(0, 5);
-  const items = Ls.map(L => {
-    const k = pick(exPK(l, L));
-    return { L, k, ex: EXA[k] };
-  });
+  const modes = ["letter_pic", "upper_lower", "opposites", "animal_assoc"];
+  const mode = (typeof forcedMode === "string" && modes.includes(forcedMode))
+    ? forcedMode
+    : pick(modes);
 
-  const leftCards = shuf(items.map(it => ({ L: it.L })));
-  const rightCards = shuf(items.map(it => ({ L: it.L, k: it.k, ex: it.ex })));
+  let leftCards = [];
+  let rightCards = [];
+  let titleVi = "Nối chữ với hình đúng";
+  let titleEn = "Connect letter to picture";
+  let introVi = "Trò chơi Nối dây thần kỳ! Bé hãy nối ô bên trái với người bạn tương ứng bên phải nhé!";
+  let introEn = "Smart Wire Match! Tap or drag a line to connect matching pairs!";
 
-  let remaining = items.length;
+  if (mode === "upper_lower") {
+    titleVi = "Nối Chữ Hoa với Chữ Thường (A ↔ a)";
+    titleEn = "Connect Uppercase & Lowercase";
+    introVi = "Tìm bạn cùng nhà! Nối chữ In Hoa với chữ thường giống hệt nó nhé!";
+    const allLetters = exPL(l);
+    const Ls = shuf(allLetters).slice(0, 5);
+    leftCards = shuf(Ls.map(L => ({
+      L,
+      t: "Chữ " + L,
+      html: `<span class="drag-card-letter">${L}</span>`
+    })));
+    rightCards = shuf(Ls.map(L => ({
+      L,
+      k: L.toLowerCase(),
+      t: L.toLowerCase(),
+      html: `<div class="drag-card-pic"><span class="drag-card-letter" style="color:#ec4899">${L.toLowerCase()}</span></div>`
+    })));
+  } else if (mode === "opposites" && window.ToddlerGames && Array.isArray(window.ToddlerGames.OPPOSITE_PAIRS)) {
+    titleVi = "Nối Các Hình Đối Lập";
+    titleEn = "Connect Opposite Pictures";
+    introVi = "Ai đối lập với ai? Bé hãy tìm hai hình trái ngược nhau và nối chúng lại nào!";
+    const pairs = shuf(window.ToddlerGames.OPPOSITE_PAIRS).slice(0, 4);
+    leftCards = shuf(pairs.map(p => ({
+      L: p.id,
+      t: p.leftVi,
+      html: `<div class="drag-card-pic"><div class="drag-card-img-box" style="font-size:48px">${p.leftEmoji}</div><span class="drag-card-txt">${p.leftVi}</span></div>`
+    })));
+    rightCards = shuf(pairs.map(p => ({
+      L: p.id,
+      k: p.id,
+      t: p.rightVi,
+      html: `<div class="drag-card-pic"><div class="drag-card-img-box" style="font-size:48px">${p.rightEmoji}</div><span class="drag-card-txt">${p.rightVi}</span></div>`
+    })));
+  } else if (mode === "animal_assoc" && window.ToddlerGames && Array.isArray(window.ToddlerGames.ANIMAL_ASSOC_PAIRS)) {
+    titleVi = "Bạn Nhỏ Thích Gì Nào?";
+    titleEn = "Animal & Favorite Match";
+    introVi = "Bạn nhỏ nào thích món ăn nào? Bé hãy nối đúng sở thích của các bạn nhé!";
+    const pairs = shuf(window.ToddlerGames.ANIMAL_ASSOC_PAIRS).slice(0, 4);
+    leftCards = shuf(pairs.map(p => ({
+      L: p.id,
+      t: p.leftVi,
+      html: `<div class="drag-card-pic"><div class="drag-card-img-box" style="font-size:48px">${p.leftEmoji}</div><span class="drag-card-txt">${p.leftVi}</span></div>`
+    })));
+    rightCards = shuf(pairs.map(p => ({
+      L: p.id,
+      k: p.id,
+      t: p.rightVi,
+      html: `<div class="drag-card-pic"><div class="drag-card-img-box" style="font-size:48px">${p.rightEmoji}</div><span class="drag-card-txt">${p.rightVi}</span></div>`
+    })));
+  } else {
+    const allLetters = exPL(l);
+    const Ls = shuf(allLetters).slice(0, 5);
+    const items = Ls.map(L => {
+      const k = pick(exPK(l, L));
+      return { L, k, ex: EXA[k] };
+    });
+    leftCards = shuf(items.map(it => ({
+      L: it.L,
+      t: it.L,
+      html: `<span class="drag-card-letter">${it.L}</span>`
+    })));
+    rightCards = shuf(items.map(it => ({
+      L: it.L,
+      k: it.k,
+      t: it.ex.t,
+      html: `<div class="drag-card-pic"><div class="drag-card-img-box">${im(it.ex.img)}</div><span class="drag-card-txt">${it.ex.t}</span></div>`
+    })));
+  }
+
+  let remaining = leftCards.length;
   let wr = 0;
   const connectedPairs = [];
   const WIRE_COLORS = ["#10b981", "#3b82f6", "#f59e0b", "#8b5cf6", "#ec4899"];
@@ -3607,21 +3745,26 @@ function match(){
   const bcHtml = kbc([
     {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
     {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
-    {t:T("Ghép chữ & hình","Match"), i:"🧩"}
+    {t:T(titleVi, titleEn), i:"🧩"}
   ]);
 
   m.innerHTML = `
     ${bcHtml}
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px">
       <h2 style="margin:0;font-size:clamp(20px,5vw,26px);color:var(--ink)">
-        ${T("Nối chữ với hình đúng", "Connect letter to picture")}
+        ${T(titleVi, titleEn)}
       </h2>
-      <button class="pill" onclick="say('Ghép chữ với hình nhé. Bé có thể chạm vào chữ rồi chạm vào hình, hoặc kéo dây để nối nhé!','Match letter and picture. Tap to connect or drag a line!')" style="font-size:14px;padding:4px 12px;min-height:38px">
-        🔊 ${T("Hướng dẫn", "Help")}
-      </button>
+      <div style="display:flex;gap:6px">
+        <button class="pill" onclick="match()" style="font-size:13.5px;padding:4px 12px;min-height:38px">
+          🎲 ${T("Đổi chủ đề nối", "Random Theme")}
+        </button>
+        <button class="pill" onclick="say('${introVi}','${introEn}')" style="font-size:14px;padding:4px 12px;min-height:38px">
+          🔊 ${T("Hướng dẫn", "Help")}
+        </button>
+      </div>
     </div>
     <div style="text-align:center;font-size:15px;color:#64748b;font-weight:700;margin-bottom:12px">
-      👉 ${T("Bé chạm vào chữ rồi chạm vào hình tương ứng, hoặc kéo dây để nối nhé!", "Tap letter then picture, or drag a wire to connect!")}
+      👉 ${T("Bé chạm vào 2 ô tương ứng hoặc kéo dây để nối nhé!", "Tap two matching cards or drag a wire to connect!")}
     </div>
 
     <div class="drag-connect-wrap" id="dragWrap">
@@ -3631,20 +3774,17 @@ function match(){
       <div class="drag-connect-cols">
         <div class="drag-connect-col left">
           ${leftCards.map(c => `
-            <div class="drag-card left" data-side="left" data-l="${c.L}" tabindex="0" role="button" aria-label="${T('Chữ cái ' + c.L, 'Letter ' + c.L)}">
-              <span class="drag-card-letter">${c.L}</span>
+            <div class="drag-card left" data-side="left" data-l="${c.L}" data-t="${c.t}" tabindex="0" role="button" aria-label="${c.t}">
+              ${c.html}
               <div class="drag-card-dot" aria-hidden="true"></div>
             </div>
           `).join("")}
         </div>
         <div class="drag-connect-col right">
           ${rightCards.map(c => `
-            <div class="drag-card right" data-side="right" data-p="${c.k}" data-p-letter="${c.L}" data-t="${c.ex.t}" tabindex="0" role="button" aria-label="${T(c.ex.t, c.ex.t)}">
+            <div class="drag-card right" data-side="right" data-p="${c.k}" data-p-letter="${c.L}" data-t="${c.t}" tabindex="0" role="button" aria-label="${c.t}">
               <div class="drag-card-dot" aria-hidden="true"></div>
-              <div class="drag-card-pic">
-                <div class="drag-card-img-box">${im(c.ex.img)}</div>
-                <span class="drag-card-txt">${c.ex.t}</span>
-              </div>
+              ${c.html}
             </div>
           `).join("")}
         </div>
@@ -3652,7 +3792,6 @@ function match(){
     </div>
   `;
 
-  say("Trò chơi Ghép chữ và hình. Bé chạm vào chữ cái rồi chạm vào hình tương ứng để nối nhé!", "Match letter and picture. Tap to connect or drag a line!");
   catSet("thinking");
 
   const wrapEl = m.querySelector("#dragWrap");
@@ -3714,7 +3853,7 @@ function match(){
 
       sfxTingTing();
       fx();
-      say(rightEl.dataset.t, rightEl.dataset.t);
+      say("Đúng rồi! Hai bạn kết đôi thật hoàn hảo!", rightEl.dataset.t);
 
       redrawFixedWires();
 
@@ -3723,7 +3862,7 @@ function match(){
         window.removeEventListener("resize", redrawFixedWires);
         cleanupEvents();
         setTimeout(() => {
-          win(wr, match, "", "");
+          win(wr, match, "Hoan hô! Bé đã ghép nối thành công tất cả các cặp rồi!", "All pairs matched!");
         }, 800);
       }
     } else {
@@ -3733,7 +3872,7 @@ function match(){
       leftEl.classList.add("bad");
       rightEl.classList.add("bad");
 
-      say("Không sao, bé thử lại nhé", "Try again, sweetheart!");
+      say("Hai bạn này chưa phải là một đôi đâu, bé thử chọn lại xem nào.", "Try again, sweetheart!");
 
       setTimeout(() => {
         activePath.style.display = "none";
@@ -3832,13 +3971,6 @@ function match(){
     };
 
     cardEl.classList.add("dragging");
-
-    if (cardEl.dataset.side === "left") {
-      sayAs(l, cardEl.dataset.l, cardEl.dataset.l);
-    } else {
-      say(cardEl.dataset.t, cardEl.dataset.t);
-    }
-
     activePath.setAttribute("class", "drag-wire-active");
     activePath.setAttribute("d", `M ${dotPos.x} ${dotPos.y} L ${dotPos.x} ${dotPos.y}`);
     activePath.style.display = "block";
@@ -3951,7 +4083,7 @@ window.getVisualCardName = getVisualCardName;
 
 function mem(){
   const l=ql=qL();
-  const pairCount = R(5, 8); // Ngẫu nhiên 5 đến 8 bộ thẻ lật tăng độ thử thách
+  const pairCount = R(6, 8); // Tăng độ khó +20%: Ngẫu nhiên 6 đến 8 bộ thẻ lật (12–16 thẻ)
   const available = exP(l);
   const ks = shuf(available).slice(0, Math.min(pairCount, available.length));
   const cs = shuf([...ks, ...ks]);
@@ -3961,7 +4093,7 @@ function mem(){
     {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
     {t:T("Lật thẻ trí nhớ","Memory"), i:"🃏"}
   ]) + `<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" data-n="${cs.length}">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
-  say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");
+  say("Trò chơi Thử thách trí nhớ! Hãy tìm hai tấm thẻ giống hệt nhau nhé!","Find two that are the same");
   catSet("thinking");
   m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{
     if(lock||b.disabled||b===a) return;
@@ -3974,6 +4106,7 @@ function mem(){
       [a, b].forEach(x => { x.disabled = true; x.classList.add("good"); });
       a = null;
       sfxOk();
+      say("Tìm thấy rồi! Hai hình giống nhau y đúc!", "Found a pair!");
       if(!--left) setTimeout(() => win(miss > Math.floor(ks.length * 0.7) ? 1 : 0, mem, "", ""), 900);
     } else {
       miss++;
@@ -4264,7 +4397,7 @@ function trace(selItem){
     triggerCelebration(T("Bé viết đẹp quá!", "Great Writing!"), T("Bé nắn nót rất giỏi, thưởng bé 1 ⭐!", "Wonderful tracing, +1 ⭐!"), "✍️", "⭐", () => win(0, returnFn, "", ""));
   };
 
-  md.say(it);
+  if (selItem) md.say(it);
   catSet("pointing");
 }
 let ST;try{ST=JSON.parse(ls.get("st",""))||{}}catch(e){ST={}}ST.n=ST.n||0;ST.f=ST.f||0;ST.w=ST.w||{};
@@ -4751,7 +4884,7 @@ function checkDailyTimeLimit(mins){
       const modal = document.getElementById("timeLimitModal");
       if(modal && modal.style.display !== "flex"){
         modal.style.display = "flex";
-        say("Bé học giỏi lắm! Hôm nay bé đã rất chăm chỉ, mình cùng nghỉ ngơi giữ gìn đôi mắt sáng nhé! Hẹn gặp lại bé ngày mai!", "Great job today! Time to rest your bright eyes!");
+        say("Bé học chăm chỉ quá! Giờ đôi mắt cần được nghỉ ngơi một chút. Chúng mình hẹn gặp lại nhau vào ngày mai nhé, bé ngoan!", "Great job today! Time to rest your bright eyes!");
         catSet("happy");
       }
     }
@@ -5950,7 +6083,23 @@ function parent(){
           <div class="settings-group-title">🔊 ${T("Âm thanh & Hiệu ứng:","Audio & Sound Effects:")}</div>
           <div class="chips" style="margin-top:4px">
             <button class="pill${SOUND_ON()?" on":""}" onclick="toggleSoundMaster();parent()">🔊 ${T("Âm thanh & Giọng đọc: "+(SOUND_ON()?"BẬT":"TẮT"),"Master sound: "+(SOUND_ON()?"ON":"OFF"))}</button>
+            <button class="pill${BGM_ON()?" on":""}" onclick="toggleBgm();parent()">🎵 ${T("Nhạc nền: "+(BGM_ON()?"BẬT":"TẮT"),"Background music: "+(BGM_ON()?"ON":"OFF"))}</button>
             <button class="pill${sf?" on":""}" onclick="togSfx();parent()">🔔 ${T("Âm hiệu ứng: "+(sf?"BẬT":"TẮT"),"Sound effects: "+(sf?"ON":"OFF"))}</button>
+          </div>
+        </div>
+
+        <!-- 5B. CHỦ ĐỀ MÀU THEO MÙA & KHOẢNG SỐ HỌC TOÁN (BƯỚC 1 & BƯỚC 11) -->
+        <div class="settings-group">
+          <div class="settings-group-title">🍂 ${T("Chủ đề màu sắc theo mùa:","Seasonal Color Theme:")}</div>
+          <div class="chips" style="margin-top:4px">
+            ${[["default","🌤️ "+T("Mặc định","Default")],["autumn","🍂 "+T("Mùa thu ấm áp","Autumn")],["spring","🌸 "+T("Mùa xuân tươi mát","Spring")]].map(([k,lbl])=>`<button class="pill${getSeasonTheme()===k?" on":""}" onclick="setSeasonTheme('${k}')">${lbl}</button>`).join("")}
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">🔢 ${T("Khoảng số tối đa cho các trò chơi Số:","Number Range Limit:")}</div>
+          <div class="chips" style="margin-top:4px">
+            ${[[5,"1 – 5 ("+T("Mới làm quen","Beginner")+")"],[10,"1 – 10 ("+T("Cơ bản","Standard")+")"],[20,"1 – 20 ("+T("Nâng cao","Advanced")+")"]].map(([v,lbl])=>`<button class="pill${getNumberRangeMax()===v?" on":""}" onclick="setNumberRangeMax(${v})">${lbl}</button>`).join("")}
           </div>
         </div>
 
@@ -5976,6 +6125,9 @@ function parent(){
             </button>
             <button class="pill" onclick="ST={n:0,f:0,w:{}};svS();parent()">
               📊 ${T("Chỉ xóa thống kê câu hỏi","Reset Quiz Stats Only")}
+            </button>
+            <button class="pill" onclick="if(window.clearAllSavedDrawings)window.clearAllSavedDrawings().then(()=>alert('Đã xóa toàn bộ bản vẽ lưu tự động!'))">
+              🎨 ${T("Xóa các bản vẽ lưu dở","Clear Saved Drawings")}
             </button>
           </div>
         </div>
@@ -6321,7 +6473,7 @@ async function storyRead(id){
       if(i>=s.content.length){
         window.__stopStory();
         triggerCelebration(T("Bé nghe xong truyện rồi!","Story Complete!"),T(`Bé nghe xong truyện "${s.title}", thật tuyệt vời!`,"You finished reading!"),s.icon||"📖","⭐⭐⭐");
-        say("Câu chuyện đến đây là hết rồi. Bé ngoan nhé!","The end. Sweet dreams!");
+        say("Câu chuyện kết thúc rồi. Chúc bé ngủ ngon và mơ những giấc mơ đẹp nhé!","The end. Sweet dreams!");
         return;
       }
       readingIdx=i;updateHl();
@@ -6373,6 +6525,17 @@ const V={
   games,
   get mis(){return(typeof window!=="undefined"&&window.mis)||(typeof globalThis!=="undefined"&&globalThis.mis);},
   get cmpS(){return(typeof window!=="undefined"&&window.cmpS)||(typeof globalThis!=="undefined"&&globalThis.cmpS);},
+  get colorShapeGame(){return(typeof window!=="undefined"&&window.colorShapeGame)||(typeof globalThis!=="undefined"&&globalThis.colorShapeGame);},
+  get puzzleGame(){return(typeof window!=="undefined"&&window.puzzleGame)||(typeof globalThis!=="undefined"&&globalThis.puzzleGame);},
+  get sizeCompareGame(){return(typeof window!=="undefined"&&window.sizeCompareGame)||(typeof globalThis!=="undefined"&&globalThis.sizeCompareGame);},
+  get oddSpotGame(){return(typeof window!=="undefined"&&window.oddSpotGame)||(typeof globalThis!=="undefined"&&globalThis.oddSpotGame);},
+  get numberTrainGame(){return(typeof window!=="undefined"&&window.numberTrainGame)||(typeof globalThis!=="undefined"&&globalThis.numberTrainGame);},
+  get randomMixGame(){return(typeof window!=="undefined"&&window.randomMixGame)||(typeof globalThis!=="undefined"&&globalThis.randomMixGame);},
+  get artStudioGame(){return(typeof window!=="undefined"&&window.artStudioGame)||(typeof globalThis!=="undefined"&&globalThis.artStudioGame);},
+  get connectDotsGame(){return(typeof window!=="undefined"&&window.connectDotsGame)||(typeof globalThis!=="undefined"&&globalThis.connectDotsGame);},
+  get memoryStepDrawGame(){return(typeof window!=="undefined"&&window.memoryStepDrawGame)||(typeof globalThis!=="undefined"&&globalThis.memoryStepDrawGame);},
+  get tenFrameGame(){return(typeof window!=="undefined"&&window.tenFrameGame)||(typeof globalThis!=="undefined"&&globalThis.tenFrameGame);},
+  get pairLinkGridGame(){return(typeof window!=="undefined"&&window.pairLinkGridGame)||(typeof globalThis!=="undefined"&&globalThis.pairLinkGridGame);},
   match,mem,trace,gate,parent,rec:recS,
   get readL(){return(typeof window!=="undefined"&&window.readL)||(typeof globalThis!=="undefined"&&globalThis.readL);},
   get math10(){return(typeof window!=="undefined"&&window.math10)||(typeof globalThis!=="undefined"&&globalThis.math10);},
@@ -6418,7 +6581,8 @@ const LSK = [
   "stars", "st", "lvl", "lang", "rate2", "auto", "ad", "sfx", "rm", "trm", "sound_master",
   "badges", "kid_name", "kid_avatar", "ageTier", "show_age_tiers", "showAgeTiers",
   "daily_limit_minutes", "blg_stage", "streak", "kids_streak_count", "kids_streak_last_date",
-  "kids_confetti_disabled", "bhv_act_stats", "bhv_offscreen_done", "bhv_profiles", "bhv_active_profile_id"
+  "kids_confetti_disabled", "bhv_act_stats", "bhv_offscreen_done", "bhv_profiles", "bhv_active_profile_id",
+  "season_theme", "number_range_max", "stickers_unlocked"
 ];
 const LSV = {
   stars: /^\d{1,9}$/,
@@ -6448,7 +6612,10 @@ const LSV = {
   bhv_profiles: /^\[[\s\S]*\]$/,
   bhv_active_profile_id: /^[a-zA-Z0-9_\-]{1,60}$/,
   blg_unlock_all: /^[01]$/,
-  blg_unlocked_stages: /^\[[\d,\s]*\]$/
+  blg_unlocked_stages: /^\[[\d,\s]*\]$/,
+  season_theme: /^(default|autumn|spring)$/,
+  number_range_max: /^(5|10|20)$/,
+  stickers_unlocked: /^\[[\s\S]*\]$/
 };
 const okSt = v => {
   try {

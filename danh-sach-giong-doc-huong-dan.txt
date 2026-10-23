@@ -1,0 +1,173 @@
+================================================================================
+DANH SÁCH CÂU THOẠI & GIỌNG ĐỌC HƯỚNG DẪN CHO BÉ ("BÉ HỌC VUI") - PHIÊN BẢN THÂN THIỆN
+================================================================================
+Hướng dẫn cho Bố/Mẹ:
+- Các câu thoại đã được làm mềm mại hơn, sử dụng ngôn ngữ giao tiếp tự nhiên với trẻ 4-6 tuổi.
+- Bạn có thể thay thế "Cô" bằng tên ở nhà của bé hoặc "Mẹ/Bố" nếu muốn cá nhân hóa hơn.
+--------------------------------------------------------------------------------
+1. TRANG CHỦ & ĐIỀU HƯỚNG CHUNG (app.js)
+--------------------------------------------------------------------------------
+- [Chào mừng vào Trang chủ]:
+"Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!"
+
+- [3 Nút lớn trên Trang chủ (khi bé chạm)]:
++ Nút Học hôm nay: "Bài học mới đang chờ bé đấy! Cùng khám phá thôi nào!"
++ Nút Chơi tự do: "Giờ chơi tự do! Bé thích trò gì nhất nhỉ?"
++ Nút Sổ Sticker: "Kho báu của bé đây rồi! Cùng xem mình đã sưu tập được những gì nhé!"
+
+- [Lời khen ngợi ngẫu nhiên khi bé làm đúng (mảng PR trong app.js)]:
+1. "Wow, giỏi quá!"
+2. "Hoan hô bé yêu!"
+3. "Tuyệt vời ông mặt trời!"
+4. "Bé thật xuất sắc!"
+5. "Chuẩn luôn rồi!"
+6. "Siêu phết!"
+7. "Bé thông minh lắm nha!"
+8. "Hay quá đi mất!"
+9. "Mèo con cũng phải trầm trồ khen bé đấy!"
+
+- [Lời động viên nhẹ nhàng khi bé chạm chưa đúng (mảng ER trong app.js)]:
+1. "Không sao, thử lại lần nữa nhé!"
+2. "Gần đúng rồi, cố lên tí nữa nào!"
+3. "Bình tĩnh nhé, chúng mình thử lại xem sao."
+4. (Khi sai 2 lần, gợi ý đáp án sáng lên): "Bé nhìn kỹ chỗ này xem nào..."
+
+- [Màn hình nghỉ ngơi khi hết giờ chơi (15 / 30 phút)]:
+"Bé học chăm chỉ quá! Giờ đôi mắt cần được nghỉ ngơi một chút. Chúng mình hẹn gặp lại nhau vào ngày mai nhé, bé ngoan!"
+--------------------------------------------------------------------------------
+2. GÓC VUI CHƠI - CÁC TRÒ CHƠI CỐT LÕI (app.js, numbers.js, games/count-game.js)
+--------------------------------------------------------------------------------
+- [Vào menu Góc vui chơi]:
+"Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!"
+
+- [Trò 1: Đếm hình chọn số (games/count-game.js)]:
++ Đề bài: "Có bao nhiêu [tên đồ vật] xinh xinh ở đây? Bé hãy chạm vào từng bạn ấy để đếm cùng cô nhé!"
++ Khi bé chạm đúng: "Chính xác! Có tất cả [N] [tên đồ vật] đấy!"
++ Khi bé chạm chưa đúng: "Ồ, chưa đúng rồi. Bé hãy chậm rãi chạm vào từng hình một để đếm lại nhé!"
+
+- [Trò 2: Bắt bóng chữ (bubbleGame trong app.js)]:
++ Mở đầu: "Trò chơi Bắt bóng chữ bắt đầu! Bé hãy nhanh tay chạm vào những quả bóng có chữ cái đúng nhé!"
++ Khi đổi tốc độ chậm: "Bóng bay chầm chậm cho bé dễ bắt nè."
++ Khi đổi tốc độ nhanh: "Tăng tốc nào! Bóng bay nhanh hơn rồi đây!"
+
+- [Trò 3: Nối chữ & Hình đối lập (match trong app.js)]:
++ Chế độ Nối Chữ - Hình: "Trò chơi Nối dây thần kỳ! Bé hãy nối ô bên trái với người bạn tương ứng bên phải nhé!"
++ Chế độ Chữ Hoa - Chữ Thường: "Tìm bạn cùng nhà! Nối chữ In Hoa với chữ thường giống hệt nó nhé!"
++ Chế độ Hình Đối lập: "Ai đối lập với ai? Bé hãy tìm hai hình trái ngược nhau và nối chúng lại nào!"
++ Chế độ Bạn nhỏ & Đồ vật yêu thích: "Bạn nhỏ nào thích món ăn nào? Bé hãy nối đúng sở thích của các bạn nhé!"
++ Khi nối đúng 1 cặp: "Đúng rồi! [Tên hình] kết đôi với [Tên chữ/hình] thật hoàn hảo!"
++ Khi nối chưa đúng: "Hai bạn này chưa phải là một đôi đâu, bé thử chọn lại xem nào."
++ Khi hoàn thành cả màn: "Hoan hô! Bé đã ghép nối thành công tất cả các cặp rồi!"
+
+- [Trò 4: Đoàn tàu sâu róm & Bóng bay số còn thiếu (mis trong numbers.js & numberTrainGame)]:
++ Đề bài chung: "Ô số nào đang trốn mất nhỉ?"
++ Đề bài Đoàn tàu sâu róm: "Đoàn tàu sâu róm thiếu một toa rồi! Bé tìm giúp số còn thiếu nhé!"
++ Đề bài Bóng bay số: "Quả bóng bay nào đang vắng mặt? Bé đoán xem đó là số mấy?"
++ Khi đúng: "Giỏi lắm! Số [N] đã xuất hiện rồi!"
++ Khi sai: "Chưa đúng rồi, bé hãy đếm dãy số từ [số đầu] một lần nữa nhé!"
+
+- [Trò 5: Lật thẻ ghi nhớ (mem trong app.js)]:
++ Mở đầu: "Trò chơi Thử thách trí nhớ! Hãy tìm hai tấm thẻ giống hệt nhau nhé!"
++ Khi lật trúng cặp: "Tìm thấy rồi! Hai hình giống nhau y đúc!"
+
+- [Trò 6: Dấu so sánh & So sánh nhóm (cmp, cmpS trong numbers.js)]:
++ Đề bài so sánh nhóm: "Bên nào nhiều hơn nhỉ?" / "Bên nào ít hơn ta?"
++ Đề bài chọn dấu (> = <): "Chọn chiếc cầu đúng nối hai bên nhé!"
++ Giải thích khi bằng nhau: "[A] bằng [B]. Hai bên cân bằng nhau thật đẹp!"
++ Giải thích khi hơn/kém: "[A] đông vui hơn [B]" / "[A] ít hơn [B] một chút!"
+
+- [Trò 7: Chém trái cây (fruitSlash trong app.js)]:
++ Mở đầu: "Trò chơi Chém trái cây! Bé hãy lướt ngón tay thật nhanh qua những quả trái cây ngon lành nhé!"
++ Hoàn thành: "Hoan hô bé yêu! Bé là cao thủ chém trái cây siêu đẳng! Tặng bé ba ngôi sao lấp lánh!"
+--------------------------------------------------------------------------------
+3. CÁC TRÒ CHƠI MẦM NON RV APPSTUDIOS (games/toddler-games.js)
+--------------------------------------------------------------------------------
+- [Trò 8: Giỏ màu & Hình dạng (colorShapeGame)]:
++ Phân loại giỏ màu: "Bé hãy giúp các hình khối tìm về đúng ngôi nhà màu sắc của chúng nhé!"
++ Khi chạm vào bạn Sư tử cổ vũ: "Cố lên bé ơi! Kéo hình bỏ vào chiếc giỏ cùng màu nào!"
++ Khi bỏ sai giỏ: "Ồ, nhầm màu rồi! Bé thử tìm chiếc giỏ khác cho [tên vật] xem nào!"
++ Ghép khuôn hình học: "Hình khối nào đi với khuôn nào? Bé hãy đặt chúng vào đúng vị trí nhé!"
++ Khi đặt sai khuôn: "Hình này chưa vừa khít đâu, bé thử khuôn bên cạnh xem sao!"
+
+- [Trò 9: Ghép tranh & Hình bóng (puzzleGame)]:
++ Ghép nửa con vật: "Hoàn thành bức tranh nào! Bé hãy tìm đúng nửa còn thiếu để ghép vào bạn nhỏ nhé!"
++ Khi ghép sai nửa: "Chưa đúng rồi, bé nhìn kỹ đường viền xem nào!"
++ Ghép miếng khuyết trên quả: "Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên quả nhé!"
++ Khi ghép sai miếng quả: "Miếng này hơi lệch rồi, bé thử quả bên cạnh xem!"
++ Ghép hình bóng con vật: "Ai đang trốn trong bóng tối? Bé hãy đưa các bạn về đúng chiếc bóng của mình nhé!"
++ Khi chạm vào bóng trống: "Chiếc bóng của ai đây nhỉ?"
++ Khi ghép sai bóng: "Bóng này không khớp rồi, bé quan sát kỹ dáng hình nhé!"
+
+- [Trò 10: To nhỏ & Đếm so sánh (sizeCompareGame)]:
++ Chọn To nhất / Nhỏ nhất: "Tìm bạn [tên con vật] TO NHẤT nào!" / "Tìm bạn [tên con vật] NHỎ XÍU nào!"
++ Khi đúng: "Chính xác! Đây chính là bạn to nhất / nhỏ nhất rồi!"
++ Khi sai: "Bé nhìn kỹ xem, ai mới là người to/bé nhất nhé!"
++ Đếm so sánh 2 bên: "Bên nào có NHIỀU [tên quả/vật] hơn?" / "Bên nào có ÍT [tên quả/vật] hơn?"
++ Khi đúng: "Giỏi quá! Bên này có tới [N] [tên vật] cơ đấy!"
++ Khi sai: "Bé hãy đếm thử cả hai bên xem bên nào nhiều hơn nhé!"
+
+- [Trò 11: Tinh mắt Tìm khác biệt, Quy luật & Thế giới loài vật (oddSpotGame)]:
++ Tìm hình khác biệt (6 ô): "Tìm điểm khác biệt! Bé hãy tìm ra hình duy nhất không giống các bạn còn lại nhé!"
++ Khi đúng: "Tìm ra rồi! [Tên hình] này đặc biệt nhất!"
++ Khi sai: "Bạn này giống các bạn khác mà, bé hãy tìm hình 'độc nhất vô nhị' kia kìa!"
++ Quy luật hình còn thiếu: "Đoán hình tiếp theo! Bé xem quy luật và điền hình còn thiếu vào dấu chấm hỏi nhé!"
++ Khi đúng: "Xuất sắc! Đó chính là [Tên hình]!"
++ Khi sai: "Chưa đúng quy luật rồi, bé nhìn dãy hình từ đầu đến cuối xem nào!"
++ Thế giới loài vật (Câu hỏi đố vui):
+1. "Bạn nào mê ăn tre trúc và đeo kính đen sành điệu?" -> "Hoan hô! Là bạn Gấu trúc đáng yêu!"
+2. "Bạn nào kêu 'Meo meo' và bắt chuột siêu giỏi?" -> "Hoan hô! Là bạn Mèo con tinh nghịch!"
+3. "Bạn nào có chiếc vòi dài ngoẵng và đôi tai to bự?" -> "Hoan hô! Là bạn Voi con khỏe mạnh!"
+4. "Bạn nào có cổ cao vút để với lá cây trên ngọn?" -> "Hoan hô! Là bạn Hươu cao cổ duyên dáng!"
+5. "Bạn nào là chúa sơn lâm với bờm tóc oai phong?" -> "Hoan hô! Là bạn Sư tử dũng mãnh!"
+6. "Bạn nào sống dưới biển sâu và phun nước tung tóe?" -> "Hoan hô! Là bạn Cá voi khổng lồ!"
+--------------------------------------------------------------------------------
+4. CÁC TRÒ CHƠI SÁNG TẠO, VẼ & MONTESSORI MỚI (games/creative-games.js)
+--------------------------------------------------------------------------------
+- [Trò 12: Tô màu theo vùng SVG & Bút phát sáng (artStudioGame)]:
++ Mở đầu Tô màu: "Họa sĩ nhí tài ba! Bé hãy chọn màu yêu thích và tô vào bức tranh [Tên tranh] nhé!"
++ Khi mở lại tranh đang tô dở: "Mừng bé quay lại với bức tranh dang dở nào!"
++ Khi bấm Xong tô màu: "Bức tranh [Tên tranh] của bé đẹp lung linh! Tặng bé một ngôi sao vàng rực rỡ!"
++ Mở đầu Bút phát sáng: "Bút thần diệu kỳ! Bé hãy vẽ những nét sáng lấp lánh trên nền tối nhé!"
++ Khi bấm Xóa bảng: "Bảng đã sạch bong kin kít, mời bé vẽ tác phẩm mới!"
++ Khi bấm Xong Bút phát sáng: "Tác phẩm ánh sáng tuyệt đẹp! Tặng bé một ngôi sao lấp lánh!"
+
+- [Trò 13: Nối chấm theo số & Tự vẽ cho bé xem (connectDotsGame)]:
++ Mở đầu: "Nối chấm kỳ diệu! Bé hãy bắt đầu từ chấm số 1 nhé!"
++ Khi bé chạm sai thứ tự chấm: "Bé ơi, tìm chấm số [N] đang nhấp nháy kìa!"
++ Khi bấm nút Tự vẽ: "Ngồi yên nhé, bút thần sẽ tự động nối chấm và tô màu cho bé xem!"
++ Khi nối xong hiện hình: "Wow! Hiện ra hình [Tên hình] xinh xắn quá!"
+
+- [Trò 14: Vẽ theo trí nhớ & Học vẽ từng bước (memoryStepDrawGame)]:
++ Chế độ Vẽ theo trí nhớ: "Thử thách trí nhớ! Bé hãy nhìn kỹ [Tên hình] trong 2 giây, sau đó vẽ lại thật giống nhé!"
++ Chế độ Học vẽ từng bước: "Tập vẽ từng nét! Bé hãy tô theo các nét chấm mờ để tạo thành [Tên hình] nhé!"
++ Khi bấm Xem lại nét mẫu: "Đây là bí quyết vẽ [Tên hình] nè, bé tham khảo nhé!"
++ Khi bấm Vẽ xong: "Tuyệt cú mèo! Bé vẽ [Tên hình] khéo léo quá!"
+
+- [Trò 15: Khung Mười Ô 2×5 (tenFrameGame)]:
++ Mở đầu: "Trong khung có [A] quả táo. Bé hãy thêm vào cho đủ [B] quả táo nhé!"
++ Khi đặt đủ số chấm: "Giỏi quá! [A] thêm [B-A] là tròn [B] quả!"
+
+- [Trò 16: Nối cặp giống nhau lưới 2×2 / 3×2 (pairLinkGridGame)]:
++ Mở đầu: "Tìm đôi bạn thân! Bé hãy nối hai ô có hình giống hệt nhau nhé!"
++ Khi chọn 2 ô khác nhau: "Hai bạn này chưa giống nhau đâu, bé thử cặp khác xem!"
++ Khi bấm Hoàn tác: "Đã hủy nối, bé chọn lại nhé!"
++ Khi bấm Gợi ý: "Bé nhìn xem, hai ô [Tên hình] đang mách nước kìa!"
++ Khi nối hết bảng: "Hoan hô! Bé đã tìm ra tất cả các cặp đôi giống nhau!"
+--------------------------------------------------------------------------------
+5. HỌC CHỮ CÁI, ĐÁNH VẦN, TẬP VIẾT & KỂ CHUYỆN (alphabet.js, spelling.js, app.js)
+--------------------------------------------------------------------------------
+- [Màn hình Học chữ & Tập tô (lettersHome)]:
+"Bé muốn học chữ cái, tập viết nét hay đánh vần nào? Chọn một mục nhé!"
+
+- [Màn hình Bảng chữ cái (letL / letP / letO)]:
++ Mở bảng chữ: "Bé hãy chạm vào các chữ cái xinh xinh nhé!"
++ Đố chữ đầu: "Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?"
++ Đố hình theo chữ: "Hình nào bắt đầu bằng chữ [L] đáng yêu?"
+
+- [Màn hình Tập tô nét & chữ (trace trong app.js)]:
++ Khi vào màn tập viết: "Cùng tô chữ [X] nào!" / "Cùng tô số [N] nào!"
++ Hướng dẫn tư thế ngồi & cầm bút: "Bé nhớ ngồi thẳng lưng, giữ khoảng cách vừa phải với màn hình và dùng ngón trỏ tô nhẹ nhàng theo nét chấm mờ nhé!"
+
+- [Màn hình Kể chuyện cổ tích (storyRead trong app.js)]:
++ Khi nghe xong truyện: "Câu chuyện kết thúc rồi. Chúc bé ngủ ngon và mơ những giấc mơ đẹp nhé!"
+================================================================================
