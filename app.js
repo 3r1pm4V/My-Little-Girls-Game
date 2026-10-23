@@ -2761,7 +2761,7 @@ function games(){
     <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Góc vui chơi ôn tập (Trò chơi vui nhộn)","Review Games & Fun")}</h2>
     <p style="font-size:14px;color:#64748b;margin:0">${T("Các trò chơi tương tác rèn luyện trí tuệ & kỹ năng cho bé 🌟","Fun interactive games for kids 🌟")}</p>
   </div>
-  <div class="cards">
+  <div class="cards game-cards">
     ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
     ${card("fruitSlash","<b>🍉 🗡️ 🍓</b>","Chém trái cây","Fruit Slash","game")}
     ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
@@ -2953,7 +2953,7 @@ function bubbleGame(isReplay) {
       </div>
     `;
 
-    const bubbleRadius = 48;
+    const bubbleRadius = Math.max(48, (bEl.offsetWidth || 0) / 2, skyEl.querySelector(".bubble-item") ? skyEl.querySelector(".bubble-item").offsetWidth / 2 : 0);
     const spawnX = bubbleRadius + Math.random() * Math.max(60, skyWidth - bubbleRadius * 2);
     const spawnY = skyHeight + 50;
 
@@ -3960,7 +3960,7 @@ function mem(){
     {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
     {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
     {t:T("Lật thẻ trí nhớ","Memory"), i:"🃏"}
-  ]) + `<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" style="max-width:620px;margin:12px auto">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
+  ]) + `<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" data-n="${cs.length}">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
   say("Trò chơi Lật thẻ ghi nhớ. Bé lật các thẻ để tìm hai hình giống nhau nhé!","Find two that are the same");
   catSet("thinking");
   m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{
