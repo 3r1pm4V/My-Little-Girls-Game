@@ -296,7 +296,49 @@
       titleVi: "Chiếc máy bay",
       titleEn: "Airplane",
       imgSrc: "coloring/mnvh_airplane.webp"
-    }
+    },
+    { id: "mnvh_kitty_flower", icon: "🌸", titleVi: "Mèo Kitty ôm hoa", titleEn: "Kitty with Flowers", imgSrc: "coloring/mnvh_kitty_flower.webp" },
+    { id: "mnvh_kitty_baking", icon: "🍪", titleVi: "Mèo Kitty làm bánh", titleEn: "Kitty Baking", imgSrc: "coloring/mnvh_kitty_baking.webp" },
+    { id: "mnvh_kitty_princess", icon: "👗", titleVi: "Mèo Kitty diện váy", titleEn: "Kitty in a Dress", imgSrc: "coloring/mnvh_kitty_princess.webp" },
+    { id: "mnvh_kitty_balloon", icon: "🎈", titleVi: "Mèo Kitty và bóng bay", titleEn: "Kitty with Balloons", imgSrc: "coloring/mnvh_kitty_balloon.webp" },
+    { id: "mnvh_kitty_stars", icon: "✨", titleVi: "Mèo Kitty lấp lánh", titleEn: "Sparkly Kitty", imgSrc: "coloring/mnvh_kitty_stars.webp" },
+    { id: "mnvh_kitty_basket", icon: "🧺", titleVi: "Mèo Kitty giỏ trứng", titleEn: "Kitty Egg Basket", imgSrc: "coloring/mnvh_kitty_basket.webp" },
+    { id: "mnvh_kitty_painting", icon: "🎨", titleVi: "Mèo Kitty vẽ tranh", titleEn: "Kitty Painting", imgSrc: "coloring/mnvh_kitty_painting.webp" },
+    { id: "mnvh_kitty_hat", icon: "🤠", titleVi: "Mèo Kitty đội mũ", titleEn: "Kitty with a Hat", imgSrc: "coloring/mnvh_kitty_hat.webp" },
+    { id: "mnvh_puppy_bow", icon: "🐕", titleVi: "Cún con đeo nơ", titleEn: "Puppy with a Bow", imgSrc: "coloring/mnvh_puppy_bow.webp" },
+    { id: "mnvh_hen_chicks", icon: "🐔", titleVi: "Gà mẹ và đàn con", titleEn: "Hen and Chicks", imgSrc: "coloring/mnvh_hen_chicks.webp" },
+    { id: "mnvh_cow_field", icon: "🐄", titleVi: "Bò ăn cỏ trên đồi", titleEn: "Cow in the Field", imgSrc: "coloring/mnvh_cow_field.webp" },
+    { id: "mnvh_rescue_pups", icon: "🐾", titleVi: "Những chú chó cứu hộ", titleEn: "Rescue Pups", imgSrc: "coloring/mnvh_rescue_pups.webp" },
+    { id: "mnvh_giraffe_palm", icon: "🦒", titleVi: "Hươu cao cổ", titleEn: "Giraffe", imgSrc: "coloring/mnvh_giraffe_palm.webp" },
+    { id: "mnvh_lily_flower", icon: "💮", titleVi: "Hoa loa kèn", titleEn: "Lily Flower", imgSrc: "coloring/mnvh_lily_flower.webp" },
+    { id: "mnvh_flower_pot", icon: "🪴", titleVi: "Chậu hoa xinh", titleEn: "Flower Pot", imgSrc: "coloring/mnvh_flower_pot.webp" },
+    { id: "mnvh_smiling_sunflower", icon: "🌻", titleVi: "Hoa mặt cười", titleEn: "Smiling Flower", imgSrc: "coloring/mnvh_smiling_sunflower.webp" },
+    { id: "mnvh_bellflower", icon: "🔔", titleVi: "Hoa chuông", titleEn: "Bellflower", imgSrc: "coloring/mnvh_bellflower.webp" },
+    { id: "mnvh_twin_daisies", icon: "🌼", titleVi: "Đôi hoa cúc", titleEn: "Twin Daisies", imgSrc: "coloring/mnvh_twin_daisies.webp" },
+    { id: "mnvh_rose_bloom", icon: "🌹", titleVi: "Bông hoa nở", titleEn: "Blooming Flower", imgSrc: "coloring/mnvh_rose_bloom.webp" },
+    { id: "mnvh_sun_garden", icon: "☀️", titleVi: "Vườn hoa ông mặt trời", titleEn: "Sunny Garden", imgSrc: "coloring/mnvh_sun_garden.webp" },
+    { id: "mnvh_boy_basketball", icon: "🏀", titleVi: "Bé trai chơi bóng", titleEn: "Boy with a Ball", imgSrc: "coloring/mnvh_boy_basketball.webp" },
+    { id: "mnvh_boy_soccer", icon: "⚽", titleVi: "Bé trai đá bóng", titleEn: "Boy Playing Soccer", imgSrc: "coloring/mnvh_boy_soccer.webp" },
+    { id: "mnvh_lion_king", icon: "🦁", titleVi: "Sư tử cha và con", titleEn: "Lion Family", imgSrc: "coloring/mnvh_lion_king.webp" },
+    { id: "mnvh_cute_dino", icon: "🦕", titleVi: "Khủng long con", titleEn: "Baby Dinosaur", imgSrc: "coloring/mnvh_cute_dino.webp" },
+    { id: "mnvh_pikachu", icon: "⚡", titleVi: "Pikachu", titleEn: "Pikachu", imgSrc: "coloring/mnvh_pikachu.webp" },
+    { id: "mnvh_doraemon", icon: "🔵", titleVi: "Doraemon", titleEn: "Doraemon", imgSrc: "coloring/mnvh_doraemon.webp" },
+    { id: "mnvh_small_plane", icon: "🛩️", titleVi: "Máy bay nhỏ", titleEn: "Small Plane", imgSrc: "coloring/mnvh_small_plane.webp" },
+    { id: "mnvh_passenger_plane", icon: "🛫", titleVi: "Máy bay chở khách", titleEn: "Passenger Plane", imgSrc: "coloring/mnvh_passenger_plane.webp" },
+    { id: "mnvh_night_plane", icon: "🌙", titleVi: "Máy bay bay đêm", titleEn: "Night Flight", imgSrc: "coloring/mnvh_night_plane.webp" },
+    { id: "mnvh_cloud_plane", icon: "☁️", titleVi: "Máy bay trên mây", titleEn: "Plane in the Clouds", imgSrc: "coloring/mnvh_cloud_plane.webp" },
+    { id: "mnvh_helicopter", icon: "🚁", titleVi: "Trực thăng", titleEn: "Helicopter", imgSrc: "coloring/mnvh_helicopter.webp" },
+    { id: "mnvh_propeller_plane", icon: "🪂", titleVi: "Máy bay cánh quạt", titleEn: "Propeller Plane", imgSrc: "coloring/mnvh_propeller_plane.webp" },
+    { id: "mnvh_beetle_car", icon: "🚙", titleVi: "Ô tô con bọ", titleEn: "Beetle Car", imgSrc: "coloring/mnvh_beetle_car.webp" },
+    { id: "mnvh_police_car", icon: "🚓", titleVi: "Xe cảnh sát", titleEn: "Police Car", imgSrc: "coloring/mnvh_police_car.webp" },
+    { id: "mnvh_police_suv", icon: "🚔", titleVi: "Xe cảnh sát địa hình", titleEn: "Police SUV", imgSrc: "coloring/mnvh_police_suv.webp" },
+    { id: "mnvh_convertible_car", icon: "🏎️", titleVi: "Ô tô mui trần", titleEn: "Convertible Car", imgSrc: "coloring/mnvh_convertible_car.webp" },
+    { id: "mnvh_mcqueen_car", icon: "🏁", titleVi: "Xe đua tia chớp", titleEn: "Racing Car", imgSrc: "coloring/mnvh_mcqueen_car.webp" },
+    { id: "mnvh_dump_truck", icon: "🚚", titleVi: "Xe ben", titleEn: "Dump Truck", imgSrc: "coloring/mnvh_dump_truck.webp" },
+    { id: "mnvh_school_bus", icon: "🚌", titleVi: "Xe buýt đến trường", titleEn: "School Bus", imgSrc: "coloring/mnvh_school_bus.webp" },
+    { id: "mnvh_fire_truck", icon: "🚒", titleVi: "Xe cứu hỏa", titleEn: "Fire Truck", imgSrc: "coloring/mnvh_fire_truck.webp" },
+    { id: "mnvh_ambulance", icon: "🚑", titleVi: "Xe cứu thương", titleEn: "Ambulance", imgSrc: "coloring/mnvh_ambulance.webp" },
+    { id: "mnvh_sports_car", icon: "🚘", titleVi: "Siêu xe thể thao", titleEn: "Sports Car", imgSrc: "coloring/mnvh_sports_car.webp" }
   ];
 
   let artState = { mode: "color", picIdx: 0, activeHex: "#ef4444", brushSize: 18, isEraser: false, round: 1, autosaveTimer: null };
@@ -341,12 +383,10 @@
           <button type="button" class="pill on" id="crResumeBtn" style="margin-left:8px;min-height:44px;background:#eab308;color:#fff">🖌️ ${_T("Tô tiếp bức đang dở", "Resume Drawing")}</button>
         </div>
 
-        <div class="chips" style="gap:8px;margin:4px 0 8px;justify-content:center;flex-wrap:wrap">
-          ${SVG_COLORING_PICTURES.map((p, idx) => `
-            <button type="button" class="pill ${idx === (artState.picIdx % SVG_COLORING_PICTURES.length) ? 'on' : ''}" data-pidx="${idx}" style="min-height:46px;padding:6px 14px;font-weight:800">
-              ${p.icon} ${_T(p.titleVi, p.titleEn)}
-            </button>
-          `).join("")}
+        <div style="display:flex;justify-content:center;margin:4px 0 8px">
+          <select class="bhv-select" id="crPicSelect" aria-label="${_T("Chọn tranh tô màu", "Pick a picture")}">
+            ${SVG_COLORING_PICTURES.map((p, idx) => `<option value="${idx}" ${idx === (artState.picIdx % SVG_COLORING_PICTURES.length) ? "selected" : ""}>${p.icon} ${_T(p.titleVi, p.titleEn)}</option>`).join("")}
+          </select>
         </div>
 
         <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
@@ -502,9 +542,10 @@
       cv.addEventListener("touchend", endDraw);
     }
 
-    wrap.querySelectorAll("[data-pidx]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const idx = parseInt(btn.dataset.pidx, 10);
+    const picSel = wrap.querySelector("#crPicSelect");
+    if (picSel) [picSel].forEach(btn => {
+      btn.addEventListener("change", () => {
+        const idx = parseInt(btn.value, 10);
         if (!isNaN(idx)) {
           saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [...strokes] });
           artState.picIdx = idx;
@@ -603,7 +644,7 @@
       <div class="rv-game-wrap" id="crGlowWrap">
         <div class="rv-top-bar">
           <div class="chips" style="margin:0">
-            <button type="button" class="pill" onclick="window.artStudioGame('color')" style="min-height:48px;font-weight:800">🎨 ${_T("Tô màu theo vùng", "Tap Coloring")}</button>
+            <button type="button" class="pill" onclick="window.artStudioGame('color')" style="min-height:48px;font-weight:800">🖍️ ${_T("Tô màu bằng tay", "Hand Coloring")}</button>
             <button type="button" class="pill on" onclick="window.artStudioGame('glow')" style="min-height:48px;font-weight:800">✨ ${_T("Bút phát sáng", "Glow Pen")}</button>
           </div>
           ${renderCreativeHeaderBadge(artState.round)}

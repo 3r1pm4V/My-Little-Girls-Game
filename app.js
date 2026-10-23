@@ -788,7 +788,7 @@ function kbc(crumbs,actionHtml=""){
     const fn=(c.s==="home")?"goHome()":(c.a!==undefined?`go('${c.s}','${c.a}')`:`go('${c.s}')`);
     return`<button class="k-bc-btn" onclick="${fn}">${c.i?c.i+" ":""}${c.t}</button><span class="k-bc-sep">›</span>`;
   }).join("");
-  return`<nav class="k-bc" aria-label="${T("Điều hướng","Navigation")}">${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
+  return`<nav class="k-bc${actionHtml?' has-action':''}" aria-label="${T("Điều hướng","Navigation")}">${items}${actionHtml?`<span class="k-bc-action">${actionHtml}</span>`:""}</nav>`;
 }
 
 /* ========================================================
@@ -3340,7 +3340,6 @@ function fruitSlash(isReplay) {
     }
 
     sfxOk();
-    say(f.type.nameVi, f.type.nameEn);
 
     createHalf(f, "left");
     createHalf(f, "right");
