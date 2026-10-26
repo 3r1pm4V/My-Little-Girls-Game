@@ -2048,3 +2048,139 @@ html.rm .confetti-cv, html.rm .fx {
   .rv-quad-card { min-height: clamp(110px, 24dvh, 165px); }
   .rv-compare-card { min-height: clamp(160px, 34dvh, 240px); }
 }
+
+/* Responsive container cho Tô màu & Bút phát sáng */
+.cr-coloring-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.cr-coloring-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  max-width: 420px;
+}
+.cr-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  max-width: 420px;
+}
+.cr-glow-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  max-width: 420px;
+}
+.cr-color-swatch, .cr-glow-swatch {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  font-size: 18px !important;
+}
+.trace-workspace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tối ưu toàn diện Tablet Landscape (màn hình ngang) */
+@media (orientation: landscape) and (min-width: 760px) and (max-height: 900px) {
+  #app { max-width: 1120px; }
+  main { padding: 4px 12px 60px; }
+  
+  /* 1. Màn hình Tô màu & Bút phát sáng */
+  #crColoringWrap, #crGlowWrap {
+    max-width: 1080px;
+    gap: 6px;
+    padding: 2px 8px;
+  }
+  .cr-coloring-row {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+  }
+  #crSvgCanvas {
+    width: min(44vw, calc(100vh - 170px), 360px) !important;
+    max-height: calc(100vh - 170px);
+  }
+  #crGlowCanvas {
+    width: min(46vw, calc(100vh - 170px), 380px) !important;
+    height: auto !important;
+    max-height: calc(100vh - 170px);
+  }
+  .cr-coloring-side {
+    max-width: 440px;
+    gap: 6px;
+    justify-content: center;
+  }
+  .cr-swatches-grid, .cr-glow-swatches-grid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+  }
+  .cr-color-swatch, .cr-glow-swatch {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+  }
+  
+  /* 2. Màn hình Tập viết (trace) */
+  .trace-workspace {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .trace-side-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 380px;
+  }
+  .trace-hint-banner {
+    margin: 2px auto 6px;
+    padding: 4px 10px;
+  }
+
+  /* 3. Màn hình Học số (numL) */
+  .stage {
+    margin: 6px auto;
+  }
+  .objs {
+    min-height: 54px;
+    margin: 4px auto;
+  }
+  .bignum {
+    font-size: clamp(60px, 14vh, 120px);
+    min-height: clamp(80px, 18vh, 140px);
+  }
+
+  /* 4. Khung 10 ô & Nối cặp & Trí nhớ */
+  #crTenFrameGrid {
+    padding: 10px 16px;
+    margin: 6px auto;
+    gap: 8px;
+  }
+  .cr-tf-cell {
+    min-width: 52px !important;
+    min-height: 52px !important;
+    font-size: 30px !important;
+  }
+  #crPairGrid {
+    margin: 6px auto;
+    gap: 10px;
+  }
+  .cr-pair-tile {
+    min-width: 76px !important;
+    min-height: 76px !important;
+    font-size: 36px !important;
+  }
+}

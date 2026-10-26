@@ -4274,19 +4274,23 @@ function trace(selItem){
       🔊 ${T(md.vi(it), md.en(it))}
     </h2>
     ${hintBanner}
-    <div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden">
-      <canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-      <canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
-      ${guide}
-      <canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-    </div>
-    <div class="chips" style="gap:8px;margin:8px 0;align-items:center">
-      ${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c => `<button class="chip" style="background:${c};border:3px solid ${c === col ? "#fff" : "transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}
-      <button class="pill" id="btn-clear" title="${T("Xóa để viết lại", "Erase")}">🧼 ${T("Tẩy", "Clear")}</button>
-      <button class="pill" id="ok">✔ ${T("Xong", "Done")}</button>
-    </div>
-    <div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">
-      ${pool.map(x => `<button class="pill${x === it ? " on" : ""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet ? VN_STROKES.find(s=>s.id===x).name.replace("Nét ", "") : x}</button>`).join("")}
+    <div class="trace-workspace">
+      <div style="position:relative;width:min(86vw,320px);aspect-ratio:320/390;margin:6px auto;background:#fdfdf9;border-radius:24px;border:4px solid #b8d4f6;box-shadow:0 8px 24px rgba(0,0,0,0.1);touch-action:none;overflow:hidden">
+        <canvas id="bgCv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+        <canvas id="guideCv" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
+        ${guide}
+        <canvas id="cv" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+      </div>
+      <div class="trace-side-controls">
+        <div class="chips trace-colors" style="gap:8px;margin:8px 0;align-items:center">
+          ${["#6b21a8","#1d4ed8","#dc2626","#16a34a","#ea580c","#db2777"].map(c => `<button class="chip" style="background:${c};border:3px solid ${c === col ? "#fff" : "transparent"};box-shadow:0 3px 6px #0002" data-col="${c}"></button>`).join("")}
+          <button class="pill" id="btn-clear" title="${T("Xóa để viết lại", "Erase")}">🧼 ${T("Tẩy", "Clear")}</button>
+          <button class="pill" id="ok">✔ ${T("Xong", "Done")}</button>
+        </div>
+        <div class="chips trace-picker" style="max-height:120px;overflow-y:auto;gap:6px;max-width:540px;margin:6px auto;padding:6px;border-radius:20px;background:var(--card);box-shadow:0 2px 8px #0001">
+          ${pool.map(x => `<button class="pill${x === it ? " on" : ""}" style="min-width:48px;padding:4px 10px;text-align:center" onclick="trace('${x}')">${isNet ? VN_STROKES.find(s=>s.id===x).name.replace("Nét ", "") : x}</button>`).join("")}
+        </div>
+      </div>
     </div>
   `;
 

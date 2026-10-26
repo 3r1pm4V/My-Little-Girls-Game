@@ -179,14 +179,28 @@
   // ============================================================================
   const COLOR_PALETTE = [
     { id: "red", hex: "#ef4444", vi: "Màu đỏ", en: "Red" },
+    { id: "crimson", hex: "#b91c1c", vi: "Màu đỏ thẫm", en: "Crimson" },
     { id: "orange", hex: "#f97316", vi: "Màu cam", en: "Orange" },
+    { id: "amber", hex: "#fb923c", vi: "Màu cam tươi", en: "Light Orange" },
     { id: "yellow", hex: "#facc15", vi: "Màu vàng", en: "Yellow" },
+    { id: "lemon", hex: "#fef08a", vi: "Màu vàng nhạt", en: "Light Yellow" },
+    { id: "lime", hex: "#84cc16", vi: "Màu xanh chuối", en: "Lime" },
     { id: "green", hex: "#22c55e", vi: "Màu xanh lá", en: "Green" },
-    { id: "blue", hex: "#3b82f6", vi: "Màu xanh dương", en: "Blue" },
-    { id: "purple", hex: "#a855f7", vi: "Màu tím", en: "Purple" },
-    { id: "pink", hex: "#ec4899", vi: "Màu hồng", en: "Pink" },
+    { id: "darkgreen", hex: "#15803d", vi: "Màu xanh đậm", en: "Dark Green" },
+    { id: "emerald", hex: "#10b981", vi: "Màu xanh ngọc", en: "Emerald" },
     { id: "cyan", hex: "#06b6d4", vi: "Màu ngọc bích", en: "Cyan" },
+    { id: "skyblue", hex: "#38bdf8", vi: "Màu da trời", en: "Sky Blue" },
+    { id: "blue", hex: "#3b82f6", vi: "Màu xanh dương", en: "Blue" },
+    { id: "navy", hex: "#1d4ed8", vi: "Màu xanh lam", en: "Navy" },
+    { id: "purple", hex: "#a855f7", vi: "Màu tím", en: "Purple" },
+    { id: "darkpurple", hex: "#6b21a8", vi: "Màu tím than", en: "Dark Purple" },
+    { id: "pink", hex: "#ec4899", vi: "Màu hồng", en: "Pink" },
+    { id: "lightpink", hex: "#f472b6", vi: "Màu hồng sen", en: "Light Pink" },
+    { id: "peach", hex: "#fbcfe8", vi: "Màu hồng phấn", en: "Peach Pink" },
     { id: "brown", hex: "#a16207", vi: "Màu nâu", en: "Brown" },
+    { id: "darkbrown", hex: "#713f12", vi: "Màu nâu đất", en: "Dark Brown" },
+    { id: "black", hex: "#1e293b", vi: "Màu đen", en: "Black" },
+    { id: "gray", hex: "#94a3b8", vi: "Màu xám", en: "Gray" },
     { id: "eraser", hex: "#ffffff", vi: "Cục tẩy trắng", en: "Eraser", isEraser: true }
   ];
 
@@ -389,7 +403,7 @@
           </select>
         </div>
 
-        <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
+        <div class="cr-coloring-row">
           <div style="text-align:center">
             <h3 role="button" tabindex="0" onclick="say('${pic.titleVi}', '${pic.titleEn}')" style="margin:0 0 6px;font-size:20px;color:#1e293b;cursor:pointer" title="${_T("Bấm để nghe tên tranh", "Tap to hear title")}">🔊 ${pic.icon} ${_T(pic.titleVi, pic.titleEn)} <small style="font-size:13px;color:#64748b;font-weight:700">(${_T("Bé kéo ngón tay để tô màu nhé!", "Drag your finger to color!")})</small></h3>
             <div id="crSvgCanvas" style="position:relative;width:min(86vw,350px);aspect-ratio:1/1;margin:0 auto;background:#ffffff;border:4px solid #bae6fd;border-radius:24px;box-shadow:0 8px 20px rgba(2,132,199,0.14);overflow:hidden;touch-action:none;user-select:none">
@@ -398,9 +412,9 @@
             </div>
           </div>
 
-          <div style="display:flex;flex-direction:column;gap:10px;align-items:center;max-width:350px">
+          <div class="cr-coloring-side">
             <div style="font-weight:800;color:#334155;font-size:15px">${_T("Chọn bút sáp màu & cỡ cọ:", "Pick crayon color & brush size:")}</div>
-            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+            <div class="cr-swatches-grid">
               ${COLOR_PALETTE.map(col => `
                 <button type="button" class="cr-color-swatch ${(!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser) ? 'on' : ''}" data-hex="${col.hex}" data-eraser="${col.isEraser ? '1' : '0'}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}"
                   style="width:58px;height:58px;border-radius:50%;background:${col.hex};border:${((!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser)) ? '5px solid #0f172a' : '3px solid #cbd5e1'};box-shadow:0 4px 10px rgba(0,0,0,0.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .15s">
@@ -654,7 +668,7 @@
           <canvas id="crGlowCanvas" width="320" height="270" style="width:min(84vw,350px);height:auto;background:#0f172a;border:4px solid #38bdf8;border-radius:26px;touch-action:none;box-shadow:0 8px 24px rgba(15,23,42,0.45)"></canvas>
 
           <div style="display:flex;flex-direction:column;gap:10px;align-items:center;max-width:320px">
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div class="cr-glow-swatches-grid">
               ${COLOR_PALETTE.map(col => `
                 <button type="button" class="cr-glow-swatch" data-hex="${col.hex}" data-vi="${col.vi}" data-en="${col.en}"
                   style="width:64px;height:64px;border-radius:50%;background:${col.hex};border:${col.hex === artState.activeHex ? '5px solid #fff' : '3px solid #334155'};box-shadow:0 0 12px ${col.hex};cursor:pointer">
