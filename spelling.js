@@ -242,7 +242,7 @@ function readL(tab) {
           '<button class="pill on" style="font-size:14px;padding:4px 12px" onclick="playLessonAudio(\'' + (L.sentenceAudio || "") + '\',\'' + L.sentence.replace(/'/g, "\\'") + '\');rp(this)">🔊 Nghe cô đọc câu mẫu</button>' +
         '</div>' +
       '</div>' +
-      '<div style="font-weight:800;margin:6px 0 4px;color:var(--ink)">1. Đánh vần Vần (Cô Lan Anh):</div>' +
+      '<div style="font-weight:800;margin:6px 0 4px;color:var(--ink)">1. Luyện đánh vần (Cô Lan Anh):</div>' +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">' +
         (L.rhymes || []).map(function(r) {
           var rName = typeof r === "string" ? r : r.rhyme;

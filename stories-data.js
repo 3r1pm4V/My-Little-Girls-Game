@@ -18,7 +18,7 @@ const FAIRY_STORIES = [
     en: "The Legend of Watermelon",
     icon: "🍉",
     summary: "Mai An Tiêm với sự cần cù và tự lập đã trồng được giống dưa hấu quý ngọt mát ngoài đảo hoang.",
-    moral: "Sức lao động chân chính và ý chí kiên cường có thể biến khó khăn thành thành quả ngọt ngào.",
+    moral: "Sức lao động chân chính và ý chí kiên cường có thể biến khó khăn thành quả ngọt ngào.",
     content: [
       "Ngày xưa, đời Vua Hùng thứ mười bảy, có một chàng trai tên là Mai An Tiêm rất thông minh và chăm chỉ, được vua cha hết mực yêu thương.",
       "Một ngày nọ, vì có kẻ ghen ghét đặt điều hãm hại, vua cha hiểu lầm nên đã đày vợ chồng Mai An Tiêm ra một hòn đảo hoang vắng ngoài biển khơi.",

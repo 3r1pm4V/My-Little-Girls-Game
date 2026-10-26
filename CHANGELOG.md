@@ -6,6 +6,21 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-10-26
+- **fix(P6-08: Code syntax fixes, configuration deduplication & UI grammar polish)**:
+  - **Sửa lỗi cú pháp code**:
+    - `img-s.js`: Bổ sung `);` còn thiếu ở cuối file, giải quyết triệt để lỗi parser (`SyntaxError: missing ) after argument list`) khi trình duyệt nạp lười sprite ảnh phụ.
+    - `styles.css`: Gỡ bỏ khối keyframe lặp lại và dấu đóng ngoặc `}` mồ côi (dòng 1327–1329), cân bằng hoàn hảo 847 cặp ngoặc `{}`.
+  - **Dọn sạch cấu hình trùng lặp & xung đột trong `audio-map.js`**:
+    - Loại bỏ toàn bộ 94 khóa trùng lặp nguyên bản trong `RAW_MAP`.
+    - Xử lý 28 khóa xung đột: gỡ bỏ mapping đè sai từ "voi" sang "Bác voi" (`opt_pre_wild_bac_voi`), chuyển `"Thước ê ke"` về đúng audio `vocab_thuoc_e_ke.mp3`, giữ lại chuẩn phát âm Mai Anh (`vocab_*.mp3`) và bộ giọng đọc thân thiện (`vp_*`).
+  - **Tinh chỉnh ngữ pháp tiếng Việt**:
+    - Sửa lỗi lặp từ `"Máy bay bay đêm"` thành `"Máy bay đêm"` trong `games/creative-games.js`.
+    - Sửa tiêu đề `"1. Đánh vần Vần (Cô Lan Anh):"` thành `"1. Luyện đánh vần (Cô Lan Anh):"` trong `spelling.js`.
+    - Sửa `"biến khó khăn thành thành quả ngọt ngào"` thành `"biến khó khăn thành quả ngọt ngào"` trong `stories-data.js`.
+  - **Tự động bump Service Worker**: Chạy `node test-sw-precache.js --fix`, tự động nâng phiên bản cache lên `bhv-v123` (asset-hash `5702b24ae884ca31`).
+  - Toàn bộ 18 test suites đạt chuẩn PASS 100%.
+
 ### 2026-10-23
 - **feat(games: Add Creative Art, Montessori Ten-Frame, Pair-Link Grid, Seasonal Themes & Number Range 1–5/10/20)**:
   - **Kiểm tra nền & Đối chiếu 12 bước (`PLAN.md` mục 10)**: Ghi nhận đầy đủ các chế độ và khóa lưu trữ hiện có; bỏ qua các bước đã tồn tại (`So sánh nhóm`, `Xếp màu/hình khối`, `Báo cáo tiến độ & Hẹn giờ chơi`, `Sổ sticker`) để tránh trùng lặp.
