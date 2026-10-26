@@ -352,7 +352,133 @@
     { id: "mnvh_school_bus", icon: "🚌", titleVi: "Xe buýt đến trường", titleEn: "School Bus", imgSrc: "coloring/mnvh_school_bus.webp" },
     { id: "mnvh_fire_truck", icon: "🚒", titleVi: "Xe cứu hỏa", titleEn: "Fire Truck", imgSrc: "coloring/mnvh_fire_truck.webp" },
     { id: "mnvh_ambulance", icon: "🚑", titleVi: "Xe cứu thương", titleEn: "Ambulance", imgSrc: "coloring/mnvh_ambulance.webp" },
-    { id: "mnvh_sports_car", icon: "🚘", titleVi: "Siêu xe thể thao", titleEn: "Sports Car", imgSrc: "coloring/mnvh_sports_car.webp" }
+    { id: "mnvh_sports_car", icon: "🚘", titleVi: "Siêu xe thể thao", titleEn: "Sports Car", imgSrc: "coloring/mnvh_sports_car.webp" },
+    {
+      id: "mnvh_elsa_portrait",
+      icon: "❄️",
+      titleVi: "Công chúa Elsa duyên dáng",
+      titleEn: "Princess Elsa Portrait",
+      imgSrc: "coloring/mnvh_elsa_portrait.webp"
+    },
+    {
+      id: "mnvh_elsa_magic_wand",
+      icon: "🪄",
+      titleVi: "Elsa và cây đũa tuyết",
+      titleEn: "Elsa with Magic Wand",
+      imgSrc: "coloring/mnvh_elsa_magic_wand.webp"
+    },
+    {
+      id: "mnvh_elsa_anna_chibi",
+      icon: "👯",
+      titleVi: "Chị em Elsa và Anna dễ thương",
+      titleEn: "Cute Elsa and Anna",
+      imgSrc: "coloring/mnvh_elsa_anna_chibi.webp"
+    },
+    {
+      id: "mnvh_elsa_snowflakes",
+      icon: "❄️",
+      titleVi: "Elsa và những bông tuyết",
+      titleEn: "Elsa and Snowflakes",
+      imgSrc: "coloring/mnvh_elsa_snowflakes.webp"
+    },
+    {
+      id: "mnvh_elsa_ballgown",
+      icon: "👗",
+      titleVi: "Công chúa Elsa đầm dạ hội",
+      titleEn: "Elsa in Ballgown",
+      imgSrc: "coloring/mnvh_elsa_ballgown.webp"
+    },
+    {
+      id: "mnvh_elsa_smile",
+      icon: "✨",
+      titleVi: "Nụ cười công chúa Elsa",
+      titleEn: "Elsa Beautiful Smile",
+      imgSrc: "coloring/mnvh_elsa_smile.webp"
+    },
+    {
+      id: "mnvh_elsa_standing",
+      icon: "👑",
+      titleVi: "Công chúa băng giá đứng kiêu sa",
+      titleEn: "Graceful Elsa Standing",
+      imgSrc: "coloring/mnvh_elsa_standing.webp"
+    },
+    {
+      id: "mnvh_elsa_cute_chibi",
+      icon: "💖",
+      titleVi: "Elsa chibi nhí nhảnh",
+      titleEn: "Cute Chibi Elsa",
+      imgSrc: "coloring/mnvh_elsa_cute_chibi.webp"
+    },
+    {
+      id: "mnvh_elsa_braid",
+      icon: "🎀",
+      titleVi: "Elsa với bím tóc dài",
+      titleEn: "Elsa with Long Braid",
+      imgSrc: "coloring/mnvh_elsa_braid.webp"
+    },
+    {
+      id: "mnvh_elsa_cape",
+      icon: "💃",
+      titleVi: "Elsa và tà áo choàng",
+      titleEn: "Elsa with Flowing Cape",
+      imgSrc: "coloring/mnvh_elsa_cape.webp"
+    },
+    {
+      id: "mnvh_elsa_gentle",
+      icon: "🌟",
+      titleVi: "Công chúa Elsa dịu dàng",
+      titleEn: "Gentle Princess Elsa",
+      imgSrc: "coloring/mnvh_elsa_gentle.webp"
+    },
+    {
+      id: "mnvh_elsa_magic_hands",
+      icon: "✨",
+      titleVi: "Phép thuật băng giá của Elsa",
+      titleEn: "Elsa Magic Hands",
+      imgSrc: "coloring/mnvh_elsa_magic_hands.webp"
+    },
+    {
+      id: "mnvh_elsa_bust",
+      icon: "👸",
+      titleVi: "Chân dung công chúa Elsa",
+      titleEn: "Elsa Portrait",
+      imgSrc: "coloring/mnvh_elsa_bust.webp"
+    },
+    {
+      id: "mnvh_elsa_anna_friends",
+      icon: "👭",
+      titleVi: "Elsa và Anna thân thiết",
+      titleEn: "Elsa and Anna Sisters",
+      imgSrc: "coloring/mnvh_elsa_anna_friends.webp"
+    },
+    {
+      id: "mnvh_elsa_dancing",
+      icon: "🩰",
+      titleVi: "Elsa múa điệu băng tuyết",
+      titleEn: "Elsa Dancing in Snow",
+      imgSrc: "coloring/mnvh_elsa_dancing.webp"
+    },
+    {
+      id: "mnvh_elsa_anna_happy",
+      icon: "🥰",
+      titleVi: "Hai chị em Elsa và Anna vui vẻ",
+      titleEn: "Happy Elsa and Anna",
+      imgSrc: "coloring/mnvh_elsa_anna_happy.webp"
+    },
+    {
+      id: "mnvh_elsa_looking_back",
+      icon: "❄️",
+      titleVi: "Elsa ngoảnh lại mỉm cười",
+      titleEn: "Elsa Looking Back",
+      imgSrc: "coloring/mnvh_elsa_looking_back.webp"
+    },
+    {
+      id: "mnvh_elsa_anna_toddler",
+      icon: "👶",
+      titleVi: "Elsa và Anna chibi bé bỏng",
+      titleEn: "Baby Elsa and Anna",
+      imgSrc: "coloring/mnvh_elsa_anna_toddler.webp"
+    }
   ];
 
   let artState = { mode: "color", picIdx: 0, activeHex: "#ef4444", brushSize: 18, isEraser: false, round: 1, autosaveTimer: null };
