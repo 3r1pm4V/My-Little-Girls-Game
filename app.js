@@ -3184,6 +3184,17 @@ function renderBubbleWin(score, total) {
 let fsActiveAnim = null;
 
 function fruitSlash(isReplay) {
+  if (typeof window !== "undefined" && window.FruitNinja && typeof window.FruitNinja.init === "function") {
+    if (fsActiveAnim) {
+      cancelAnimationFrame(fsActiveAnim);
+      fsActiveAnim = null;
+    }
+    return window.FruitNinja.init(m, {
+      onExit: () => {
+        if (typeof go === "function") go("games");
+      }
+    });
+  }
   if (fsActiveAnim) {
     cancelAnimationFrame(fsActiveAnim);
     fsActiveAnim = null;

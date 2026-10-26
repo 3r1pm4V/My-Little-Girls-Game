@@ -7,6 +7,24 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-26
+- **feat(P4-FN: Modular Ninja Fruit Clone in games/fruit-ninja.js)**:
+  - **Module độc lập Canvas 2D 60 FPS (`games/fruit-ninja.js`)**:
+    - Thiết kế mobile-first, responsive, 0 dependency, không cần bundler/build step, chạy mượt mà trên trình duyệt.
+    - Hỗ trợ đa điểm chạm (Multi-touch tối đa 5 ngón cùng lúc) với thuật toán kiểm tra va chạm đoạn thẳng - đường tròn (`distToSegment`).
+    - Vệt kiếm Ribbon phát sáng mượt mà (Glowing Blade Trail), hiệu ứng quả xẻ đôi văng ra hai bên, hạt nước tóe (Juice Splatter) và hiệu ứng rung giật màn hình (Screen Shake).
+    - Bộ tổng hợp âm thanh Web Audio Synth thuần (`AudioEngine`): tiếng chém gió swoosh, chém ngọt splat, bom nổ, freeze băng giá và chuông hợp âm combo.
+  - **3 Chế độ chơi chuẩn Fruit Ninja**:
+    - **Classic**: Vô tận, có bom (chém trúng nổ thua ngay), 3 mạng rơi (mỗi 100 điểm hồi 1 mạng).
+    - **Zen**: 90 giây tĩnh tâm rèn luyện kiếm pháp, không bom, không rớt mạng, tập trung tối đa combo.
+    - **Arcade**: 60 giây nghẹt thở, có bom (-10đ), thanh Blitz bonus duy trì nhịp chém, 3 loại chuối thần thánh (*Chuối xanh Freeze* làm chậm thời gian, *Chuối đỏ Frenzy* bão mưa trái cây, *Chuối tím Double* nhân đôi điểm) và *Quả lựu khổng lồ (Pomegranate)* xả chém liên tục trong 5 giây cuối.
+  - **Hệ thống Combo & Critical**: Chém $\ge 3$ quả trong 1 nét vuốt nhân đôi điểm combo; 9% cơ hội nổ nhát chém chí mạng (+10 điểm).
+  - **Shop Kiếm & Dojos**: 5 loại lưỡi kiếm (Bạc, Lửa, Băng, Cầu vồng, Hắc nguyệt) và 4 đạo quán (Vân gỗ, Đêm sao, Vườn đào, Hoàng hôn); lưu trữ `localStorage` (`fn_best_*`, `fn_currency`, `fn_blade`, `fn_dojo`).
+  - **Tích hợp & Kiểm thử**:
+    - Nạp `games/fruit-ninja.js` vào `index.html` và nạp vào danh sách `CORE` trong `sw.js`.
+    - Ủy quyền `fruitSlash` trong `app.js` tự động khởi tạo `window.FruitNinja.init(m)`.
+    - Viết mới test suite `test-fruit-ninja.js`: kiểm tra 100% hợp đồng API, DOM và cơ chế game.
+    - Tự động bump Service Worker lên `bhv-v124` (asset-hash `c213c5e0e8807f7b`).
+    - Toàn bộ 19 test suites đạt chuẩn PASS 100%.
 - **fix(P6-08: Code syntax fixes, configuration deduplication & UI grammar polish)**:
   - **Sửa lỗi cú pháp code**:
     - `img-s.js`: Bổ sung `);` còn thiếu ở cuối file, giải quyết triệt để lỗi parser (`SyntaxError: missing ) after argument list`) khi trình duyệt nạp lười sprite ảnh phụ.
