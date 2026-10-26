@@ -181,6 +181,32 @@
     }
   };
 
+  // --- FRUIT NINJA SPRITE ASSET LOADER ---
+  const ASSETS_PATH = "games/fruit-ninja-assets/";
+  const IMAGE_CACHE = {};
+  const IMAGE_NAMES = [
+    "apple", "apple_half_1", "apple_half_2",
+    "banana", "banana_half_1", "banana_half_2",
+    "coconut", "coconut_half_1", "coconut_half_2",
+    "orange", "orange_half_1", "orange_half_2",
+    "pineapple", "pineapple_half_1", "pineapple_half_2",
+    "watermelon", "watermelon_half_1", "watermelon_half_2",
+    "bomb", "explosion",
+    "splash_red", "splash_orange", "splash_yellow", "splash_transparent",
+    "background"
+  ];
+
+  function loadFruitNinjaImages() {
+    if (typeof Image === "undefined") return;
+    IMAGE_NAMES.forEach(name => {
+      if (!IMAGE_CACHE[name]) {
+        const img = new Image();
+        img.src = ASSETS_PATH + name + ".webp";
+        img.onload = () => { IMAGE_CACHE[name] = img; };
+      }
+    });
+  }
+
   // --- ĐỊNH NGHĨA TRÁI CÂY (CANVAS 2D VECTOR) ---
   const FRUIT_TYPES = {
     watermelon: { id: "watermelon", nameVi: "Dưa hấu", nameEn: "Watermelon", radius: 42, color: "#10b981", innerColor: "#ef4444", points: 1 },
@@ -304,6 +330,16 @@
 
   // --- VECTOR DRAWING HELPERS ---
   function drawVectorFruit(ctx, type, x, y, r, rot) {
+    // Ưu tiên dùng sprite ảnh nếu đã nạp
+    if (IMAGE_CACHE[type.id]) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.drawImage(IMAGE_CACHE[type.id], -r, -r, r * 2, r * 2);
+      ctx.restore();
+      return;
+    }
+
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
@@ -469,6 +505,17 @@
   }
 
   function drawHalfFruit(ctx, half) {
+    const halfKey = `${half.type.id}_half_${half.side === "left" ? "1" : "2"}`;
+    if (IMAGE_CACHE[halfKey]) {
+      ctx.save();
+      ctx.translate(half.x, half.y);
+      ctx.rotate(half.rot);
+      ctx.globalAlpha = Math.max(0, half.alpha);
+      ctx.drawImage(IMAGE_CACHE[halfKey], -half.radius, -half.radius, half.radius * 2, half.radius * 2);
+      ctx.restore();
+      return;
+    }
+
     ctx.save();
     ctx.translate(half.x, half.y);
     ctx.rotate(half.rot);
@@ -518,6 +565,23 @@
   }
 
   function drawBomb(ctx, b) {
+    if (IMAGE_CACHE["bomb"]) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.rot);
+      ctx.drawImage(IMAGE_CACHE["bomb"], -b.radius, -b.radius, b.radius * 2, b.radius * 2);
+
+      // Tia lửa xẹt ngòi nổ
+      ctx.fillStyle = (Math.floor(Date.now() / 60) % 2 === 0) ? "#fef08a" : "#ef4444";
+      for (let i = 0; i < 5; i++) {
+        const angle = (i * Math.PI * 2) / 5 + (Date.now() * 0.01);
+        const dist = 6 + Math.random() * 6;
+        ctx.fillRect(Math.cos(angle) * dist, -b.radius * 0.9 + Math.sin(angle) * dist, 3, 3);
+      }
+      ctx.restore();
+      return;
+    }
+
     ctx.save();
     ctx.translate(b.x, b.y);
     ctx.rotate(b.rot);
@@ -902,12 +966,17 @@
   }
 
   function createSplatter(x, y, color) {
-    // Vết nước dính trên background
+    let sprite = "splash_red";
+    if (color === "#f97316") sprite = "splash_orange";
+    else if (color === "#eab308" || color === "#f59e0b") sprite = "splash_yellow";
+    else if (color === "#78350f" || color === "#ec4899") sprite = "splash_transparent";
+
     splatters.push({
       x, y,
-      radius: 20 + Math.random() * 25,
+      radius: 40 + Math.random() * 35,
+      sprite,
       color,
-      alpha: 0.35,
+      alpha: 0.75,
       life: 3.5
     });
     if (splatters.length > 15) splatters.shift();
@@ -1153,8 +1222,10 @@
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // Vân gỗ hoặc họa tiết trang trí sàn
-    if (dojoConfig.id === "wood") {
+    // Nền vân gỗ Fruit Ninja chân thực nếu đã tải
+    if (dojoConfig.id === "wood" && IMAGE_CACHE["background"]) {
+      ctx.drawImage(IMAGE_CACHE["background"], 0, 0, w, h);
+    } else if (dojoConfig.id === "wood") {
       ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
       ctx.lineWidth = 1;
       for (let y = 0; y < h; y += 40) {
@@ -1165,14 +1236,18 @@
       }
     }
 
-    // 2. Vẽ Vết nước trái cây bám trên sàn (Splatters)
+    // 2. Vẽ Vết nước trái cây bám trên sàn (Splatters & Textures)
     splatters.forEach(s => {
       ctx.save();
       ctx.globalAlpha = Math.max(0, s.alpha * (s.life / 3.5));
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-      ctx.fillStyle = s.color;
-      ctx.fill();
+      if (s.sprite && IMAGE_CACHE[s.sprite]) {
+        ctx.drawImage(IMAGE_CACHE[s.sprite], s.x - s.radius, s.y - s.radius, s.radius * 2, s.radius * 2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.fill();
+      }
       ctx.restore();
     });
 
@@ -1584,6 +1659,7 @@
     onExitCallback = options.onExit || null;
 
     loadStorage();
+    loadFruitNinjaImages();
     buildUI();
 
     if (animId) {

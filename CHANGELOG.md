@@ -22,8 +22,9 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
   - **Tích hợp & Kiểm thử**:
     - Nạp `games/fruit-ninja.js` vào `index.html` và nạp vào danh sách `CORE` trong `sw.js`.
     - Ủy quyền `fruitSlash` trong `app.js` tự động khởi tạo `window.FruitNinja.init(m)`.
+    - Tích hợp kho tài nguyên 25 sprites Fruit Ninja (`games/fruit-ninja-assets/`): chuyển đổi toàn bộ 7.44 MB ảnh gốc thành WebP siêu nhẹ 275 KB (-96.4%), hỗ trợ nạp mượt mà quả nguyên, nửa quả xẻ đôi, vết nước dính nền, bom và nền vân gỗ.
     - Viết mới test suite `test-fruit-ninja.js`: kiểm tra 100% hợp đồng API, DOM và cơ chế game.
-    - Tự động bump Service Worker lên `bhv-v124` (asset-hash `c213c5e0e8807f7b`).
+    - Tự động bump Service Worker lên `bhv-v125` (asset-hash `c213c5e0e8807f7b`).
     - Toàn bộ 19 test suites đạt chuẩn PASS 100%.
 - **fix(P6-08: Code syntax fixes, configuration deduplication & UI grammar polish)**:
   - **Sửa lỗi cú pháp code**:
