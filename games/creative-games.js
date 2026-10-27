@@ -641,7 +641,6 @@
             redrawAllStrokes();
             banner.style.display = "none";
             _sfxTing();
-            _say("Mừng bé quay lại với bức tranh dang dở nào!", "Resumed your drawing!");
           };
         }
       }
@@ -735,7 +734,6 @@
       btn.addEventListener("click", () => {
         updateColorSwatchUI(btn);
         _sfxTap();
-        _say(btn.dataset.vi, btn.dataset.en);
       });
     });
 
@@ -756,7 +754,6 @@
           sp.style.background = "#64748b";
         });
         _sfxTap();
-        _say("Cục tẩy trắng", "Eraser");
       });
     }
 
@@ -787,7 +784,6 @@
         redrawAllStrokes();
         saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [] });
         _sfxTap();
-        _say("Bảng đã sạch bong kin kít, mời bé vẽ tác phẩm mới!", "Cleared!");
       });
     }
 
@@ -983,7 +979,6 @@
       btn.addEventListener("click", () => {
         updateGlowSwatchUI(btn);
         _sfxTap();
-        _say(btn.dataset.vi, btn.dataset.en);
       });
     });
 
@@ -995,7 +990,6 @@
         redrawGlow();
         saveDrawingRecord({ id: "glow_pen_latest", type: "glow_pen", strokes: [] });
         _sfxTap();
-        _say("Bảng đã sạch bong kin kít, mời bé vẽ tác phẩm mới!", "Cleared!");
       });
     }
 
@@ -1411,7 +1405,6 @@
           }
         }
         _sfxTap();
-        _say(`Đây là bí quyết vẽ ${item.nameVi} nè, bé tham khảo nhé!`, "Here is the guide!");
       });
     }
 
@@ -1666,7 +1659,6 @@
             t.style.background = "#ffffff";
           });
           _sfxTap();
-          _say("Đã hủy nối, bé chọn lại nhé!", "Undid last pair!");
         }
       });
     }
