@@ -1613,7 +1613,6 @@
           selectedBtn = tile;
           tile.style.borderColor = "#0284c7";
           tile.style.background = "#e0f2fe";
-          _say(tile.dataset.vi, tile.dataset.en);
           return;
         }
         if (selectedBtn === tile) {
@@ -1642,7 +1641,6 @@
           prev.style.borderColor = "#cbd5e1";
           prev.style.background = "#ffffff";
           _sfxNo();
-          _say("Hai bạn này chưa giống nhau đâu, bé thử cặp khác xem!", "Try matching two identical tiles!");
         }
       });
     });

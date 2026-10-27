@@ -391,7 +391,6 @@
         _sfxNo();
         basketEl.classList.add("shake-bad");
         cardEl.classList.add("shake-bad");
-        _say("Ồ, nhầm màu rồi! Bé thử tìm chiếc giỏ khác xem nào!", "Try another color basket!");
         setTimeout(() => {
           basketEl.classList.remove("shake-bad");
           cardEl.classList.remove("shake-bad");
@@ -494,7 +493,6 @@
         _sfxNo();
         slotEl.classList.add("shake-bad");
         pieceEl.classList.add("shake-bad");
-        _say("Hình này chưa vừa khít đâu, bé thử khuôn bên cạnh xem sao!", "Try another slot!");
         setTimeout(() => {
           slotEl.classList.remove("shake-bad");
           pieceEl.classList.remove("shake-bad");
@@ -622,7 +620,6 @@
         _sfxNo();
         boardEl.classList.add("shake-bad");
         pieceEl.classList.add("shake-bad");
-        _say("Chưa đúng rồi, bé nhìn kỹ đường viền xem nào!", "Try another piece!");
         setTimeout(() => {
           boardEl.classList.remove("shake-bad");
           pieceEl.classList.remove("shake-bad");
@@ -768,7 +765,6 @@
         _sfxNo();
         boardEl.classList.add("shake-bad");
         pieceEl.classList.add("shake-bad");
-        _say("Miếng này hơi lệch rồi, bé thử quả bên cạnh xem!", "Try the other fruit!");
         setTimeout(() => {
           boardEl.classList.remove("shake-bad");
           pieceEl.classList.remove("shake-bad");
@@ -869,7 +865,6 @@
         _sfxNo();
         slotEl.classList.add("shake-bad");
         pieceEl.classList.add("shake-bad");
-        _say("Bóng này không khớp rồi, bé quan sát kỹ dáng hình nhé!", "Try another shadow!");
         setTimeout(() => {
           slotEl.classList.remove("shake-bad");
           pieceEl.classList.remove("shake-bad");
