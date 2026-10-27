@@ -2079,6 +2079,81 @@ html.rm .confetti-cv, html.rm .fx {
   min-width: 44px !important;
   min-height: 44px !important;
   font-size: 18px !important;
+  position: relative;
+  border-radius: 50% !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cr-color-swatch:active, .cr-glow-swatch:active {
+  transform: scale(0.92);
+}
+.cr-color-swatch.on {
+  transform: scale(1.15) !important;
+  box-shadow: 0 0 0 3px #0284c7, 0 6px 14px rgba(2,132,199,0.35) !important;
+  z-index: 2;
+}
+.cr-color-swatch.on::after {
+  content: "✓";
+  position: absolute;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+}
+.cr-color-swatch[data-eraser="1"].on::after,
+.cr-color-swatch[data-hex="#fef08a"].on::after,
+.cr-color-swatch[data-hex="#facc15"].on::after,
+.cr-color-swatch[data-hex="#fbcfe8"].on::after {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+.cr-glow-swatch.on {
+  transform: scale(1.15) !important;
+  box-shadow: 0 0 0 3px #ffffff, 0 0 18px currentColor !important;
+  z-index: 2;
+}
+.cr-glow-swatch.on::after {
+  content: "✓";
+  position: absolute;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 0 4px #000;
+}
+.cr-active-color-badge, .cr-active-glow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 14.5px;
+  font-weight: 800;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.cr-active-color-badge {
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  color: #1e293b;
+}
+.cr-active-glow-badge {
+  background: #0f172a;
+  border: 2px solid #38bdf8;
+  color: #f8fafc;
+}
+.cr-active-color-dot, .cr-active-glow-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.cr-active-color-dot {
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #94a3b8;
 }
 .trace-workspace {
   display: flex;

@@ -6,6 +6,18 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-10-27
+- **fix(Parent Gate: Bảo vệ Cổng PIN khi hết giờ chơi & Ngăn chặn đóng lén modal)**:
+  - **Khắc phục triệt để lỗ hổng thoát kiểm soát thời gian**: Trước đây, khi hết giờ chơi, bé bấm nút `✕` trên `#timeLimitModal` hoặc mở PIN rồi bấm `✕` (`onCancel`) thì modal tự đóng và hoãn thêm 3-5 phút cho bé chơi tiếp mà không cần mã PIN.
+  - **Khóa modal hết giờ an toàn**: Đổi nút trên `#timeLimitModal` thành nút mở khóa phụ huynh `🔑` và hàm `window.__dismissTimeLimitModal()` chuyển hướng trực tiếp sang gọi `window.__unlockTimeLimit()` (mở Cổng PIN phụ huynh `#parentPinModal`).
+  - **Logic hủy an toàn**: Nếu chưa nhập đúng PIN mà đóng modal mã PIN, hệ thống giữ nguyên trạng thái khóa và mở lại `#timeLimitModal`, tuyệt đối không gia hạn lén lút bất kỳ phút nào. Chỉ khi ba mẹ nhập đúng mã PIN (hoặc giải đúng bài toán người lớn khi quên PIN) mới được cộng 15 phút.
+- **feat(Coloring & Glow Pen: Cập nhật toàn diện hệ thống màu vẽ cho bé mầm non)**:
+  - **Thanh trạng thái màu sắc trực quan (`crActiveColorBadge` & `crActiveGlowBadge`)**: Hiển thị tên màu và chấm màu đang chọn (song ngữ Việt - Anh) ngay phía trên bảng vẽ, giúp bé nhận biết màu sắc và học từ vựng hiệu quả.
+  - **Cải tiến hiển thị & tương tác nút màu (Swatches)**: Thêm class `.on`, hiệu ứng phóng to `scale(1.15)`, viền kép tương phản cao (màu đen viền trắng nổi bật, cục tẩy trắng viền xanh rõ ràng) và dấu tích `✓` nhận diện trực quan cho bé.
+  - **Đồng bộ giọng đọc tiếng Việt (`audio-map.js`)**: Bổ sung mapping 100% cho 24 màu trong `COLOR_PALETTE` (cả viết hoa, viết thường và tiền tố `vi|`), đảm bảo khi bé bấm vào bất cứ màu nào cũng nghe thấy âm thanh phát âm tên màu rõ ràng.
+  - **Tự động bump Service Worker**: Nâng phiên bản cache lên `bhv-v126` (asset-hash `b02cfd0e9ad23e84`).
+  - **Kiểm thử**: Toàn bộ 19 test suites tự động đạt chuẩn PASS 100%.
+
 ### 2026-10-26
 - **feat(P4-FN: Modular Ninja Fruit Clone in games/fruit-ninja.js)**:
   - **Module độc lập Canvas 2D 60 FPS (`games/fruit-ninja.js`)**:

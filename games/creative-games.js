@@ -539,14 +539,23 @@
           </div>
 
           <div class="cr-coloring-side">
-            <div style="font-weight:800;color:#334155;font-size:15px">${_T("Chọn bút sáp màu & cỡ cọ:", "Pick crayon color & brush size:")}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px;flex-wrap:wrap;gap:6px">
+              <span style="font-weight:800;color:#334155;font-size:15px">${_T("Bút sáp màu & cỡ cọ:", "Crayon color & brush size:")}</span>
+              <div class="cr-active-color-badge" id="crActiveColorBadge">
+                <span>🖍️</span>
+                <span class="cr-active-color-dot" id="crActiveColorDot" style="background:${artState.isEraser ? '#ffffff' : artState.activeHex}"></span>
+                <strong id="crActiveColorText">${artState.isEraser ? _T("Cục tẩy trắng", "Eraser") : _T(COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.vi || "Màu đỏ", COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.en || "Red")}</strong>
+              </div>
+            </div>
             <div class="cr-swatches-grid">
-              ${COLOR_PALETTE.map(col => `
-                <button type="button" class="cr-color-swatch ${(!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser) ? 'on' : ''}" data-hex="${col.hex}" data-eraser="${col.isEraser ? '1' : '0'}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}"
-                  style="width:58px;height:58px;border-radius:50%;background:${col.hex};border:${((!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser)) ? '5px solid #0f172a' : '3px solid #cbd5e1'};box-shadow:0 4px 10px rgba(0,0,0,0.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .15s">
+              ${COLOR_PALETTE.map(col => {
+                const isSelected = (!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser);
+                return `
+                <button type="button" class="cr-color-swatch ${isSelected ? 'on' : ''}" data-hex="${col.hex}" data-eraser="${col.isEraser ? '1' : '0'}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}" title="${col.vi} (${col.en})"
+                  style="background:${col.hex};border:${isSelected ? (col.isEraser ? '4px solid #0284c7' : '4px solid #ffffff') : (col.isEraser ? '3px solid #cbd5e1' : '2px solid rgba(0,0,0,0.15)')};display:flex;align-items:center;justify-content:center;cursor:pointer">
                   ${col.isEraser ? "🧼" : ""}
-                </button>
-              `).join("")}
+                </button>`;
+              }).join("")}
             </div>
 
             <div class="chips" style="margin:2px 0;gap:8px">
@@ -695,15 +704,35 @@
       });
     });
 
+    function updateColorSwatchUI(selectedBtn) {
+      const isEr = selectedBtn.dataset.eraser === "1";
+      artState.isEraser = isEr;
+      if (!isEr) artState.activeHex = selectedBtn.dataset.hex;
+      wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
+        const isSel = (b === selectedBtn);
+        b.classList.toggle("on", isSel);
+        if (isSel) {
+          b.style.border = isEr ? "4px solid #0284c7" : "4px solid #ffffff";
+        } else {
+          b.style.border = b.dataset.eraser === "1" ? "3px solid #cbd5e1" : "2px solid rgba(0,0,0,0.15)";
+        }
+      });
+      const badgeText = wrap.querySelector("#crActiveColorText");
+      const badgeDot = wrap.querySelector("#crActiveColorDot");
+      if (badgeText) {
+        badgeText.textContent = isEr ? _T("Cục tẩy trắng", "Eraser") : _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+      }
+      if (badgeDot) {
+        badgeDot.style.background = isEr ? "#ffffff" : selectedBtn.dataset.hex;
+      }
+      wrap.querySelectorAll(".cr-brush-btn span").forEach(sp => {
+        sp.style.background = isEr ? "#64748b" : artState.activeHex;
+      });
+    }
+
     wrap.querySelectorAll(".cr-color-swatch").forEach(btn => {
       btn.addEventListener("click", () => {
-        const isEr = btn.dataset.eraser === "1";
-        artState.isEraser = isEr;
-        if (!isEr) artState.activeHex = btn.dataset.hex;
-        wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
-          b.style.border = b === btn ? "5px solid #0f172a" : "3px solid #cbd5e1";
-          b.style.transform = b === btn ? "scale(1.1)" : "scale(1)";
-        });
+        updateColorSwatchUI(btn);
         _sfxTap();
         _say(btn.dataset.vi, btn.dataset.en);
       });
@@ -793,13 +822,20 @@
         <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap">
           <canvas id="crGlowCanvas" width="320" height="270" style="width:min(84vw,350px);height:auto;background:#0f172a;border:4px solid #38bdf8;border-radius:26px;touch-action:none;box-shadow:0 8px 24px rgba(15,23,42,0.45)"></canvas>
 
-          <div style="display:flex;flex-direction:column;gap:10px;align-items:center;max-width:320px">
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:center;max-width:420px">
+            <div class="cr-active-glow-badge" id="crActiveGlowBadge">
+              <span>✨</span>
+              <span class="cr-active-glow-dot" id="crActiveGlowDot" style="background:${artState.activeHex};box-shadow:0 0 10px ${artState.activeHex}"></span>
+              <strong id="crActiveGlowText">${_T(COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.vi || "Màu đỏ", COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.en || "Red")}</strong>
+            </div>
             <div class="cr-glow-swatches-grid">
-              ${COLOR_PALETTE.map(col => `
-                <button type="button" class="cr-glow-swatch" data-hex="${col.hex}" data-vi="${col.vi}" data-en="${col.en}"
-                  style="width:64px;height:64px;border-radius:50%;background:${col.hex};border:${col.hex === artState.activeHex ? '5px solid #fff' : '3px solid #334155'};box-shadow:0 0 12px ${col.hex};cursor:pointer">
-                </button>
-              `).join("")}
+              ${COLOR_PALETTE.map(col => {
+                const isSelected = (col.hex === artState.activeHex);
+                return `
+                <button type="button" class="cr-glow-swatch ${isSelected ? 'on' : ''}" data-hex="${col.hex}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}" title="${col.vi} (${col.en})"
+                  style="background:${col.hex};border:${isSelected ? '4px solid #ffffff' : '3px solid #334155'};box-shadow:0 0 ${isSelected ? '16px' : '6px'} ${col.hex};display:flex;align-items:center;justify-content:center;cursor:pointer">
+                </button>`;
+              }).join("")}
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
               <button type="button" class="pill" id="crGlowClearBtn" style="min-height:64px;min-width:110px;font-weight:800;background:#fee2e2;color:#991b1b;border-color:#fca5a5">🧹 ${_T("Xóa bảng", "Clear")}</button>
@@ -902,9 +938,28 @@
     cv.addEventListener("touchmove", onMove, { passive: false });
     cv.addEventListener("touchend", onEnd);
 
+    function updateGlowSwatchUI(selectedBtn) {
+      artState.activeHex = selectedBtn.dataset.hex;
+      wrap.querySelectorAll(".cr-glow-swatch").forEach(b => {
+        const isSel = (b === selectedBtn);
+        b.classList.toggle("on", isSel);
+        b.style.border = isSel ? "4px solid #ffffff" : "3px solid #334155";
+        b.style.boxShadow = isSel ? `0 0 18px ${b.dataset.hex}` : `0 0 6px ${b.dataset.hex}`;
+      });
+      const badgeText = wrap.querySelector("#crActiveGlowText");
+      const badgeDot = wrap.querySelector("#crActiveGlowDot");
+      if (badgeText) {
+        badgeText.textContent = _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+      }
+      if (badgeDot) {
+        badgeDot.style.background = selectedBtn.dataset.hex;
+        badgeDot.style.boxShadow = `0 0 10px ${selectedBtn.dataset.hex}`;
+      }
+    }
+
     wrap.querySelectorAll(".cr-glow-swatch").forEach(btn => {
       btn.addEventListener("click", () => {
-        artState.activeHex = btn.dataset.hex;
+        updateGlowSwatchUI(btn);
         _sfxTap();
         _say(btn.dataset.vi, btn.dataset.en);
       });

@@ -4923,22 +4923,20 @@ window.__unlockTimeLimit = function(){
       alert(lang === "vi" ? "✅ Đã gia hạn thêm 15 phút học cho hôm nay!" : "✅ Extended 15 more minutes of study time for today!");
     },
     onCancel: () => {
-      const dismissTime = Date.now() + 3 * 60 * 1000;
-      limitModalDismissedUntil = dismissTime;
-      ls.set("limit_dismissed_until", dismissTime);
+      // Phụ huynh hủy hoặc đóng PIN: TUYỆT ĐỐI KHÔNG gia hạn lén lút!
+      // Trả lại màn hình hết giờ timeLimitModal để bảo vệ mắt của bé
       const pinModal = document.getElementById("parentPinModal");
       if (pinModal) pinModal.style.display = "none";
-      if (timeModal) timeModal.style.display = "none";
+      const tModal = document.getElementById("timeLimitModal");
+      if (tModal) tModal.style.display = "flex";
     }
   });
 };
 
 window.__dismissTimeLimitModal = function(){
-  const modal = document.getElementById("timeLimitModal");
-  if (modal) modal.style.display = "none";
-  const dismissTime = Date.now() + 5 * 60 * 1000;
-  limitModalDismissedUntil = dismissTime;
-  ls.set("limit_dismissed_until", dismissTime);
+  // Khi bé bấm nút hoặc chạm muốn chơi tiếp, mở cổng nhập mã PIN phụ huynh
+  // Không cho phép tự ý tắt modal hết giờ để chơi tiếp mà không có PIN
+  window.__unlockTimeLimit();
 };
 
 function setDailyLimit(mins){
