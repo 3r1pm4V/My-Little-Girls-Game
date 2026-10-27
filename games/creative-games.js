@@ -182,6 +182,7 @@
     { id: "crimson", hex: "#b91c1c", vi: "Màu đỏ thẫm", en: "Crimson" },
     { id: "orange", hex: "#f97316", vi: "Màu cam", en: "Orange" },
     { id: "amber", hex: "#fb923c", vi: "Màu cam tươi", en: "Light Orange" },
+    { id: "skin", hex: "#fed7aa", vi: "Màu da người", en: "Skin Tone" },
     { id: "yellow", hex: "#facc15", vi: "Màu vàng", en: "Yellow" },
     { id: "lemon", hex: "#fef08a", vi: "Màu vàng nhạt", en: "Light Yellow" },
     { id: "lime", hex: "#84cc16", vi: "Màu xanh chuối", en: "Lime" },
@@ -199,9 +200,8 @@
     { id: "peach", hex: "#fbcfe8", vi: "Màu hồng phấn", en: "Peach Pink" },
     { id: "brown", hex: "#a16207", vi: "Màu nâu", en: "Brown" },
     { id: "darkbrown", hex: "#713f12", vi: "Màu nâu đất", en: "Dark Brown" },
-    { id: "black", hex: "#1e293b", vi: "Màu đen", en: "Black" },
     { id: "gray", hex: "#94a3b8", vi: "Màu xám", en: "Gray" },
-    { id: "eraser", hex: "#ffffff", vi: "Cục tẩy trắng", en: "Eraser", isEraser: true }
+    { id: "black", hex: "#1e293b", vi: "Màu đen", en: "Black" }
   ];
 
   // Kho tranh tô màu mầm non từ Trường Mầm non Việt Hưng (https://mnviethung.hanoi.edu.vn/chuong-trinh-hoc-cua-be/tranh-to-mau-cho-be-nhieu-chu-de/ctmb/12444/358979)
@@ -558,16 +558,19 @@
               }).join("")}
             </div>
 
-            <div class="chips" style="margin:2px 0;gap:8px">
+            <div class="chips" style="margin:2px 0;gap:8px;align-items:center;flex-wrap:wrap">
               ${[
                 { sz: 10, label: _T("Cọ nhỏ", "Small"), dot: 10 },
                 { sz: 18, label: _T("Cọ vừa", "Medium"), dot: 16 },
                 { sz: 28, label: _T("Cọ to", "Large"), dot: 22 }
               ].map(b => `
-                <button type="button" class="pill cr-brush-btn ${artState.brushSize === b.sz ? 'on' : ''}" data-sz="${b.sz}" style="min-height:46px;padding:6px 12px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
+                <button type="button" class="pill cr-brush-btn ${(!artState.isEraser && artState.brushSize === b.sz) ? 'on' : ''}" data-sz="${b.sz}" style="min-height:46px;padding:6px 12px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
                   <span style="width:${b.dot}px;height:${b.dot}px;border-radius:50%;background:currentColor;display:inline-block"></span> ${b.label}
                 </button>
               `).join("")}
+              <button type="button" class="pill cr-eraser-btn ${artState.isEraser ? 'on' : ''}" id="crEraserBtn" style="min-height:46px;padding:6px 14px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
+                🧼 ${_T("Cục tẩy", "Eraser")}
+              </button>
             </div>
 
             <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px">
@@ -705,28 +708,26 @@
     });
 
     function updateColorSwatchUI(selectedBtn) {
-      const isEr = selectedBtn.dataset.eraser === "1";
-      artState.isEraser = isEr;
-      if (!isEr) artState.activeHex = selectedBtn.dataset.hex;
+      artState.isEraser = false;
+      artState.activeHex = selectedBtn.dataset.hex;
+      const eraserBtn = wrap.querySelector("#crEraserBtn");
+      if (eraserBtn) eraserBtn.classList.remove("on");
+
       wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
         const isSel = (b === selectedBtn);
         b.classList.toggle("on", isSel);
-        if (isSel) {
-          b.style.border = isEr ? "4px solid #0284c7" : "4px solid #ffffff";
-        } else {
-          b.style.border = b.dataset.eraser === "1" ? "3px solid #cbd5e1" : "2px solid rgba(0,0,0,0.15)";
-        }
+        b.style.border = isSel ? "4px solid #ffffff" : "2px solid rgba(0,0,0,0.15)";
       });
       const badgeText = wrap.querySelector("#crActiveColorText");
       const badgeDot = wrap.querySelector("#crActiveColorDot");
       if (badgeText) {
-        badgeText.textContent = isEr ? _T("Cục tẩy trắng", "Eraser") : _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+        badgeText.textContent = _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
       }
       if (badgeDot) {
-        badgeDot.style.background = isEr ? "#ffffff" : selectedBtn.dataset.hex;
+        badgeDot.style.background = selectedBtn.dataset.hex;
       }
       wrap.querySelectorAll(".cr-brush-btn span").forEach(sp => {
-        sp.style.background = isEr ? "#64748b" : artState.activeHex;
+        sp.style.background = artState.activeHex;
       });
     }
 
@@ -737,6 +738,27 @@
         _say(btn.dataset.vi, btn.dataset.en);
       });
     });
+
+    const eraserBtn = wrap.querySelector("#crEraserBtn");
+    if (eraserBtn) {
+      eraserBtn.addEventListener("click", () => {
+        artState.isEraser = true;
+        eraserBtn.classList.add("on");
+        wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
+          b.classList.remove("on");
+          b.style.border = "2px solid rgba(0,0,0,0.15)";
+        });
+        const badgeText = wrap.querySelector("#crActiveColorText");
+        const badgeDot = wrap.querySelector("#crActiveColorDot");
+        if (badgeText) badgeText.textContent = _T("Cục tẩy trắng", "Eraser");
+        if (badgeDot) badgeDot.style.background = "#ffffff";
+        wrap.querySelectorAll(".cr-brush-btn span").forEach(sp => {
+          sp.style.background = "#64748b";
+        });
+        _sfxTap();
+        _say("Cục tẩy trắng", "Eraser");
+      });
+    }
 
     wrap.querySelectorAll(".cr-brush-btn").forEach(btn => {
       btn.addEventListener("click", () => {

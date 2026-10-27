@@ -18,6 +18,14 @@
 
   const RAW_MAP = {
     // --- BẢNG MÀU TÔ MÀU CHO BÉ (CREATIVE COLOR PALETTE) ---
+    "Màu da người": "audio/vp_mau_cam_af358e.mp3",
+    "vi|Màu da người": "audio/vp_mau_cam_af358e.mp3",
+    "màu da người": "audio/vp_mau_cam_af358e.mp3",
+    "vi|màu da người": "audio/vp_mau_cam_af358e.mp3",
+    "Màu da": "audio/vp_mau_cam_af358e.mp3",
+    "vi|Màu da": "audio/vp_mau_cam_af358e.mp3",
+    "màu da": "audio/vp_mau_cam_af358e.mp3",
+    "vi|màu da": "audio/vp_mau_cam_af358e.mp3",
     "Màu đỏ": "audio/vp_mau_do_fc1f88.mp3",
     "vi|Màu đỏ": "audio/vp_mau_do_fc1f88.mp3",
     "màu đỏ": "audio/vp_mau_do_fc1f88.mp3",

@@ -11,6 +11,14 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
   - **Khắc phục triệt để lỗ hổng thoát kiểm soát thời gian**: Trước đây, khi hết giờ chơi, bé bấm nút `✕` trên `#timeLimitModal` hoặc mở PIN rồi bấm `✕` (`onCancel`) thì modal tự đóng và hoãn thêm 3-5 phút cho bé chơi tiếp mà không cần mã PIN.
   - **Khóa modal hết giờ an toàn**: Đổi nút trên `#timeLimitModal` thành nút mở khóa phụ huynh `🔑` và hàm `window.__dismissTimeLimitModal()` chuyển hướng trực tiếp sang gọi `window.__unlockTimeLimit()` (mở Cổng PIN phụ huynh `#parentPinModal`).
   - **Logic hủy an toàn**: Nếu chưa nhập đúng PIN mà đóng modal mã PIN, hệ thống giữ nguyên trạng thái khóa và mở lại `#timeLimitModal`, tuyệt đối không gia hạn lén lút bất kỳ phút nào. Chỉ khi ba mẹ nhập đúng mã PIN (hoặc giải đúng bài toán người lớn khi quên PIN) mới được cộng 15 phút.
+- **feat(Coloring: Bổ sung Màu da người, 24 màu vẽ hoàn chỉnh & Tối ưu toàn diện Tablet Landscape)**:
+  - **Bổ sung Màu da người (`#fed7aa`, Skin Tone)**: Đáp ứng phản hồi của bé khi tô vẽ khuôn mặt, chân tay các nhân vật hoạt hình (Elsa, Anna, Kitty, bé gái, gia đình), nâng bảng màu lên 24 màu vẽ phong phú đầy đủ quang phổ.
+  - **Nâng cấp nút Cục tẩy chuyên dụng (`crEraserBtn`)**: Tách Cục tẩy `🧼` thành nút công cụ độc lập, to rõ ngay cạnh thanh kích cỡ cọ vẽ. Bé bấm vào cọ vẽ bất kỳ hoặc màu bất kỳ để vẽ màu; bấm vào `🧼 Cục tẩy` để chuyển sang chế độ tẩy nhẹ nhàng không làm mờ nét viền đen của tranh.
+  - **Tối ưu toàn diện giao diện Tablet Landscape (Xoay ngang)**:
+    - Loại bỏ hoàn toàn điều kiện giới hạn `max-height: 900px` để hỗ trợ xuất sắc mọi dòng iPad, Galaxy Tab (iPad Pro 11", iPad Pro 12.9", Tab S8 Ultra, v.v.).
+    - Khung tranh vẽ (`#crSvgCanvas` / `#crGlowCanvas`) phóng to tối đa (đạt 480px - 500px), tận dụng trọn vẹn không gian hiển thị của tablet ngang.
+    - Kích thước nút màu swatches tăng lên 48px - 50px, nút cọ vẽ và tẩy $\ge 48$px, nút chức năng $\ge 52$px đạt chuẩn touch vàng cho trẻ nhỏ.
+    - Căn chỉnh bố cục 2 cột ngang hàng cân đối, fit 100% trong khung nhìn màn hình, không bị cuộn trang.
 - **feat(Coloring & Glow Pen: Cập nhật toàn diện hệ thống màu vẽ cho bé mầm non)**:
   - **Thanh trạng thái màu sắc trực quan (`crActiveColorBadge` & `crActiveGlowBadge`)**: Hiển thị tên màu và chấm màu đang chọn (song ngữ Việt - Anh) ngay phía trên bảng vẽ, giúp bé nhận biết màu sắc và học từ vựng hiệu quả.
   - **Cải tiến hiển thị & tương tác nút màu (Swatches)**: Thêm class `.on`, hiệu ứng phóng to `scale(1.15)`, viền kép tương phản cao (màu đen viền trắng nổi bật, cục tẩy trắng viền xanh rõ ràng) và dấu tích `✓` nhận diện trực quan cho bé.
