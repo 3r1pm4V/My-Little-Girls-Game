@@ -478,6 +478,48 @@
       titleVi: "Elsa và Anna chibi bé bỏng",
       titleEn: "Baby Elsa and Anna",
       imgSrc: "coloring/mnvh_elsa_anna_toddler.webp"
+    },
+    {
+      id: "mnvh_elsa_olaf",
+      icon: "☃️",
+      titleVi: "Elsa và người tuyết Olaf",
+      titleEn: "Elsa and Olaf the Snowman",
+      imgSrc: "coloring/mnvh_elsa_olaf.png"
+    },
+    {
+      id: "mnvh_elsa_ice_castle",
+      icon: "🏰",
+      titleVi: "Elsa và lâu đài băng",
+      titleEn: "Elsa and the Ice Castle",
+      imgSrc: "coloring/mnvh_elsa_ice_castle.png"
+    },
+    {
+      id: "mnvh_elsa_ice_skating",
+      icon: "⛸️",
+      titleVi: "Elsa trượt băng nghệ thuật",
+      titleEn: "Elsa Ice Skating",
+      imgSrc: "coloring/mnvh_elsa_ice_skating.png"
+    },
+    {
+      id: "mnvh_elsa_ice_crown",
+      icon: "👑",
+      titleVi: "Elsa vương miện băng tuyết",
+      titleEn: "Elsa with Ice Crown",
+      imgSrc: "coloring/mnvh_elsa_ice_crown.png"
+    },
+    {
+      id: "mnvh_elsa_nokk_water_horse",
+      icon: "🦄",
+      titleVi: "Elsa và chú ngựa thần Nokk",
+      titleEn: "Elsa and Nokk Water Horse",
+      imgSrc: "coloring/mnvh_elsa_nokk_water_horse.png"
+    },
+    {
+      id: "mnvh_elsa_bruni",
+      icon: "🦎",
+      titleVi: "Elsa và thằn lằn tuyết Bruni",
+      titleEn: "Elsa and Baby Salamander Bruni",
+      imgSrc: "coloring/mnvh_elsa_bruni.png"
     }
   ];
 

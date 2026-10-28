@@ -7,20 +7,23 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-28
-- **feat(Single-Screen PWA Layout & Icon-Only Menu)**:
-  - **Dàn trang 1 màn hình chuẩn Native App (100dvh, không cuộn trang)**:
-    - Khóa chặt chiều cao khung nhìn `height: 100dvh; max-height: 100dvh; overflow: hidden !important;` trên `html, body, #app`.
-    - Loại bỏ hoàn toàn khoảng đệm thừa `padding-bottom: 140px;` cũ trên `main` gây ra thanh cuộn dọc không mong muốn; thay bằng padding gọn gàng `6px 12px 12px; min-height: 0;`.
-    - Thêm `.home-container` với `display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; overflow: hidden;` giúp toàn bộ giao diện Trang chủ vừa vặn trọn vẹn trong 1 màn hình duy nhất trên cả Mobile Portrait và Tablet Landscape.
-  - **Thu gọn Menu thành Icon-Only Tiles rực rỡ cho bé (Không chữ rườm rà)**:
-    - Bố cục lưới thẻ icon 2 cột × 2 hàng trên Mobile, 4 cột × 1 hàng trên màn hình ngang Tablet.
-    - 4 ô icon lớn nổi bật (`🔤` Chữ cái & Tập tô, `🔢` Số đếm & Toán, `🎮` Góc trò chơi, `📖` Truyện cổ tích) với icon nổi 3D `clamp(34px, 6.5vh, 42px)` và viền mềm bo tròn.
-    - Ẩn toàn bộ văn bản giải thích dài dòng (`.kid-btn-text, .kid-btn-arrow { display: none !important; }`), giúp bé 4 tuổi nhận biết tức thì bằng trực giác hình ảnh mà không bị rối mắt.
-    - Giữ trọn vẹn `aria-label` và tính năng phát âm khi chạm giữ `speakKidBtn` phục vụ accessibility và kiểm thử.
-  - **Tinh gọn Thanh điều hướng & Nút chức năng**:
-    - Nút Quay lại `#backBtn` ẩn chữ `.bk-lbl { display: none !important; }`, chỉ hiển thị icon trực quan `🔙`.
-    - Nhóm nút Sticker `🏆`, Phụ huynh `👨‍👩‍👧`, và Cài ứng dụng `📲` được gom vào thanh đáy `.home-bottom-bar` dạng icon pill tròn gọn gàng.
-  - **Đồng bộ Service Worker**: Tăng phiên bản cache từ `bhv-v129` lên `bhv-v130`.
+- **feat(Single-Screen Standard Toàn bộ & Chrome Automation Sinh Ảnh PNG Đồng Bộ)**:
+  - **Dàn trang chuẩn Single-Screen cho toàn bộ các mục chính (Học chữ & Trò chơi)**:
+    - `lettersHome()`: Chuyển đổi thành lưới 4 ô Icon Tiles lớn trực quan (`✍️` 14 Nét viết cơ bản, `🔤` Bảng chữ cái, `📖` Đánh vần, `🪑` Tư thế ngồi & Cầm bút), vừa khít 1 màn hình. Mục tư thế ngồi được mở bằng popup modal cô giáo dặn dò, loại bỏ hoàn toàn việc cuộn trang.
+    - `games()`: Dàn trang thẻ game thành lưới `.game-cards` compact (4 cột trên mobile, 8 cột trên tablet) vừa vặn 1 màn hình.
+    - `home()`: Giao diện Trang chủ fit trọn vẹn 100dvh với menu icon tiles 2x2 / 4x1.
+  - **Điều khiển Chrome Automation (`chrome.exe`) tự động tạo ảnh PNG 0 credit**:
+    - Sử dụng script `scripts/chrome_generate_assets.js` điều khiển `C:\Program Files\Google\Chrome\Application\chrome.exe` tự động kết xuất canvas và xuất định dạng PNG chuẩn.
+    - **Thêm 6 Tranh Tô Màu Elsa mới** nét viền đen đậm, nền trắng tinh (`coloring/mnvh_elsa_*.png`):
+      1. `mnvh_elsa_olaf.png`: Elsa và người tuyết Olaf vui vẻ.
+      2. `mnvh_elsa_ice_castle.png`: Elsa và lâu đài băng lộng lẫy.
+      3. `mnvh_elsa_ice_skating.png`: Elsa trượt băng nghệ thuật trên hồ băng.
+      4. `mnvh_elsa_ice_crown.png`: Elsa vương miện băng tuyết kiêu sa.
+      5. `mnvh_elsa_nokk_water_horse.png`: Elsa và chú ngựa nước Nokk thần thoại.
+      6. `mnvh_elsa_bruni.png`: Elsa và thằn lằn tuyết Bruni bé nhỏ.
+    - **Thêm Bộ 10 Sticker hoạt hình 2D rực rỡ** (`img/stickers/sticker_*.png`) thay thế toàn bộ emoji thô trong mục Thành tích của bé: Mèo Mimi, Táo Ngọt Ngào, Phi Thuyền Nhí, Cầu Vồng Kì Diệu, Kỳ Lân Mộng Mơ, Sư Tử Trí Tuệ, Ngôi Sao May Mắn, Bướm Xinh, Vương Miện Công Chúa, Thỏ Trắng Tinh Nghịch.
+    - **Thêm Bộ 8 Icon Game đồ họa bắt mắt** (`img/games/game_*.png`) thay thế emoji chữ trong menu Trò chơi.
+  - **Đồng bộ Service Worker**: Tăng phiên bản cache từ `bhv-v129` lên `bhv-v131`.
 
 ### 2026-10-27
 - **fix(Parent Gate: Bảo vệ Cổng PIN khi hết giờ chơi & Ngăn chặn đóng lén modal)**:

@@ -14,5 +14,8 @@ extract_*.js
 .env
 .env.*
 drive_docs/
+node_modules/
+package-lock.json
+package.json
 
 

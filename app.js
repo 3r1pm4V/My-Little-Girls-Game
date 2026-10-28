@@ -58,6 +58,24 @@ I["vocab_dong_ho"]="img/vocab/vocab_dong_ho.png";
 I["vocab_khan_mat"]="img/vocab/vocab_khan_mat.png";
 I["vocab_kinh_mat"]="img/vocab/vocab_kinh_mat.png";
 I["vocab_non_la"]="img/vocab/vocab_non_la.png";
+I["sticker_cat"]="img/stickers/sticker_cat.png";
+I["sticker_apple"]="img/stickers/sticker_apple.png";
+I["sticker_rocket"]="img/stickers/sticker_rocket.png";
+I["sticker_rainbow"]="img/stickers/sticker_rainbow.png";
+I["sticker_unicorn"]="img/stickers/sticker_unicorn.png";
+I["sticker_lion"]="img/stickers/sticker_lion.png";
+I["sticker_star"]="img/stickers/sticker_star.png";
+I["sticker_butterfly"]="img/stickers/sticker_butterfly.png";
+I["sticker_crown"]="img/stickers/sticker_crown.png";
+I["sticker_rabbit"]="img/stickers/sticker_rabbit.png";
+I["game_count"]="img/games/game_count.png";
+I["game_bubble"]="img/games/game_bubble.png";
+I["game_match"]="img/games/game_match.png";
+I["game_missing"]="img/games/game_missing.png";
+I["game_memory"]="img/games/game_memory.png";
+I["game_compare"]="img/games/game_compare.png";
+I["game_art"]="img/games/game_art.png";
+I["game_ninja"]="img/games/game_ninja.png";
 const ALT_MAP={
   vocab_banh_mi:"Bánh mì",vocab_ca_rot:"Cà rốt",vocab_cai_bat:"Cái bát",vocab_dong_ho:"Đồng hồ",vocab_khan_mat:"Khăn mặt",vocab_kinh_mat:"Kính mắt",vocab_non_la:"Nón lá",vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
@@ -843,14 +861,17 @@ const BADGES = [
 ];
 
 const STICKERS = [
-  {id:"cat",name:"Mèo Mimi",en:"Mimi Kitty",icon:"🐱",desc:"Tặng bé ngày đầu tiên đến lớp",enDesc:"Welcome to learning",test:()=>true},
-  {id:"apple",name:"Táo Ngọt Ngào",en:"Sweet Apple",icon:"🍎",desc:"Đạt 5 ngôi sao đầu tiên",enDesc:"Earn 5 stars",test:()=>stars>=5},
-  {id:"rocket",name:"Phi Thuyền Nhí",en:"Space Rocket",icon:"🚀",desc:"Đạt chuỗi học 2 ngày liên tiếp",enDesc:"2-day streak",test:()=>getDailyStreak().count>=2},
-  {id:"rainbow",name:"Cầu Vồng Kì Diệu",en:"Magic Rainbow",icon:"🌈",desc:"Đạt 25 ngôi sao rực rỡ",enDesc:"Earn 25 stars",test:()=>stars>=25},
-  {id:"unicorn",name:"Kỳ Lân Mộng Mơ",en:"Dreamy Unicorn",icon:"🦄",desc:"Đạt chuỗi học 3 ngày liên tiếp",enDesc:"3-day streak",test:()=>getDailyStreak().count>=3},
-  {id:"lion",name:"Sư Tử Trí Tuệ",en:"Wise Lion",icon:"🦁",desc:"Chinh phục 50 ngôi sao",enDesc:"Earn 50 stars",test:()=>stars>=50},
-  {id:"icecream",name:"Kem Vui Vẻ",en:"Happy Ice Cream",icon:"🍦",desc:"Làm đúng 10 câu hỏi",enDesc:"Answer 10 questions",test:()=>(ST.f||0)>=10},
-  {id:"crown",name:"Vương Miện Nhí",en:"Kid's Crown",icon:"👑",desc:"Đạt chuỗi học 5 ngày liên tiếp",enDesc:"5-day streak",test:()=>getDailyStreak().count>=5}
+  {id:"cat",name:"Mèo Mimi",en:"Mimi Kitty",icon:"🐱",img:"img/stickers/sticker_cat.png",desc:"Tặng bé ngày đầu tiên đến lớp",enDesc:"Welcome to learning",test:()=>true},
+  {id:"apple",name:"Táo Ngọt Ngào",en:"Sweet Apple",icon:"🍎",img:"img/stickers/sticker_apple.png",desc:"Đạt 5 ngôi sao đầu tiên",enDesc:"Earn 5 stars",test:()=>stars>=5},
+  {id:"rocket",name:"Phi Thuyền Nhí",en:"Space Rocket",icon:"🚀",img:"img/stickers/sticker_rocket.png",desc:"Đạt chuỗi học 2 ngày liên tiếp",enDesc:"2-day streak",test:()=>getDailyStreak().count>=2},
+  {id:"rainbow",name:"Cầu Vồng Kì Diệu",en:"Magic Rainbow",icon:"🌈",img:"img/stickers/sticker_rainbow.png",desc:"Đạt 25 ngôi sao rực rỡ",enDesc:"Earn 25 stars",test:()=>stars>=25},
+  {id:"unicorn",name:"Kỳ Lân Mộng Mơ",en:"Dreamy Unicorn",icon:"🦄",img:"img/stickers/sticker_unicorn.png",desc:"Đạt chuỗi học 3 ngày liên tiếp",enDesc:"3-day streak",test:()=>getDailyStreak().count>=3},
+  {id:"lion",name:"Sư Tử Trí Tuệ",en:"Wise Lion",icon:"🦁",img:"img/stickers/sticker_lion.png",desc:"Chinh phục 50 ngôi sao",enDesc:"Earn 50 stars",test:()=>stars>=50},
+  {id:"icecream",name:"Kem Vui Vẻ",en:"Happy Ice Cream",icon:"🍦",img:"img/stickers/sticker_star.png",desc:"Làm đúng 10 câu hỏi",enDesc:"Answer 10 questions",test:()=>(ST.f||0)>=10},
+  {id:"crown",name:"Vương Miện Nhí",en:"Kid's Crown",icon:"👑",img:"img/stickers/sticker_crown.png",desc:"Đạt chuỗi học 5 ngày liên tiếp",enDesc:"5-day streak",test:()=>getDailyStreak().count>=5},
+  {id:"star",name:"Ngôi Sao May Mắn",en:"Lucky Star",icon:"⭐",img:"img/stickers/sticker_star.png",desc:"Đạt 35 ngôi sao học tập",enDesc:"Earn 35 stars",test:()=>stars>=35},
+  {id:"butterfly",name:"Bướm Xinh Đón Nắng",en:"Pretty Butterfly",icon:"🦋",img:"img/stickers/sticker_butterfly.png",desc:"Đạt chuỗi học 4 ngày liên tiếp",enDesc:"4-day streak",test:()=>getDailyStreak().count>=4},
+  {id:"rabbit",name:"Thỏ Trắng Tinh Nghịch",en:"Playful Bunny",icon:"🐰",img:"img/stickers/sticker_rabbit.png",desc:"Chinh phục 15 bài học xuất sắc",enDesc:"15 lessons completed",test:()=>getUnlockedBadges().length>=4}
 ];
 
 function getUnlockedBadges(){
@@ -941,7 +962,7 @@ function showBadges(tab = currentAchieveTab){
         ${STICKERS.map(s=>{
           const isUn=s.test();
           return `<div class="sticker-card ${isUn?"unlocked":"locked"}" onclick="window.__clickSticker('${s.id}')">
-            <div class="sticker-emoji">${s.icon}</div>
+            <div class="sticker-emoji">${s.img ? `<img src="${s.img}" alt="${lang==="vi"?s.name:s.en}" style="width:54px;height:54px;object-fit:contain">` : s.icon}</div>
             <div class="sticker-title">${lang==="vi"?s.name:s.en}</div>
             <div class="sticker-badge ${isUn?"unlocked":"locked"}">
               ${isUn?"✔ "+T("Đã dán","Collected"):"🔒 "+T("Khóa","Locked")}
@@ -1730,71 +1751,84 @@ window.todayLearning = todayLearning;
 
 function lettersHome(){
   m.innerHTML = `
-    ${kbc([
-      {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
-      {t:T("Học chữ & Tập tô","Letters & Tracing"), i:"🔤"}
-    ])}
-    
-    <div style="text-align:center;margin:6px 0 16px">
-      <h2 style="font-size:24px;margin:0 0 4px">🔤 ${T("Học Chữ & Tập Tô Nét", "Learn Letters & Trace")}</h2>
-      <p style="font-size:14px;color:#64748b;margin:0">${T("Giáo trình Tiền tiểu học chuẩn · 14 Nét cơ bản & 29 Chữ cái", "Pre-primary Curriculum · 14 Strokes & 29 Letters")}</p>
-    </div>
-
-    <!-- 3 MỤC CHÍNH DỰA TRÊN GOOGLE DRIVE -->
-    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:760px;margin:0 auto 16px">
+    <div class="home-container letters-home-container">
+      ${kbc([
+        {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
+        {t:T("Học chữ & Tập tô","Letters & Tracing"), i:"🔤"}
+      ])}
       
-      <!-- 1. 14 NÉT VIẾT CƠ BẢN (các nét cơ bản.pdf) -->
-      <div class="card" onclick="window.__traceFrom='lettersHome';trm='net';ls.set('trm','net');trace()" style="cursor:pointer;border:3px solid #bae6fd;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
-        <div style="font-size:36px;margin-bottom:8px">✏️</div>
-        <div style="font-size:18px;font-weight:900;color:#0369a1;margin-bottom:4px">${T("14 Nét viết cơ bản", "14 Basic Strokes")}</div>
-        <div style="font-size:13px;color:#0284c7;line-height:1.4">${T("Nét thẳng, nét móc, nét cong, nét khuyết & nét thắt chuẩn ô ly", "Straight, hook, curve, loop & knot strokes on grid")}</div>
-        <div style="margin-top:12px;font-weight:800;color:#0284c7;display:flex;align-items:center;gap:4px">
-          <span>${T("Tập tô nét ngay 🚀", "Trace strokes 🚀")}</span>
-        </div>
+      <div style="text-align:center;margin:2px 0 6px">
+        <h2 style="font-size:22px;margin:0 0 2px">🔤 ${T("Học Chữ & Tập Tô Nét", "Learn Letters & Trace")}</h2>
+        <p style="font-size:13px;color:#64748b;margin:0">${T("Giáo trình Tiền tiểu học chuẩn · 14 Nét cơ bản & 29 Chữ cái", "Pre-primary Curriculum · 14 Strokes & 29 Letters")}</p>
       </div>
 
-      <!-- 2. BẢNG CHỮ CÁI TIẾNG VIỆT (TIỀN TIỂU HỌC - Viết chữ.pdf & Sách luyện đọc.pdf) -->
-      <div class="card" onclick="go('letL')" style="cursor:pointer;border:3px solid #fed7aa;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
-        <div style="font-size:36px;margin-bottom:8px">🔤</div>
-        <div style="font-size:18px;font-weight:900;color:#c2410c;margin-bottom:4px">${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}</div>
-        <div style="font-size:13px;color:#ea580c;line-height:1.4">${T("29 chữ cái kèm hình ảnh, từ ví dụ & hướng dẫn tập tô từng nét", "29 letters with sounds, pictures, words & stroke guides")}</div>
-        <div style="margin-top:12px;font-weight:800;color:#ea580c;display:flex;align-items:center;gap:4px">
-          <span>${T("Xem bảng chữ cái 🔤", "Explore alphabet 🔤")}</span>
-        </div>
-      </div>
+      <!-- 4 MỤC CHÍNH DÀN TRANG ICON TILES 1 MÀN HÌNH -->
+      <div class="kid-home-menu clean-4-grid letters-sub-grid">
+        <!-- 1. 14 NÉT VIẾT CƠ BẢN -->
+        <button class="kid-home-btn kid-btn-today" onclick="window.__traceFrom='lettersHome';trm='net';ls.set('trm','net');trace()" title="${T("14 Nét viết cơ bản", "14 Basic Strokes")}">
+          <div class="kid-btn-icon-wrap" style="background:#e0f2fe;font-size:38px">✏️</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#0369a1">${T("14 Nét viết cơ bản", "14 Basic Strokes")}</div>
+          </div>
+        </button>
 
-      <!-- 3. BÉ TẬP ĐÁNH VẦN (Sách luyện đọc.pdf) -->
-      <div class="card" onclick="go('readL')" style="cursor:pointer;border:3px solid #bbf7d0;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:24px;padding:16px;text-align:left;box-shadow:0 4px 10px rgba(0,0,0,0.05)">
-        <div style="font-size:36px;margin-bottom:8px">📖</div>
-        <div style="font-size:18px;font-weight:900;color:#15803d;margin-bottom:4px">${T("Bé tập đánh vần", "Learn Phonics")}</div>
-        <div style="font-size:13px;color:#16a34a;line-height:1.4">${T("Ghép âm đầu + nguyên âm + 6 dấu thanh (b-a-ba, c-a-ca...)", "Spell onset + vowel + 6 tones with clear voice audio")}</div>
-        <div style="margin-top:12px;font-weight:800;color:#16a34a;display:flex;align-items:center;gap:4px">
-          <span>${T("Tập ghép vần 📖", "Start phonics 📖")}</span>
-        </div>
-      </div>
+        <!-- 2. BẢNG CHỮ CÁI TIẾNG VIỆT -->
+        <button class="kid-home-btn kid-btn-numbers" onclick="go('letL')" title="${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}">
+          <div class="kid-btn-icon-wrap" style="background:#ffedd5;font-size:38px">🔤</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#c2410c">${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}</div>
+          </div>
+        </button>
 
-    </div>
+        <!-- 3. BÉ TẬP ĐÁNH VẦN -->
+        <button class="kid-home-btn kid-btn-stories" onclick="go('readL')" title="${T("Bé tập đánh vần", "Learn Phonics")}">
+          <div class="kid-btn-icon-wrap" style="background:#dcfce7;font-size:38px">📖</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#15803d">${T("Bé tập đánh vần", "Learn Phonics")}</div>
+          </div>
+        </button>
 
-    <!-- Hướng dẫn tư thế ngồi & cách cầm bút chuẩn (GIÁO ÁN HÀNH TRANG VÀO LỚP 1) -->
-    <div style="background:#fff;border:3px solid #e2e8f0;border-radius:24px;padding:16px 20px;max-width:760px;margin:0 auto 16px;text-align:left;box-shadow:0 4px 12px rgba(0,0,0,0.04)">
-      <div style="font-size:16px;font-weight:900;color:#1e293b;margin-bottom:8px;display:flex;align-items:center;gap:8px">
-        <span>✏️</span> <span>${T("Lời dặn cô giáo: Tư thế ngồi & Cách cầm bút", "Teacher's Advice: Posture & Grip")}</span>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:13.5px;color:#475569;line-height:1.45">
-        <div style="background:#f8fafc;padding:10px 14px;border-radius:16px;border-left:4px solid #38bdf8">
-          <b>🪑 1. Tư thế ngồi học:</b><br>
-          ${T("Lưng thẳng, không tì ngực vào bàn. Hai chân để vuông góc chạm đất, đầu hơi cúi cách vở 25–30cm.", "Sit straight, feet flat on the floor, head slightly tilted 25-30cm from paper.")}
-        </div>
-        <div style="background:#f8fafc;padding:10px 14px;border-radius:16px;border-left:4px solid #f43f5e">
-          <b>✍️ 2. Quy tắc 3 ngón tay:</b><br>
-          ${T("Cầm bút bằng 3 ngón: ngón cái, ngón trỏ và ngón giữa đỡ dưới thân bút. Không cầm bút quá chặt.", "Hold pencil with thumb and index finger, supported by middle finger.")}
-        </div>
+        <!-- 4. TƯ THẾ NGỒI & CÁCH CẦM BÚT -->
+        <button class="kid-home-btn kid-btn-games" onclick="openPostureModal()" title="${T("Tư thế ngồi & Cách cầm bút", "Posture & Grip")}">
+          <div class="kid-btn-icon-wrap" style="background:#fce7f3;font-size:38px">🪑</div>
+          <div class="kid-btn-text">
+            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#881337">${T("Tư thế ngồi & Cách cầm bút", "Posture & Grip")}</div>
+          </div>
+        </button>
       </div>
     </div>
   `;
   sayPrompt("letters_home", "Bé muốn học chữ cái, tập viết nét hay đánh vần nào? Chọn một mục nhé!", "Choose basic strokes, alphabet, or phonics!", 180000);
 }
 window.lettersHome = lettersHome;
+
+function openPostureModal(){
+  const modal = document.createElement("div");
+  modal.className = "celeb-overlay";
+  modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
+  modal.innerHTML = `
+    <div class="celeb-box" style="max-width:480px;text-align:left;padding:22px">
+      <div style="font-size:20px;font-weight:900;color:#0284c7;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <span>✏️</span> <span>${T("Lời dặn cô giáo: Tư thế ngồi & Cách cầm bút", "Teacher's Advice: Posture & Grip")}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:#334155;line-height:1.5">
+        <div style="background:#f0f9ff;padding:12px 14px;border-radius:16px;border-left:4px solid #38bdf8">
+          <b>🪑 1. Tư thế ngồi học:</b><br>
+          ${T("Lưng thẳng, không tì ngực vào bàn. Hai chân để vuông góc chạm đất, đầu hơi cúi cách vở 25–30cm.", "Sit straight, feet flat on the floor, head slightly tilted 25-30cm from paper.")}
+        </div>
+        <div style="background:#fff1f2;padding:12px 14px;border-radius:16px;border-left:4px solid #f43f5e">
+          <b>✍️ 2. Quy tắc 3 ngón tay:</b><br>
+          ${T("Cầm bút bằng 3 ngón: ngón cái, ngón trỏ và ngón giữa đỡ dưới thân bút. Không cầm bút quá chặt.", "Hold pencil with thumb and index finger, supported by middle finger.")}
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="pill on" onclick="this.closest('.celeb-overlay').remove()" style="font-size:16px;padding:8px 26px">✔ ${T("Bé đã nhớ rồi","I got it")}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+window.openPostureModal = openPostureModal;
 
 function home(){
   const showTiers = isAgeTierSelectorEnabled();
@@ -2827,31 +2861,34 @@ function win(wr,next,vi,en){
   adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
 }
 function games(){
-  window.__traceFrom = "games";
-  m.innerHTML=`${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
-  <div style="text-align:center;margin:6px 0 12px">
-    <h2 style="font-size:24px;margin:0 0 4px">🎮 ${T("Góc vui chơi ôn tập (Trò chơi vui nhộn)","Review Games & Fun")}</h2>
-    <p style="font-size:14px;color:#64748b;margin:0 0 8px">${T("Các trò chơi tương tác chạy ngẫu nhiên cho bé 🌟","Randomized fun games 🌟")}</p>
-    <button class="pill on" onclick="go('randomMixGame',true)" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-weight:900;font-size:15px;padding:8px 20px;border:3px solid #fff;border-radius:26px">🎲 ${T("Hộp Quà Bất Ngờ (Chơi Ngẫu Nhiên)","Play Random Mix")}</button>
-  </div>
-  <div class="cards game-cards">
-    ${card("countGame","<b>🍎 3 ⭐</b>","Đếm hình chọn số","Count & Match","game")}
-    ${card("bubbleGame","<b>🫧 Aa</b>","Bắt bóng chữ","Bubble Pop Letters","game")}
-    ${card("match",im("apple")+imL("A"),"Nối chữ & Hình đối lập","Smart Wire Match","vietnamese")}
-    ${card("mis","<b>🐛 1 ? 3</b>","Đoàn tàu & Bóng bay số","Number Train & Missing","math")}
-    ${card("mem",im("cat")+im("cat"),"Lật thẻ ghi nhớ","Memory","game")}
-    ${card("cmpS","<b>&gt; = &lt;</b>","Dấu so sánh","Signs","math")}
-    ${card("colorShapeGame","<b>🧺 🐸 ⭐</b>","Giỏ màu & Hình dạng","Colors & Shapes","game")}
-    ${card("puzzleGame","<b>🐧 🧩 🐌</b>","Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
-    ${card("sizeCompareGame","<b>🐞 🍇 ⚖️</b>","To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
-    ${card("oddSpotGame","<b>🔍 🐞 🐠</b>","Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
-    ${card("fruitSlash","<b>🍉 🗡️ 🍓</b>","Chém trái cây","Fruit Slash","game")}
-    ${card("artStudioGame","<b>🎨 🖌️ ✨</b>","Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
-    ${card("connectDotsGame","<b>🔢 1→2→3 ⭐</b>","Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
-    ${card("memoryStepDrawGame","<b>🧠 ✍️ 👣</b>","Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
-    ${card("tenFrameGame","<b>🔟 🍎 🟢</b>","Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
-    ${card("pairLinkGridGame","<b>🔗 🍎 ↔ 🍎</b>","Nối cặp giống nhau","Pair Link Grid","logic")}
-  </div>`;
+  window.__traceFrom="games";
+  m.innerHTML=`
+    <div class="home-container games-home-container">
+      ${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
+      <div style="text-align:center;margin:2px 0 6px">
+        <h2 style="font-size:20px;margin:0 0 2px">🎮 ${T("Trò chơi vui nhộn","Review Games & Fun")}</h2>
+        <button class="pill on" onclick="go('randomMixGame',true)" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-weight:900;font-size:13.5px;padding:4px 16px;border:2px solid #fff;border-radius:20px;min-height:44px">🎲 ${T("Hộp Quà Bất Ngờ (Chơi Ngẫu Nhiên)","Play Random Mix")}</button>
+      </div>
+      <div class="cards game-cards">
+        ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game")}
+        ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game")}
+        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese")}
+        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math")}
+        ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game")}
+        ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math")}
+        ${card("colorShapeGame",`<img src="${I.game_art}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game")}
+        ${card("puzzleGame","<b>🐧 🧩 🐌</b>","Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
+        ${card("sizeCompareGame","<b>🐞 🍇 ⚖️</b>","To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
+        ${card("oddSpotGame","<b>🔍 🐞 🐠</b>","Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
+        ${card("fruitSlash",`<img src="${I.game_ninja}" class="g-ico">`,"Chém trái cây","Fruit Slash","game")}
+        ${card("artStudioGame",`<img src="${I.game_art}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
+        ${card("connectDotsGame","<b>🔢 1→2→3 ⭐</b>","Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
+        ${card("memoryStepDrawGame","<b>🧠 ✍️ 👣</b>","Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
+        ${card("tenFrameGame","<b>🔟 🍎 🟢</b>","Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
+        ${card("pairLinkGridGame","<b>🔗 🍎 ↔ 🍎</b>","Nối cặp giống nhau","Pair Link Grid","logic")}
+      </div>
+    </div>
+  `;
   sayPrompt("games","Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!","Pick a game to play",180000);
 }
 
