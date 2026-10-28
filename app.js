@@ -90,6 +90,8 @@ I["game_connect_dots"]="img/games/game_connect_dots.png";
 I["game_memory_draw"]="img/games/game_memory_draw.png";
 I["game_ten_frame"]="img/games/game_ten_frame.png";
 I["game_pair_link"]="img/games/game_pair_link.png";
+I["game_math_sum"]="img/games/game_math_sum.png";
+I["game_animal_path"]="img/games/game_animal_path.png";
 I["count_sun"]="img/vocab/count_sun.png";
 I["count_cat"]="img/vocab/count_cat.png";
 I["count_car"]="img/vocab/count_car.png";
@@ -1485,10 +1487,12 @@ function pwaGuide(){
     <div class="note ok" style="max-width:540px;margin:12px auto;text-align:left">${guideHtml}</div>
     <div class="row" style="justify-content:center;margin-top:14px"><button class="pill" onclick="go('home')">✔ ${T("Đã hiểu","Got it")}</button></div>`;
 }
-function card(f,vis,vi,en,subject="default"){
+function card(f,vis,vi,en,subject="default",grade=""){
   const cls = subject !== "default" ? `card card-${subject}` : "card";
   const safeVi = String(vi).replace(/'/g, "\\'");
-  return`<button class="${cls}" onclick="go('${f}')" onpointerdown="speakCardTitle('${safeVi}')"><div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
+  const gradeAttr = grade ? ` data-grade="${grade}"` : "";
+  const gradeBadge = grade ? `<span class="card-grade-badge badge-${grade}">${grade === 'preschool' ? '🐣 3-4T' : grade === 'kinder' ? '🎓 5-6T' : '🎒 6-7T'}</span>` : "";
+  return`<button class="${cls}"${gradeAttr} onclick="go('${f}')" onpointerdown="speakCardTitle('${safeVi}')">${gradeBadge}<div class="vis">${vis}</div><span>${T(vi,en)}</span></button>`;
 }
 function speakCardTitle(vi){
   // Chỉ phát hiệu ứng chạm nhẹ và nhạc nền khi bấm chọn thẻ menu, không đọc lặp lại tiêu đề option.
@@ -2895,35 +2899,76 @@ function win(wr,next,vi,en){
   const isEndless=(cur==="match"||cur==="mem");
   adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
 }
+function renderGradeTabsHtml(){
+  const g=(typeof window!=="undefined"&&window.__curGameGrade)||"all";
+  return`<div class="grade-tabs-wrap">
+    <button type="button" class="grade-tab ${g==='all'?'active':''}" onclick="filterGamesByGrade('all')">🌟 ${T("Tất cả","All")}</button>
+    <button type="button" class="grade-tab ${g==='preschool'?'active':''}" onclick="filterGamesByGrade('preschool')">🐣 ${T("Mầm non 3-4T","Preschool")}</button>
+    <button type="button" class="grade-tab ${g==='kinder'?'active':''}" onclick="filterGamesByGrade('kinder')">🎓 ${T("Mẫu giáo 5-6T","Kinder")}</button>
+    <button type="button" class="grade-tab ${g==='grade1'?'active':''}" onclick="filterGamesByGrade('grade1')">🎒 ${T("Tiền TH 6-7T","Grade 1")}</button>
+  </div>`;
+}
+
+function filterGamesByGrade(grade){
+  if(typeof window!=="undefined")window.__curGameGrade=grade;
+  const grid=document.getElementById("gamesCardGrid");
+  const tabs=document.querySelectorAll(".grade-tab");
+  tabs.forEach(t=>{
+    const isAct=t.getAttribute("onclick")&&t.getAttribute("onclick").includes(`'${grade}'`);
+    t.classList.toggle("active",!!isAct);
+  });
+  if(!grid)return;
+  const cards=grid.querySelectorAll(".card");
+  cards.forEach(c=>{
+    const cg=c.getAttribute("data-grade");
+    const show=(grade==="all"||cg===grade);
+    c.style.display=show?"":"none";
+    if(show){
+      c.classList.remove("card-fade-in");
+      void c.offsetWidth;
+      c.classList.add("card-fade-in");
+    }
+  });
+}
+window.renderGradeTabsHtml=renderGradeTabsHtml;
+window.filterGamesByGrade=filterGamesByGrade;
+
 function games(){
   window.__traceFrom="games";
+  const curGrade=(typeof window!=="undefined"&&window.__curGameGrade)||"all";
   m.innerHTML=`
     <div class="home-container games-home-container">
       ${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
-      <div style="text-align:center;margin:2px 0 6px">
-        <h2 style="font-size:20px;margin:0 0 2px">🎮 ${T("Trò chơi vui nhộn","Review Games & Fun")}</h2>
-        <button class="pill on" onclick="go('randomMixGame',true)" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;font-weight:900;font-size:13.5px;padding:4px 16px;border:2px solid #fff;border-radius:20px;min-height:44px">🎲 ${T("Hộp Quà Bất Ngờ (Chơi Ngẫu Nhiên)","Play Random Mix")}</button>
+      <div class="games-header-bar">
+        <h2 style="font-size:18px;margin:0">🎮 ${T("Trò chơi vui nhộn","Review Games & Fun")}</h2>
+        <button class="pill on random-gift-pill" onclick="go('randomMixGame',true)">🎲 ${T("Hộp Quà Bất Ngờ","Play Random Mix")}</button>
       </div>
-      <div class="cards game-cards">
-        ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game")}
-        ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game")}
-        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese")}
-        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math")}
-        ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game")}
-        ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math")}
-        ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game")}
-        ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
-        ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
-        ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
-        ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game")}
-        ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
-        ${card("connectDotsGame",`<img src="${I.game_connect_dots}" class="g-ico">`,"Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
-        ${card("memoryStepDrawGame",`<img src="${I.game_memory_draw}" class="g-ico">`,"Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
-        ${card("tenFrameGame",`<img src="${I.game_ten_frame}" class="g-ico">`,"Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
-        ${card("pairLinkGridGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Nối cặp giống nhau","Pair Link Grid","logic")}
+      ${renderGradeTabsHtml()}
+      <div class="cards game-cards" id="gamesCardGrid">
+        ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game","preschool")}
+        ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game","kinder")}
+        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder")}
+        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder")}
+        ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
+        ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
+        ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
+        ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic","preschool")}
+        ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math","preschool")}
+        ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder")}
+        ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
+        ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
+        ${card("connectDotsGame",`<img src="${I.game_connect_dots}" class="g-ico">`,"Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math","grade1")}
+        ${card("memoryStepDrawGame",`<img src="${I.game_memory_draw}" class="g-ico">`,"Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace","grade1")}
+        ${card("tenFrameGame",`<img src="${I.game_ten_frame}" class="g-ico">`,"Khung 10 ô (Gộp số)","Ten-Frame Math","math","kinder")}
+        ${card("pairLinkGridGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Nối cặp giống nhau","Pair Link Grid","logic","grade1")}
+        ${card("mathSumGame",`<img src="${I.game_math_sum}" class="g-ico">`,"Phép tính hình","Math Sums","math","grade1")}
+        ${card("animalPathGame",`<img src="${I.game_animal_path}" class="g-ico">`,"Đường về tổ","Animal Path","logic","grade1")}
       </div>
     </div>
   `;
+  if(curGrade!=="all"){
+    setTimeout(()=>filterGamesByGrade(curGrade),10);
+  }
   sayPrompt("games","Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!","Pick a game to play",180000);
 }
 
@@ -6639,6 +6684,8 @@ const V={
   get memoryStepDrawGame(){return(typeof window!=="undefined"&&window.memoryStepDrawGame)||(typeof globalThis!=="undefined"&&globalThis.memoryStepDrawGame);},
   get tenFrameGame(){return(typeof window!=="undefined"&&window.tenFrameGame)||(typeof globalThis!=="undefined"&&globalThis.tenFrameGame);},
   get pairLinkGridGame(){return(typeof window!=="undefined"&&window.pairLinkGridGame)||(typeof globalThis!=="undefined"&&globalThis.pairLinkGridGame);},
+  get mathSumGame(){return(typeof window!=="undefined"&&window.mathSumGame)||(typeof globalThis!=="undefined"&&globalThis.mathSumGame);},
+  get animalPathGame(){return(typeof window!=="undefined"&&window.animalPathGame)||(typeof globalThis!=="undefined"&&globalThis.animalPathGame);},
   match,mem,trace,gate,parent,rec:recS,
   get readL(){return(typeof window!=="undefined"&&window.readL)||(typeof globalThis!=="undefined"&&globalThis.readL);},
   get math10(){return(typeof window!=="undefined"&&window.math10)||(typeof globalThis!=="undefined"&&globalThis.math10);},

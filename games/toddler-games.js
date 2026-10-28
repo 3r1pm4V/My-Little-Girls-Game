@@ -1448,7 +1448,9 @@
       "connectDotsGame",
       "memoryStepDrawGame",
       "tenFrameGame",
-      "pairLinkGridGame"
+      "pairLinkGridGame",
+      "mathSumGame",
+      "animalPathGame"
     ];
 
     if (typeof window !== "undefined") {
