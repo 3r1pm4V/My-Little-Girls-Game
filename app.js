@@ -2905,16 +2905,16 @@ function games(){
         ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math")}
         ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game")}
         ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math")}
-        ${card("colorShapeGame",`<img src="${I.game_art}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game")}
-        ${card("puzzleGame","<b>🐧 🧩 🐌</b>","Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
-        ${card("sizeCompareGame","<b>🐞 🍇 ⚖️</b>","To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
-        ${card("oddSpotGame","<b>🔍 🐞 🐠</b>","Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
-        ${card("fruitSlash",`<img src="${I.game_ninja}" class="g-ico">`,"Chém trái cây","Fruit Slash","game")}
-        ${card("artStudioGame",`<img src="${I.game_art}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
-        ${card("connectDotsGame","<b>🔢 1→2→3 ⭐</b>","Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
-        ${card("memoryStepDrawGame","<b>🧠 ✍️ 👣</b>","Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
-        ${card("tenFrameGame","<b>🔟 🍎 🟢</b>","Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
-        ${card("pairLinkGridGame","<b>🔗 🍎 ↔ 🍎</b>","Nối cặp giống nhau","Pair Link Grid","logic")}
+        ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game")}
+        ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic")}
+        ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math")}
+        ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic")}
+        ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game")}
+        ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game")}
+        ${card("connectDotsGame",`<img src="${I.game_connect_dots}" class="g-ico">`,"Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math")}
+        ${card("memoryStepDrawGame",`<img src="${I.game_memory_draw}" class="g-ico">`,"Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace")}
+        ${card("tenFrameGame",`<img src="${I.game_ten_frame}" class="g-ico">`,"Khung 10 ô (Gộp số)","Ten-Frame Math","math")}
+        ${card("pairLinkGridGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Nối cặp giống nhau","Pair Link Grid","logic")}
       </div>
     </div>
   `;

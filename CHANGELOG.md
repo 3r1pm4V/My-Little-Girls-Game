@@ -7,6 +7,14 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-28
+- **fix(Loại Bỏ Icon Gộp & Chuẩn Hóa Tranh Tô Màu Elsa Line Art Không Màu Nền)**:
+  - **Khắc phục lỗi icon gộp 2-3 emoji trên thẻ trò chơi**:
+    - Thay thế toàn bộ chuỗi emoji gộp (`<b>🐧 🧩 🐌</b>`, `<b>🔟 🍎 🟢</b>`, `<b>🔗 🍎 ↔ 🍎</b>`...) trên 16 thẻ game bằng các ảnh PNG huy hiệu 3D độc nhất (`I.game_puzzle`, `I.game_size_compare`, `I.game_odd_spot`, `I.game_connect_dots`, `I.game_memory_draw`, `I.game_ten_frame`, `I.game_pair_link`, v.v.).
+    - Bỏ chữ nhỏ bên trong khung icon để biểu tượng đồ họa được căn giữa hoàn hảo, to rõ, sắc nét, không bị chèn ép hay lòi ra ngoài mép.
+  - **Tranh tô màu Elsa chuẩn 100% Prompt Line Art Nét Đen Trắng**:
+    - Thay thế toàn bộ tranh emoji có màu trước đó bằng tranh tô màu line art chuẩn mực tuân theo prompt: `"[Chủ thể/Nhân vật] + [Hành động/Bối cảnh] + coloring page line art, black and white outline, thick bold lines, simple background, white background, no shading, kid-friendly --no color"`.
+    - Bao gồm: `mnvh_elsa_olaf.png`, `mnvh_elsa_ice_castle.png`, `mnvh_elsa_ice_skating.png`, `mnvh_elsa_ice_crown.png`, `mnvh_elsa_nokk_water_horse.png`, `mnvh_elsa_bruni.png`. Nét đen dày rõ ràng trên nền trắng tinh khiết, hoàn toàn không tô màu sẵn, tối ưu 100% cho bé tập tô màu.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v134`.
 - **feat(Hoàn thiện Icon Trang Chủ Responsive, Đồ Vật Đếm Độc Nhất 0–20 & Khay Đếm Cố Định)**:
   - **Icon lớn Trang Chủ chuẩn Responsive (Phone / Tablet / PC)**:
     - 4 nút lớn trang chủ (`Học chữ cái`, `Học số đếm`, `Trò chơi ôn tập`, `Truyện cổ tích`) hiển thị ảnh PNG đồ họa sinh từ Chrome (`home_letters.png`, `home_numbers.png`, `home_games.png`, `home_stories.png`).

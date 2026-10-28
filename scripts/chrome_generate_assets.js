@@ -115,19 +115,10 @@ async function main() {
           ctx.restore();
 
           // Main Icon
-          ctx.font = "180px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
+          ctx.font = "220px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(iconEmoji, cx, cy + (subSymbol ? -12 : 8));
-
-          // Sub symbol if exists
-          if (subSymbol) {
-            ctx.font = "bold 70px 'Baloo 2', system-ui, sans-serif";
-            ctx.fillStyle = "#ffffff";
-            ctx.shadowColor = "rgba(0,0,0,0.4)";
-            ctx.shadowBlur = 8;
-            ctx.fillText(subSymbol, cx, cy + 130);
-          }
+          ctx.fillText(iconEmoji, cx, cy + 12);
 
           return c.toDataURL("image/png");
         }
@@ -255,29 +246,29 @@ async function main() {
   // ============================================================================
   console.log('\n--- 2. Sinh 16 Icon Game Cho Menu Trò Chơi (PNG) ---');
   const GAME_ICONS = [
-    { id: 'game_count', bg1: '#fee2e2', bg2: '#fca5a5', border: '#ef4444', emoji: '🍎', sub: 'Đếm hình' },
-    { id: 'game_bubble', bg1: '#e0f2fe', bg2: '#7dd3fc', border: '#0284c7', emoji: '🫧', sub: 'Bắt bóng' },
-    { id: 'game_match', bg1: '#fef3c7', bg2: '#fcd34d', border: '#f59e0b', emoji: '🧩', sub: 'Ghép chữ' },
-    { id: 'game_missing', bg1: '#ede9fe', bg2: '#c4b5fd', border: '#8b5cf6', emoji: '❓', sub: 'Số thiếu' },
-    { id: 'game_memory', bg1: '#fce7f3', bg2: '#f9a8d4', border: '#ec4899', emoji: '🃏', sub: 'Lật thẻ' },
-    { id: 'game_compare', bg1: '#dcfce7', bg2: '#86efac', border: '#10b981', emoji: '⚖️', sub: 'So sánh' },
-    { id: 'game_color_shape', bg1: '#ccfbf1', bg2: '#5eead4', border: '#14b8a6', emoji: '🧺', sub: 'Giỏ màu' },
-    { id: 'game_puzzle', bg1: '#ffedd5', bg2: '#fed7aa', border: '#f97316', emoji: '🐧', sub: 'Ghép hình' },
-    { id: 'game_size_compare', bg1: '#fef9c3', bg2: '#fde047', border: '#eab308', emoji: '🍇', sub: 'To nhỏ' },
-    { id: 'game_odd_spot', bg1: '#ecfdf5', bg2: '#a7f3d0', border: '#059669', emoji: '🔍', sub: 'Khác biệt' },
-    { id: 'game_fruit_slash', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉', sub: 'Chém quả' },
-    { id: 'game_ninja', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉', sub: 'Chém quả' },
-    { id: 'game_art_studio', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨', sub: 'Tô màu' },
-    { id: 'game_art', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨', sub: 'Tô màu' },
-    { id: 'game_connect_dots', bg1: '#eff6ff', bg2: '#93c5fd', border: '#3b82f6', emoji: '🔢', sub: 'Nối chấm' },
-    { id: 'game_memory_draw', bg1: '#f5f3ff', bg2: '#ddd6fe', border: '#7c3aed', emoji: '🧠', sub: 'Vẽ nhớ' },
-    { id: 'game_ten_frame', bg1: '#ecfeff', bg2: '#a5f3fc', border: '#06b6d4', emoji: '🔟', sub: 'Khung 10' },
-    { id: 'game_pair_link', bg1: '#fff7ed', bg2: '#fdba74', border: '#ea580c', emoji: '🔗', sub: 'Nối cặp' }
+    { id: 'game_count', bg1: '#fee2e2', bg2: '#fca5a5', border: '#ef4444', emoji: '🍎' },
+    { id: 'game_bubble', bg1: '#e0f2fe', bg2: '#7dd3fc', border: '#0284c7', emoji: '🫧' },
+    { id: 'game_match', bg1: '#fef3c7', bg2: '#fcd34d', border: '#f59e0b', emoji: '🔤' },
+    { id: 'game_missing', bg1: '#ede9fe', bg2: '#c4b5fd', border: '#8b5cf6', emoji: '❓' },
+    { id: 'game_memory', bg1: '#fce7f3', bg2: '#f9a8d4', border: '#ec4899', emoji: '🃏' },
+    { id: 'game_compare', bg1: '#dcfce7', bg2: '#86efac', border: '#10b981', emoji: '⚖️' },
+    { id: 'game_color_shape', bg1: '#ccfbf1', bg2: '#5eead4', border: '#14b8a6', emoji: '🔷' },
+    { id: 'game_puzzle', bg1: '#ffedd5', bg2: '#fed7aa', border: '#f97316', emoji: '🧩' },
+    { id: 'game_size_compare', bg1: '#fef9c3', bg2: '#fde047', border: '#eab308', emoji: '🐘' },
+    { id: 'game_odd_spot', bg1: '#ecfdf5', bg2: '#a7f3d0', border: '#059669', emoji: '🔍' },
+    { id: 'game_fruit_slash', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉' },
+    { id: 'game_ninja', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉' },
+    { id: 'game_art_studio', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨' },
+    { id: 'game_art', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨' },
+    { id: 'game_connect_dots', bg1: '#eff6ff', bg2: '#93c5fd', border: '#3b82f6', emoji: '✏️' },
+    { id: 'game_memory_draw', bg1: '#f5f3ff', bg2: '#ddd6fe', border: '#7c3aed', emoji: '🖌️' },
+    { id: 'game_ten_frame', bg1: '#ecfeff', bg2: '#a5f3fc', border: '#06b6d4', emoji: '🔟' },
+    { id: 'game_pair_link', bg1: '#fff7ed', bg2: '#fdba74', border: '#ea580c', emoji: '🔗' }
   ];
 
   for (const g of GAME_ICONS) {
     const pngBase64 = await page.evaluate((g) => {
-      return drawGlossyBadge(g.bg1, g.bg2, g.border, g.emoji, g.sub).replace(/^data:image\/png;base64,/, '');
+      return drawGlossyBadge(g.bg1, g.bg2, g.border, g.emoji).replace(/^data:image\/png;base64,/, '');
     }, g);
     const dest = path.join(ROOT_DIR, 'img', 'games', `${g.id}.png`);
     fs.writeFileSync(dest, Buffer.from(pngBase64, 'base64'));
