@@ -520,6 +520,76 @@
       titleVi: "Elsa và thằn lằn tuyết Bruni",
       titleEn: "Elsa and Baby Salamander Bruni",
       imgSrc: "coloring/mnvh_elsa_bruni.png"
+    },
+    {
+      id: "cbn_teddy_bear",
+      icon: "🧸",
+      titleVi: "Tô theo số: Gấu bông (1–7)",
+      titleEn: "Color by Number: Teddy Bear (1–7)",
+      imgSrc: "coloring/cbn_teddy_bear.png"
+    },
+    {
+      id: "cbn_butterfly",
+      icon: "🦋",
+      titleVi: "Tô theo số: Cánh bướm xinh (1–7)",
+      titleEn: "Color by Number: Butterfly (1–7)",
+      imgSrc: "coloring/cbn_butterfly.png"
+    },
+    {
+      id: "cbn_castle",
+      icon: "🏰",
+      titleVi: "Tô theo số: Lâu đài cổ tích (1–7)",
+      titleEn: "Color by Number: Fairytale Castle (1–7)",
+      imgSrc: "coloring/cbn_castle.png"
+    },
+    {
+      id: "cbn_dinosaur",
+      icon: "🦕",
+      titleVi: "Tô theo số: Khủng long tí hon (1–7)",
+      titleEn: "Color by Number: Cute Dinosaur (1–7)",
+      imgSrc: "coloring/cbn_dinosaur.png"
+    },
+    {
+      id: "cbn_sunflower",
+      icon: "🌻",
+      titleVi: "Tô theo số: Hoa hướng dương (1–7)",
+      titleEn: "Color by Number: Sunflower (1–7)",
+      imgSrc: "coloring/cbn_sunflower.png"
+    },
+    {
+      id: "cbn_apple_tree",
+      icon: "🍎",
+      titleVi: "Tô theo số: Cây táo sum suê (1–7)",
+      titleEn: "Color by Number: Apple Tree (1–7)",
+      imgSrc: "coloring/cbn_apple_tree.png"
+    },
+    {
+      id: "cbn_car",
+      icon: "🚗",
+      titleVi: "Tô theo số: Xe ô tô con (1–7)",
+      titleEn: "Color by Number: Cute Car (1–7)",
+      imgSrc: "coloring/cbn_car.png"
+    },
+    {
+      id: "cbn_fish",
+      icon: "🐠",
+      titleVi: "Tô theo số: Cá con bơi lội (1–7)",
+      titleEn: "Color by Number: Tropical Fish (1–7)",
+      imgSrc: "coloring/cbn_fish.png"
+    },
+    {
+      id: "cbn_kitten",
+      icon: "🐱",
+      titleVi: "Tô theo số: Mèo con tinh nghịch (1–7)",
+      titleEn: "Color by Number: Playful Kitten (1–7)",
+      imgSrc: "coloring/cbn_kitten.png"
+    },
+    {
+      id: "cbn_rocket",
+      icon: "🚀",
+      titleVi: "Tô theo số: Tên lửa vũ trụ (1–7)",
+      titleEn: "Color by Number: Space Rocket (1–7)",
+      imgSrc: "coloring/cbn_rocket.png"
     }
   ];
 
