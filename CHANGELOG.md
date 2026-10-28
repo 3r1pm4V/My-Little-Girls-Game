@@ -7,6 +7,16 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-28
+- **feat(Hoàn thiện Icon Trang Chủ Responsive, Đồ Vật Đếm Độc Nhất 0–20 & Khay Đếm Cố Định)**:
+  - **Icon lớn Trang Chủ chuẩn Responsive (Phone / Tablet / PC)**:
+    - 4 nút lớn trang chủ (`Học chữ cái`, `Học số đếm`, `Trò chơi ôn tập`, `Truyện cổ tích`) hiển thị ảnh PNG đồ họa sinh từ Chrome (`home_letters.png`, `home_numbers.png`, `home_games.png`, `home_stories.png`).
+    - Icon tự động co giãn linh hoạt (`clamp(48px, 9.5vw, 76px)` trên mobile đến `clamp(64px, 10vw, 92px)` trên desktop/tablet) và nút bấm mở rộng tỉ lệ phù hợp, giải quyết triệt để vấn đề icon bị nhỏ trên PC/Desktop.
+  - **Khu vực đếm số (`numL`) với khay đếm cố định & 21 ví dụ đồ vật đếm độc nhất hoàn toàn**:
+    - Khay đếm `.objs` được gán chiều cao cố định (`height: clamp(120px, 20vh, 170px);`) có viền nét đứt bo tròn xinh xắn, giúp khi bé chọn từ số 0 đến 20 thì toàn bộ thanh chọn số bên dưới đứng yên tuyệt đối, không bị nhảy giật giao diện.
+    - 21 số từ 0 đến 20 sở hữu 21 hình ảnh đồ vật đếm riêng biệt hoàn toàn (Số 7: chùm nho vs Số 17: quả dưa hấu; Số 8: quả cam vs Số 18: bướm xinh; Số 9: quả dâu tây vs Số 19: tàu tên lửa; Số 0: Khay trống 📦).
+  - **Tối ưu hóa âm thanh các nút bấm**:
+    - Giữ trọn vẹn trải nghiệm tự nhiên: tắt việc đọc tiếng không cần thiết ở các nút chọn màu, tẩy vẽ và icon menu phân biệt được bằng hình ảnh/màu sắc.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v133`.
 - **feat(Single-Screen Standard Toàn bộ & Chrome Automation Sinh Ảnh PNG Đồng Bộ)**:
   - **Dàn trang chuẩn Single-Screen cho toàn bộ các mục chính (Học chữ & Trò chơi)**:
     - `lettersHome()`: Chuyển đổi thành lưới 4 ô Icon Tiles lớn trực quan (`✍️` 14 Nét viết cơ bản, `🔤` Bảng chữ cái, `📖` Đánh vần, `🪑` Tư thế ngồi & Cầm bút), vừa khít 1 màn hình. Mục tư thế ngồi được mở bằng popup modal cô giáo dặn dò, loại bỏ hoàn toàn việc cuộn trang.

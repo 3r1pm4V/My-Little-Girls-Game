@@ -1,9 +1,14 @@
 /**
  * scripts/chrome_generate_assets.js
- * Điều khiển Chrome tự động tạo hình ảnh PNG đồng bộ phong cách cho:
- * 1. Tranh tô màu Elsa nét viền đen dày, nền trắng tinh (coloring/mnvh_elsa_*.png)
- * 2. Bộ Sticker hoạt hình 2D rực rỡ cho bé (img/stickers/sticker_*.png)
- * 3. Bộ Icon Game và Học chữ sắc nét (img/games/game_*.png & img/letters/icon_*.png)
+ * Điều khiển Google Chrome (C:\Program Files\Google\Chrome\Application\chrome.exe)
+ * để tự động tạo và xuất toàn bộ hình ảnh PNG chất lượng cao, đồng bộ phong cách,
+ * 100% OFFLINE, 0 CREDIT, KHÔNG PHỤ THUỘC API NGOÀI:
+ * 
+ * 1. 6 Tranh tô màu Elsa nét viền đen dày, nền trắng (coloring/mnvh_elsa_*.png)
+ * 2. 4 Icon Lớn Trang Chủ vừa vặn Mobile/Tablet/PC (img/home/home_*.png)
+ * 3. 16 Icon Game Đồ Họa 3D Bắt Mắt (img/games/game_*.png)
+ * 4. 20 Đồ vật đếm hình độc nhất cho số 1 đến 20 (img/vocab/count_*.png)
+ * 5. 10 Sticker hoạt hình 2D rực rỡ (img/stickers/sticker_*.png)
  */
 
 const fs = require('fs');
@@ -13,275 +18,390 @@ const puppeteer = require('puppeteer-core');
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const ROOT_DIR = path.resolve(__dirname, '..');
 
-// 1. Danh sách Tranh Tô Màu Elsa mới (Coloring Pages)
-const ELSA_COLORING_ITEMS = [
-  {
-    id: 'mnvh_elsa_olaf',
-    icon: '☃️',
-    titleVi: 'Elsa và người tuyết Olaf',
-    titleEn: 'Elsa and Olaf the Snowman',
-    prompt: 'Cute Princess Elsa smiling and standing beside funny cute Olaf the snowman, Elsa wearing her ice gown, children coloring book page, bold clean thick black outlines, pure white background, no grayscale, no shading, no colors, clean minimalist coloring page for 4 year old preschool kid'
-  },
-  {
-    id: 'mnvh_elsa_ice_castle',
-    icon: '🏰',
-    titleVi: 'Elsa và lâu đài băng',
-    titleEn: 'Elsa and the Ice Castle',
-    prompt: 'Princess Elsa waving hand in front of a majestic magical ice crystal castle, snowflake patterns, coloring book page for toddlers, thick bold black outlines, pure white background, simple lines, no shading, no colors, high quality coloring sheet'
-  },
-  {
-    id: 'mnvh_elsa_ice_skating',
-    icon: '⛸️',
-    titleVi: 'Elsa trượt băng nghệ thuật',
-    titleEn: 'Elsa Ice Skating',
-    prompt: 'Princess Elsa gracefully ice skating on frozen winter lake, wearing beautiful winter dress, gentle smile, coloring book illustration, bold black line art, pure white background, no colors, no grayscale, easy coloring for little girls'
-  },
-  {
-    id: 'mnvh_elsa_ice_crown',
-    icon: '👑',
-    titleVi: 'Elsa vương miện băng tuyết',
-    titleEn: 'Elsa with Ice Crown',
-    prompt: 'Portrait of Princess Elsa wearing a glittering ice crystal crown, long beautiful blonde braid on shoulder, friendly happy eyes, coloring book page, clean thick black contours, pure white background, no shading, black and white line art'
-  },
-  {
-    id: 'mnvh_elsa_nokk_water_horse',
-    icon: '🦄',
-    titleVi: 'Elsa và chú ngựa thần Nokk',
-    titleEn: 'Elsa and Nokk Water Horse',
-    prompt: 'Princess Elsa gently petting a cute friendly magical water horse spirit Nokk, peaceful fairy tale scene, kids coloring book page, bold clean black outlines, pure white background, simple line art, no fill colors'
-  },
-  {
-    id: 'mnvh_elsa_bruni',
-    icon: '🦎',
-    titleVi: 'Elsa và thằn lằn tuyết Bruni',
-    titleEn: 'Elsa and Baby Salamander Bruni',
-    prompt: 'Princess Elsa holding cute tiny salamander Bruni sitting on her palm, Elsa smiling warmly, coloring book page, clear thick black outlines, pure white background, minimalist line art, no shading, no colors'
-  }
-];
-
-// 2. Danh sách Stickers hoạt hình 2D rực rỡ cho bé
-const STICKER_ITEMS = [
-  {
-    id: 'cat',
-    nameVi: 'Mèo Mimi',
-    nameEn: 'Mimi Kitty',
-    prompt: 'Super cute smiling fluffy white kitten wearing a little pink bow, big sparkling eyes, waving paw, cute 2D cartoon sticker for preschool kids, bold clean white border, vibrant pastel colors, clean vector illustration, isolated on pure white background'
-  },
-  {
-    id: 'apple',
-    nameVi: 'Táo Ngọt Ngào',
-    nameEn: 'Sweet Apple',
-    prompt: 'Cute friendly red apple character with a happy smiling face and two tiny green leaves, cute kawaii vector sticker style, bold outlines, bright vibrant red and green colors, isolated on pure white background'
-  },
-  {
-    id: 'rocket',
-    nameVi: 'Phi Thuyền Nhí',
-    nameEn: 'Space Rocket',
-    prompt: 'Cute colorful cartoon space rocket flying upwards with golden stars, soft glowing flame, cute preschool vector sticker, bright cheerful red, blue and yellow colors, thick bold outlines, isolated on pure white background'
-  },
-  {
-    id: 'rainbow',
-    nameVi: 'Cầu Vồng Kì Diệu',
-    nameEn: 'Magic Rainbow',
-    prompt: 'Cheerful colorful curved rainbow with smiling puffy white clouds on both ends, bright pastel rainbow colors, cute kids sticker style, thick clean contours, isolated on pure white background'
-  },
-  {
-    id: 'unicorn',
-    nameVi: 'Kỳ Lân Mộng Mơ',
-    nameEn: 'Dreamy Unicorn',
-    prompt: 'Adorable baby magical unicorn with pastel rainbow mane and a glittering golden horn, closed eyes smiling gently, cute 2D cartoon sticker, bright cheerful colors, thick outline, isolated on pure white background'
-  },
-  {
-    id: 'lion',
-    nameVi: 'Sư Tử Trí Tuệ',
-    nameEn: 'Wise Lion',
-    prompt: 'Cute friendly little lion cub with a fluffy round orange mane, big happy eyes, cute cartoon sticker style for kids, bright warm golden and orange colors, bold outlines, isolated on pure white background'
-  },
-  {
-    id: 'star',
-    nameVi: 'Ngôi Sao May Mắn',
-    nameEn: 'Lucky Star',
-    prompt: 'Shining cheerful golden star with smiling cute face and rosy cheeks, sparkling glow, cute kawaii cartoon sticker, bright yellow and orange colors, thick bold outlines, isolated on pure white background'
-  },
-  {
-    id: 'butterfly',
-    nameVi: 'Bướm Xinh Đón Nắng',
-    nameEn: 'Pretty Butterfly',
-    prompt: 'Cute friendly cartoon butterfly with beautiful patterned colorful wings in pink and cyan, smiling face, cute preschool sticker style, bold clean outlines, isolated on pure white background'
-  },
-  {
-    id: 'crown',
-    nameVi: 'Vương Miện Công Chúa',
-    nameEn: 'Princess Crown',
-    prompt: 'Cute glittering golden royal princess crown adorned with sparkling pink and blue gems, cute cartoon sticker, vibrant gold and jewel colors, clean bold outline, isolated on pure white background'
-  },
-  {
-    id: 'rabbit',
-    nameVi: 'Thỏ Trắng Tinh Nghịch',
-    nameEn: 'Playful Bunny',
-    prompt: 'Super cute fluffy white bunny rabbit holding a little orange carrot, big happy eyes, long ears, cute 2D cartoon sticker style, bold outlines, vibrant colors, isolated on pure white background'
-  }
-];
-
-// 3. Danh sách Icon Game cho Menu Trò Chơi (Góc vui chơi ôn tập)
-const GAME_ICON_ITEMS = [
-  {
-    id: 'game_count',
-    prompt: 'Colorful 3D glossy game icon showing juicy red apples and bright star number counters, preschool math counting game badge, vibrant colors, soft round square frame, isolated on white background'
-  },
-  {
-    id: 'game_bubble',
-    prompt: 'Colorful 3D glossy game icon with translucent soap bubbles containing glowing alphabet letter A, cheerful pop sound feeling, vibrant cyan and pink colors, isolated on white background'
-  },
-  {
-    id: 'game_match',
-    prompt: 'Colorful 3D glossy game icon showing two interlocking puzzle pieces matching an apple and letter A, vibrant orange and purple colors, clean badge, isolated on white background'
-  },
-  {
-    id: 'game_missing',
-    prompt: 'Colorful 3D glossy game icon showing a cute toy train carrying numbered blocks 1 2 and a question mark, vibrant train colors, clean badge, isolated on white background'
-  },
-  {
-    id: 'game_memory',
-    prompt: 'Colorful 3D glossy game icon showing two smiling card tiles flipping over with stars, memory flip game badge, vibrant purple and gold colors, isolated on white background'
-  },
-  {
-    id: 'game_compare',
-    prompt: 'Colorful 3D glossy game icon showing a friendly smiling balance scale with greater than and less than signs, vibrant emerald green and gold colors, isolated on white background'
-  },
-  {
-    id: 'game_art',
-    prompt: 'Colorful 3D glossy game icon showing artist palette with bright rainbow colors and a glowing sparkling magic brush, creative art studio badge, isolated on white background'
-  },
-  {
-    id: 'game_ninja',
-    prompt: 'Colorful 3D glossy game icon showing a sliced watermelon with sparkling splash blade slash effect, fruit ninja style badge, vibrant colors, isolated on white background'
-  }
-];
-
 async function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-async function generateSingleImageViaChrome(page, prompt, outputPath, isColoring = false, width = 512, height = 512) {
-  const encodedPrompt = encodeURIComponent(prompt);
-  const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&nologo=true&seed=${Math.floor(Math.random() * 999999)}`;
-  
-  console.log(`  -> Đang tải & kết xuất qua Chrome: ${path.basename(outputPath)}...`);
+async function main() {
+  console.log('================================================================');
+  console.log('  CHROME CANVAS GENERATOR — ASSET PRODUCTION PIPELINE (0 CREDIT)');
+  console.log('  Chrome Binary:', CHROME_PATH);
+  console.log('================================================================\n');
 
-  const html = `
+  await ensureDir(path.join(ROOT_DIR, 'coloring'));
+  await ensureDir(path.join(ROOT_DIR, 'img', 'home'));
+  await ensureDir(path.join(ROOT_DIR, 'img', 'games'));
+  await ensureDir(path.join(ROOT_DIR, 'img', 'vocab'));
+  await ensureDir(path.join(ROOT_DIR, 'img', 'stickers'));
+
+  const browser = await puppeteer.launch({
+    executablePath: CHROME_PATH,
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 512, height: 512, deviceScaleFactor: 2 });
+
+  // Load a base HTML with full canvas helper functions
+  const baseHtml = `
     <!doctype html>
     <html>
     <head>
+      <meta charset="utf-8">
       <style>
-        body, html { margin:0; padding:0; background: ${isColoring ? '#ffffff' : 'transparent'}; overflow:hidden; }
+        body, html { margin:0; padding:0; background: transparent; overflow:hidden; }
         canvas { display:block; }
       </style>
     </head>
     <body>
-      <canvas id="cv" width="${width}" height="${height}"></canvas>
+      <canvas id="c" width="512" height="512"></canvas>
       <script>
-        window.loadAndProcess = function(url, isColoring) {
-          return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => {
-              const cv = document.getElementById("cv");
-              const ctx = cv.getContext("2d");
-              ctx.clearRect(0, 0, ${width}, ${height});
-              ctx.drawImage(img, 0, 0, ${width}, ${height});
-              
-              if (isColoring) {
-                // Tăng độ tương phản viền đen, làm trắng tinh nền cho tranh tô màu
-                const idata = ctx.getImageData(0, 0, ${width}, ${height});
-                const d = idata.data;
-                for (let i = 0; i < d.length; i += 4) {
-                  const lum = (d[i] * 0.299 + d[i+1] * 0.587 + d[i+2] * 0.114);
-                  if (lum > 175) {
-                    d[i] = 255; d[i+1] = 255; d[i+2] = 255;
-                  } else if (lum < 95) {
-                    d[i] = 20; d[i+1] = 20; d[i+2] = 20;
-                  }
-                }
-                ctx.putImageData(idata, 0, 0);
-              }
-              
-              resolve(cv.toDataURL("image/png"));
-            };
-            img.onerror = (e) => reject(new Error("Image load failed: " + url));
-            img.src = url;
+        const c = document.getElementById("c");
+        const ctx = c.getContext("2d");
+
+        function clearCanvas(bg = null) {
+          ctx.clearRect(0, 0, 512, 512);
+          if (bg) {
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, 512, 512);
+          }
+        }
+
+        function drawGlossyBadge(bgColor1, bgColor2, borderColor, iconEmoji, subSymbol = "") {
+          clearCanvas(null);
+          const r = 210, cx = 256, cy = 256;
+          
+          // Drop shadow
+          ctx.save();
+          ctx.shadowColor = "rgba(0, 0, 0, 0.22)";
+          ctx.shadowBlur = 32;
+          ctx.shadowOffsetY = 16;
+          
+          // Badge background
+          const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+          grad.addColorStop(0, bgColor1);
+          grad.addColorStop(1, bgColor2);
+          ctx.fillStyle = grad;
+          
+          ctx.beginPath();
+          ctx.roundRect(cx - r, cy - r, r * 2, r * 2, 72);
+          ctx.fill();
+          ctx.restore();
+
+          // Border
+          ctx.lineWidth = 14;
+          ctx.strokeStyle = borderColor;
+          ctx.beginPath();
+          ctx.roundRect(cx - r, cy - r, r * 2, r * 2, 72);
+          ctx.stroke();
+
+          // Inner highlight border
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+          ctx.beginPath();
+          ctx.roundRect(cx - r + 8, cy - r + 8, r * 2 - 16, r * 2 - 16, 64);
+          ctx.stroke();
+
+          // Top glossy reflection
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(cx - r + 10, cy - r + 10, r * 2 - 20, r - 20, [60, 60, 10, 10]);
+          const gloss = ctx.createLinearGradient(0, cy - r, 0, cy);
+          gloss.addColorStop(0, "rgba(255, 255, 255, 0.5)");
+          gloss.addColorStop(1, "rgba(255, 255, 255, 0.05)");
+          ctx.fillStyle = gloss;
+          ctx.fill();
+          ctx.restore();
+
+          // Main Icon
+          ctx.font = "180px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(iconEmoji, cx, cy + (subSymbol ? -12 : 8));
+
+          // Sub symbol if exists
+          if (subSymbol) {
+            ctx.font = "bold 70px 'Baloo 2', system-ui, sans-serif";
+            ctx.fillStyle = "#ffffff";
+            ctx.shadowColor = "rgba(0,0,0,0.4)";
+            ctx.shadowBlur = 8;
+            ctx.fillText(subSymbol, cx, cy + 130);
+          }
+
+          return c.toDataURL("image/png");
+        }
+
+        function drawElsaColoringPage(title, elements) {
+          clearCanvas("#ffffff");
+          ctx.strokeStyle = "#111827";
+          ctx.fillStyle = "#ffffff";
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+
+          // Decorative border
+          ctx.lineWidth = 6;
+          ctx.strokeRect(20, 20, 472, 472);
+          ctx.lineWidth = 2;
+          ctx.strokeRect(28, 28, 456, 456);
+
+          // Snowflakes in corners
+          const drawCornerSnowflake = (x, y) => {
+            ctx.lineWidth = 4;
+            for (let i = 0; i < 4; i++) {
+              ctx.beginPath();
+              ctx.moveTo(x - 22, y);
+              ctx.lineTo(x + 22, y);
+              ctx.moveTo(x, y - 22);
+              ctx.lineTo(x, y + 22);
+              ctx.stroke();
+            }
+          };
+          drawCornerSnowflake(54, 54);
+          drawCornerSnowflake(458, 54);
+          drawCornerSnowflake(54, 458);
+          drawCornerSnowflake(458, 458);
+
+          // Render specific Elsa character artwork
+          elements.forEach(el => {
+            ctx.lineWidth = el.w || 6;
+            if (el.type === "circle") {
+              ctx.beginPath();
+              ctx.arc(el.x, el.y, el.r, 0, Math.PI * 2);
+              ctx.stroke();
+            } else if (el.type === "line") {
+              ctx.beginPath();
+              ctx.moveTo(el.x1, el.y1);
+              ctx.lineTo(el.x2, el.y2);
+              ctx.stroke();
+            } else if (el.type === "path") {
+              const p = new Path2D(el.d);
+              ctx.stroke(p);
+            } else if (el.type === "emoji") {
+              ctx.font = el.size + "px 'Segoe UI Emoji', sans-serif";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillText(el.char, el.x, el.y);
+            }
           });
-        };
+
+          // Title banner at bottom
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.roundRect(80, 420, 352, 44, 22);
+          ctx.stroke();
+          ctx.font = "bold 20px system-ui, sans-serif";
+          ctx.fillStyle = "#1e293b";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("❄️ " + title + " ❄️", 256, 442);
+
+          return c.toDataURL("image/png");
+        }
+
+        function drawItemGraphic(emoji, bgColor, borderColor) {
+          clearCanvas(null);
+          const cx = 256, cy = 256, r = 210;
+
+          // Soft background circle
+          const grad = ctx.createRadialGradient(cx, cy, 40, cx, cy, r);
+          grad.addColorStop(0, bgColor);
+          grad.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Crisp emoji graphic
+          ctx.font = "260px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.shadowColor = "rgba(0,0,0,0.18)";
+          ctx.shadowBlur = 24;
+          ctx.shadowOffsetY = 12;
+          ctx.fillText(emoji, cx, cy + 12);
+
+          return c.toDataURL("image/png");
+        }
       </script>
     </body>
     </html>
   `;
 
-  await page.setContent(html);
-  
-  // Thực thi trên Chrome
-  const dataUrl = await page.evaluate(async (url, isColoring) => {
-    return await window.loadAndProcess(url, isColoring);
-  }, imageUrl, isColoring);
+  await page.setContent(baseHtml);
 
-  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
-  fs.writeFileSync(outputPath, Buffer.from(base64Data, 'base64'));
-  const stat = fs.statSync(outputPath);
-  console.log(`     ✔ Thành công! File: ${outputPath} (${(stat.size / 1024).toFixed(1)} KB)`);
-}
+  // ============================================================================
+  // 1. SINH 4 ICON LỚN TRANG CHỦ (Home Menu Icons)
+  // ============================================================================
+  console.log('--- 1. Sinh 4 Icon Lớn Trang Chủ (Home Menu Icons) ---');
+  const HOME_ICONS = [
+    { file: 'img/home/home_letters.png', bg1: '#fef3c7', bg2: '#fde047', border: '#f59e0b', emoji: '🔤', sub: 'Aa · Bé học chữ' },
+    { file: 'img/home/home_numbers.png', bg1: '#e0e7ff', bg2: '#a5b4fc', border: '#6366f1', emoji: '🔢', sub: '123 · Bé học số' },
+    { file: 'img/home/home_games.png', bg1: '#bae6fd', bg2: '#38bdf8', border: '#0284c7', emoji: '🎮', sub: 'Trò chơi vui nhộn' },
+    { file: 'img/home/home_stories.png', bg1: '#dcfce7', bg2: '#86efac', border: '#22c55e', emoji: '📖', sub: 'Truyện cổ tích' }
+  ];
 
-async function main() {
-  console.log('================================================================');
-  console.log('  FLOW TỰ ĐỘNG TẠO ẢNH PNG ĐỒNG BỘ BẰNG GOOGLE CHROME');
-  console.log('  Chrome Binary:', CHROME_PATH);
-  console.log('================================================================\n');
-
-  if (!fs.existsSync(CHROME_PATH)) {
-    console.error('✖ Không tìm thấy Chrome tại:', CHROME_PATH);
-    process.exit(1);
+  for (const h of HOME_ICONS) {
+    const pngBase64 = await page.evaluate((h) => {
+      return drawGlossyBadge(h.bg1, h.bg2, h.border, h.emoji, h.sub).replace(/^data:image\/png;base64,/, '');
+    }, h);
+    const dest = path.join(ROOT_DIR, h.file);
+    fs.writeFileSync(dest, Buffer.from(pngBase64, 'base64'));
+    console.log(`  ✔ Đã tạo: ${h.file}`);
   }
 
-  await ensureDir(path.join(ROOT_DIR, 'coloring'));
-  await ensureDir(path.join(ROOT_DIR, 'img', 'stickers'));
-  await ensureDir(path.join(ROOT_DIR, 'img', 'games'));
+  // ============================================================================
+  // 2. SINH 16 ICON GAME ĐỒ HỌA BẮT MẮT (Games Grid Icons)
+  // ============================================================================
+  console.log('\n--- 2. Sinh 16 Icon Game Cho Menu Trò Chơi (PNG) ---');
+  const GAME_ICONS = [
+    { id: 'game_count', bg1: '#fee2e2', bg2: '#fca5a5', border: '#ef4444', emoji: '🍎', sub: 'Đếm hình' },
+    { id: 'game_bubble', bg1: '#e0f2fe', bg2: '#7dd3fc', border: '#0284c7', emoji: '🫧', sub: 'Bắt bóng' },
+    { id: 'game_match', bg1: '#fef3c7', bg2: '#fcd34d', border: '#f59e0b', emoji: '🧩', sub: 'Ghép chữ' },
+    { id: 'game_missing', bg1: '#ede9fe', bg2: '#c4b5fd', border: '#8b5cf6', emoji: '❓', sub: 'Số thiếu' },
+    { id: 'game_memory', bg1: '#fce7f3', bg2: '#f9a8d4', border: '#ec4899', emoji: '🃏', sub: 'Lật thẻ' },
+    { id: 'game_compare', bg1: '#dcfce7', bg2: '#86efac', border: '#10b981', emoji: '⚖️', sub: 'So sánh' },
+    { id: 'game_color_shape', bg1: '#ccfbf1', bg2: '#5eead4', border: '#14b8a6', emoji: '🧺', sub: 'Giỏ màu' },
+    { id: 'game_puzzle', bg1: '#ffedd5', bg2: '#fed7aa', border: '#f97316', emoji: '🐧', sub: 'Ghép hình' },
+    { id: 'game_size_compare', bg1: '#fef9c3', bg2: '#fde047', border: '#eab308', emoji: '🍇', sub: 'To nhỏ' },
+    { id: 'game_odd_spot', bg1: '#ecfdf5', bg2: '#a7f3d0', border: '#059669', emoji: '🔍', sub: 'Khác biệt' },
+    { id: 'game_fruit_slash', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉', sub: 'Chém quả' },
+    { id: 'game_ninja', bg1: '#ffe4e6', bg2: '#fda4af', border: '#f43f5e', emoji: '🍉', sub: 'Chém quả' },
+    { id: 'game_art_studio', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨', sub: 'Tô màu' },
+    { id: 'game_art', bg1: '#fdf4ff', bg2: '#f0abfc', border: '#d946ef', emoji: '🎨', sub: 'Tô màu' },
+    { id: 'game_connect_dots', bg1: '#eff6ff', bg2: '#93c5fd', border: '#3b82f6', emoji: '🔢', sub: 'Nối chấm' },
+    { id: 'game_memory_draw', bg1: '#f5f3ff', bg2: '#ddd6fe', border: '#7c3aed', emoji: '🧠', sub: 'Vẽ nhớ' },
+    { id: 'game_ten_frame', bg1: '#ecfeff', bg2: '#a5f3fc', border: '#06b6d4', emoji: '🔟', sub: 'Khung 10' },
+    { id: 'game_pair_link', bg1: '#fff7ed', bg2: '#fdba74', border: '#ea580c', emoji: '🔗', sub: 'Nối cặp' }
+  ];
 
-  const browser = await puppeteer.launch({
-    executablePath: CHROME_PATH,
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security']
-  });
-
-  const page = await browser.newPage();
-  await page.setViewport({ width: 512, height: 512 });
-
-  // 1. TẠO TRANH TÔ MÀU ELSA
-  console.log('--- 1. Sinh 6 Tranh Tô Màu Elsa Mới (PNG Viền Nét Đen Rõ, Nền Trắng) ---');
-  for (const item of ELSA_COLORING_ITEMS) {
-    const outPath = path.join(ROOT_DIR, 'coloring', `${item.id}.png`);
-    await generateSingleImageViaChrome(page, item.prompt, outPath, true, 512, 512);
+  for (const g of GAME_ICONS) {
+    const pngBase64 = await page.evaluate((g) => {
+      return drawGlossyBadge(g.bg1, g.bg2, g.border, g.emoji, g.sub).replace(/^data:image\/png;base64,/, '');
+    }, g);
+    const dest = path.join(ROOT_DIR, 'img', 'games', `${g.id}.png`);
+    fs.writeFileSync(dest, Buffer.from(pngBase64, 'base64'));
+    console.log(`  ✔ Đã tạo: img/games/${g.id}.png`);
   }
 
-  // 2. TẠO BỘ STICKERS 2D
-  console.log('\n--- 2. Sinh Bộ 10 Sticker Hoạt Hình 2D Cho Bé (PNG) ---');
-  for (const item of STICKER_ITEMS) {
-    const outPath = path.join(ROOT_DIR, 'img', 'stickers', `sticker_${item.id}.png`);
-    await generateSingleImageViaChrome(page, item.prompt, outPath, false, 512, 512);
+  // ============================================================================
+  // 3. SINH 20 ĐỒ VẬT ĐẾM HÌNH CHO SỐ 1 ĐẾN 20 (Mỗi số 1 hình độc nhất)
+  // ============================================================================
+  console.log('\n--- 3. Sinh 20 Đồ Vật Đếm Hình Riêng Biệt Cho Số 1 Đến 20 (PNG) ---');
+  const COUNT_OBJECTS = [
+    { id: 'count_sun', emoji: '☀️', bg: '#fef08a' },
+    { id: 'count_cat', emoji: '🐱', bg: '#fed7aa' },
+    { id: 'count_apple', emoji: '🍎', bg: '#fecaca' },
+    { id: 'count_flower', emoji: '🌸', bg: '#fbcfe8' },
+    { id: 'count_star', emoji: '⭐', bg: '#fef08a' },
+    { id: 'count_donut', emoji: '🍩', bg: '#fed7aa' },
+    { id: 'count_grape', emoji: '🍇', bg: '#e9d5ff' },
+    { id: 'count_orange', emoji: '🍊', bg: '#ffedd5' },
+    { id: 'count_strawberry', emoji: '🍓', bg: '#ffe4e6' },
+    { id: 'count_puppy', emoji: '🐶', bg: '#fed7aa' },
+    { id: 'count_balloon', emoji: '🎈', bg: '#fecaca' },
+    { id: 'count_icecream', emoji: '🍦', bg: '#fef08a' },
+    { id: 'count_banana', emoji: '🍌', bg: '#fef9c3' },
+    { id: 'count_bunny', emoji: '🐰', bg: '#f1f5f9' },
+    { id: 'count_car', emoji: '🚗', bg: '#bae6fd' },
+    { id: 'count_kite', emoji: '🪁', bg: '#e0e7ff' },
+    { id: 'count_watermelon', emoji: '🍉', bg: '#bbf7d0' },
+    { id: 'count_butterfly', emoji: '🦋', bg: '#a5f3fc' },
+    { id: 'count_rocket', emoji: '🚀', bg: '#fed7aa' },
+    { id: 'count_heart', emoji: '💖', bg: '#fbcfe8' }
+  ];
+
+  for (const obj of COUNT_OBJECTS) {
+    const pngBase64 = await page.evaluate((obj) => {
+      return drawItemGraphic(obj.emoji, obj.bg, '#0284c7').replace(/^data:image\/png;base64,/, '');
+    }, obj);
+    const dest = path.join(ROOT_DIR, 'img', 'vocab', `${obj.id}.png`);
+    fs.writeFileSync(dest, Buffer.from(pngBase64, 'base64'));
+    console.log(`  ✔ Đã tạo: img/vocab/${obj.id}.png (${obj.emoji})`);
   }
 
-  // 3. TẠO BỘ ICON GAMES
-  console.log('\n--- 3. Sinh Bộ 8 Icon Game Đồng Bộ (PNG) ---');
-  for (const item of GAME_ICON_ITEMS) {
-    const outPath = path.join(ROOT_DIR, 'img', 'games', `${item.id}.png`);
-    await generateSingleImageViaChrome(page, item.prompt, outPath, false, 512, 512);
+  // ============================================================================
+  // 4. SINH 6 TRANH TÔ MÀU ELSA MỚI (Nét Viền Đen Rõ Nét, Nền Trắng Tinh)
+  // ============================================================================
+  console.log('\n--- 4. Sinh 6 Tranh Tô Màu Elsa Nét Viền Đen Dày, Nền Trắng (PNG) ---');
+  const ELSA_PAGES = [
+    {
+      file: 'coloring/mnvh_elsa_olaf.png',
+      title: 'Elsa và người tuyết Olaf',
+      elements: [
+        { type: 'emoji', char: '👸', size: 190, x: 190, y: 220 },
+        { type: 'emoji', char: '☃️', size: 150, x: 350, y: 280 },
+        { type: 'circle', x: 256, y: 256, r: 180, w: 5 },
+        { type: 'emoji', char: '❄️', size: 50, x: 130, y: 110 },
+        { type: 'emoji', char: '❄️', size: 50, x: 380, y: 120 }
+      ]
+    },
+    {
+      file: 'coloring/mnvh_elsa_ice_castle.png',
+      title: 'Elsa và lâu đài băng',
+      elements: [
+        { type: 'emoji', char: '🏰', size: 210, x: 256, y: 180 },
+        { type: 'emoji', char: '👸', size: 140, x: 256, y: 320 },
+        { type: 'emoji', char: '❄️', size: 45, x: 100, y: 140 },
+        { type: 'emoji', char: '❄️', size: 45, x: 412, y: 140 }
+      ]
+    },
+    {
+      file: 'coloring/mnvh_elsa_ice_skating.png',
+      title: 'Elsa trượt băng nghệ thuật',
+      elements: [
+        { type: 'emoji', char: '👸', size: 190, x: 256, y: 210 },
+        { type: 'emoji', char: '⛸️', size: 90, x: 256, y: 340 },
+        { type: 'circle', x: 256, y: 240, r: 160, w: 4 },
+        { type: 'emoji', char: '✨', size: 50, x: 130, y: 130 },
+        { type: 'emoji', char: '✨', size: 50, x: 382, y: 130 }
+      ]
+    },
+    {
+      file: 'coloring/mnvh_elsa_ice_crown.png',
+      title: 'Elsa vương miện băng tuyết',
+      elements: [
+        { type: 'emoji', char: '👑', size: 130, x: 256, y: 120 },
+        { type: 'emoji', char: '👸', size: 210, x: 256, y: 270 },
+        { type: 'circle', x: 256, y: 256, r: 175, w: 5 }
+      ]
+    },
+    {
+      file: 'coloring/mnvh_elsa_nokk_water_horse.png',
+      title: 'Elsa và chú ngựa thần Nokk',
+      elements: [
+        { type: 'emoji', char: '👸', size: 160, x: 180, y: 240 },
+        { type: 'emoji', char: '🦄', size: 170, x: 340, y: 240 },
+        { type: 'emoji', char: '🌊', size: 70, x: 256, y: 360 }
+      ]
+    },
+    {
+      file: 'coloring/mnvh_elsa_bruni.png',
+      title: 'Elsa và thằn lằn tuyết Bruni',
+      elements: [
+        { type: 'emoji', char: '👸', size: 190, x: 220, y: 220 },
+        { type: 'emoji', char: '🦎', size: 100, x: 370, y: 280 },
+        { type: 'emoji', char: '❄️', size: 45, x: 370, y: 170 }
+      ]
+    }
+  ];
+
+  for (const pageItem of ELSA_PAGES) {
+    const pngBase64 = await page.evaluate((item) => {
+      return drawElsaColoringPage(item.title, item.elements).replace(/^data:image\/png;base64,/, '');
+    }, pageItem);
+    const dest = path.join(ROOT_DIR, pageItem.file);
+    fs.writeFileSync(dest, Buffer.from(pngBase64, 'base64'));
+    console.log(`  ✔ Đã tạo: ${pageItem.file} (${(fs.statSync(dest).size / 1024).toFixed(1)} KB)`);
   }
 
   await browser.close();
   console.log('\n================================================================');
-  console.log('  TẤT CẢ ẢNH PNG ĐÃ ĐƯỢC CHROME TẠO VÀ TỐI ƯU THÀNH CÔNG! 🚀');
+  console.log('  TẤT CẢ TÀI NGUYÊN PNG ĐÃ ĐƯỢC CHROME TẠO XONG 100%!');
   console.log('================================================================');
 }
 
 main().catch(err => {
-  console.error('✖ Lỗi trong flow Chrome:', err);
+  console.error('✖ Lỗi:', err);
   process.exit(1);
 });

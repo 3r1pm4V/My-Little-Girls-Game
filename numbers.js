@@ -7,8 +7,30 @@
 var NV = "không,một,hai,ba,bốn,năm,sáu,bảy,tám,chín,mười,mười một,mười hai,mười ba,mười bốn,mười lăm,mười sáu,mười bảy,mười tám,mười chín,hai mươi".split(",");
 var NE = "zero,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen,twenty".split(",");
 
-// 2. DANH SÁCH ĐỒ VẬT ĐẾM HÌNH CHO BÉ
-var COUNT = ["count_star", "count_apple", "count_ball", "count_star", "count_flower", "count_bear", "apple", "donut", "grape", "orange"];
+// 2. DANH SÁCH ĐỒ VẬT ĐẾM HÌNH CHO BÉ (21 MẪU ĐỘC NHẤT CHO SỐ 0–20)
+var COUNT = [
+  "empty",
+  "count_sun",        // 1: Mặt trời
+  "count_cat",        // 2: Mèo Mimi
+  "count_apple",      // 3: Táo đỏ
+  "count_flower",     // 4: Bông hoa
+  "count_star",       // 5: Ngôi sao
+  "count_donut",      // 6: Bánh donut
+  "count_grape",      // 7: Chùm nho
+  "count_orange",     // 8: Quả cam
+  "count_strawberry", // 9: Quả dâu tây
+  "count_puppy",      // 10: Chú cún
+  "count_balloon",    // 11: Bóng bay
+  "count_icecream",   // 12: Cây kem
+  "count_banana",     // 13: Quả chuối
+  "count_bunny",      // 14: Chú thỏ
+  "count_car",        // 15: Chiếc ô tô
+  "count_kite",       // 16: Con diều
+  "count_watermelon", // 17: Dưa hấu (khác 7 nho)
+  "count_butterfly",  // 18: Bướm xinh (khác 8 cam)
+  "count_rocket",     // 19: Tên lửa (khác 9 dâu)
+  "count_heart"       // 20: Trái tim
+];
 
 // 3. TIỆN ÍCH PHÁT ÂM & HIỆU ỨNG CHẠM ĐẾM
 var sayN = function(n) {
@@ -22,30 +44,31 @@ function cnt(b, i) {
   b.style.animation = "pop .4s";
 }
 
-// 4. MÀN HÌNH HỌC SỐ ĐẾM 0–20 (numL)
+// 4. MÀN HÌNH HỌC SỐ ĐẾM 0–20 (numL) — DÀN TRANG 1 MÀN HÌNH CHUẨN KHÔNG CUỘN
 function numL(n) {
   var isExplicitTap = (typeof n !== "undefined");
   if (typeof n === "undefined") n = 1;
-  var o = COUNT[n % COUNT.length];
+  var o = COUNT[n] || COUNT[n % COUNT.length];
   if (typeof ST !== "undefined") {
     ST.numCount = (ST.numCount || 0) + 1;
     if (typeof svS === "function") svS();
     if (typeof checkBadges === "function") checkBadges();
   }
+  var sizeCls = n <= 4 ? " objs-few" : (n <= 10 ? " objs-mid" : " objs-many");
   var objsHtml = n
     ? Array.from({ length: n }, function(_, i) {
-        return `<button class="ob" onclick="cnt(this,${i + 1})">${im(o)}</button>`;
+        return '<button class="ob" onclick="cnt(this,' + (i + 1) + ')">' + im(o) + '</button>';
       }).join("")
-    : "<span>Không có gì · Nothing</span>";
+    : '<div class="objs-empty-hint"><span>📦</span><span>' + T("Khay trống · Không có gì", "Empty Tray · Nothing") + '</span></div>';
 
   var chipsHtml = Array.from({ length: 21 }, function(_, i) {
-    return `<button class="chip ${i == n ? "on" : ""}" style="min-width:48px;min-height:48px;margin:2px" onclick="numL(${i})">${i}</button>`;
+    return '<button class="chip ' + (i == n ? "on" : "") + '" style="min-width:44px;min-height:44px;margin:2px" onclick="numL(' + i + ')">' + i + '</button>';
   }).join("");
 
-  m.innerHTML = `${kbc([
+  m.innerHTML = `<div class="home-container num-learning-container">${kbc([
     { s: "home", t: T("Trang chủ", "Home"), i: "🏠" },
     { t: T("Học số", "Numbers"), i: "🔢" }
-  ], `<button class="pill" onclick="go('numP')">🎮 ${T("Chơi", "Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n + 20) % 21})">${im("btn_back")}</button><button class="bignum${n > 9 ? " two" : ""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n + 1) % 21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div style="text-align:center;margin:6px 0 10px"><button class="pill" onclick="window.__traceFrom='numL';trm='nu';ls.set('trm','nu');trace('${n}')" style="background:#0284c7;color:#fff;font-weight:800;font-size:15px;padding:8px 20px;border:none;box-shadow:0 4px 12px rgba(2,132,199,0.3);border-radius:24px">✍️ ${T("Bé tập tô số " + n, "Trace number " + n)}</button></div><div class="objs${n <= 3 ? " objs-few" : ""}">${objsHtml}</div><div class="chips" style="gap:10px">${chipsHtml}</div>`;
+  ], `<button class="pill" onclick="go('numP')">🎮 ${T("Chơi", "Play")}</button>`)}<div class="stage"><button class="nav" onclick="numL(${(n + 20) % 21})">${im("btn_back")}</button><button class="bignum${n > 9 ? " two" : ""}" onclick="sayN(${n})">${n}</button><button class="nav" onclick="numL(${(n + 1) % 21})">${im("btn_next")}</button></div><div class="word" onclick="sayN(${n})" role="button" tabindex="0" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${NV[n]} · ${NE[n]}</div><div style="text-align:center;margin:2px 0 6px"><button class="pill" onclick="window.__traceFrom='numL';trm='nu';ls.set('trm','nu');trace('${n}')" style="background:#0284c7;color:#fff;font-weight:800;font-size:14px;padding:6px 18px;border:none;box-shadow:0 4px 10px rgba(2,132,199,0.25);border-radius:20px">✍️ ${T("Bé tập tô số " + n, "Trace number " + n)}</button></div><!-- KHU VỰC CHỪA SẴN CỐ ĐỊNH HIỂN THỊ ĐỒ VẬT ĐẾM (KHÔNG NHẢY BẬC BỐ CỤC) --><div class="objs${sizeCls}">${objsHtml}</div><div class="chips num-chips-bar" style="gap:6px">${chipsHtml}</div></div>`;
 
   if (isExplicitTap && (typeof isBackNav === "undefined" || !isBackNav)) sayN(n);
 }

@@ -68,6 +68,10 @@ I["sticker_star"]="img/stickers/sticker_star.png";
 I["sticker_butterfly"]="img/stickers/sticker_butterfly.png";
 I["sticker_crown"]="img/stickers/sticker_crown.png";
 I["sticker_rabbit"]="img/stickers/sticker_rabbit.png";
+I["home_letters"]="img/home/home_letters.png";
+I["home_numbers"]="img/home/home_numbers.png";
+I["home_games"]="img/home/home_games.png";
+I["home_stories"]="img/home/home_stories.png";
 I["game_count"]="img/games/game_count.png";
 I["game_bubble"]="img/games/game_bubble.png";
 I["game_match"]="img/games/game_match.png";
@@ -76,6 +80,31 @@ I["game_memory"]="img/games/game_memory.png";
 I["game_compare"]="img/games/game_compare.png";
 I["game_art"]="img/games/game_art.png";
 I["game_ninja"]="img/games/game_ninja.png";
+I["game_color_shape"]="img/games/game_color_shape.png";
+I["game_puzzle"]="img/games/game_puzzle.png";
+I["game_size_compare"]="img/games/game_size_compare.png";
+I["game_odd_spot"]="img/games/game_odd_spot.png";
+I["game_fruit_slash"]="img/games/game_fruit_slash.png";
+I["game_art_studio"]="img/games/game_art_studio.png";
+I["game_connect_dots"]="img/games/game_connect_dots.png";
+I["game_memory_draw"]="img/games/game_memory_draw.png";
+I["game_ten_frame"]="img/games/game_ten_frame.png";
+I["game_pair_link"]="img/games/game_pair_link.png";
+I["count_sun"]="img/vocab/count_sun.png";
+I["count_cat"]="img/vocab/count_cat.png";
+I["count_car"]="img/vocab/count_car.png";
+I["count_kite"]="img/vocab/count_kite.png";
+I["count_balloon"]="img/vocab/count_balloon.png";
+I["count_orange"]="img/vocab/count_orange.png";
+I["count_banana"]="img/vocab/count_banana.png";
+I["count_icecream"]="img/vocab/count_icecream.png";
+I["count_donut"]="img/vocab/count_donut.png";
+I["count_puppy"]="img/vocab/count_puppy.png";
+I["count_bunny"]="img/vocab/count_bunny.png";
+I["count_grape"]="img/vocab/count_grape.png";
+I["count_watermelon"]="img/vocab/count_watermelon.png";
+I["count_rocket"]="img/vocab/count_rocket.png";
+I["count_heart"]="img/vocab/count_heart.png";
 const ALT_MAP={
   vocab_banh_mi:"Bánh mì",vocab_ca_rot:"Cà rốt",vocab_cai_bat:"Cái bát",vocab_dong_ho:"Đồng hồ",vocab_khan_mat:"Khăn mặt",vocab_kinh_mat:"Kính mắt",vocab_non_la:"Nón lá",vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
@@ -1866,7 +1895,7 @@ function home(){
           onpointerdown="speakKidBtn('letters')"
           title="${T("Học chữ cái & Tập tô", "Learn Letters & Trace")}"
           aria-label="${T("Học chữ cái & Tập tô", "Learn Letters & Trace")}">
-          <div class="kid-btn-icon-wrap">🔤</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.home_letters}" alt="Chữ cái" class="kid-btn-img"></div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Học chữ cái", "Learn Letters")}</div>
           </div>
@@ -1878,7 +1907,7 @@ function home(){
           onpointerdown="speakKidBtn('numbers')"
           title="${T("Học số đếm", "Numbers & Counting")}"
           aria-label="${T("Học số đếm", "Numbers & Counting")}">
-          <div class="kid-btn-icon-wrap">🔢</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.home_numbers}" alt="Học số" class="kid-btn-img"></div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Học số đếm", "Numbers & Counting")}</div>
           </div>
@@ -1890,7 +1919,7 @@ function home(){
           onpointerdown="speakKidBtn('games')"
           title="${T("Trò chơi ôn tập", "Fun Games")}"
           aria-label="${T("Trò chơi ôn tập", "Fun Games")}">
-          <div class="kid-btn-icon-wrap">🎮</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.home_games}" alt="Trò chơi" class="kid-btn-img"></div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Trò chơi ôn tập", "Fun Games")}</div>
           </div>
@@ -1902,7 +1931,7 @@ function home(){
           onpointerdown="speakKidBtn('stories')"
           title="${T("Truyện cổ tích", "Fairy Tales")}"
           aria-label="${T("Truyện cổ tích", "Fairy Tales")}">
-          <div class="kid-btn-icon-wrap">📖</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.home_stories}" alt="Truyện cổ tích" class="kid-btn-img"></div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Truyện cổ tích", "Fairy Tales")}</div>
           </div>

@@ -195,12 +195,45 @@ button:active,.card:active,.opt:active,.chip:active,.pill:active,.syl-btn:active
 .nav img{width:clamp(46px,9vw,68px)}
 .bignum{font-size:clamp(85px,22vw,180px);font-weight:800;line-height:1;color:var(--acc);background:var(--card);border-radius:38px;width:clamp(125px,30vw,240px);min-height:clamp(125px,30vw,240px);display:inline-flex;align-items:center;justify-content:center;border:6px solid var(--acc2);text-shadow:4px 4px 0 #0002}
 .word{font-size:var(--font-xl);margin:6px 0;line-height:1.25}
-.objs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:76px;margin:8px auto;max-width:640px;align-items:center}
-.ob{display:inline-flex;align-items:center;justify-content:center;padding:2px}
-.ob img{width:clamp(52px,12vw,78px);height:clamp(52px,12vw,78px);object-fit:contain}
-.ob img[src*="count_"]{transform:scale(1.28)}
-.objs-few .ob img{width:clamp(74px,18vw,108px);height:clamp(74px,18vw,108px)}
-.objs-few .ob img[src*="count_"]{transform:scale(1.32)}
+.objs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  align-items:center;
+  align-content:center;
+  height:clamp(120px, 20vh, 170px);
+  min-height:clamp(120px, 20vh, 170px);
+  max-height:clamp(120px, 20vh, 170px);
+  margin:4px auto 8px;
+  max-width:680px;
+  padding:4px 8px;
+  box-sizing:border-box;
+  background:rgba(255, 255, 255, 0.45);
+  border:2px dashed rgba(2, 132, 199, 0.25);
+  border-radius:20px;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.objs-empty-hint{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:15px;
+  font-weight:700;
+  color:#64748b;
+  user-select:none;
+}
+.objs-empty-hint span:first-child{font-size:32px}
+.ob{display:inline-flex;align-items:center;justify-content:center;padding:2px;background:none;border:none;cursor:pointer}
+.ob img{width:clamp(40px,9vw,60px);height:clamp(40px,9vw,60px);object-fit:contain}
+.ob img[src*="count_"]{transform:scale(1.15)}
+.objs-few .ob img{width:clamp(64px,14vw,96px);height:clamp(64px,14vw,96px)}
+.objs-few .ob img[src*="count_"]{transform:scale(1.22)}
+.objs-mid .ob img{width:clamp(46px,10vw,68px);height:clamp(46px,10vw,68px)}
+.objs-many .ob img{width:clamp(36px,7.5vw,50px);height:clamp(36px,7.5vw,50px)}
 .im-emoji{display:inline-flex;align-items:center;justify-content:center;font-size:clamp(48px,12vw,72px);line-height:1}
 .im-emoji.big{font-size:clamp(100px,22vw,150px);height:clamp(120px,25vw,180px);display:inline-flex;align-items:center;justify-content:center}
 .ob .im-emoji{font-size:clamp(48px,11vw,68px);width:clamp(52px,12vw,78px);height:clamp(52px,12vw,78px);line-height:1;display:inline-flex;align-items:center;justify-content:center}
@@ -1126,8 +1159,8 @@ html.rm .confetti-cv, html.rm .fx {
   min-height: 84px;
   min-width: 64px;
   width: 100%;
-  max-width: 170px;
-  height: clamp(84px, 16vh, 120px);
+  max-width: clamp(140px, 18vw, 190px);
+  height: clamp(90px, 17vh, 135px);
   padding: 8px 12px;
   border-radius: 26px;
   border: 4px solid #fff;
@@ -1204,22 +1237,29 @@ html.rm .confetti-cv, html.rm .fx {
   color: #881337;
 }
 .kid-btn-icon-wrap {
-  width: clamp(52px, 10vh, 66px);
-  height: clamp(52px, 10vh, 66px);
-  min-width: 52px;
-  min-height: 52px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.88);
+  width: clamp(56px, 11vw, 88px);
+  height: clamp(56px, 11vw, 88px);
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.92);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: clamp(34px, 6.5vh, 42px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   flex-shrink: 0;
   transition: transform .15s ease;
 }
+.kid-btn-img {
+  width: clamp(48px, 9.5vw, 76px);
+  height: clamp(48px, 9.5vw, 76px);
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+  display: block;
+}
 .kid-home-btn:hover .kid-btn-icon-wrap {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 .kid-btn-text, .kid-btn-arrow {
   display: none !important;
@@ -2428,15 +2468,17 @@ html.rm .confetti-cv, html.rm .fx {
 
   /* 3. Màn hình Học số (numL) */
   .stage {
-    margin: 6px auto;
+    margin: 4px auto;
   }
   .objs {
-    min-height: 60px;
-    margin: 6px auto;
+    height: clamp(100px, 18vh, 150px) !important;
+    min-height: clamp(100px, 18vh, 150px) !important;
+    max-height: clamp(100px, 18vh, 150px) !important;
+    margin: 4px auto 6px !important;
   }
   .bignum {
-    font-size: clamp(70px, 16vh, 130px);
-    min-height: clamp(90px, 20vh, 150px);
+    font-size: clamp(60px, 14vh, 110px);
+    min-height: clamp(75px, 16vh, 130px);
   }
 
   /* 4. Khung 10 ô & Nối cặp & Trí nhớ */
