@@ -1830,67 +1830,72 @@ function home(){
         <button class="kid-home-btn kid-btn-today kid-btn-letters" 
           onclick="go('lettersHome')"
           onpointerdown="speakKidBtn('letters')"
+          title="${T("Học chữ cái & Tập tô", "Learn Letters & Trace")}"
           aria-label="${T("Học chữ cái & Tập tô", "Learn Letters & Trace")}">
           <div class="kid-btn-icon-wrap">🔤</div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Học chữ cái", "Learn Letters")}</div>
-            <div class="kid-btn-sub">${T("14 Nét viết cơ bản & 29 chữ cái ô ly ✍️", "14 Basic strokes & 29 letters ✍️")}</div>
           </div>
-          <div class="kid-btn-arrow">➡️</div>
         </button>
 
         <!-- 2. HỌC SỐ & ĐẾM -->
         <button class="kid-home-btn kid-btn-numbers" 
           onclick="go('numL')"
           onpointerdown="speakKidBtn('numbers')"
+          title="${T("Học số đếm", "Numbers & Counting")}"
           aria-label="${T("Học số đếm", "Numbers & Counting")}">
           <div class="kid-btn-icon-wrap">🔢</div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Học số đếm", "Numbers & Counting")}</div>
-            <div class="kid-btn-sub">${T("Số 1–10, đếm đồ vật sinh động 🍎", "Numbers 1–10 & counting objects 🍎")}</div>
           </div>
-          <div class="kid-btn-arrow">➡️</div>
         </button>
 
         <!-- 3. TRÒ CHƠI ÔN TẬP -->
         <button class="kid-home-btn kid-btn-games" 
           onclick="go('games')"
           onpointerdown="speakKidBtn('games')"
+          title="${T("Trò chơi ôn tập", "Fun Games")}"
           aria-label="${T("Trò chơi ôn tập", "Fun Games")}">
           <div class="kid-btn-icon-wrap">🎮</div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Trò chơi ôn tập", "Fun Games")}</div>
-            <div class="kid-btn-sub">${T("Đếm hình, bắt bóng chữ, ghép thẻ vui nhộn 🎈", "Bubble pop, counting, card flip 🎈")}</div>
           </div>
-          <div class="kid-btn-arrow">➡️</div>
         </button>
 
         <!-- 4. TRUYỆN CỔ TÍCH -->
         <button class="kid-home-btn kid-btn-stories" 
           onclick="go('storyL')"
           onpointerdown="speakKidBtn('stories')"
+          title="${T("Truyện cổ tích", "Fairy Tales")}"
           aria-label="${T("Truyện cổ tích", "Fairy Tales")}">
           <div class="kid-btn-icon-wrap">📖</div>
           <div class="kid-btn-text">
             <div class="kid-btn-title">${T("Truyện cổ tích", "Fairy Tales")}</div>
-            <div class="kid-btn-sub">${T("Giọng đọc ấm áp, tranh minh họa đẹp ✨", "Gentle voice & storybooks ✨")}</div>
           </div>
-          <div class="kid-btn-arrow">➡️</div>
         </button>
       </div>
 
-      <div style="text-align:center;margin:4px 0 16px">
+      <div class="home-bottom-bar">
         <button class="kid-home-btn kid-btn-stickers" 
           onclick="showBadges('stickers')"
           onpointerdown="speakKidBtn('stickers')"
-          style="max-width:320px;margin:0 auto;min-height:56px;padding:8px 16px"
+          title="${T("Sticker của bé", "My Stickers")}"
           aria-label="${T("Sticker của bé", "My Stickers")}">
-          <div class="kid-btn-icon-wrap" style="width:38px;height:38px;min-width:38px;min-height:38px;font-size:22px">🏆</div>
-          <div class="kid-btn-text">
-            <div class="kid-btn-title" style="font-size:15px">${T("Sticker của bé", "My Stickers")}</div>
-            <div class="kid-btn-sub" style="font-size:12px">${T("Bộ sưu tập sao & huy hiệu 🌟", "Stars & badges 🌟")}</div>
-          </div>
+          <span style="font-size:30px;line-height:1">🏆</span>
+          <div class="kid-btn-text"><div class="kid-btn-title">${T("Sticker", "Stickers")}</div></div>
         </button>
+        <button class="pill home-parent-btn" onclick="go('gate')"
+          title="${T("Phụ huynh", "Parents")}"
+          aria-label="${T("Phụ huynh", "Parents")}">
+          👨‍👩‍👧${vState().k==="no"?" ⚠":""}
+        </button>
+        ${!isStandalone() ? `
+          <button class="pill home-pwa-btn" id="pwa-btn" onclick="triggerPWAInstall()"
+            title="${T("Cài ứng dụng", "Install App")}"
+            aria-label="${T("Cài ứng dụng", "Install App")}">
+            📲
+          </button>
+        ` : ""}
       </div>
     `;
   } else if(currentTier === "grade1_2"){
@@ -1904,6 +1909,10 @@ function home(){
       ${card("trace", im("pencil")+"<b>Aa1</b>", "Luyện chữ đẹp", "Handwriting", "trace")}
       ${card("storyL", "<b>📖 ✨</b>", "Đọc truyện", "Stories", "reading")}
       ${card("games", im("kite")+im("rocket"), "Trò chơi", "Games", "game")}
+    </div>
+    <div class="home-bottom-bar">
+      <button class="pill home-parent-btn" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>
+      ${!isStandalone()?`<button class="pill home-pwa-btn" id="pwa-btn" onclick="triggerPWAInstall()">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}
     </div>`;
   } else {
     contentHtml = `<div class="cards">
@@ -1913,6 +1922,10 @@ function home(){
       ${card("cmpS", "<b>&gt; = &lt;</b>", "Toán so sánh", "Signs", "math")}
       ${card("storyL", "<b>📖 ✨</b>", "Truyện & Bài học", "Stories & Morals", "reading")}
       ${card("games", im("kite")+im("rocket"), "Trò chơi trí tuệ", "Logic Games", "game")}
+    </div>
+    <div class="home-bottom-bar">
+      <button class="pill home-parent-btn" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>
+      ${!isStandalone()?`<button class="pill home-pwa-btn" id="pwa-btn" onclick="triggerPWAInstall()">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}
     </div>`;
   }
 
@@ -1921,13 +1934,19 @@ function home(){
     : "Fun Learning";
 
   m.innerHTML = `
-    <div class="hero"><button onclick="say('Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!','Hello! Let\\'s learn together')" aria-label="${T("Nghe chào","Hear greeting")}" style="background:none;border:none;cursor:pointer;padding:0;display:inline-block">${im("cat_idle")}</button><h1>Bé học vui<small>${subTitle}</small></h1></div>
-    ${tierSelectorHtml}
-    ${contentHtml}
-    <p style="margin-top:16px">
-      <button class="pill" onclick="go('gate')">👨‍👩‍👧 ${T("Phụ huynh","Parents")}${vState().k==="no"?" ⚠":""}</button>
-      ${!isStandalone()?`<button class="pill" id="pwa-btn" onclick="triggerPWAInstall()" style="margin-left:8px;background:var(--ok);color:#fff;font-weight:800">📲 ${T("Cài ứng dụng","Install App")}</button>`:""}
-    </p>
+    <div class="home-container">
+      <div class="hero home-hero">
+        <button onclick="say('Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!','Hello! Let\\'s learn together')" aria-label="${T("Nghe chào","Hear greeting")}" class="hero-mascot-btn">
+          ${im("cat_idle")}
+        </button>
+        <div class="hero-brand">
+          <h1 class="hero-title">Bé học vui</h1>
+          <small class="hero-subtitle">${subTitle}</small>
+        </div>
+      </div>
+      ${tierSelectorHtml}
+      ${contentHtml}
+    </div>
   `;
   if(isKidPreschoolMode){
     sayPrompt("home", "Xin chào bé yêu! Chúng mình cùng bắt đầu ngày học vui vẻ nhé!", "Hello! Let\'s learn together", 300000);

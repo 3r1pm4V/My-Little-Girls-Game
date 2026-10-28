@@ -6,6 +6,22 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-10-28
+- **feat(Single-Screen PWA Layout & Icon-Only Menu)**:
+  - **Dàn trang 1 màn hình chuẩn Native App (100dvh, không cuộn trang)**:
+    - Khóa chặt chiều cao khung nhìn `height: 100dvh; max-height: 100dvh; overflow: hidden !important;` trên `html, body, #app`.
+    - Loại bỏ hoàn toàn khoảng đệm thừa `padding-bottom: 140px;` cũ trên `main` gây ra thanh cuộn dọc không mong muốn; thay bằng padding gọn gàng `6px 12px 12px; min-height: 0;`.
+    - Thêm `.home-container` với `display: flex; flex-direction: column; justify-content: space-evenly; height: 100%; overflow: hidden;` giúp toàn bộ giao diện Trang chủ vừa vặn trọn vẹn trong 1 màn hình duy nhất trên cả Mobile Portrait và Tablet Landscape.
+  - **Thu gọn Menu thành Icon-Only Tiles rực rỡ cho bé (Không chữ rườm rà)**:
+    - Bố cục lưới thẻ icon 2 cột × 2 hàng trên Mobile, 4 cột × 1 hàng trên màn hình ngang Tablet.
+    - 4 ô icon lớn nổi bật (`🔤` Chữ cái & Tập tô, `🔢` Số đếm & Toán, `🎮` Góc trò chơi, `📖` Truyện cổ tích) với icon nổi 3D `clamp(34px, 6.5vh, 42px)` và viền mềm bo tròn.
+    - Ẩn toàn bộ văn bản giải thích dài dòng (`.kid-btn-text, .kid-btn-arrow { display: none !important; }`), giúp bé 4 tuổi nhận biết tức thì bằng trực giác hình ảnh mà không bị rối mắt.
+    - Giữ trọn vẹn `aria-label` và tính năng phát âm khi chạm giữ `speakKidBtn` phục vụ accessibility và kiểm thử.
+  - **Tinh gọn Thanh điều hướng & Nút chức năng**:
+    - Nút Quay lại `#backBtn` ẩn chữ `.bk-lbl { display: none !important; }`, chỉ hiển thị icon trực quan `🔙`.
+    - Nhóm nút Sticker `🏆`, Phụ huynh `👨‍👩‍👧`, và Cài ứng dụng `📲` được gom vào thanh đáy `.home-bottom-bar` dạng icon pill tròn gọn gàng.
+  - **Đồng bộ Service Worker**: Tăng phiên bản cache từ `bhv-v129` lên `bhv-v130`.
+
 ### 2026-10-27
 - **fix(Parent Gate: Bảo vệ Cổng PIN khi hết giờ chơi & Ngăn chặn đóng lén modal)**:
   - **Khắc phục triệt để lỗ hổng thoát kiểm soát thời gian**: Trước đây, khi hết giờ chơi, bé bấm nút `✕` trên `#timeLimitModal` hoặc mở PIN rồi bấm `✕` (`onCancel`) thì modal tự đóng và hoãn thêm 3-5 phút cho bé chơi tiếp mà không cần mã PIN.
