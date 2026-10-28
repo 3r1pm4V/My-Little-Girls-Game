@@ -7,6 +7,21 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-10-28
+- **fix(Antigravity Design Expert UI/UX Refactor — Khắc Phục Toàn Diện 4 Lỗi Hiển Thị Cho Bé)**:
+  - **Tối ưu triệt để menu Học Chữ (`lettersHome()`, Ảnh 1)**:
+    - Loại bỏ hoàn toàn tỷ lệ nút bè ngang dị dạng và lỗi icon bị trồi lên mép trên cắt cụt hình.
+    - Chuyển sang bố cục 4 thẻ đứng (`portrait-cards`) cân đối hoàn mỹ: kích thước `clamp(140px, 24vh, 185px)`, bo góc mềm mại 28px, đổ bóng khuếch tán êm ái (`box-shadow: 0 14px 30px rgba(0,0,0,0.08)`).
+    - Tạo và tích hợp 4 icon PNG bóng bẩy sinh từ Chrome (`letters_strokes.png`, `letters_alphabet.png`, `letters_phonics.png`, `letters_posture.png`) đặt hoàn toàn lọt lòng, to rõ ở tâm (`clamp(52px, 8.5vw, 76px)`).
+  - **Đồng bộ hóa thanh Header theo chuẩn Glassmorphism (Ảnh 2)**:
+    - Thay thế nút Back đỏ vuông chắp vá với icon "BACK" pixel bé xíu bằng nút tròn đồng bộ kích thước chuẩn `52px x 52px` với nút Home.
+    - Tích hợp biểu tượng mũi tên cong tròn mềm mại (`img/btn_back_circle.png`), viền pastel hồng đào dịu mắt, hiệu ứng nảy nhẹ Antigravity.
+    - Nền Header kính mờ cao cấp (`rgba(255,255,255,0.85); backdrop-filter: blur(14px)`).
+  - **Khắc phục lỗi mảng trắng đè chữ ở số 18 và cắt chỏm tim ở số 20 (`numL`, Ảnh 3 & 4)**:
+    - **Sửa lỗi mảng chữ đè nhau ở số 9 & số 18**: Đăng ký bổ sung `count_strawberry` (dâu tây) và `count_butterfly` (bướm xinh) vào từ điển `I` trong `app.js`, loại bỏ triệt để lỗi fallback in chuỗi text thô.
+    - **Sửa lỗi cắt đầu đuôi và scrollbar ở khay đếm số**: Bỏ thuộc tính scrollbar (`overflow: hidden !important`), giải phóng `.ob` khỏi rule ép buộc 64px (`min-width/min-height: unset !important; padding: 2px`).
+    - Nâng cấp khay đếm số theo phong cách Glassmorphism trắng ngà tinh khiết `rgba(255,255,255,0.88)` với viền trắng bóng 2.5px, vật đếm tự động co giãn thông minh theo số lượng (khi $n \ge 11$ thì kích thước 32-44px), xếp đều 2 hàng không bao giờ bị cắt chỏm.
+    - Dãy 21 nút chọn số (0–20) được căn chỉnh đều đặn 2 hàng cân đối (Hàng 1: 0–10; Hàng 2: 11–20), tròn trịa, nảy 3D.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v136`.
 - **fix(Loại Bỏ Icon Gộp & Chuẩn Hóa Tranh Tô Màu Elsa Line Art Không Màu Nền)**:
   - **Khắc phục lỗi icon gộp 2-3 emoji trên thẻ trò chơi**:
     - Thay thế toàn bộ chuỗi emoji gộp (`<b>🐧 🧩 🐌</b>`, `<b>🔟 🍎 🟢</b>`, `<b>🔗 🍎 ↔ 🍎</b>`...) trên 16 thẻ game bằng các ảnh PNG huy hiệu 3D độc nhất (`I.game_puzzle`, `I.game_size_compare`, `I.game_odd_spot`, `I.game_connect_dots`, `I.game_memory_draw`, `I.game_ten_frame`, `I.game_pair_link`, v.v.).

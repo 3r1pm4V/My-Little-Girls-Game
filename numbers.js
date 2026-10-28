@@ -62,7 +62,7 @@ function numL(n) {
     : '<div class="objs-empty-hint"><span>📦</span><span>' + T("Khay trống · Không có gì", "Empty Tray · Nothing") + '</span></div>';
 
   var chipsHtml = Array.from({ length: 21 }, function(_, i) {
-    return '<button class="chip ' + (i == n ? "on" : "") + '" style="min-width:44px;min-height:44px;margin:2px" onclick="numL(' + i + ')">' + i + '</button>';
+    return '<button class="chip ' + (i == n ? "on" : "") + '" onclick="numL(' + i + ')">' + i + '</button>';
   }).join("");
 
   m.innerHTML = `<div class="home-container num-learning-container">${kbc([

@@ -1,6 +1,6 @@
-// asset-hash: a510c28f09e2b8b6
+// asset-hash: fbd39487665e2488
 // ↑ do `node test-sw-precache.js --fix` sinh ra; đừng sửa tay. Đổi bất kỳ file trong CORE/OPT mà chưa chạy --fix thì test sẽ ĐỎ.
-const C = "bhv-v134";
+const C = "bhv-v136";
 
 // Bắt buộc: thiếu 1 file là cài SW thất bại (addAll atomic) → test-sw-precache.js kiểm tra đủ & tồn tại.
 const CORE = [
@@ -8,7 +8,7 @@ const CORE = [
   "app.js", "data-vn.js", "activities-data.js", "audio-map.js", "img-core.js", "progress.js", "games/count-game.js", "games/toddler-games.js", "games/creative-games.js", "games/fruit-ninja.js", "alphabet.js", "numbers.js", "spelling.js",
   "font-vn.ttf", "font-tapviet.ttf", "font-tapviet-cham.ttf",
   "fonts/baloo2-600.woff2", "fonts/baloo2-800.woff2",
-  "manifest.webmanifest", "icon-192.png", "icon-512.png"
+  "manifest.webmanifest", "icon-192.png", "icon-512.png", "img/btn_back_circle.png"
 ];
 
 // Nạp lười bằng import() trong app.js: tải cố gắng hết sức lúc cài, thiếu file KHÔNG làm hỏng việc cài SW.

@@ -103,8 +103,14 @@ I["count_puppy"]="img/vocab/count_puppy.png";
 I["count_bunny"]="img/vocab/count_bunny.png";
 I["count_grape"]="img/vocab/count_grape.png";
 I["count_watermelon"]="img/vocab/count_watermelon.png";
+I["count_strawberry"]="img/vocab/count_strawberry.png";
+I["count_butterfly"]="img/vocab/count_butterfly.png";
 I["count_rocket"]="img/vocab/count_rocket.png";
 I["count_heart"]="img/vocab/count_heart.png";
+I["letters_strokes"]="img/home/letters_strokes.png";
+I["letters_alphabet"]="img/home/letters_alphabet.png";
+I["letters_phonics"]="img/home/letters_phonics.png";
+I["letters_posture"]="img/home/letters_posture.png";
 const ALT_MAP={
   vocab_banh_mi:"Bánh mì",vocab_ca_rot:"Cà rốt",vocab_cai_bat:"Cái bát",vocab_dong_ho:"Đồng hồ",vocab_khan_mat:"Khăn mặt",vocab_kinh_mat:"Kính mắt",vocab_non_la:"Nón lá",vocab_anh_trai:"Anh trai",vocab_ao_mua:"Áo mưa",vocab_an_toan:"An toàn",vocab_an_com:"Ăn cơm",vocab_an_banh:"Ăn bánh",vocab_am_ap:"Ấm áp",vocab_am_thanh:"Âm thanh",vocab_ba_me:"Ba mẹ",vocab_bup_be:"Búp bê",count_apple:"Quả táo",count_ball:"Quả bóng",count_star:"Ngôi sao",count_flower:"Bông hoa",count_bear:"Chú gấu",
   cat_idle:"Chú mèo con bạn đồng hành",cat_happy:"Chú mèo con vui mừng",cat_sad:"Chú mèo con đang suy nghĩ",
@@ -1795,33 +1801,33 @@ function lettersHome(){
       <div class="kid-home-menu clean-4-grid letters-sub-grid">
         <!-- 1. 14 NÉT VIẾT CƠ BẢN -->
         <button class="kid-home-btn kid-btn-today" onclick="window.__traceFrom='lettersHome';trm='net';ls.set('trm','net');trace()" title="${T("14 Nét viết cơ bản", "14 Basic Strokes")}">
-          <div class="kid-btn-icon-wrap" style="background:#e0f2fe;font-size:38px">✏️</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.letters_strokes}" alt="14 Nét viết cơ bản" class="kid-btn-img"></div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#0369a1">${T("14 Nét viết cơ bản", "14 Basic Strokes")}</div>
+            <div class="kid-btn-title">${T("14 Nét viết cơ bản", "14 Basic Strokes")}</div>
           </div>
         </button>
 
         <!-- 2. BẢNG CHỮ CÁI TIẾNG VIỆT -->
         <button class="kid-home-btn kid-btn-numbers" onclick="go('letL')" title="${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}">
-          <div class="kid-btn-icon-wrap" style="background:#ffedd5;font-size:38px">🔤</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.letters_alphabet}" alt="Bảng chữ cái Tiếng Việt" class="kid-btn-img"></div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#c2410c">${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}</div>
+            <div class="kid-btn-title">${T("Bảng chữ cái Tiếng Việt", "Vietnamese Alphabet")}</div>
           </div>
         </button>
 
         <!-- 3. BÉ TẬP ĐÁNH VẦN -->
         <button class="kid-home-btn kid-btn-stories" onclick="go('readL')" title="${T("Bé tập đánh vần", "Learn Phonics")}">
-          <div class="kid-btn-icon-wrap" style="background:#dcfce7;font-size:38px">📖</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.letters_phonics}" alt="Bé tập đánh vần" class="kid-btn-img"></div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#15803d">${T("Bé tập đánh vần", "Learn Phonics")}</div>
+            <div class="kid-btn-title">${T("Bé tập đánh vần", "Learn Phonics")}</div>
           </div>
         </button>
 
         <!-- 4. TƯ THẾ NGỒI & CÁCH CẦM BÚT -->
         <button class="kid-home-btn kid-btn-games" onclick="openPostureModal()" title="${T("Tư thế ngồi & Cách cầm bút", "Posture & Grip")}">
-          <div class="kid-btn-icon-wrap" style="background:#fce7f3;font-size:38px">🪑</div>
+          <div class="kid-btn-icon-wrap"><img src="${I.letters_posture}" alt="Tư thế ngồi & Cách cầm bút" class="kid-btn-img"></div>
           <div class="kid-btn-text">
-            <div class="kid-btn-title" style="font-size:15px;font-weight:900;color:#881337">${T("Tư thế ngồi & Cách cầm bút", "Posture & Grip")}</div>
+            <div class="kid-btn-title">${T("Tư thế ngồi & Cách cầm bút", "Posture & Grip")}</div>
           </div>
         </button>
       </div>
