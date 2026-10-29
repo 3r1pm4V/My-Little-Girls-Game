@@ -2921,7 +2921,7 @@ function filterGamesByGrade(grade){
   const cards=grid.querySelectorAll(".card");
   cards.forEach(c=>{
     const cg=c.getAttribute("data-grade");
-    const show=(grade==="all"||cg===grade);
+    const show=(grade==="all"||(cg&&cg.split(" ").includes(grade)));
     c.style.display=show?"":"none";
     if(show){
       c.classList.remove("card-fade-in");
@@ -2947,8 +2947,8 @@ function games(){
       <div class="cards game-cards" id="gamesCardGrid">
         ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game","preschool")}
         ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game","kinder")}
-        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder")}
-        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder")}
+        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder grade1")}
+        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder grade1")}
         ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
         ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
         ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
@@ -2957,12 +2957,6 @@ function games(){
         ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder")}
         ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
         ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
-        ${card("connectDotsGame",`<img src="${I.game_connect_dots}" class="g-ico">`,"Nối chấm & Tự vẽ","Connect Dots & Auto-Draw","math","grade1")}
-        ${card("memoryStepDrawGame",`<img src="${I.game_memory_draw}" class="g-ico">`,"Vẽ trí nhớ & Từng bước","Memory & Step Draw","trace","grade1")}
-        ${card("tenFrameGame",`<img src="${I.game_ten_frame}" class="g-ico">`,"Khung 10 ô (Gộp số)","Ten-Frame Math","math","kinder")}
-        ${card("pairLinkGridGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Nối cặp giống nhau","Pair Link Grid","logic","grade1")}
-        ${card("mathSumGame",`<img src="${I.game_math_sum}" class="g-ico">`,"Phép tính hình","Math Sums","math","grade1")}
-        ${card("animalPathGame",`<img src="${I.game_animal_path}" class="g-ico">`,"Đường về tổ","Animal Path","logic","grade1")}
       </div>
     </div>
   `;
@@ -6680,12 +6674,12 @@ const V={
   get numberTrainGame(){return(typeof window!=="undefined"&&window.numberTrainGame)||(typeof globalThis!=="undefined"&&globalThis.numberTrainGame);},
   get randomMixGame(){return(typeof window!=="undefined"&&window.randomMixGame)||(typeof globalThis!=="undefined"&&globalThis.randomMixGame);},
   get artStudioGame(){return(typeof window!=="undefined"&&window.artStudioGame)||(typeof globalThis!=="undefined"&&globalThis.artStudioGame);},
-  get connectDotsGame(){return(typeof window!=="undefined"&&window.connectDotsGame)||(typeof globalThis!=="undefined"&&globalThis.connectDotsGame);},
-  get memoryStepDrawGame(){return(typeof window!=="undefined"&&window.memoryStepDrawGame)||(typeof globalThis!=="undefined"&&globalThis.memoryStepDrawGame);},
-  get tenFrameGame(){return(typeof window!=="undefined"&&window.tenFrameGame)||(typeof globalThis!=="undefined"&&globalThis.tenFrameGame);},
-  get pairLinkGridGame(){return(typeof window!=="undefined"&&window.pairLinkGridGame)||(typeof globalThis!=="undefined"&&globalThis.pairLinkGridGame);},
-  get mathSumGame(){return(typeof window!=="undefined"&&window.mathSumGame)||(typeof globalThis!=="undefined"&&globalThis.mathSumGame);},
-  get animalPathGame(){return(typeof window!=="undefined"&&window.animalPathGame)||(typeof globalThis!=="undefined"&&globalThis.animalPathGame);},
+  get connectDotsGame(){return()=>go("games");},
+  get memoryStepDrawGame(){return()=>go("games");},
+  get tenFrameGame(){return()=>go("games");},
+  get pairLinkGridGame(){return()=>go("games");},
+  get mathSumGame(){return()=>go("games");},
+  get animalPathGame(){return()=>go("games");},
   match,mem,trace,gate,parent,rec:recS,
   get readL(){return(typeof window!=="undefined"&&window.readL)||(typeof globalThis!=="undefined"&&globalThis.readL);},
   get math10(){return(typeof window!=="undefined"&&window.math10)||(typeof globalThis!=="undefined"&&globalThis.math10);},

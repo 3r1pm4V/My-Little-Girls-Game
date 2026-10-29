@@ -1444,13 +1444,7 @@
       "sizeCompareGame",
       "oddSpotGame",
       "fruitSlash",
-      "artStudioGame",
-      "connectDotsGame",
-      "memoryStepDrawGame",
-      "tenFrameGame",
-      "pairLinkGridGame",
-      "mathSumGame",
-      "animalPathGame"
+      "artStudioGame"
     ];
 
     if (typeof window !== "undefined") {

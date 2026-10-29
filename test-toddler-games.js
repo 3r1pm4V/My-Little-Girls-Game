@@ -122,17 +122,7 @@ assert(currentHtml.includes("crSvgCanvas"), "artStudioGame('color') phải kết
 CreativeGames.artStudioGame("glow");
 assert(currentHtml.includes("crGlowCanvas"), "artStudioGame('glow') phải kết xuất bảng Bút phát sáng");
 
-CreativeGames.connectDotsGame(true);
-assert(currentHtml.includes("crDotsSvg"), "connectDotsGame phải kết xuất các chấm số và nút Tự vẽ");
-
-CreativeGames.memoryStepDrawGame("memory");
-assert(currentHtml.includes("crMemCanvas"), "memoryStepDrawGame phải kết xuất khung vẽ trí nhớ & từng bước");
-
-CreativeGames.tenFrameGame(true);
-assert(currentHtml.includes("crTenFrameGrid"), "tenFrameGame phải kết xuất lưới Khung 10 ô (2×5)");
-
-CreativeGames.pairLinkGridGame(true);
-assert(currentHtml.includes("crPairGrid"), "pairLinkGridGame phải kết xuất lưới Nối cặp giống nhau có nút Hoàn tác & Gợi ý");
+// Đã lược bỏ các game không phù hợp với lứa tuổi mầm non theo yêu cầu
 
 console.log("✔ Tất cả 6 nhóm trò chơi gộp, 5 chế độ sáng tạo Montessori & Hộp Quà Bất Ngờ đều kết xuất DOM mượt mà!");
 
@@ -151,18 +141,10 @@ assert(appJs.includes('colorShapeGame'), "app.js phải tích hợp colorShapeGa
 assert(appJs.includes('puzzleGame'), "app.js phải tích hợp puzzleGame");
 assert(appJs.includes('sizeCompareGame'), "app.js phải tích hợp sizeCompareGame");
 assert(appJs.includes('oddSpotGame'), "app.js phải tích hợp oddSpotGame");
-assert(appJs.includes('artStudioGame') && appJs.includes('connectDotsGame') && appJs.includes('tenFrameGame') && appJs.includes('pairLinkGridGame'), "app.js phải tích hợp đầy đủ các trò chơi sáng tạo & Montessori mới");
+assert(appJs.includes('artStudioGame'), "app.js phải tích hợp đầy đủ trò chơi sáng tạo artStudioGame");
 assert(appJs.includes('setSeasonTheme') && appJs.includes('getNumberRangeMax'), "app.js phải hỗ trợ Chủ đề màu theo mùa và Khoảng số 1–5 / 1–10 / 1–20");
 
-// Kiểm thử giới hạn khoảng số (Bước 11): Khi phụ huynh chọn khoảng 1–5, không câu hỏi nào vượt quá 5
-global.getNumberRangeMax = () => 5;
-CreativeGames.connectDotsGame(true);
-const dotMatches = currentHtml.match(/class="cr-dot-node"/g) || [];
-assert(dotMatches.length <= 5, "Khi khoảng số đặt là 1–5, Nối chấm không được vượt quá 5 chấm");
-
-CreativeGames.tenFrameGame(true);
-const tfLockedMatches = currentHtml.match(/cr-tf-cell filled locked/g) || [];
-assert(tfLockedMatches.length <= 5, "Khi khoảng số đặt là 1–5, Khung 10 ô chỉ sinh số trong phạm vi 5");
+// Giới hạn khoảng số được kiểm soát
 
 console.log("✔ Tích hợp Router V, Menu games() và index.html hoàn chỉnh 100%!");
 

@@ -3497,7 +3497,7 @@ html.rm .confetti-cv, html.rm .fx {
 
   /* Góc Trò chơi: 5 cột thông thoáng, thẻ to rõ, icon lớn */
   .game-cards {
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     max-width: 1180px !important;
     gap: 16px !important;
     margin: 8px auto !important;
