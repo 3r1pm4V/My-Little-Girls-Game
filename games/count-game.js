@@ -8,18 +8,22 @@
 
 // Bể tài nguyên các hình ảnh con vật & đồ vật quen thuộc cho bé
 const COUNT_ITEMS_POOL = [
-  { emoji: "🍎", nameVi: "quả táo", nameEn: "apples" },
-  { emoji: "🐱", nameVi: "chú mèo", nameEn: "cats" },
-  { emoji: "🚗", nameVi: "ô tô", nameEn: "cars" },
-  { emoji: "⭐", nameVi: "ngôi sao", nameEn: "stars" },
-  { emoji: "🎈", nameVi: "bóng bay", nameEn: "balloons" },
-  { emoji: "🐥", nameVi: "gà con", nameEn: "chicks" },
-  { emoji: "🍓", nameVi: "dâu tây", nameEn: "strawberries" },
-  { emoji: "🐰", nameVi: "chú thỏ", nameEn: "bunnies" },
-  { emoji: "🍦", nameVi: "cây kem", nameEn: "ice creams" },
-  { emoji: "🍉", nameVi: "miếng dưa", nameEn: "watermelons" },
-  { emoji: "🐻", nameVi: "chú gấu", nameEn: "teddy bears" },
-  { emoji: "🚀", nameVi: "tên lửa", nameEn: "rockets" }
+  { emoji: "🍎", nameVi: "quả táo", nameEn: "apples", img: "img/vocab/count_apple.png" },
+  { emoji: "🐱", nameVi: "chú mèo", nameEn: "cats", img: "img/vocab/count_cat.png" },
+  { emoji: "🚗", nameVi: "ô tô", nameEn: "cars", img: "img/vocab/count_car.png" },
+  { emoji: "⭐", nameVi: "ngôi sao", nameEn: "stars", img: "img/vocab/count_star.png" },
+  { emoji: "🎈", nameVi: "bóng bay", nameEn: "balloons", img: "img/vocab/count_balloon.png" },
+  { emoji: "🦋", nameVi: "bướm xinh", nameEn: "butterflies", img: "img/vocab/count_butterfly.png" },
+  { emoji: "🍓", nameVi: "dâu tây", nameEn: "strawberries", img: "img/vocab/count_strawberry.png" },
+  { emoji: "🐰", nameVi: "chú thỏ", nameEn: "bunnies", img: "img/vocab/count_bunny.png" },
+  { emoji: "🍦", nameVi: "cây kem", nameEn: "ice creams", img: "img/vocab/count_icecream.png" },
+  { emoji: "🍉", nameVi: "miếng dưa", nameEn: "watermelons", img: "img/vocab/count_watermelon.png" },
+  { emoji: "🐻", nameVi: "chú gấu", nameEn: "teddy bears", img: "img/vocab/count_bear.png" },
+  { emoji: "🚀", nameVi: "tên lửa", nameEn: "rockets", img: "img/vocab/count_rocket.png" },
+  { emoji: "🍌", nameVi: "quả chuối", nameEn: "bananas", img: "img/vocab/count_banana.png" },
+  { emoji: "🍩", nameVi: "bánh rán", nameEn: "donuts", img: "img/vocab/count_donut.png" },
+  { emoji: "🐶", nameVi: "cún con", nameEn: "puppies", img: "img/vocab/count_puppy.png" },
+  { emoji: "🌸", nameVi: "bông hoa", nameEn: "flowers", img: "img/vocab/count_flower.png" }
 ];
 
 // Trạng thái cục bộ của trò chơi
@@ -133,7 +137,7 @@ function renderCountQuestion() {
 
   const itemsHtml = Array.from({ length: count }, (_, i) => {
     return `<button class="cg-item-btn" data-i="${i + 1}" onclick="window.__cgCountTap(this)" aria-label="${item.nameVi}">
-      ${item.emoji}
+      ${item.img ? `<img src="${item.img}" class="cg-item-img" alt="${item.nameVi}">` : item.emoji}
       <span class="cg-badge"></span>
     </button>`;
   }).join("");
