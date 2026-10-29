@@ -3456,38 +3456,62 @@ html.rm .confetti-cv, html.rm .fx {
   .game-cards {
     grid-template-columns: repeat(5, 1fr) !important;
     max-width: 1180px !important;
-    gap: 14px !important;
-    margin: 6px auto !important;
+    gap: 16px !important;
+    margin: 8px auto !important;
   }
   .game-cards .card {
     width: 100% !important;
     max-width: none !important;
     box-sizing: border-box !important;
-    min-height: 135px !important;
-    height: clamp(135px, 19vh, 165px) !important;
-    padding: 10px 8px !important;
-    border-radius: 24px !important;
+    min-height: 160px !important;
+    height: clamp(160px, 22vh, 195px) !important;
+    padding: 12px 10px 14px !important;
+    border-radius: 26px !important;
     border-width: 4px !important;
     box-shadow: 0 6px 16px rgba(2, 132, 199, 0.16) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
   .game-cards .card .vis {
-    height: 66px !important;
+    height: 88px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 4px 0 6px !important;
   }
   .game-cards .card .vis img {
-    width: 60px !important;
-    height: 60px !important;
+    width: 84px !important;
+    height: 84px !important;
+    object-fit: contain !important;
+    border-radius: 20px !important;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.14)) !important;
+  }
+  .game-cards .card > span {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
   }
   .game-cards .card > span > span {
-    font-size: 15.5px !important;
+    font-size: 16.5px !important;
     line-height: 1.25 !important;
-    font-weight: 800 !important;
+    font-weight: 900 !important;
   }
   .game-cards .card > span > small {
-    display: none !important;
+    display: block !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    opacity: 0.85 !important;
+    margin-top: 1px !important;
   }
   .card-grade-badge {
-    font-size: 11.5px !important;
-    padding: 2.5px 7px !important;
+    font-size: 12px !important;
+    padding: 3px 9px !important;
+    border-radius: 10px !important;
   }
 
   /* Học Chữ & Tập Tô Nét */
@@ -3616,33 +3640,59 @@ html.rm .confetti-cv, html.rm .fx {
   /* Trò chơi Tablet Dọc: 3 cột to rõ */
   .game-cards {
     grid-template-columns: repeat(3, 1fr) !important;
-    max-width: 740px !important;
-    gap: 18px !important;
+    max-width: 760px !important;
+    gap: 20px !important;
   }
   .game-cards .card {
     width: 100% !important;
     max-width: none !important;
     box-sizing: border-box !important;
-    min-height: 180px !important;
-    height: clamp(170px, 18vh, 210px) !important;
-    padding: 16px 12px !important;
-    border-radius: 28px !important;
+    min-height: 205px !important;
+    height: clamp(195px, 20vh, 235px) !important;
+    padding: 16px 12px 18px !important;
+    border-radius: 32px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
   .game-cards .card .vis {
-    height: 84px !important;
+    height: 108px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 4px 0 6px !important;
   }
   .game-cards .card .vis img {
-    width: 76px !important;
-    height: 76px !important;
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: contain !important;
+    border-radius: 24px !important;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.16)) !important;
+  }
+  .game-cards .card > span {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
   }
   .game-cards .card > span > span {
-    font-size: 18px !important;
+    font-size: 19px !important;
     font-weight: 900 !important;
   }
+  .game-cards .card > span > small {
+    display: block !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    opacity: 0.85 !important;
+    margin-top: 1px !important;
+  }
   .card-grade-badge {
-    font-size: 13px !important;
-    padding: 3px 9px !important;
-    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
   }
 
   /* Học chữ Tablet Dọc: 2x2 */
