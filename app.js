@@ -978,11 +978,29 @@ function showBadges(tab = currentAchieveTab){
     </div>
   `;
 
+  const BADGES_PER_PAGE = 6;
+  if (typeof window !== "undefined" && window.__lastAchieveTab !== tab) {
+    window.__curBadgePage = 1;
+    window.__lastAchieveTab = tab;
+  }
+  const curBadgePage = (typeof window !== "undefined" && window.__curBadgePage) || 1;
+
+  window.switchBadgePage = function(p) {
+    if (typeof window !== "undefined") window.__curBadgePage = p;
+    showBadges(currentAchieveTab);
+  };
+
   let contentHtml = "";
   if(tab === "badges"){
+    const totalBadgePages = Math.max(1, Math.ceil(BADGES.length / BADGES_PER_PAGE));
+    const validPage = Math.min(Math.max(1, curBadgePage), totalBadgePages);
+    if (typeof window !== "undefined") window.__curBadgePage = validPage;
+    const startIdx = (validPage - 1) * BADGES_PER_PAGE;
+    const pageBadges = BADGES.slice(startIdx, startIdx + BADGES_PER_PAGE);
+
     contentHtml = `
       <div class="badge-grid">
-        ${BADGES.map(b=>{
+        ${pageBadges.map(b=>{
           const isUn=unlockedBadges.has(b.id);
           return `<div class="badge-card ${isUn?"unlocked":"locked"}" onclick="say('${b.name}','${b.en}')">
             <div class="badge-card-icon">${b.icon}</div>
@@ -992,11 +1010,30 @@ function showBadges(tab = currentAchieveTab){
           </div>`;
         }).join("")}
       </div>
+      ${totalBadgePages > 1 ? `
+        <div class="badge-pagination-bar" style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px auto">
+          <button type="button" class="pill" onclick="switchBadgePage(${validPage - 1})" ${validPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
+            ◀ ${T("Trang trước", "Previous")}
+          </button>
+          <span style="font-weight:800;font-size:15px;color:var(--ink);padding:0 6px">
+            ${T(`Trang ${validPage} / ${totalBadgePages}`, `Page ${validPage} / ${totalBadgePages}`)}
+          </span>
+          <button type="button" class="pill" onclick="switchBadgePage(${validPage + 1})" ${validPage >= totalBadgePages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
+            ${T("Trang sau", "Next")} ▶
+          </button>
+        </div>
+      ` : ""}
     `;
   } else {
+    const totalStickerPages = Math.max(1, Math.ceil(STICKERS.length / BADGES_PER_PAGE));
+    const validPage = Math.min(Math.max(1, curBadgePage), totalStickerPages);
+    if (typeof window !== "undefined") window.__curBadgePage = validPage;
+    const startIdx = (validPage - 1) * BADGES_PER_PAGE;
+    const pageStickers = STICKERS.slice(startIdx, startIdx + BADGES_PER_PAGE);
+
     contentHtml = `
       <div class="sticker-grid">
-        ${STICKERS.map(s=>{
+        ${pageStickers.map(s=>{
           const isUn=s.test();
           return `<div class="sticker-card ${isUn?"unlocked":"locked"}" onclick="window.__clickSticker('${s.id}')">
             <div class="sticker-emoji">${s.img ? `<img src="${s.img}" alt="${lang==="vi"?s.name:s.en}" style="width:54px;height:54px;object-fit:contain">` : s.icon}</div>
@@ -1008,6 +1045,19 @@ function showBadges(tab = currentAchieveTab){
           </div>`;
         }).join("")}
       </div>
+      ${totalStickerPages > 1 ? `
+        <div class="badge-pagination-bar" style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px auto">
+          <button type="button" class="pill" onclick="switchBadgePage(${validPage - 1})" ${validPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
+            ◀ ${T("Trang trước", "Previous")}
+          </button>
+          <span style="font-weight:800;font-size:15px;color:var(--ink);padding:0 6px">
+            ${T(`Trang ${validPage} / ${totalStickerPages}`, `Page ${validPage} / ${totalStickerPages}`)}
+          </span>
+          <button type="button" class="pill" onclick="switchBadgePage(${validPage + 1})" ${validPage >= totalStickerPages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
+            ${T("Trang sau", "Next")} ▶
+          </button>
+        </div>
+      ` : ""}
     `;
   }
 
@@ -2909,34 +2959,95 @@ function renderGradeTabsHtml(){
   </div>`;
 }
 
-function filterGamesByGrade(grade){
-  if(typeof window!=="undefined")window.__curGameGrade=grade;
-  const grid=document.getElementById("gamesCardGrid");
-  const tabs=document.querySelectorAll(".grade-tab");
-  tabs.forEach(t=>{
-    const isAct=t.getAttribute("onclick")&&t.getAttribute("onclick").includes(`'${grade}'`);
-    t.classList.toggle("active",!!isAct);
+const GAMES_PER_PAGE = 6;
+
+function renderGamesPaginationHtml(totalPages, curPage) {
+  if (totalPages <= 1) return "";
+  return `
+    <div class="games-pagination-bar" id="gamesPaginationBar">
+      <button type="button" class="game-page-btn" onclick="switchGamePage(${curPage - 1})" ${curPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous Page")}">
+        ◀ ${T("Trang trước", "Previous")}
+      </button>
+      <div class="game-page-dots">
+        ${Array.from({ length: totalPages }, (_, i) => `
+          <button type="button" class="game-page-dot ${i + 1 === curPage ? 'active' : ''}" onclick="switchGamePage(${i + 1})" aria-label="${T(`Trang ${i + 1}`, `Page ${i + 1}`)}">
+            ${i + 1}
+          </button>
+        `).join("")}
+      </div>
+      <button type="button" class="game-page-btn" onclick="switchGamePage(${curPage + 1})" ${curPage >= totalPages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next Page")}">
+        ${T("Trang sau", "Next")} ▶
+      </button>
+    </div>
+  `;
+}
+
+function updateGamesView() {
+  const grid = document.getElementById("gamesCardGrid");
+  if (!grid) return;
+  const grade = (typeof window !== "undefined" && window.__curGameGrade) || "all";
+  const curPage = (typeof window !== "undefined" && window.__curGamePage) || 1;
+  const cards = Array.from(grid.querySelectorAll(".card"));
+
+  const matchingCards = cards.filter(c => {
+    const cg = c.getAttribute("data-grade");
+    return grade === "all" || (cg && cg.split(" ").includes(grade));
   });
-  if(!grid)return;
-  const cards=grid.querySelectorAll(".card");
-  cards.forEach(c=>{
-    const cg=c.getAttribute("data-grade");
-    const show=(grade==="all"||(cg&&cg.split(" ").includes(grade)));
-    c.style.display=show?"":"none";
-    if(show){
+
+  const totalPages = Math.max(1, Math.ceil(matchingCards.length / GAMES_PER_PAGE));
+  const validPage = Math.min(Math.max(1, curPage), totalPages);
+  if (typeof window !== "undefined") window.__curGamePage = validPage;
+
+  const startIdx = (validPage - 1) * GAMES_PER_PAGE;
+  const endIdx = startIdx + GAMES_PER_PAGE;
+
+  cards.forEach(c => {
+    const idx = matchingCards.indexOf(c);
+    const show = idx >= startIdx && idx < endIdx;
+    if (show) {
+      c.style.removeProperty("display");
+      c.classList.remove("is-hidden");
       c.classList.remove("card-fade-in");
       void c.offsetWidth;
       c.classList.add("card-fade-in");
+    } else {
+      c.style.setProperty("display", "none", "important");
+      c.classList.add("is-hidden");
     }
   });
-}
-window.renderGradeTabsHtml=renderGradeTabsHtml;
-window.filterGamesByGrade=filterGamesByGrade;
 
-function games(){
-  window.__traceFrom="games";
-  const curGrade=(typeof window!=="undefined"&&window.__curGameGrade)||"all";
-  m.innerHTML=`
+  const pagWrap = document.getElementById("gamesPaginationWrap");
+  if (pagWrap) {
+    pagWrap.innerHTML = renderGamesPaginationHtml(totalPages, validPage);
+  }
+}
+
+function switchGamePage(page) {
+  if (typeof window !== "undefined") window.__curGamePage = page;
+  updateGamesView();
+}
+
+function filterGamesByGrade(grade) {
+  if (typeof window !== "undefined") {
+    window.__curGameGrade = grade;
+    window.__curGamePage = 1;
+  }
+  const tabs = document.querySelectorAll(".grade-tab");
+  tabs.forEach(t => {
+    const isAct = t.getAttribute("onclick") && t.getAttribute("onclick").includes(`'${grade}'`);
+    t.classList.toggle("active", !!isAct);
+  });
+  updateGamesView();
+}
+
+window.renderGradeTabsHtml = renderGradeTabsHtml;
+window.filterGamesByGrade = filterGamesByGrade;
+window.switchGamePage = switchGamePage;
+window.updateGamesView = updateGamesView;
+
+function games() {
+  window.__traceFrom = "games";
+  m.innerHTML = `
     <div class="home-container games-home-container">
       ${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
       <div class="games-header-bar">
@@ -2958,11 +3069,10 @@ function games(){
         ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
         ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
       </div>
+      <div id="gamesPaginationWrap"></div>
     </div>
   `;
-  if(curGrade!=="all"){
-    setTimeout(()=>filterGamesByGrade(curGrade),10);
-  }
+  updateGamesView();
   sayPrompt("games","Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!","Pick a game to play",180000);
 }
 
@@ -6408,9 +6518,18 @@ async function storyL(catId, page, search){
   }
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
 
+  const STORIES_PER_PAGE = 4;
+  let curStoryPage = 1;
+
+  window.switchStoryPage = function(p) {
+    curStoryPage = p;
+    renderStoryItems(false);
+    m.scrollTop = 0;
+  };
+
   window.debouncedStorySearch = debounce(function(val){
     curStorySearch=(val||"").trim();
-    storyRenderedCount=STORY_BATCH_SIZE;
+    curStoryPage = 1;
     const clr=document.getElementById("stClearBtn");
     if(clr)clr.style.display=curStorySearch?'inline-flex':'none';
     m.scrollTop=0;
@@ -6419,7 +6538,7 @@ async function storyL(catId, page, search){
 
   window.clearStorySearch=function(){
     curStorySearch="";
-    storyRenderedCount=STORY_BATCH_SIZE;
+    curStoryPage = 1;
     const inp=document.getElementById("stSearchInput");
     if(inp){inp.value="";inp.focus();}
     const clr=document.getElementById("stClearBtn");
@@ -6431,7 +6550,7 @@ async function storyL(catId, page, search){
   window.switchStoryCat=function(cId){
     curCat=cId;
     curStorySearch="";
-    storyRenderedCount=STORY_BATCH_SIZE;
+    curStoryPage = 1;
     const inp=document.getElementById("stSearchInput");
     if(inp)inp.value="";
     const clr=document.getElementById("stClearBtn");
@@ -6441,7 +6560,7 @@ async function storyL(catId, page, search){
   };
 
   function renderStoryItems(reset=false){
-    if(reset) storyRenderedCount=STORY_BATCH_SIZE;
+    if(reset) curStoryPage = 1;
     const fCats = getFairyCategories();
     const cat = fCats.find(c=>c.id===curCat) || fCats[0];
 
@@ -6454,7 +6573,12 @@ async function storyL(catId, page, search){
     }
 
     const list=getFilteredStories(catalog);
-    const visibleItems=list.slice(0, storyRenderedCount);
+    const totalPages = Math.max(1, Math.ceil(list.length / STORIES_PER_PAGE));
+    if(curStoryPage > totalPages) curStoryPage = totalPages;
+    if(curStoryPage < 1) curStoryPage = 1;
+
+    const startIdx = (curStoryPage - 1) * STORIES_PER_PAGE;
+    const visibleItems = list.slice(startIdx, startIdx + STORIES_PER_PAGE);
 
     // Cập nhật dòng trạng thái tìm kiếm
     const statusEl=document.getElementById("storySearchStatus");
@@ -6469,7 +6593,7 @@ async function storyL(catId, page, search){
     const loadMoreWrap=document.getElementById("storyLoadMoreWrap");
     if(listWrap){
       if(list.length===0){
-        listWrap.innerHTML=`<div style="padding:30px;opacity:.7;font-size:20px">Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!</div>`;
+        listWrap.innerHTML=`<div style="padding:30px;opacity:.7;font-size:20px">${T("Không tìm thấy truyện nào. Bé thử tìm từ khóa khác nhé!","No stories found. Try another search!")}</div>`;
         if(loadMoreWrap) loadMoreWrap.innerHTML="";
       } else {
         const frag=document.createDocumentFragment();
@@ -6479,44 +6603,27 @@ async function storyL(catId, page, search){
         listWrap.replaceChildren(frag);
 
         if(loadMoreWrap){
-          if(storyRenderedCount < list.length){
-            loadMoreWrap.innerHTML=`<div class="story-infinite-tip" style="padding:14px;font-size:15px;color:#64748b;font-weight:700">📜 Bé cuộn xuống để xem thêm truyện nhé (${visibleItems.length}/${list.length})</div>`;
+          if(totalPages > 1){
+            loadMoreWrap.innerHTML=`
+              <div class="story-pagination-bar" style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px auto">
+                <button type="button" class="pill" onclick="switchStoryPage(${curStoryPage - 1})" ${curStoryPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
+                  ◀ ${T("Trang trước", "Previous")}
+                </button>
+                <span class="story-page-indicator" style="font-weight:800;font-size:15px;color:var(--ink);padding:0 8px">
+                  ${T(`Trang ${curStoryPage} / ${totalPages}`, `Page ${curStoryPage} / ${totalPages}`)} (${list.length} ${T("truyện", "stories")})
+                </span>
+                <button type="button" class="pill" onclick="switchStoryPage(${curStoryPage + 1})" ${curStoryPage >= totalPages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
+                  ${T("Trang sau", "Next")} ▶
+                </button>
+              </div>
+            `;
           } else {
-            loadMoreWrap.innerHTML=`<div style="padding:14px;font-size:14px;color:#94a3b8;font-weight:700">🌟 Bé đã xem hết ${list.length} truyện trong mục này!</div>`;
+            loadMoreWrap.innerHTML=`<div style="padding:10px;font-size:14px;color:#94a3b8;font-weight:700">🌟 ${T(`Bé đã xem hết ${list.length} truyện trong mục này!`, `All ${list.length} stories displayed!`)}</div>`;
           }
         }
       }
     }
   }
-
-  // Đăng ký Infinite Scroll qua throttled scroll handler
-  onScroll(function(){
-    if(cur!=="storyL") return;
-    const listWrap=document.getElementById("storyListWrap");
-    if(!listWrap) return;
-    const list=getFilteredStories(catalog);
-    if(storyRenderedCount >= list.length) return;
-    if(m.scrollTop + m.clientHeight >= m.scrollHeight - 350){
-      const nextBatch = list.slice(storyRenderedCount, storyRenderedCount + STORY_BATCH_SIZE);
-      if(nextBatch.length){
-        storyRenderedCount += nextBatch.length;
-        const frag=document.createDocumentFragment();
-        const tpl=document.createElement("template");
-        tpl.innerHTML=nextBatch.map(storyCardHtml).join("");
-        frag.appendChild(tpl.content);
-        listWrap.appendChild(frag);
-
-        const loadMoreWrap=document.getElementById("storyLoadMoreWrap");
-        if(loadMoreWrap){
-          if(storyRenderedCount < list.length){
-            loadMoreWrap.innerHTML=`<div class="story-infinite-tip" style="padding:14px;font-size:15px;color:#64748b;font-weight:700">📜 Bé cuộn xuống để xem thêm truyện nhé (${storyRenderedCount}/${list.length})</div>`;
-          } else {
-            loadMoreWrap.innerHTML=`<div style="padding:14px;font-size:14px;color:#94a3b8;font-weight:700">🌟 Bé đã xem hết ${list.length} truyện trong mục này!</div>`;
-          }
-        }
-      }
-    }
-  });
 
   // Khởi tạo khung giao diện nếu chưa có
   const existingInput=document.getElementById("stSearchInput");
