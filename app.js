@@ -6492,6 +6492,14 @@ function getFilteredStories(catalog){
   return catalog.filter(s=>s.cat===curCat);
 }
 
+let curStoryPage = 1;
+window.switchStoryPage = function(p) {
+  curStoryPage = p;
+  if (typeof window.__renderStoryItems === "function") window.__renderStoryItems(false);
+  const mainEl = document.querySelector("main");
+  if (mainEl) mainEl.scrollTop = 0;
+};
+
 async function storyL(catId, page, search){
   if(catId)curCat=catId;
   if(search!==undefined)curStorySearch=search;
@@ -6519,7 +6527,7 @@ async function storyL(catId, page, search){
   const getCatCount=cId=>catalog.filter(s=>s.cat===cId).length;
 
   const STORIES_PER_PAGE = 4;
-  let curStoryPage = 1;
+  window.__renderStoryItems = renderStoryItems;
 
   window.switchStoryPage = function(p) {
     curStoryPage = p;
