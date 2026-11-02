@@ -228,13 +228,6 @@
       imgSrc: "coloring/mnvh_daisy_flower.webp"
     },
     {
-      id: "mnvh_tulip_garden",
-      icon: "🌷",
-      titleVi: "Vườn hoa rực rỡ",
-      titleEn: "Flower Garden",
-      imgSrc: "coloring/mnvh_tulip_garden.webp"
-    },
-    {
       id: "mnvh_cute_cat",
       icon: "🐱",
       titleVi: "Mèo con đeo nơ",
@@ -277,20 +270,6 @@
       imgSrc: "coloring/mnvh_little_snail.webp"
     },
     {
-      id: "mnvh_butterfly",
-      icon: "🦋",
-      titleVi: "Bươm bướm xinh",
-      titleEn: "Pretty Butterfly",
-      imgSrc: "coloring/mnvh_butterfly.webp"
-    },
-    {
-      id: "mnvh_seahorse",
-      icon: "🐠",
-      titleVi: "Cá ngựa đại dương",
-      titleEn: "Ocean Seahorse",
-      imgSrc: "coloring/mnvh_seahorse.webp"
-    },
-    {
       id: "mnvh_dairy_cow",
       icon: "🐮",
       titleVi: "Bò sữa đáng yêu",
@@ -320,27 +299,17 @@
     { id: "mnvh_kitty_painting", icon: "🎨", titleVi: "Mèo Kitty vẽ tranh", titleEn: "Kitty Painting", imgSrc: "coloring/mnvh_kitty_painting.webp" },
     { id: "mnvh_kitty_hat", icon: "🤠", titleVi: "Mèo Kitty đội mũ", titleEn: "Kitty with a Hat", imgSrc: "coloring/mnvh_kitty_hat.webp" },
     { id: "mnvh_puppy_bow", icon: "🐕", titleVi: "Cún con đeo nơ", titleEn: "Puppy with a Bow", imgSrc: "coloring/mnvh_puppy_bow.webp" },
-    { id: "mnvh_hen_chicks", icon: "🐔", titleVi: "Gà mẹ và đàn con", titleEn: "Hen and Chicks", imgSrc: "coloring/mnvh_hen_chicks.webp" },
-    { id: "mnvh_cow_field", icon: "🐄", titleVi: "Bò ăn cỏ trên đồi", titleEn: "Cow in the Field", imgSrc: "coloring/mnvh_cow_field.webp" },
-    { id: "mnvh_rescue_pups", icon: "🐾", titleVi: "Những chú chó cứu hộ", titleEn: "Rescue Pups", imgSrc: "coloring/mnvh_rescue_pups.webp" },
     { id: "mnvh_giraffe_palm", icon: "🦒", titleVi: "Hươu cao cổ", titleEn: "Giraffe", imgSrc: "coloring/mnvh_giraffe_palm.webp" },
     { id: "mnvh_lily_flower", icon: "💮", titleVi: "Hoa loa kèn", titleEn: "Lily Flower", imgSrc: "coloring/mnvh_lily_flower.webp" },
     { id: "mnvh_flower_pot", icon: "🪴", titleVi: "Chậu hoa xinh", titleEn: "Flower Pot", imgSrc: "coloring/mnvh_flower_pot.webp" },
     { id: "mnvh_smiling_sunflower", icon: "🌻", titleVi: "Hoa mặt cười", titleEn: "Smiling Flower", imgSrc: "coloring/mnvh_smiling_sunflower.webp" },
-    { id: "mnvh_bellflower", icon: "🔔", titleVi: "Hoa chuông", titleEn: "Bellflower", imgSrc: "coloring/mnvh_bellflower.webp" },
-    { id: "mnvh_twin_daisies", icon: "🌼", titleVi: "Đôi hoa cúc", titleEn: "Twin Daisies", imgSrc: "coloring/mnvh_twin_daisies.webp" },
-    { id: "mnvh_rose_bloom", icon: "🌹", titleVi: "Bông hoa nở", titleEn: "Blooming Flower", imgSrc: "coloring/mnvh_rose_bloom.webp" },
-    { id: "mnvh_sun_garden", icon: "☀️", titleVi: "Vườn hoa ông mặt trời", titleEn: "Sunny Garden", imgSrc: "coloring/mnvh_sun_garden.webp" },
     { id: "mnvh_boy_basketball", icon: "🏀", titleVi: "Bé trai chơi bóng", titleEn: "Boy with a Ball", imgSrc: "coloring/mnvh_boy_basketball.webp" },
     { id: "mnvh_boy_soccer", icon: "⚽", titleVi: "Bé trai đá bóng", titleEn: "Boy Playing Soccer", imgSrc: "coloring/mnvh_boy_soccer.webp" },
     { id: "mnvh_lion_king", icon: "🦁", titleVi: "Sư tử cha và con", titleEn: "Lion Family", imgSrc: "coloring/mnvh_lion_king.webp" },
     { id: "mnvh_cute_dino", icon: "🦕", titleVi: "Khủng long con", titleEn: "Baby Dinosaur", imgSrc: "coloring/mnvh_cute_dino.webp" },
     { id: "mnvh_pikachu", icon: "⚡", titleVi: "Pikachu", titleEn: "Pikachu", imgSrc: "coloring/mnvh_pikachu.webp" },
-    { id: "mnvh_doraemon", icon: "🔵", titleVi: "Doraemon", titleEn: "Doraemon", imgSrc: "coloring/mnvh_doraemon.webp" },
     { id: "mnvh_small_plane", icon: "🛩️", titleVi: "Máy bay nhỏ", titleEn: "Small Plane", imgSrc: "coloring/mnvh_small_plane.webp" },
-    { id: "mnvh_passenger_plane", icon: "🛫", titleVi: "Máy bay chở khách", titleEn: "Passenger Plane", imgSrc: "coloring/mnvh_passenger_plane.webp" },
     { id: "mnvh_night_plane", icon: "🌙", titleVi: "Máy bay đêm", titleEn: "Night Flight", imgSrc: "coloring/mnvh_night_plane.webp" },
-    { id: "mnvh_cloud_plane", icon: "☁️", titleVi: "Máy bay trên mây", titleEn: "Plane in the Clouds", imgSrc: "coloring/mnvh_cloud_plane.webp" },
     { id: "mnvh_helicopter", icon: "🚁", titleVi: "Trực thăng", titleEn: "Helicopter", imgSrc: "coloring/mnvh_helicopter.webp" },
     { id: "mnvh_propeller_plane", icon: "🪂", titleVi: "Máy bay cánh quạt", titleEn: "Propeller Plane", imgSrc: "coloring/mnvh_propeller_plane.webp" },
     { id: "mnvh_beetle_car", icon: "🚙", titleVi: "Ô tô con bọ", titleEn: "Beetle Car", imgSrc: "coloring/mnvh_beetle_car.webp" },
@@ -349,10 +318,7 @@
     { id: "mnvh_convertible_car", icon: "🏎️", titleVi: "Ô tô mui trần", titleEn: "Convertible Car", imgSrc: "coloring/mnvh_convertible_car.webp" },
     { id: "mnvh_mcqueen_car", icon: "🏁", titleVi: "Xe đua tia chớp", titleEn: "Racing Car", imgSrc: "coloring/mnvh_mcqueen_car.webp" },
     { id: "mnvh_dump_truck", icon: "🚚", titleVi: "Xe ben", titleEn: "Dump Truck", imgSrc: "coloring/mnvh_dump_truck.webp" },
-    { id: "mnvh_school_bus", icon: "🚌", titleVi: "Xe buýt đến trường", titleEn: "School Bus", imgSrc: "coloring/mnvh_school_bus.webp" },
-    { id: "mnvh_fire_truck", icon: "🚒", titleVi: "Xe cứu hỏa", titleEn: "Fire Truck", imgSrc: "coloring/mnvh_fire_truck.webp" },
     { id: "mnvh_ambulance", icon: "🚑", titleVi: "Xe cứu thương", titleEn: "Ambulance", imgSrc: "coloring/mnvh_ambulance.webp" },
-    { id: "mnvh_sports_car", icon: "🚘", titleVi: "Siêu xe thể thao", titleEn: "Sports Car", imgSrc: "coloring/mnvh_sports_car.webp" },
     {
       id: "mnvh_elsa_portrait",
       icon: "❄️",
@@ -487,39 +453,11 @@
       imgSrc: "coloring/mnvh_elsa_olaf.png"
     },
     {
-      id: "mnvh_elsa_ice_castle",
-      icon: "🏰",
-      titleVi: "Elsa và lâu đài băng",
-      titleEn: "Elsa and the Ice Castle",
-      imgSrc: "coloring/mnvh_elsa_ice_castle.png"
-    },
-    {
       id: "mnvh_elsa_ice_skating",
       icon: "⛸️",
       titleVi: "Elsa trượt băng nghệ thuật",
       titleEn: "Elsa Ice Skating",
       imgSrc: "coloring/mnvh_elsa_ice_skating.png"
-    },
-    {
-      id: "mnvh_elsa_ice_crown",
-      icon: "👑",
-      titleVi: "Elsa vương miện băng tuyết",
-      titleEn: "Elsa with Ice Crown",
-      imgSrc: "coloring/mnvh_elsa_ice_crown.png"
-    },
-    {
-      id: "mnvh_elsa_nokk_water_horse",
-      icon: "🦄",
-      titleVi: "Elsa và chú ngựa thần Nokk",
-      titleEn: "Elsa and Nokk Water Horse",
-      imgSrc: "coloring/mnvh_elsa_nokk_water_horse.png"
-    },
-    {
-      id: "mnvh_elsa_bruni",
-      icon: "🦎",
-      titleVi: "Elsa và thằn lằn tuyết Bruni",
-      titleEn: "Elsa and Baby Salamander Bruni",
-      imgSrc: "coloring/mnvh_elsa_bruni.png"
     }
   ];
 
