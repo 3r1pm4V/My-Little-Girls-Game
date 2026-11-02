@@ -326,7 +326,7 @@
           ${renderHeaderRightBadge(csState.round)}
         </div>
 
-        <div class="rv-cards-row" id="rvCardsRow" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+        <div class="rv-cards-row rv-cards-row-5" id="rvCardsRow">
           ${shuffledCards.map(item => `
             <div class="rv-item-card" data-uid="${item.uid}" data-bucket="${item.bucketId}" data-vi="${item.vi}" data-en="${item.en}" tabindex="0" role="button" aria-label="${item.vi}">
               <span class="rv-item-emoji">${item.emoji}</span>
@@ -444,7 +444,7 @@
           ${renderHeaderRightBadge(csState.round)}
         </div>
 
-        <div class="rv-slots-row" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div class="rv-slots-row rv-slots-row-4">
           ${chosenShapes.map(sh => `
             <div class="rv-shape-slot" data-shape-id="${sh.id}" data-vi="${sh.nameVi}" data-en="${sh.nameEn}" tabindex="0" role="button" aria-label="${sh.nameVi}">
               <div class="rv-shape-silhouette" style="color:#94a3b8">${sh.svg}</div>
@@ -570,7 +570,7 @@
           ${renderHeaderRightBadge(pzState.round)}
         </div>
 
-        <div class="rv-half-boards" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="rv-half-boards rv-half-boards-3">
           ${pair.map(an => `
             <div class="rv-half-board" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" style="background:${an.bg}" tabindex="0" role="button" aria-label="${an.nameVi}">
               <div class="rv-half-graphic">
@@ -714,7 +714,7 @@
           ${renderHeaderRightBadge(pzState.round)}
         </div>
 
-        <div class="rv-half-boards" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="rv-half-boards rv-half-boards-3">
           ${pair.map(fc => `
             <div class="rv-cutout-board" data-id="${fc.id}" data-vi="${fc.fruitVi} - ${fc.shapeVi}" data-en="${fc.shapeVi}" style="background:${fc.bg}" tabindex="0" role="button" aria-label="${fc.fruitVi}">
               <div class="rv-cutout-fruit-wrap">
@@ -818,7 +818,7 @@
           ${renderHeaderRightBadge(pzState.round)}
         </div>
 
-        <div class="rv-slots-row" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div class="rv-slots-row rv-slots-row-4">
           ${chosen.map(an => `
             <div class="rv-shadow-slot" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" tabindex="0" role="button" aria-label="${_T('Bóng của ' + an.nameVi, 'Shadow of ' + an.nameEn)}">
               <span class="rv-shadow-emoji">${an.emoji}</span>
@@ -1133,7 +1133,7 @@
           ${renderHeaderRightBadge(osState.round)}
         </div>
 
-        <div class="rv-quad-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px">
+        <div class="rv-quad-grid rv-quad-grid-6">
           ${cards.map(item => `
             <button type="button" class="rv-quad-card" data-odd="${item.isOdd ? '1' : '0'}" data-vi="${item.vi}">
               <span style="font-size:clamp(54px,11vw,82px);line-height:1">${item.emoji}</span>
@@ -1277,7 +1277,7 @@
           ${renderHeaderRightBadge(osState.round)}
         </div>
 
-        <div class="rv-quad-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px">
+        <div class="rv-quad-grid rv-quad-grid-6">
           ${opts.map(o => `
             <button type="button" class="rv-quad-card" data-right="${o.isRight ? '1' : '0'}" data-vi="${o.vi}">
               <span style="font-size:clamp(54px,11vw,82px);line-height:1">${o.emoji}</span>
