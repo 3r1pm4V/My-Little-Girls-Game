@@ -662,6 +662,12 @@ async function playSafeAudio(text, voice="Mai Anh", onEnd){
     clearTimeout(ttsDebounceTimers.get(cleanKey));
   }
 
+  // Khi mở file trực tiếp qua giao thức file:// (không có backend server), dùng ngay Web Speech API
+  if(typeof window!=="undefined"&&window.location&&window.location.protocol==="file:"){
+    fallbackToWebSpeech(cleanKey,"vi-VN",finishOnce);
+    return;
+  }
+
   return new Promise(resolve=>{
     const timerId=setTimeout(async()=>{
       ttsDebounceTimers.delete(cleanKey);
