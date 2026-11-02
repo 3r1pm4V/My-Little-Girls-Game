@@ -4131,6 +4131,21 @@ html.rm .confetti-cv, html.rm .fx {
   }
 }
 
+@media (max-width: 599px) {
+  .games-stage-wrap {
+    gap: 4px !important;
+  }
+  .games-side-nav-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+  }
+  .games-side-nav-icon {
+    font-size: 16px !important;
+  }
+}
+
 .games-page-badge {
   background: #e0f2fe !important;
   color: #0369a1 !important;
