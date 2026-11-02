@@ -1702,11 +1702,21 @@ html.rm .confetti-cv, html.rm .fx {
 }
 .rv-prompt {
   margin: 0;
-  font-size: clamp(18px, 4.2vw, 24px);
-  color: #1e293b;
+  font-size: clamp(16px, 3.8vw, 22px);
+  color: #ffffff !important;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  border: 3px solid #ffffff;
+  border-radius: 22px;
+  padding: 6px 18px;
+  box-shadow: 0 6px 14px rgba(29, 78, 216, 0.35);
   cursor: pointer;
   flex: 1;
-  text-align: left;
+  text-align: center;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 .rv-ribbon-blue {
   background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
@@ -4387,10 +4397,19 @@ main:has(.story-box) {
     font-size: 13px !important;
   }
 
-  /* Tô màu & Bút phát sáng */
+  /* Toddler Games & Coloring balance on Landscape Tablet */
   .rv-game-wrap {
+    min-height: calc(100vh - 125px) !important;
+    min-height: calc(100dvh - 125px) !important;
+    max-width: 1080px !important;
+    justify-content: space-evenly !important;
+    padding: 6px 16px 12px !important;
+    gap: 12px !important;
+  }
+  #crColoringWrap, #crGlowWrap {
+    min-height: 0 !important;
+    gap: 6px !important;
     padding: 2px 12px 4px !important;
-    gap: 4px !important;
   }
   .cr-coloring-row {
     flex-wrap: nowrap !important;
@@ -4428,4 +4447,29 @@ main:has(.story-box) {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
+  .cr-coloring-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+  #crSvgCanvas, #crGlowCanvasWrap {
+    width: min(85vw, 480px) !important;
+    height: min(85vw, 480px) !important;
+  }
+  .cr-coloring-sidebar {
+    width: 100% !important;
+    max-width: 480px !important;
+  }
+}
+
+.story-page-indicator, .badge-page-indicator {
+  white-space: nowrap !important;
+  font-size: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.story-page-indicator small, .badge-page-indicator small {
+  display: inline !important;
+  margin: 0 0 0 4px !important;
 }

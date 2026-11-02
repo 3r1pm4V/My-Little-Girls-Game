@@ -1015,8 +1015,8 @@ function showBadges(tab = currentAchieveTab){
           <button type="button" class="pill" onclick="switchBadgePage(${validPage - 1})" ${validPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
             ◀ ${T("Trang trước", "Previous")}
           </button>
-          <span style="font-weight:800;font-size:15px;color:var(--ink);padding:0 6px">
-            ${T(`Trang ${validPage} / ${totalBadgePages}`, `Page ${validPage} / ${totalBadgePages}`)}
+          <span class="badge-page-indicator" style="font-weight:800;font-size:15px;color:var(--ink);padding:0 8px;white-space:nowrap">
+            ${lang === "vi" ? `Trang ${validPage} / ${totalBadgePages}` : `Page ${validPage} / ${totalBadgePages}`}
           </span>
           <button type="button" class="pill" onclick="switchBadgePage(${validPage + 1})" ${validPage >= totalBadgePages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
             ${T("Trang sau", "Next")} ▶
@@ -1050,8 +1050,8 @@ function showBadges(tab = currentAchieveTab){
           <button type="button" class="pill" onclick="switchBadgePage(${validPage - 1})" ${validPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
             ◀ ${T("Trang trước", "Previous")}
           </button>
-          <span style="font-weight:800;font-size:15px;color:var(--ink);padding:0 6px">
-            ${T(`Trang ${validPage} / ${totalStickerPages}`, `Page ${validPage} / ${totalStickerPages}`)}
+          <span class="badge-page-indicator" style="font-weight:800;font-size:15px;color:var(--ink);padding:0 8px;white-space:nowrap">
+            ${lang === "vi" ? `Trang ${validPage} / ${totalStickerPages}` : `Page ${validPage} / ${totalStickerPages}`}
           </span>
           <button type="button" class="pill" onclick="switchBadgePage(${validPage + 1})" ${validPage >= totalStickerPages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
             ${T("Trang sau", "Next")} ▶
@@ -1848,7 +1848,7 @@ function lettersHome(){
       
       <div style="text-align:center;margin:2px 0 6px">
         <h2 style="font-size:22px;margin:0 0 2px">🔤 ${T("Học Chữ & Tập Tô Nét", "Learn Letters & Trace")}</h2>
-        <p style="font-size:13px;color:#64748b;margin:0">${T("Giáo trình Tiền tiểu học chuẩn · 14 Nét cơ bản & 29 Chữ cái", "Pre-primary Curriculum · 14 Strokes & 29 Letters")}</p>
+        <p style="font-size:15px;color:#cbd5e1;font-weight:700;margin:0">${T("Giáo trình Tiền tiểu học chuẩn · 14 Nét cơ bản & 29 Chữ cái", "Pre-primary Curriculum · 14 Strokes & 29 Letters")}</p>
       </div>
 
       <!-- 4 MỤC CHÍNH DÀN TRANG ICON TILES 1 MÀN HÌNH -->
@@ -6672,8 +6672,8 @@ async function storyL(catId, page, search){
                 <button type="button" class="pill" onclick="switchStoryPage(${curStoryPage - 1})" ${curStoryPage <= 1 ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang trước", "Previous")}">
                   ◀ ${T("Trang trước", "Previous")}
                 </button>
-                <span class="story-page-indicator" style="font-weight:800;font-size:15px;color:var(--ink);padding:0 8px">
-                  ${T(`Trang ${curStoryPage} / ${totalPages}`, `Page ${curStoryPage} / ${totalPages}`)} (${list.length} ${T("truyện", "stories")})
+                <span class="story-page-indicator" style="font-weight:800;font-size:15px;color:var(--ink);padding:0 8px;white-space:nowrap">
+                  ${lang === "vi" ? `Trang ${curStoryPage} / ${totalPages} · (${list.length} truyện)` : `Page ${curStoryPage} / ${totalPages} · (${list.length} stories)`}
                 </span>
                 <button type="button" class="pill" onclick="switchStoryPage(${curStoryPage + 1})" ${curStoryPage >= totalPages ? 'disabled style="opacity:0.35;pointer-events:none"' : ''} title="${T("Trang sau", "Next")}">
                   ${T("Trang sau", "Next")} ▶
