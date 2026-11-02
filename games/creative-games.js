@@ -612,6 +612,11 @@
 
     const pic = SVG_COLORING_PICTURES[artState.picIdx % SVG_COLORING_PICTURES.length];
     const saveId = "freehand_color_" + pic.id;
+    const formatColorName = (vi, en) => {
+      const shortVi = (vi || "").replace(/^Màu\s+/i, "");
+      return _T(shortVi.charAt(0).toUpperCase() + shortVi.slice(1), en || "");
+    };
+    const activeCol = COLOR_PALETTE.find(col => col.hex === artState.activeHex) || COLOR_PALETTE[0];
 
     const bcHtml = _kbc([
       { s: "home", t: _T("Trang chủ", "Home"), i: "🏠" },
@@ -622,74 +627,108 @@
     c.innerHTML = `
       ${bcHtml}
       <div class="rv-game-wrap" id="crColoringWrap">
-        <div class="rv-top-bar">
-          <div class="chips" style="margin:0">
-            <button type="button" class="pill on" onclick="window.artStudioGame('color')" style="min-height:48px;font-weight:800">🖍️ ${_T("Tô màu bằng tay", "Hand Coloring")}</button>
-            <button type="button" class="pill" onclick="window.artStudioGame('glow')" style="min-height:48px;font-weight:800">✨ ${_T("Bút phát sáng", "Glow Pen")}</button>
+        <div class="rv-top-bar cr-top-bar">
+          <div class="chips" style="margin:0;gap:6px">
+            <button type="button" class="pill on" onclick="window.artStudioGame('color')" style="min-height:44px;font-weight:800">🖍️ ${_T("Tô màu", "Hand Color")}</button>
+            <button type="button" class="pill" onclick="window.artStudioGame('glow')" style="min-height:44px;font-weight:800">✨ ${_T("Bút phát sáng", "Glow Pen")}</button>
           </div>
+
+          <div class="cr-pic-nav-bar">
+            <button type="button" class="pill cr-nav-arrow" id="crPrevPicBtn" aria-label="${_T("Tranh trước", "Previous picture")}" title="${_T("Tranh trước", "Previous picture")}">◀</button>
+            <div class="cr-pic-dropdown-wrap">
+              <select class="bhv-select cr-pic-dropdown" id="crPicSelect" aria-label="${_T("Chọn tranh tô màu", "Pick a picture")}">
+                ${SVG_COLORING_PICTURES.map((p, idx) => `<option value="${idx}" ${idx === (artState.picIdx % SVG_COLORING_PICTURES.length) ? "selected" : ""}>${p.icon} ${_T(p.titleVi, p.titleEn)}</option>`).join("")}
+              </select>
+            </div>
+            <button type="button" class="pill cr-nav-arrow" id="crNextPicNavBtn" aria-label="${_T("Tranh tiếp", "Next picture")}" title="${_T("Tranh tiếp", "Next picture")}">▶</button>
+            <button type="button" class="pill cr-speak-btn" id="crSpeakTitleBtn" aria-label="${_T("Nghe tên tranh", "Hear title")}" title="${_T("Bấm để nghe đọc tên tranh", "Hear picture name")}">🔊</button>
+          </div>
+
           ${renderCreativeHeaderBadge(artState.round)}
         </div>
 
-        <div id="crResumeBanner" style="display:none;background:#fef9c3;border:2px solid #facc15;border-radius:18px;padding:8px 14px;text-align:center;font-weight:800;color:#854d0e">
+        <div id="crResumeBanner" style="display:none;background:#fef9c3;border:2px solid #facc15;border-radius:18px;padding:6px 14px;text-align:center;font-weight:800;color:#854d0e;margin:2px auto 6px">
           🌟 ${_T("Bé có bức tranh đang tô dở:", "Resume your unfinished drawing:")}
-          <button type="button" class="pill on" id="crResumeBtn" style="margin-left:8px;min-height:44px;background:#eab308;color:#fff">🖌️ ${_T("Tô tiếp bức đang dở", "Resume Drawing")}</button>
-        </div>
-
-        <div style="display:flex;justify-content:center;margin:4px 0 8px">
-          <select class="bhv-select" id="crPicSelect" aria-label="${_T("Chọn tranh tô màu", "Pick a picture")}">
-            ${SVG_COLORING_PICTURES.map((p, idx) => `<option value="${idx}" ${idx === (artState.picIdx % SVG_COLORING_PICTURES.length) ? "selected" : ""}>${p.icon} ${_T(p.titleVi, p.titleEn)}</option>`).join("")}
-          </select>
+          <button type="button" class="pill on" id="crResumeBtn" style="margin-left:8px;min-height:40px;background:#eab308;color:#fff">🖌️ ${_T("Tô tiếp bức đang dở", "Resume Drawing")}</button>
         </div>
 
         <div class="cr-coloring-row">
-          <div style="text-align:center">
-            <h3 role="button" tabindex="0" onclick="say('${pic.titleVi}', '${pic.titleEn}')" style="margin:0 0 6px;font-size:20px;color:#1e293b;cursor:pointer" title="${_T("Bấm để nghe tên tranh", "Tap to hear title")}">🔊 ${pic.icon} ${_T(pic.titleVi, pic.titleEn)} <small style="font-size:13px;color:#64748b;font-weight:700">(${_T("Bé kéo ngón tay để tô màu nhé!", "Drag your finger to color!")})</small></h3>
-            <div id="crSvgCanvas" style="position:relative;width:min(86vw,350px);aspect-ratio:1/1;margin:0 auto;background:#ffffff;border:4px solid #bae6fd;border-radius:24px;box-shadow:0 8px 20px rgba(2,132,199,0.14);overflow:hidden;touch-action:none;user-select:none">
-              <img src="${pic.imgSrc}" alt="${pic.titleVi}" draggable="false" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;z-index:1;background:#ffffff" />
-              <canvas id="crHandColorCanvas" width="350" height="350" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;mix-blend-mode:multiply;cursor:crosshair;touch-action:none"></canvas>
+          <!-- KHU VỰC KHUNG VẼ TO RỘNG CHO BÉ -->
+          <div class="cr-canvas-container">
+            <div id="crSvgCanvas" class="cr-svg-canvas">
+              <img src="${pic.imgSrc}" alt="${pic.titleVi}" draggable="false" class="cr-canvas-bg" />
+              <canvas id="crHandColorCanvas" width="500" height="500" class="cr-canvas-layer"></canvas>
+              <!-- VÒNG TRÒN HIỂN THỊ VÙNG TÔ ĐƯỢC DƯỚI NGÓN TAY BÉ -->
+              <div id="crBrushCursor" class="cr-brush-indicator" style="display:none;opacity:0;"></div>
             </div>
           </div>
 
-          <div class="cr-coloring-side">
-            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px;flex-wrap:wrap;gap:6px">
-              <span style="font-weight:800;color:#334155;font-size:15px">${_T("Bút sáp màu & cỡ cọ:", "Crayon color & brush size:")}</span>
-              <div class="cr-active-color-badge" id="crActiveColorBadge">
-                <span>🖍️</span>
-                <span class="cr-active-color-dot" id="crActiveColorDot" style="background:${artState.isEraser ? '#ffffff' : artState.activeHex}"></span>
-                <strong id="crActiveColorText">${artState.isEraser ? _T("Cục tẩy trắng", "Eraser") : _T(COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.vi || "Màu đỏ", COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.en || "Red")}</strong>
+          <!-- THANH CÔNG CỤ TINH GỌN (BỘ CHỌN MÀU SELECTOR + CỠ CỌ + NÚT BẤM) -->
+          <div class="cr-coloring-sidebar">
+            <div class="cr-tool-card">
+              <span class="cr-tool-label">${_T("Màu sáp & Tẩy", "Crayon & Eraser")}:</span>
+              <div class="cr-color-ctrl-row">
+                <!-- NÚT BỘ CHỌN MÀU (POPUP SELECTOR) -->
+                <button type="button" class="pill cr-color-picker-trigger" id="crColorPickerBtn" title="${_T("Bấm để mở bảng chọn màu", "Tap to open palette")}">
+                  <span class="cr-active-color-dot" id="crActiveColorDot" style="background:${artState.isEraser ? '#ffffff' : artState.activeHex}"></span>
+                  <strong class="cr-active-color-name" id="crActiveColorText">${artState.isEraser ? _T("Cục tẩy", "Eraser") : formatColorName(activeCol.vi, activeCol.en)}</strong>
+                  <span class="cr-picker-chevron">🎨 ▾</span>
+                </button>
+
+                <!-- NÚT CỤC TẨY TRẮNG TIỆN LỢI -->
+                <button type="button" class="pill cr-eraser-btn ${artState.isEraser ? 'on' : ''}" id="crEraserBtn" title="${_T("Cục tẩy trắng", "Eraser")}">
+                  🧼 ${_T("Tẩy", "Eraser")}
+                </button>
               </div>
+            </div>
+
+            <!-- CHỌN CỠ NÉT VẼ -->
+            <div class="cr-tool-card">
+              <span class="cr-tool-label">${_T("Cỡ ngòi vẽ", "Brush Size")}:</span>
+              <div class="chips cr-brush-chips" style="margin:0;gap:6px">
+                ${[
+                  { sz: 14, label: _T("Nhỏ", "Small"), dot: 10 },
+                  { sz: 26, label: _T("Vừa", "Medium"), dot: 16 },
+                  { sz: 42, label: _T("To", "Large"), dot: 24 }
+                ].map(b => `
+                  <button type="button" class="pill cr-brush-btn ${(!artState.isEraser && artState.brushSize === b.sz) ? 'on' : ''}" data-sz="${b.sz}">
+                    <span class="cr-brush-dot" style="width:${b.dot}px;height:${b.dot}px;border-radius:50%;background:${artState.isEraser ? '#64748b' : artState.activeHex};display:inline-block"></span>
+                    <span>${b.label}</span>
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+
+            <!-- CÁC THAO TÁC: HOÀN TÁC, TÔ LẠI, XONG RỒI -->
+            <div class="cr-tool-card cr-actions-card">
+              <div class="cr-action-btns-row">
+                <button type="button" class="pill cr-sub-btn" id="crUndoColorBtn" title="${_T("Lùi lại một nét", "Undo stroke")}">↩️ ${_T("Hoàn tác", "Undo")}</button>
+                <button type="button" class="pill cr-sub-btn cr-clear-btn" id="crClearColorBtn" title="${_T("Tô lại từ đầu", "Clear canvas")}">🧹 ${_T("Tô lại", "Clear")}</button>
+              </div>
+              <button type="button" class="pill on cr-done-btn" id="crDoneColorBtn">✔ ${_T("Xong rồi!", "All Done!")}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HỘP THOẠI POPUP BẢNG MÀU SÁP CHO BÉ CHỌN (MODAL SELECTOR) -->
+        <div id="crPaletteModal" class="cr-palette-modal" style="display:none;" aria-hidden="true">
+          <div class="cr-palette-backdrop" id="crPaletteBackdrop"></div>
+          <div class="cr-palette-sheet" role="dialog" aria-modal="true" aria-label="${_T("Bảng màu sáp", "Crayon Palette")}">
+            <div class="cr-palette-header">
+              <h4 style="margin:0;font-size:19px;display:flex;align-items:center;gap:8px;color:#1e293b;font-weight:900">
+                🎨 <span>${_T("Bé chọn màu sáp yêu thích:", "Pick your favorite crayon:")}</span>
+              </h4>
+              <button type="button" class="cr-palette-close-btn" id="crPaletteCloseBtn" aria-label="${_T("Đóng", "Close")}">✖</button>
             </div>
             <div class="cr-swatches-grid">
               ${COLOR_PALETTE.map(col => {
-                const isSelected = (!artState.isEraser && col.hex === artState.activeHex) || (artState.isEraser && col.isEraser);
+                const isSelected = (!artState.isEraser && col.hex === artState.activeHex);
                 return `
-                <button type="button" class="cr-color-swatch ${isSelected ? 'on' : ''}" data-hex="${col.hex}" data-eraser="${col.isEraser ? '1' : '0'}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}" title="${col.vi} (${col.en})"
-                  style="background:${col.hex};border:${isSelected ? (col.isEraser ? '4px solid #0284c7' : '4px solid #ffffff') : (col.isEraser ? '3px solid #cbd5e1' : '2px solid rgba(0,0,0,0.15)')};display:flex;align-items:center;justify-content:center;cursor:pointer">
-                  ${col.isEraser ? "🧼" : ""}
+                <button type="button" class="cr-color-swatch ${isSelected ? 'on' : ''}" data-hex="${col.hex}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}" title="${col.vi} (${col.en})"
+                  style="background:${col.hex};">
+                  ${isSelected ? '<span class="cr-swatch-check">✔</span>' : ''}
                 </button>`;
               }).join("")}
-            </div>
-
-            <div class="chips" style="margin:2px 0;gap:8px;align-items:center;flex-wrap:wrap">
-              ${[
-                { sz: 10, label: _T("Cọ nhỏ", "Small"), dot: 10 },
-                { sz: 18, label: _T("Cọ vừa", "Medium"), dot: 16 },
-                { sz: 28, label: _T("Cọ to", "Large"), dot: 22 }
-              ].map(b => `
-                <button type="button" class="pill cr-brush-btn ${(!artState.isEraser && artState.brushSize === b.sz) ? 'on' : ''}" data-sz="${b.sz}" style="min-height:46px;padding:6px 12px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
-                  <span style="width:${b.dot}px;height:${b.dot}px;border-radius:50%;background:currentColor;display:inline-block"></span> ${b.label}
-                </button>
-              `).join("")}
-              <button type="button" class="pill cr-eraser-btn ${artState.isEraser ? 'on' : ''}" id="crEraserBtn" style="min-height:46px;padding:6px 14px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
-                🧼 ${_T("Cục tẩy", "Eraser")}
-              </button>
-            </div>
-
-            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px">
-              <button type="button" class="pill" id="crUndoColorBtn" style="min-height:54px;padding:8px 14px;font-weight:800">↩️ ${_T("Hoàn tác", "Undo")}</button>
-              <button type="button" class="pill" id="crClearColorBtn" style="min-height:54px;padding:8px 14px;font-weight:800;background:#fee2e2;color:#991b1b;border-color:#fca5a5">🧹 ${_T("Tô lại", "Clear")}</button>
-              <button type="button" class="pill" id="crNextPicBtn" style="min-height:54px;padding:8px 14px;font-weight:800">🔄 ${_T("Tranh khác", "Next")}</button>
-              <button type="button" class="pill on" id="crDoneColorBtn" style="min-height:54px;padding:8px 20px;font-weight:900;background:#16a34a;color:#fff;border-color:#15803d">✔ ${_T("Xong rồi!", "All Done!")}</button>
             </div>
           </div>
         </div>
@@ -702,6 +741,7 @@
     if (!wrap) return;
     const cv = wrap.querySelector("#crHandColorCanvas");
     const ctx = cv && cv.getContext ? cv.getContext("2d") : null;
+    const cursorEl = wrap.querySelector("#crBrushCursor");
     let strokes = [];
     let currentStroke = null;
 
@@ -713,7 +753,7 @@
         ctx.save();
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.lineWidth = st.size || 18;
+        ctx.lineWidth = st.size || 26;
         if (st.eraser) {
           ctx.globalCompositeOperation = "destination-out";
           ctx.strokeStyle = "rgba(0,0,0,1)";
@@ -749,7 +789,18 @@
         if (banner && btn) {
           banner.style.display = "block";
           btn.onclick = () => {
-            strokes = saved.strokes;
+            // Tương thích ngược: nếu nét vẽ được lưu ở chuẩn cũ 350x350, tự động scale lên 500x500
+            const maxCoord = Math.max(...saved.strokes.flatMap(st => (st.points || []).flatMap(pt => [pt.x, pt.y])), 0);
+            if (maxCoord > 0 && maxCoord <= 360) {
+              const ratio = 500 / 350;
+              strokes = saved.strokes.map(st => ({
+                ...st,
+                size: Math.round((st.size || 18) * ratio),
+                points: (st.points || []).map(p => ({ x: Math.round(p.x * ratio), y: Math.round(p.y * ratio) }))
+              }));
+            } else {
+              strokes = saved.strokes;
+            }
             redrawAllStrokes();
             banner.style.display = "none";
             _sfxTing();
@@ -758,13 +809,51 @@
       }
     });
 
+    // Cập nhật vị trí và kích thước vòng tròn hiển thị vùng tô dưới ngón tay bé
+    function updateBrushCursor(e, visible) {
+      if (!cursorEl || !cv) return;
+      if (!visible) {
+        cursorEl.style.opacity = "0";
+        cursorEl.style.display = "none";
+        return;
+      }
+      const r = cv.getBoundingClientRect();
+      const p = e.touches && e.touches[0] ? e.touches[0] : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0] : e);
+      const relX = p.clientX - r.left;
+      const relY = p.clientY - r.top;
+
+      if (relX < -15 || relX > r.width + 15 || relY < -15 || relY > r.height + 15) {
+        cursorEl.style.opacity = "0";
+        cursorEl.style.display = "none";
+        return;
+      }
+
+      const scale = r.width / cv.width;
+      const diamCss = Math.max(14, Math.round(artState.brushSize * scale));
+
+      cursorEl.style.width = diamCss + "px";
+      cursorEl.style.height = diamCss + "px";
+      cursorEl.style.left = relX + "px";
+      cursorEl.style.top = relY + "px";
+
+      if (artState.isEraser) {
+        cursorEl.style.background = "rgba(255, 255, 255, 0.55)";
+        cursorEl.style.borderColor = "#0284c7";
+      } else {
+        cursorEl.style.background = artState.activeHex + "44";
+        cursorEl.style.borderColor = "rgba(15, 23, 42, 0.75)";
+      }
+      cursorEl.style.display = "block";
+      cursorEl.style.opacity = "1";
+    }
+
     if (cv) {
       const getPt = (e) => {
         const r = cv.getBoundingClientRect();
         const p = e.touches && e.touches[0] ? e.touches[0] : e;
         return {
-          x: Math.round(((p.clientX - r.left) / (r.width || 350)) * cv.width),
-          y: Math.round(((p.clientY - r.top) / (r.height || 350)) * cv.height)
+          x: Math.round(((p.clientX - r.left) / (r.width || 500)) * cv.width),
+          y: Math.round(((p.clientY - r.top) / (r.height || 500)) * cv.height)
         };
       };
 
@@ -779,36 +868,45 @@
         };
         strokes.push(currentStroke);
         redrawAllStrokes();
+        updateBrushCursor(e, true);
       };
 
       const moveDraw = (e) => {
-        if (!currentStroke) return;
+        if (!currentStroke) {
+          updateBrushCursor(e, true);
+          return;
+        }
         if (e.cancelable) e.preventDefault();
         const pt = getPt(e);
         const last = currentStroke.points[currentStroke.points.length - 1];
         if (Math.hypot(pt.x - last.x, pt.y - last.y) < 3) return;
         currentStroke.points.push(pt);
         redrawAllStrokes();
+        updateBrushCursor(e, true);
       };
 
-      const endDraw = () => {
+      const endDraw = (e) => {
         if (!currentStroke) return;
         currentStroke = null;
         scheduleAutosave();
+        updateBrushCursor(e, false);
       };
 
       cv.addEventListener("mousedown", startDraw);
       cv.addEventListener("mousemove", moveDraw);
+      cv.addEventListener("mouseleave", (e) => updateBrushCursor(e, false));
       window.addEventListener("mouseup", endDraw);
       cv.addEventListener("touchstart", startDraw, { passive: false });
       cv.addEventListener("touchmove", moveDraw, { passive: false });
       cv.addEventListener("touchend", endDraw);
+      cv.addEventListener("touchcancel", endDraw);
     }
 
+    // Điều hướng chọn tranh
     const picSel = wrap.querySelector("#crPicSelect");
-    if (picSel) [picSel].forEach(btn => {
-      btn.addEventListener("change", () => {
-        const idx = parseInt(btn.value, 10);
+    if (picSel) {
+      picSel.addEventListener("change", () => {
+        const idx = parseInt(picSel.value, 10);
         if (!isNaN(idx)) {
           saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [...strokes] });
           artState.picIdx = idx;
@@ -816,7 +914,60 @@
           renderSvgColoringStudio();
         }
       });
-    });
+    }
+
+    const prevBtn = wrap.querySelector("#crPrevPicBtn");
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [...strokes] });
+        artState.picIdx = (artState.picIdx - 1 + SVG_COLORING_PICTURES.length) % SVG_COLORING_PICTURES.length;
+        _sfxTap();
+        renderSvgColoringStudio();
+      });
+    }
+
+    const nextNavBtn = wrap.querySelector("#crNextPicNavBtn");
+    if (nextNavBtn) {
+      nextNavBtn.addEventListener("click", () => {
+        saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [...strokes] });
+        artState.picIdx = (artState.picIdx + 1) % SVG_COLORING_PICTURES.length;
+        _sfxTap();
+        renderSvgColoringStudio();
+      });
+    }
+
+    const speakTitleBtn = wrap.querySelector("#crSpeakTitleBtn");
+    if (speakTitleBtn) {
+      speakTitleBtn.addEventListener("click", () => {
+        _sfxTap();
+        if (typeof window !== "undefined" && window.say) {
+          window.say(pic.titleVi, pic.titleEn);
+        }
+      });
+    }
+
+    // Quản lý Modal Chọn Màu (Color Selector Popover)
+    const modal = wrap.querySelector("#crPaletteModal");
+    const openBtn = wrap.querySelector("#crColorPickerBtn");
+    const closeBtn = wrap.querySelector("#crPaletteCloseBtn");
+    const backdrop = wrap.querySelector("#crPaletteBackdrop");
+
+    function openPaletteModal() {
+      if (!modal) return;
+      modal.style.display = "flex";
+      modal.setAttribute("aria-hidden", "false");
+      _sfxTap();
+    }
+
+    function closePaletteModal() {
+      if (!modal) return;
+      modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openPaletteModal);
+    if (closeBtn) closeBtn.addEventListener("click", () => { closePaletteModal(); _sfxTap(); });
+    if (backdrop) backdrop.addEventListener("click", closePaletteModal);
 
     function updateColorSwatchUI(selectedBtn) {
       artState.isEraser = false;
@@ -827,26 +978,30 @@
       wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
         const isSel = (b === selectedBtn);
         b.classList.toggle("on", isSel);
-        b.style.border = isSel ? "4px solid #ffffff" : "2px solid rgba(0,0,0,0.15)";
+        b.innerHTML = isSel ? '<span class="cr-swatch-check">✔</span>' : '';
       });
+
       const badgeText = wrap.querySelector("#crActiveColorText");
       const badgeDot = wrap.querySelector("#crActiveColorDot");
       if (badgeText) {
-        badgeText.textContent = _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+        badgeText.textContent = formatColorName(selectedBtn.dataset.vi, selectedBtn.dataset.en);
       }
       if (badgeDot) {
         badgeDot.style.background = selectedBtn.dataset.hex;
       }
-      wrap.querySelectorAll(".cr-brush-btn span").forEach(sp => {
+      wrap.querySelectorAll(".cr-brush-btn .cr-brush-dot").forEach(sp => {
         sp.style.background = artState.activeHex;
       });
+
+      closePaletteModal();
+      _sfxTap();
+      if (typeof window !== "undefined" && window.say) {
+        window.say(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+      }
     }
 
     wrap.querySelectorAll(".cr-color-swatch").forEach(btn => {
-      btn.addEventListener("click", () => {
-        updateColorSwatchUI(btn);
-        _sfxTap();
-      });
+      btn.addEventListener("click", () => updateColorSwatchUI(btn));
     });
 
     const eraserBtn = wrap.querySelector("#crEraserBtn");
@@ -856,13 +1011,13 @@
         eraserBtn.classList.add("on");
         wrap.querySelectorAll(".cr-color-swatch").forEach(b => {
           b.classList.remove("on");
-          b.style.border = "2px solid rgba(0,0,0,0.15)";
+          b.innerHTML = '';
         });
         const badgeText = wrap.querySelector("#crActiveColorText");
         const badgeDot = wrap.querySelector("#crActiveColorDot");
-        if (badgeText) badgeText.textContent = _T("Cục tẩy trắng", "Eraser");
+        if (badgeText) badgeText.textContent = _T("Cục tẩy", "Eraser");
         if (badgeDot) badgeDot.style.background = "#ffffff";
-        wrap.querySelectorAll(".cr-brush-btn span").forEach(sp => {
+        wrap.querySelectorAll(".cr-brush-btn .cr-brush-dot").forEach(sp => {
           sp.style.background = "#64748b";
         });
         _sfxTap();
@@ -871,7 +1026,7 @@
 
     wrap.querySelectorAll(".cr-brush-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        artState.brushSize = parseInt(btn.dataset.sz, 10) || 18;
+        artState.brushSize = parseInt(btn.dataset.sz, 10) || 26;
         wrap.querySelectorAll(".cr-brush-btn").forEach(b => b.classList.toggle("on", b === btn));
         _sfxTap();
       });
@@ -899,15 +1054,6 @@
       });
     }
 
-    const nextBtn = wrap.querySelector("#crNextPicBtn");
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        saveDrawingRecord({ id: saveId, type: "freehand_color", picId: pic.id, strokes: [...strokes] });
-        artState.picIdx = (artState.picIdx + 1) % SVG_COLORING_PICTURES.length;
-        renderSvgColoringStudio();
-      });
-    }
-
     const doneBtn = wrap.querySelector("#crDoneColorBtn");
     if (doneBtn) {
       doneBtn.addEventListener("click", () => {
@@ -931,6 +1077,11 @@
   function renderGlowPenStudio() {
     const c = getContainer();
     if (!c) return;
+    const formatColorName = (vi, en) => {
+      const shortVi = (vi || "").replace(/^Màu\s+/i, "");
+      return _T(shortVi.charAt(0).toUpperCase() + shortVi.slice(1), en || "");
+    };
+    const activeCol = COLOR_PALETTE.find(col => col.hex === artState.activeHex) || COLOR_PALETTE[0];
 
     const bcHtml = _kbc([
       { s: "home", t: _T("Trang chủ", "Home"), i: "🏠" },
@@ -941,35 +1092,59 @@
     c.innerHTML = `
       ${bcHtml}
       <div class="rv-game-wrap" id="crGlowWrap">
-        <div class="rv-top-bar">
-          <div class="chips" style="margin:0">
-            <button type="button" class="pill" onclick="window.artStudioGame('color')" style="min-height:48px;font-weight:800">🖍️ ${_T("Tô màu bằng tay", "Hand Coloring")}</button>
-            <button type="button" class="pill on" onclick="window.artStudioGame('glow')" style="min-height:48px;font-weight:800">✨ ${_T("Bút phát sáng", "Glow Pen")}</button>
+        <div class="rv-top-bar cr-top-bar">
+          <div class="chips" style="margin:0;gap:6px">
+            <button type="button" class="pill" onclick="window.artStudioGame('color')" style="min-height:44px;font-weight:800">🖍️ ${_T("Tô màu", "Hand Color")}</button>
+            <button type="button" class="pill on" onclick="window.artStudioGame('glow')" style="min-height:44px;font-weight:800">✨ ${_T("Bút phát sáng", "Glow Pen")}</button>
           </div>
+          <div style="font-size:16px;font-weight:800;color:#38bdf8">✨ ${_T("Vẽ tia sáng thần kỳ", "Magical Neon Glow")}</div>
           ${renderCreativeHeaderBadge(artState.round)}
         </div>
 
-        <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap">
-          <canvas id="crGlowCanvas" width="320" height="270" style="width:min(84vw,350px);height:auto;background:#0f172a;border:4px solid #38bdf8;border-radius:26px;touch-action:none;box-shadow:0 8px 24px rgba(15,23,42,0.45)"></canvas>
-
-          <div style="display:flex;flex-direction:column;gap:8px;align-items:center;max-width:420px">
-            <div class="cr-active-glow-badge" id="crActiveGlowBadge">
-              <span>✨</span>
-              <span class="cr-active-glow-dot" id="crActiveGlowDot" style="background:${artState.activeHex};box-shadow:0 0 10px ${artState.activeHex}"></span>
-              <strong id="crActiveGlowText">${_T(COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.vi || "Màu đỏ", COLOR_PALETTE.find(c => c.hex === artState.activeHex)?.en || "Red")}</strong>
+        <div class="cr-coloring-row">
+          <div class="cr-canvas-container">
+            <div id="crGlowCanvasWrap" class="cr-svg-canvas cr-glow-canvas-wrap" style="position:relative;background:#0f172a;border:4px solid #38bdf8;border-radius:26px;overflow:hidden;box-shadow:0 8px 24px rgba(15,23,42,0.45)">
+              <canvas id="crGlowCanvas" width="500" height="500" style="display:block;width:100%;height:100%;touch-action:none;cursor:crosshair"></canvas>
+              <div id="crGlowBrushCursor" class="cr-brush-indicator cr-glow-indicator" style="display:none;opacity:0;"></div>
             </div>
-            <div class="cr-glow-swatches-grid">
+          </div>
+
+          <div class="cr-coloring-sidebar">
+            <div class="cr-tool-card">
+              <span class="cr-tool-label">${_T("Màu ánh sáng", "Glow Color")}:</span>
+              <button type="button" class="pill cr-color-selector-btn" id="crGlowColorPickerBtn" style="border-color:#38bdf8;box-shadow:0 0 12px rgba(56,189,248,0.3)">
+                <span class="cr-active-color-dot" id="crActiveGlowDot" style="background:${artState.activeHex};box-shadow:0 0 10px ${artState.activeHex}"></span>
+                <strong class="cr-active-color-name" id="crActiveGlowText">${_T(activeCol.vi, activeCol.en)}</strong>
+                <span class="cr-picker-chevron">✨ ▾</span>
+              </button>
+            </div>
+
+            <div class="cr-tool-card cr-actions-card">
+              <button type="button" class="pill cr-sub-btn cr-clear-btn" id="crGlowClearBtn" style="min-height:48px;font-weight:800;background:#fee2e2;color:#991b1b;border-color:#fca5a5">🧹 ${_T("Xóa bảng", "Clear")}</button>
+              <button type="button" class="pill on cr-done-btn" id="crGlowDoneBtn">✔ ${_T("Xong rồi!", "All Done!")}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HỘP THOẠI POPUP BẢNG MÀU ÁNH SÁNG -->
+        <div id="crGlowPaletteModal" class="cr-palette-modal" style="display:none;" aria-hidden="true">
+          <div class="cr-palette-backdrop" id="crGlowPaletteBackdrop"></div>
+          <div class="cr-palette-sheet" style="background:#0f172a;border-color:#38bdf8" role="dialog" aria-modal="true">
+            <div class="cr-palette-header">
+              <h4 style="margin:0;font-size:19px;display:flex;align-items:center;gap:8px;color:#38bdf8;font-weight:900">
+                ✨ <span>${_T("Chọn màu ánh sáng neon:", "Pick a neon glow color:")}</span>
+              </h4>
+              <button type="button" class="cr-palette-close-btn" id="crGlowPaletteCloseBtn" style="color:#ffffff;background:#334155" aria-label="${_T("Đóng", "Close")}">✖</button>
+            </div>
+            <div class="cr-swatches-grid">
               ${COLOR_PALETTE.map(col => {
                 const isSelected = (col.hex === artState.activeHex);
                 return `
                 <button type="button" class="cr-glow-swatch ${isSelected ? 'on' : ''}" data-hex="${col.hex}" data-vi="${col.vi}" data-en="${col.en}" aria-label="${col.vi}" title="${col.vi} (${col.en})"
-                  style="background:${col.hex};border:${isSelected ? '4px solid #ffffff' : '3px solid #334155'};box-shadow:0 0 ${isSelected ? '16px' : '6px'} ${col.hex};display:flex;align-items:center;justify-content:center;cursor:pointer">
+                  style="background:${col.hex};border:${isSelected ? '4px solid #ffffff' : '3px solid #334155'};box-shadow:0 0 ${isSelected ? '18px' : '6px'} ${col.hex};">
+                  ${isSelected ? '<span class="cr-swatch-check" style="color:#fff">✔</span>' : ''}
                 </button>`;
               }).join("")}
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
-              <button type="button" class="pill" id="crGlowClearBtn" style="min-height:64px;min-width:110px;font-weight:800;background:#fee2e2;color:#991b1b;border-color:#fca5a5">🧹 ${_T("Xóa bảng", "Clear")}</button>
-              <button type="button" class="pill on" id="crGlowDoneBtn" style="min-height:64px;min-width:120px;font-weight:900;background:#16a34a;color:#fff;border-color:#15803d">✔ ${_T("Xong", "Done")}</button>
             </div>
           </div>
         </div>
@@ -981,6 +1156,7 @@
     const wrap = c.querySelector("#crGlowWrap");
     const cv = c.querySelector("#crGlowCanvas");
     if (!wrap || !cv) return;
+    const cursorEl = wrap.querySelector("#crGlowBrushCursor");
     const ctx = cv.getContext ? cv.getContext("2d") : null;
     let strokes = []; // mỗi phần tử: { color, points: [{x,y}] }
     let currentStroke = null;
@@ -1002,12 +1178,12 @@
         ctx.lineJoin = "round";
         ctx.strokeStyle = st.color;
         ctx.shadowColor = st.color;
-        ctx.shadowBlur = 14;
-        ctx.lineWidth = 8;
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 10;
         ctx.stroke();
         ctx.strokeStyle = "#ffffff";
         ctx.shadowBlur = 0;
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 3;
         ctx.stroke();
         ctx.restore();
       });
@@ -1022,12 +1198,41 @@
       }
     });
 
+    function updateGlowCursor(e, visible) {
+      if (!cursorEl || !cv) return;
+      if (!visible) {
+        cursorEl.style.opacity = "0";
+        cursorEl.style.display = "none";
+        return;
+      }
+      const r = cv.getBoundingClientRect();
+      const p = e.touches && e.touches[0] ? e.touches[0] : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0] : e);
+      const relX = p.clientX - r.left;
+      const relY = p.clientY - r.top;
+
+      if (relX < -15 || relX > r.width + 15 || relY < -15 || relY > r.height + 15) {
+        cursorEl.style.opacity = "0";
+        cursorEl.style.display = "none";
+        return;
+      }
+
+      cursorEl.style.width = "24px";
+      cursorEl.style.height = "24px";
+      cursorEl.style.left = relX + "px";
+      cursorEl.style.top = relY + "px";
+      cursorEl.style.background = artState.activeHex + "66";
+      cursorEl.style.borderColor = "#ffffff";
+      cursorEl.style.boxShadow = `0 0 12px ${artState.activeHex}, inset 0 0 6px ${artState.activeHex}`;
+      cursorEl.style.display = "block";
+      cursorEl.style.opacity = "1";
+    }
+
     function getCanvasPt(e) {
       const r = cv.getBoundingClientRect();
       const p = e.touches ? e.touches[0] : e;
       return {
-        x: Math.round(((p.clientX - r.left) / (r.width || 320)) * cv.width),
-        y: Math.round(((p.clientY - r.top) / (r.height || 270)) * cv.height)
+        x: Math.round(((p.clientX - r.left) / (r.width || 500)) * cv.width),
+        y: Math.round(((p.clientY - r.top) / (r.height || 500)) * cv.height)
       };
     }
 
@@ -1037,36 +1242,66 @@
       currentStroke = { color: artState.activeHex, points: [pt] };
       strokes.push(currentStroke);
       totalPoints++;
+      updateGlowCursor(e, true);
     }
 
     function onMove(e) {
-      if (!currentStroke) return;
+      if (!currentStroke) {
+        updateGlowCursor(e, true);
+        return;
+      }
       if (e.cancelable) e.preventDefault();
       const pt = getCanvasPt(e);
       const last = currentStroke.points[currentStroke.points.length - 1];
       if (Math.hypot(pt.x - last.x, pt.y - last.y) < 5) return;
       currentStroke.points.push(pt);
       totalPoints++;
-      // Giới hạn số điểm để máy yếu luôn mượt
       while (totalPoints > MAX_GLOW_POINTS && strokes.length > 1) {
         const removed = strokes.shift();
         totalPoints -= (removed.points ? removed.points.length : 0);
       }
       redrawGlow();
+      updateGlowCursor(e, true);
     }
 
-    function onEnd() {
+    function onEnd(e) {
       if (!currentStroke) return;
       currentStroke = null;
       saveDrawingRecord({ id: "glow_pen_latest", type: "glow_pen", strokes });
+      updateGlowCursor(e, false);
     }
 
     cv.addEventListener("mousedown", onStart);
     cv.addEventListener("mousemove", onMove);
-    cv.addEventListener("mouseup", onEnd);
+    cv.addEventListener("mouseleave", (e) => updateGlowCursor(e, false));
+    window.addEventListener("mouseup", onEnd);
     cv.addEventListener("touchstart", onStart, { passive: false });
     cv.addEventListener("touchmove", onMove, { passive: false });
     cv.addEventListener("touchend", onEnd);
+    cv.addEventListener("touchcancel", onEnd);
+
+    // Modal quản lý bảng màu Glow
+    const glowModal = wrap.querySelector("#crGlowPaletteModal");
+    const openGlowBtn = wrap.querySelector("#crGlowColorPickerBtn");
+    const closeGlowBtn = wrap.querySelector("#crGlowPaletteCloseBtn");
+    const backdropGlow = wrap.querySelector("#crGlowPaletteBackdrop");
+
+    function openGlowModal() {
+      if (!glowModal) return;
+      glowModal.style.display = "flex";
+      glowModal.setAttribute("aria-hidden", "false");
+      _sfxTap();
+    }
+
+    function closeGlowModal() {
+      if (!glowModal) return;
+      glowModal.style.display = "none";
+      glowModal.setAttribute("aria-hidden", "true");
+    }
+
+    if (openGlowBtn) openGlowBtn.addEventListener("click", openGlowModal);
+    if (closeGlowBtn) closeGlowBtn.addEventListener("click", () => { closeGlowModal(); _sfxTap(); });
+    if (backdropGlow) backdropGlow.addEventListener("click", closeGlowModal);
 
     function updateGlowSwatchUI(selectedBtn) {
       artState.activeHex = selectedBtn.dataset.hex;
@@ -1075,23 +1310,26 @@
         b.classList.toggle("on", isSel);
         b.style.border = isSel ? "4px solid #ffffff" : "3px solid #334155";
         b.style.boxShadow = isSel ? `0 0 18px ${b.dataset.hex}` : `0 0 6px ${b.dataset.hex}`;
+        b.innerHTML = isSel ? '<span class="cr-swatch-check" style="color:#fff">✔</span>' : '';
       });
       const badgeText = wrap.querySelector("#crActiveGlowText");
       const badgeDot = wrap.querySelector("#crActiveGlowDot");
       if (badgeText) {
-        badgeText.textContent = _T(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+        badgeText.textContent = formatColorName(selectedBtn.dataset.vi, selectedBtn.dataset.en);
       }
       if (badgeDot) {
         badgeDot.style.background = selectedBtn.dataset.hex;
         badgeDot.style.boxShadow = `0 0 10px ${selectedBtn.dataset.hex}`;
       }
+      closeGlowModal();
+      _sfxTap();
+      if (typeof window !== "undefined" && window.say) {
+        window.say(selectedBtn.dataset.vi, selectedBtn.dataset.en);
+      }
     }
 
     wrap.querySelectorAll(".cr-glow-swatch").forEach(btn => {
-      btn.addEventListener("click", () => {
-        updateGlowSwatchUI(btn);
-        _sfxTap();
-      });
+      btn.addEventListener("click", () => updateGlowSwatchUI(btn));
     });
 
     const clrBtn = wrap.querySelector("#crGlowClearBtn");
