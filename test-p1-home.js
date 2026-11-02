@@ -170,7 +170,7 @@ console.log('✔ Màn hình lettersHome() kết nối đầy đủ 14 nét viế
 // ----------------------------------------------------------------------------
 console.log('\n--- TEST 5: Kiểm tra danh mục trò chơi trong games() ---');
 
-const gamesSnippet = appJs.slice(appJs.indexOf('function games()'), appJs.indexOf('function games()') + 1500);
+const gamesSnippet = appJs.slice(appJs.indexOf('function games()'), appJs.indexOf('function games()') + 2500);
 
 assert(gamesSnippet.includes('Trò chơi vui nhộn') || gamesSnippet.includes('Chơi tự do'), 'games() phải có tiêu đề Trò chơi');
 assert(gamesSnippet.includes('countGame'), 'games() phải có trò đếm hình countGame');

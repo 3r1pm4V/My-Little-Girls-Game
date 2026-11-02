@@ -3016,6 +3016,54 @@ function updateGamesView() {
     }
   });
 
+  // Cập nhật 2 nút mũi tên qua lại 2 bên sườn màn hình (Next & Lùi trang)
+  const prevBtn = document.getElementById("gamesPrevBtn");
+  const nextBtn = document.getElementById("gamesNextBtn");
+  const pageBadge = document.getElementById("gamesPageBadge");
+
+  if (pageBadge) {
+    if (totalPages <= 1) {
+      pageBadge.style.display = "none";
+    } else {
+      pageBadge.style.display = "inline-flex";
+      pageBadge.textContent = `${validPage} / ${totalPages}`;
+    }
+  }
+
+  if (prevBtn) {
+    if (totalPages <= 1) {
+      prevBtn.style.display = "none";
+    } else {
+      prevBtn.style.display = "flex";
+      const isDis = (validPage <= 1);
+      prevBtn.disabled = isDis;
+      prevBtn.classList.toggle("is-disabled", isDis);
+      prevBtn.onclick = () => {
+        if (validPage > 1) {
+          if (typeof window !== "undefined" && window.sfxTap) window.sfxTap();
+          switchGamePage(validPage - 1);
+        }
+      };
+    }
+  }
+
+  if (nextBtn) {
+    if (totalPages <= 1) {
+      nextBtn.style.display = "none";
+    } else {
+      nextBtn.style.display = "flex";
+      const isDis = (validPage >= totalPages);
+      nextBtn.disabled = isDis;
+      nextBtn.classList.toggle("is-disabled", isDis);
+      nextBtn.onclick = () => {
+        if (validPage < totalPages) {
+          if (typeof window !== "undefined" && window.sfxTap) window.sfxTap();
+          switchGamePage(validPage + 1);
+        }
+      };
+    }
+  }
+
   const pagWrap = document.getElementById("gamesPaginationWrap");
   if (pagWrap) {
     pagWrap.innerHTML = renderGamesPaginationHtml(totalPages, validPage);
@@ -3052,24 +3100,31 @@ function games() {
       ${kbc([{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Góc vui chơi ôn tập","Fun Games"),i:"🎮"}])}
       <div class="games-header-bar">
         <h2 style="font-size:18px;margin:0">🎮 ${T("Trò chơi vui nhộn","Review Games & Fun")}</h2>
-        <button class="pill on random-gift-pill" onclick="go('randomMixGame',true)">🎲 ${T("Hộp Quà Bất Ngờ","Play Random Mix")}</button>
+        <div style="display:inline-flex;align-items:center;gap:10px">
+          <span class="games-page-badge" id="gamesPageBadge" style="display:none">1/2</span>
+          <button class="pill on random-gift-pill" onclick="go('randomMixGame',true)">🎲 ${T("Hộp Quà Bất Ngờ","Play Random Mix")}</button>
+        </div>
       </div>
       ${renderGradeTabsHtml()}
-      <div class="cards game-cards" id="gamesCardGrid">
-        ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game","preschool")}
-        ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game","kinder")}
-        ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder grade1")}
-        ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder grade1")}
-        ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
-        ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
-        ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
-        ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic","preschool")}
-        ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math","preschool")}
-        ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder")}
-        ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
-        ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
+      <div class="games-stage-wrap" id="gamesStageWrap">
+        <button type="button" class="games-side-nav-btn games-prev-btn" id="gamesPrevBtn" aria-label="${T("Trang trước","Previous")}" title="${T("Trang trước","Previous")}"><span class="games-side-nav-icon">◀</span></button>
+        <div class="cards game-cards" id="gamesCardGrid">
+          ${card("countGame",`<img src="${I.game_count}" class="g-ico">`,"Đếm hình","Count","game","preschool")}
+          ${card("bubbleGame",`<img src="${I.game_bubble}" class="g-ico">`,"Bắt bóng","Bubble","game","kinder")}
+          ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder grade1")}
+          ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder grade1")}
+          ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
+          ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
+          ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
+          ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic","preschool")}
+          ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math","preschool")}
+          ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder")}
+          ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
+          ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
+        </div>
+        <button type="button" class="games-side-nav-btn games-next-btn" id="gamesNextBtn" aria-label="${T("Trang sau","Next")}"><span class="games-side-nav-icon">▶</span></button>
       </div>
-      <div id="gamesPaginationWrap"></div>
+      <div id="gamesPaginationWrap" style="display:none"></div>
     </div>
   `;
   updateGamesView();
