@@ -3519,26 +3519,43 @@ html.rm .confetti-cv, html.rm .fx {
     margin: 8px 0 !important;
   }
   .objs {
-    min-height: 150px !important;
+    height: clamp(120px, 20vh, 165px) !important;
+    min-height: clamp(120px, 20vh, 165px) !important;
+    max-height: clamp(120px, 20vh, 165px) !important;
     max-width: 960px !important;
-    gap: 16px !important;
-    padding: 16px !important;
+    gap: clamp(6px, 1vw, 10px) 12px !important;
+    padding: 10px 18px !important;
+    justify-content: center !important;
+    align-content: center !important;
   }
-  .objs .ob img {
-    width: 76px !important;
-    height: 76px !important;
+  .objs-few .ob img {
+    width: clamp(64px, 8.5vw, 84px) !important;
+    height: clamp(64px, 8.5vw, 84px) !important;
+  }
+  .objs-mid .ob img {
+    width: clamp(48px, 6vw, 64px) !important;
+    height: clamp(48px, 6vw, 64px) !important;
+  }
+  .objs-many .ob img {
+    width: clamp(34px, 3.6vw, 44px) !important;
+    height: clamp(34px, 3.6vw, 44px) !important;
+  }
+  .objs.objs-many {
+    max-width: 640px !important;
   }
   .num-chips-bar {
-    gap: 8px !important;
-    max-width: 1040px !important;
-    margin: 10px auto !important;
+    gap: clamp(3px, 0.5vw, 6px) !important;
+    max-width: 1060px !important;
+    margin: 6px auto !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
   }
   .num-chips-bar .chip {
-    width: 46px !important;
-    height: 46px !important;
-    min-width: 46px !important;
-    min-height: 46px !important;
-    font-size: 21px !important;
+    width: clamp(36px, 3.4vw, 42px) !important;
+    height: clamp(36px, 3.4vw, 42px) !important;
+    min-width: clamp(36px, 3.4vw, 42px) !important;
+    min-height: clamp(36px, 3.4vw, 42px) !important;
+    font-size: clamp(15px, 1.6vw, 19px) !important;
     border-radius: 50% !important;
     font-weight: 800 !important;
   }
@@ -4474,6 +4491,18 @@ main:has(.story-box) {
   .cr-coloring-sidebar {
     width: 100% !important;
     max-width: 480px !important;
+  }
+  .num-chips-bar {
+    flex-wrap: wrap !important;
+    max-width: 620px !important;
+    gap: 8px !important;
+  }
+  .num-chips-bar .chip {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    font-size: 19px !important;
   }
 }
 
