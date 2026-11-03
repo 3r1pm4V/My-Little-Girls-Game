@@ -2014,6 +2014,44 @@ html.rm .confetti-cv, html.rm .fx {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.rv-cutout-real-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+.rv-half-real-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+.rv-half-left-img {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+.rv-half-right-shadow {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  -webkit-clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  filter: brightness(0) opacity(0.38);
+  transition: all 0.3s ease;
+}
+.rv-half-board.completed .rv-half-right-shadow {
+  filter: none;
+  animation: pop 0.4s ease;
+}
+.rv-half-piece .rv-half-piece-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  -webkit-clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  user-select: none;
+  pointer-events: none;
+}
 .rv-cutout-filled-piece {
   opacity: 0;
   transition: opacity 0.25s;

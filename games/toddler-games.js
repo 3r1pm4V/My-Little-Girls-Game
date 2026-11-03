@@ -169,12 +169,24 @@
   ];
 
   const FRUIT_CUTOUTS = [
-    { id: "watermelon_star", fruitEmoji: "🍉", fruitVi: "Quả dưa hấu", shapeId: "star", shapeVi: "Hình ngôi sao", bg: "#fb7185", fill: "#16a34a" },
-    { id: "pepper_hex", fruitEmoji: "🔔", fruitVi: "Quả chuông vàng", shapeId: "hexagon", shapeVi: "Hình lục giác", bg: "#f472b6", fill: "#eab308" },
-    { id: "apple_heart", fruitEmoji: "🍎", fruitVi: "Quả táo đỏ", shapeId: "heart", shapeVi: "Hình trái tim", bg: "#bae6fd", fill: "#ef4444" },
-    { id: "orange_circle", fruitEmoji: "🍊", fruitVi: "Quả cam vàng", shapeId: "circle", shapeVi: "Hình tròn", bg: "#fde68a", fill: "#f97316" },
-    { id: "strawberry_tri", fruitEmoji: "🍓", fruitVi: "Quả dâu tây", shapeId: "triangle", shapeVi: "Hình tam giác", bg: "#bbf7d0", fill: "#e11d48" },
-    { id: "grape_diamond", fruitEmoji: "🍇", fruitVi: "Chùm nho tím", shapeId: "diamond", shapeVi: "Hình thoi", bg: "#fed7aa", fill: "#9333ea" }
+    { id: "apple_heart", img: "img/vocab/count_apple.png", fruitEmoji: "🍎", fruitVi: "Quả táo đỏ", shapeId: "heart", shapeVi: "Hình trái tim", bg: "#bae6fd", fill: "#ef4444" },
+    { id: "watermelon_star", img: "img/vocab/count_watermelon.png", fruitEmoji: "🍉", fruitVi: "Quả dưa hấu", shapeId: "star", shapeVi: "Hình ngôi sao", bg: "#fb7185", fill: "#16a34a" },
+    { id: "orange_circle", img: "img/vocab/count_orange.png", fruitEmoji: "🍊", fruitVi: "Quả cam vàng", shapeId: "circle", shapeVi: "Hình tròn", bg: "#fde68a", fill: "#f97316" },
+    { id: "strawberry_tri", img: "img/vocab/count_strawberry.png", fruitEmoji: "🍓", fruitVi: "Quả dâu tây", shapeId: "triangle", shapeVi: "Hình tam giác", bg: "#bbf7d0", fill: "#e11d48" },
+    { id: "grape_diamond", img: "img/vocab/count_grape.png", fruitEmoji: "🍇", fruitVi: "Chùm nho tím", shapeId: "diamond", shapeVi: "Hình thoi", bg: "#fed7aa", fill: "#9333ea" },
+    { id: "banana_square", img: "img/vocab/count_banana.png", fruitEmoji: "🍌", fruitVi: "Quả chuối vàng", shapeId: "square", shapeVi: "Hình vuông", bg: "#fef9c3", fill: "#eab308" },
+    { id: "donut_circle", img: "img/vocab/count_donut.png", fruitEmoji: "🍩", fruitVi: "Bánh donut ngọt", shapeId: "circle", shapeVi: "Hình tròn", bg: "#fce7f3", fill: "#ec4899" },
+    { id: "car_square", img: "img/vocab/count_car.png", fruitEmoji: "🚗", fruitVi: "Chiếc ô tô", shapeId: "square", shapeVi: "Hình vuông", bg: "#dbeafe", fill: "#3b82f6" },
+    { id: "balloon_heart", img: "img/vocab/count_balloon.png", fruitEmoji: "🎈", fruitVi: "Quả bóng bay", shapeId: "heart", shapeVi: "Hình trái tim", bg: "#f3e8ff", fill: "#a855f7" },
+    { id: "rocket_tri", img: "img/vocab/count_rocket.png", fruitEmoji: "🚀", fruitVi: "Tên lửa vũ trụ", shapeId: "triangle", shapeVi: "Hình tam giác", bg: "#e0f2fe", fill: "#0284c7" },
+    { id: "bunny_star", img: "img/animals/bunny.png", fruitEmoji: "🐰", fruitVi: "Bạn thỏ trắng", shapeId: "star", shapeVi: "Hình ngôi sao", bg: "#fdf2f8", fill: "#f472b6" },
+    { id: "puppy_circle", img: "img/animals/puppy.png", fruitEmoji: "🐶", fruitVi: "Bạn cún con", shapeId: "circle", shapeVi: "Hình tròn", bg: "#fff7ed", fill: "#ea580c" },
+    { id: "kitten_heart", img: "img/animals/kitten.png", fruitEmoji: "🐱", fruitVi: "Bạn mèo con", shapeId: "heart", shapeVi: "Hình trái tim", bg: "#fef2f2", fill: "#f87171" },
+    { id: "bear_hex", img: "img/animals/bear.png", fruitEmoji: "🐻", fruitVi: "Bạn gấu nâu", shapeId: "hexagon", shapeVi: "Hình lục giác", bg: "#fefce8", fill: "#ca8a04" },
+    { id: "carrot_diamond", img: "img/animals/carrot.png", fruitEmoji: "🥕", fruitVi: "Củ cà rốt", shapeId: "diamond", shapeVi: "Hình thoi", bg: "#ffedd5", fill: "#ea580c" },
+    { id: "flower_star", img: "img/animals/flower.png", fruitEmoji: "🌻", fruitVi: "Bông hoa tươi", shapeId: "star", shapeVi: "Hình ngôi sao", bg: "#f0fdf4", fill: "#16a34a" },
+    { id: "sun_circle", img: "img/vocab/count_sun.png", fruitEmoji: "☀️", fruitVi: "Mặt trời ấm áp", shapeId: "circle", shapeVi: "Hình tròn", bg: "#fffbeb", fill: "#f59e0b" },
+    { id: "butterfly_heart", img: "img/vocab/count_butterfly.png", fruitEmoji: "🦋", fruitVi: "Bươm bướm xinh", shapeId: "heart", shapeVi: "Hình trái tim", bg: "#ecfeff", fill: "#06b6d4" }
   ];
 
   const OPPOSITE_PAIRS = [
@@ -522,24 +534,62 @@
   }
 
   // ============================================================================
-  // 5. TRÒ CHƠI 2: GHÉP TRANH & HÌNH BÓNG (puzzleGame - Độ khó +20%)
-  //    - Mode 1: Ghép 3 khung nửa con vật + 1 mảnh gây nhiễu (4 mảnh ở khay)
-  //    - Mode 2: Ghép 3 quả khuyết hình học + 1 mảnh gây nhiễu
-  //    - Mode 3: Ghép 4 con vật vào 4 hình bóng
+  // 5. TRÒ CHƠI GHÉP TRANH & HÌNH BÓNG (puzzleGame)
+  //    - Mode 1: Khuyết hình học trên tranh 3D (18 đồ vật & hoa quả phong phú)
+  //    - Mode 2: Ghép 3 hình ảnh vào đúng hình bóng thực tế
+  //    - Mode 3: Ghép 2 nửa tranh hoàn chỉnh
+  //    Cơ chế Deck không lặp lại: đảm bảo 6 lượt chơi liên tiếp không trùng hình!
   // ============================================================================
   let pzState = { round: 1 };
+  let pzCutoutDeck = [];
+  let pzHalfDeck = [];
+  let pzShadowDeck = [];
+
+  function getNonRepeatingCutoutPool(count = 3) {
+    if (pzCutoutDeck.length < count + 1) {
+      pzCutoutDeck = _shuf(FRUIT_CUTOUTS);
+    }
+    const pair = pzCutoutDeck.splice(0, count);
+    const remaining = FRUIT_CUTOUTS.filter(x => !pair.some(p => p.id === x.id));
+    const distractor = _pick(remaining);
+    return { pair, distractor };
+  }
+
+  function getNonRepeatingHalfPool(count = 3) {
+    if (pzHalfDeck.length < count + 1) {
+      pzHalfDeck = _shuf(PUZZLE_ANIMALS);
+    }
+    const pair = pzHalfDeck.splice(0, count);
+    const remaining = PUZZLE_ANIMALS.filter(x => !pair.some(p => p.id === x.id));
+    const distractor = _pick(remaining);
+    return { pair, distractor };
+  }
+
+  function getNonRepeatingShadowPool(count = 3) {
+    if (pzShadowDeck.length < count) {
+      pzShadowDeck = _shuf(PUZZLE_ANIMALS);
+    }
+    return pzShadowDeck.splice(0, count);
+  }
 
   function puzzleGame(isReplay) {
-    if (isReplay) pzState.round = 1;
-    const modes = ["half_animal", "fruit_cutout", "shadow_animal"];
-    const mode = modes[(pzState.round - 1 + _R(0, 2)) % modes.length];
+    if (isReplay) {
+      pzState.round = 1;
+      pzCutoutDeck = [];
+      pzHalfDeck = [];
+      pzShadowDeck = [];
+    }
+    // Xoay vòng tuần tự qua 3 chế độ: 1. Khuyết hình, 2. Hình bóng, 3. Ghép 2 nửa
+    // Đảm bảo không bao giờ bị lặp lại cùng một kiểu chơi!
+    const modes = ["fruit_cutout", "shadow_animal", "half_animal"];
+    const mode = modes[(pzState.round - 1) % modes.length];
 
-    if (mode === "half_animal") {
-      renderHalfAnimalPuzzle();
-    } else if (mode === "fruit_cutout") {
+    if (mode === "fruit_cutout") {
       renderFruitCutoutPuzzle();
-    } else {
+    } else if (mode === "shadow_animal") {
       renderShadowAnimalPuzzle();
+    } else {
+      renderHalfAnimalPuzzle();
     }
   }
 
@@ -547,10 +597,8 @@
     const c = getContainer();
     if (!c) return;
 
-    // Độ khó +20%: 3 bức tranh cần ghép + 1 mảnh nhiễu ở khay
-    const shuffledPool = _shuf(PUZZLE_ANIMALS);
-    const pair = shuffledPool.slice(0, 3);
-    const distractor = shuffledPool[3];
+    // Rút từ Deck không lặp lại: 3 bức tranh cần ghép + 1 mảnh nhiễu ở khay
+    const { pair, distractor } = getNonRepeatingHalfPool(3);
     const trayPieces = _shuf([...pair, distractor]);
     let remaining = pair.length;
     let selectedPiece = null;
@@ -565,7 +613,7 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvHalfWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Hoàn thành bức tranh nào! Bé hãy tìm đúng nửa còn thiếu để ghép vào bạn nhỏ nhé!','Complete the animal pictures!')">
+          <h2 class="rv-prompt" onclick="say('Hoàn thành bức tranh nào! Bé hãy tìm đúng nửa còn thiếu để ghép vào bạn nhỏ nhé!','Complete the pictures!')">
             🔊 ${_T("Ghép nửa còn thiếu để hoàn thành 3 bức tranh nhé!", "Match the missing half to complete 3 pictures!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
@@ -574,9 +622,14 @@
         <div class="rv-half-boards rv-half-boards-3">
           ${pair.map(an => `
             <div class="rv-half-board" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" style="background:${an.bg}" tabindex="0" role="button" aria-label="${an.nameVi}">
-              <div class="rv-half-graphic">
-                <span class="rv-emoji-left-half">${an.emoji}</span>
-                <span class="rv-emoji-right-shadow" data-right-slot="${an.id}">${an.emoji}</span>
+              <div class="rv-half-graphic" style="position:relative;display:flex;align-items:center;justify-content:center">
+                ${an.img ? `
+                  <img src="${an.img}" class="rv-half-real-img rv-half-left-img" alt="${an.nameVi}">
+                  <img src="${an.img}" class="rv-half-real-img rv-half-right-shadow" data-right-slot="${an.id}" alt="${an.nameVi}">
+                ` : `
+                  <span class="rv-emoji-left-half">${an.emoji}</span>
+                  <span class="rv-emoji-right-shadow" data-right-slot="${an.id}">${an.emoji}</span>
+                `}
               </div>
               <div class="rv-board-caption">${_T(an.nameVi, an.nameEn)}</div>
             </div>
@@ -586,7 +639,7 @@
         <div class="rv-tray-box">
           ${trayPieces.map(an => `
             <div class="rv-half-piece" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" tabindex="0" role="button" aria-label="${_T('Nửa hình ' + an.nameVi, 'Half of ' + an.nameEn)}">
-              <span class="rv-emoji-right-half">${an.emoji}</span>
+              ${an.img ? `<img src="${an.img}" class="rv-half-piece-img" alt="${an.nameVi}">` : `<span class="rv-emoji-right-half">${an.emoji}</span>`}
             </div>
           `).join("")}
         </div>
@@ -652,10 +705,8 @@
     const c = getContainer();
     if (!c) return;
 
-    // Độ khó +20%: 3 quả khuyết hình + 1 miếng ghép nhiễu
-    const shuffled = _shuf(FRUIT_CUTOUTS);
-    const pair = shuffled.slice(0, 3);
-    const distractor = shuffled[3];
+    // Rút từ Deck 18 hình phong phú: không bao giờ lặp lại trong nhiều lượt chơi liên tiếp!
+    const { pair, distractor } = getNonRepeatingCutoutPool(3);
     const trayPieces = _shuf([...pair, distractor]);
     let remaining = pair.length;
     let selectedPiece = null;
@@ -672,6 +723,7 @@
         case "triangle": return "polygon(50% 10%, 92% 86%, 8% 86%)";
         case "diamond": return "polygon(50% 6%, 90% 50%, 50% 94%, 10% 50%)";
         case "circle": return "circle(42% at 50% 50%)";
+        case "square": return "polygon(14% 14%, 86% 14%, 86% 86%, 14% 86%)";
         case "heart": return "polygon(50% 20%, 65% 8%, 85% 12%, 94% 32%, 85% 56%, 50% 88%, 15% 56%, 6% 32%, 15% 12%, 35% 8%)";
         default: return "circle(42% at 50% 50%)";
       }
@@ -683,7 +735,7 @@
         return `
           <div class="rv-cutout-hole" style="color:#271c15">
             <div style="position:absolute;inset:0;clip-path:${clip};-webkit-clip-path:${clip};display:flex;align-items:center;justify-content:center;background:#1e1b18">
-              <span style="font-size:112px;line-height:1;filter:brightness(0.32) contrast(1.25);opacity:0.75;user-select:none">${fc.fruitEmoji}</span>
+              ${fc.img ? `<img src="${fc.img}" style="width:112px;height:112px;object-fit:contain;filter:brightness(0.28) contrast(1.2);opacity:0.75;user-select:none">` : `<span style="font-size:112px;line-height:1;filter:brightness(0.32) contrast(1.25);opacity:0.75;user-select:none">${fc.fruitEmoji}</span>`}
             </div>
             <div style="position:relative;width:100%;height:100%;color:transparent">${getShapeSvg(fc.shapeId)}</div>
           </div>
@@ -692,7 +744,7 @@
       return `
         <div style="position:relative;width:74px;height:74px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.22))">
           <div style="position:absolute;inset:0;clip-path:${clip};-webkit-clip-path:${clip};background:${fc.fill};display:flex;align-items:center;justify-content:center">
-            <span style="font-size:112px;line-height:1;user-select:none">${fc.fruitEmoji}</span>
+            ${fc.img ? `<img src="${fc.img}" style="width:112px;height:112px;object-fit:contain;user-select:none">` : `<span style="font-size:112px;line-height:1;user-select:none">${fc.fruitEmoji}</span>`}
           </div>
           <div style="position:relative;width:100%;height:100%;color:transparent;pointer-events:none">${getShapeSvg(fc.shapeId)}</div>
         </div>
@@ -709,8 +761,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvCutoutWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên quả nhé!','Fit the shape piece into the fruit cutout!')">
-            🔊 ${_T("Đặt miếng ghép vào đúng chỗ khuyết trên 3 quả nhé!", "Fit the shape piece into the matching fruit!")}
+          <h2 class="rv-prompt" onclick="say('Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên tranh nhé!','Fit the shape piece into the matching picture!')">
+            🔊 ${_T("Đặt miếng ghép vào đúng chỗ khuyết trên 3 bức tranh nhé!", "Fit the shape piece into 3 matching pictures!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
         </div>
@@ -719,7 +771,7 @@
           ${pair.map(fc => `
             <div class="rv-cutout-board" data-id="${fc.id}" data-vi="${fc.fruitVi} - ${fc.shapeVi}" data-en="${fc.shapeVi}" style="background:${fc.bg}" tabindex="0" role="button" aria-label="${fc.fruitVi}">
               <div class="rv-cutout-fruit-wrap">
-                <span class="rv-cutout-fruit">${fc.fruitEmoji}</span>
+                ${fc.img ? `<img src="${fc.img}" class="rv-cutout-real-img" alt="${fc.fruitVi}">` : `<span class="rv-cutout-fruit">${fc.fruitEmoji}</span>`}
                 ${renderTexturedCutoutPiece(fc, true)}
                 <div class="rv-cutout-filled-piece" style="display:flex;align-items:center;justify-content:center">${renderTexturedCutoutPiece(fc, false)}</div>
               </div>
@@ -738,7 +790,7 @@
       </div>
     `;
 
-    _say("Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên quả nhé!", "Fit the shape pieces into the fruits!");
+    _say("Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên tranh nhé!", "Fit the shape pieces into the pictures!");
     _catSet("thinking");
 
     const wrap = c.querySelector("#rvCutoutWrap");
@@ -797,8 +849,8 @@
     const c = getContainer();
     if (!c) return;
 
-    // Phù hợp cho bé 4 tuổi: 3 hình bóng to rõ, hình ảnh 3D trực quan
-    const chosen = _shuf(PUZZLE_ANIMALS).slice(0, 3);
+    // Rút từ Deck 13 hình bóng 3D: không bao giờ lặp lại trong nhiều lượt chơi liên tiếp!
+    const chosen = getNonRepeatingShadowPool(3);
     const trayItems = _shuf([...chosen]);
     let remaining = chosen.length;
     let selectedPiece = null;

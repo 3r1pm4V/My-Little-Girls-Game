@@ -7,6 +7,18 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-11-03
+- **fix(P4-PUZ: Mở Rộng Kho Tranh Khuyết Hình 3D & Cơ Chế Deck Chống Lặp Hình Ảnh)**:
+  - **Mở rộng kho tranh khuyết hình lên 18 vật thể & bạn nhỏ 3D chân thực**:
+    - Thay thế emoji quả chuông, quả cam, quả dưa hấu bằng kho 18 tranh đồ họa 3D sắc nét (`apple`, `watermelon`, `orange`, `strawberry`, `grape`, `banana`, `donut`, `car`, `balloon`, `rocket`, `bunny`, `puppy`, `kitten`, `bear`, `carrot`, `flower`, `sun`, `butterfly`).
+    - Kết hợp đa dạng các hình khối khoét lỗ (ngôi sao, trái tim, hình tròn, hình vuông, tam giác, hình thoi, lục giác) với màu sắc hài hòa.
+    - Cải tiến ghép nửa tranh (`renderHalfAnimalPuzzle`): dùng ảnh đồ họa 3D cắt nửa trái/phải (`clip-path`) thay vì emoji.
+  - **Thuật toán bộ bài rút dần (Deck) triệt tiêu hoàn toàn sự lặp lại**:
+    - Xây dựng 3 bộ Deck độc lập: `getNonRepeatingCutoutPool(3)`, `getNonRepeatingHalfPool(3)`, `getNonRepeatingShadowPool(3)`.
+    - Các thẻ hình được rút ra và loại trừ khỏi bộ bài cho đến khi bé chơi hết toàn bộ kho tranh (tối thiểu 6 lượt chơi liên tiếp không bao giờ gặp lại tranh đã xuất hiện).
+    - Luân phiên tuần tự qua 3 chế độ ghép (`fruit_cutout` $\to$ `shadow_animal` $\to$ `half_animal`), loại bỏ việc random ngẫu nhiên bị kẹt ở cùng một chế độ chơi 3 lần liên tiếp.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v159` (asset-hash `0d5fb98d9e79f2e5`).
+  - **Kiểm thử**: Cập nhật `test-toddler-games.js`, toàn bộ 19 test suites tự động PASS 100%.
+
 - **feat(P4-LOGIC: Montessori Logic Enhancement & Authentic 3D Asset Integration)**:
   - **Kích hoạt Trò chơi Ghép đôi liên kết & Cặp đối lập (`pairMatchGame`)**:
     - Thiết kế mobile-first, 2 hàng thẻ chạm trực quan (3 cặp/vòng), vùng chạm to rõ $\ge 96$px.
