@@ -153,18 +153,19 @@
   ];
 
   const PUZZLE_ANIMALS = [
-    { id: "penguin", emoji: "🐧", nameVi: "Chim cánh cụt", nameEn: "Penguin", bg: "#38bdf8" },
-    { id: "duck", emoji: "🦆", nameVi: "Chú vịt con", nameEn: "Duck", bg: "#2dd4bf" },
-    { id: "snail", emoji: "🐌", nameVi: "Ốc sên", nameEn: "Snail", bg: "#a7f3d0" },
-    { id: "hedgehog", emoji: "🦔", nameVi: "Chú nhím nhỏ", nameEn: "Hedgehog", bg: "#fde68a" },
-    { id: "panda", emoji: "🐼", nameVi: "Gấu trúc", nameEn: "Panda", bg: "#bfdbfe" },
-    { id: "cat", emoji: "🐱", nameVi: "Mèo con", nameEn: "Kitty", bg: "#fed7aa" },
-    { id: "ladybug", emoji: "🐞", nameVi: "Bọ rùa", nameEn: "Ladybug", bg: "#fecdd3" },
-    { id: "lion", emoji: "🦁", nameVi: "Sư tử", nameEn: "Lion", bg: "#fef08a" },
-    { id: "elephant", emoji: "🐘", nameVi: "Voi con", nameEn: "Elephant", bg: "#e0e7ff" },
-    { id: "turtle", emoji: "🐢", nameVi: "Rùa xanh", nameEn: "Turtle", bg: "#bbf7d0" },
-    { id: "owl", emoji: "🦉", nameVi: "Chim cú mèo", nameEn: "Owl", bg: "#ddd6fe" },
-    { id: "rabbit", emoji: "🐰", nameVi: "Thỏ trắng", nameEn: "Rabbit", bg: "#fce7f3" }
+    { id: "bunny", img: "img/animals/bunny.png", emoji: "🐰", nameVi: "Thỏ trắng", nameEn: "Bunny", bg: "#fce7f3" },
+    { id: "puppy", img: "img/animals/puppy.png", emoji: "🐶", nameVi: "Cún con", nameEn: "Puppy", bg: "#fed7aa" },
+    { id: "kitten", img: "img/animals/kitten.png", emoji: "🐱", nameVi: "Mèo con", nameEn: "Kitten", bg: "#fee2e2" },
+    { id: "bear", img: "img/animals/bear.png", emoji: "🐻", nameVi: "Gấu nâu", nameEn: "Bear", bg: "#fef3c7" },
+    { id: "bee", img: "img/animals/bee.png", emoji: "🐝", nameVi: "Chú ong", nameEn: "Bee", bg: "#fef9c3" },
+    { id: "apple", img: "img/vocab/count_apple.png", emoji: "🍎", nameVi: "Quả táo đỏ", nameEn: "Red Apple", bg: "#ffe4e6" },
+    { id: "banana", img: "img/vocab/count_banana.png", emoji: "🍌", nameVi: "Quả chuối", nameEn: "Banana", bg: "#fef9c3" },
+    { id: "car", img: "img/vocab/count_car.png", emoji: "🚗", nameVi: "Chiếc ô tô", nameEn: "Car", bg: "#dbeafe" },
+    { id: "balloon", img: "img/vocab/count_balloon.png", emoji: "🎈", nameVi: "Bóng bay", nameEn: "Balloon", bg: "#f3e8ff" },
+    { id: "butterfly", img: "img/vocab/count_butterfly.png", emoji: "🦋", nameVi: "Bươm bướm", nameEn: "Butterfly", bg: "#e0f2fe" },
+    { id: "strawberry", img: "img/vocab/count_strawberry.png", emoji: "🍓", nameVi: "Quả dâu tây", nameEn: "Strawberry", bg: "#fee2e2" },
+    { id: "star", img: "img/vocab/count_star.png", emoji: "⭐", nameVi: "Ngôi sao", nameEn: "Star", bg: "#fef3c7" },
+    { id: "sun", img: "img/vocab/count_sun.png", emoji: "☀️", nameVi: "Mặt trời", nameEn: "Sun", bg: "#ffedd5" }
   ];
 
   const FRUIT_CUTOUTS = [
@@ -177,21 +178,21 @@
   ];
 
   const OPPOSITE_PAIRS = [
-    { id: "hot_cold", leftEmoji: "🔥", leftVi: "Ngọn lửa nóng", rightEmoji: "🧊", rightVi: "Viên đá lạnh", border: "#22c55e" },
-    { id: "happy_sad", leftEmoji: "😄", leftVi: "Khuôn mặt vui", rightEmoji: "🙄", rightVi: "Khuôn mặt buồn", border: "#38bdf8" },
-    { id: "fast_slow", leftEmoji: "🐇", leftVi: "Thỏ chạy nhanh", rightEmoji: "🐢", rightVi: "Rùa bò chậm", border: "#eab308" },
-    { id: "day_night", leftEmoji: "☀️", leftVi: "Ban ngày nắng", rightEmoji: "🌙", rightVi: "Ban đêm trăng", border: "#f97316" },
-    { id: "big_small", leftEmoji: "🐘", leftVi: "Voi khổng lồ", rightEmoji: "🐜", rightVi: "Kiến tí hon", border: "#a855f7" },
-    { id: "sun_rain", leftEmoji: "🕶️", leftVi: "Trời nắng đeo kính", rightEmoji: "☂️", rightVi: "Trời mưa che ô", border: "#ec4899" }
+    { id: "day_night", leftImg: "img/vocab/count_sun.png", leftEmoji: "☀️", leftVi: "Mặt trời ban ngày", leftEn: "Sunny Day", rightImg: "img/vocab/count_star.png", rightEmoji: "⭐", rightVi: "Ngôi sao ban đêm", rightEn: "Night Stars", border: "#f97316", desc: "Ban ngày có mặt trời, ban đêm có trăng sao!" },
+    { id: "big_small", leftImg: "img/animals/bear.png", leftEmoji: "🐻", leftVi: "Gấu to lớn", leftEn: "Big Bear", rightImg: "img/animals/bee.png", rightEmoji: "🐝", rightVi: "Chú ong nhỏ bé", rightEn: "Small Bee", border: "#a855f7", desc: "Gấu to lớn và chú ong nhỏ bé!" },
+    { id: "fast_slow", leftImg: "img/animals/bunny.png", leftEmoji: "🐇", leftVi: "Thỏ chạy nhanh", leftEn: "Fast Bunny", rightImg: "img/animals/puppy.png", rightEmoji: "🐶", rightVi: "Cún tung tăng", rightEn: "Happy Puppy", border: "#eab308", desc: "Thỏ chạy nhanh và cún tung tăng!" },
+    { id: "happy_sad", leftEmoji: "😄", leftVi: "Khuôn mặt vui", rightEmoji: "😢", rightVi: "Khuôn mặt buồn", border: "#38bdf8", desc: "Nụ cười vui vẻ và khuôn mặt buồn!" },
+    { id: "hot_cold", leftEmoji: "🔥", leftVi: "Ngọn lửa nóng", rightEmoji: "🧊", rightVi: "Viên đá lạnh", border: "#22c55e", desc: "Lửa ấm nóng và viên đá mát lạnh!" },
+    { id: "sun_rain", leftEmoji: "🕶️", leftVi: "Trời nắng đeo kính", rightEmoji: "☂️", rightVi: "Trời mưa che ô", border: "#ec4899", desc: "Trời nắng đeo kính và trời mưa che ô!" }
   ];
 
   const ANIMAL_ASSOC_PAIRS = [
-    { id: "monkey_banana", leftEmoji: "🐒", leftVi: "Chú khỉ", rightEmoji: "🍌", rightVi: "Quả chuối", border: "#eab308" },
-    { id: "rabbit_carrot", leftEmoji: "🐰", leftVi: "Chú thỏ", rightEmoji: "🥕", rightVi: "Củ cà rốt", border: "#f97316" },
-    { id: "bee_flower", leftEmoji: "🐝", leftVi: "Ong chăm chỉ", rightEmoji: "🌻", rightVi: "Bông hoa", border: "#22c55e" },
-    { id: "cat_fish", leftEmoji: "🐱", leftVi: "Mèo con", rightEmoji: "🐟", rightVi: "Con cá", border: "#38bdf8" },
-    { id: "dog_bone", leftEmoji: "🐶", leftVi: "Chó cún", rightEmoji: "🦴", rightVi: "Khúc xương", border: "#a855f7" },
-    { id: "panda_bamboo", leftEmoji: "🐼", leftVi: "Gấu trúc", rightEmoji: "🎍", rightVi: "Cây trúc", border: "#10b981" }
+    { id: "bunny_carrot", leftImg: "img/animals/bunny.png", leftEmoji: "🐰", leftVi: "Thỏ con", leftEn: "Bunny", rightImg: "img/animals/carrot.png", rightEmoji: "🥕", rightVi: "Củ cà rốt", rightEn: "Carrot", border: "#f97316", desc: "Thỏ con thích ăn cà rốt!" },
+    { id: "puppy_bone", leftImg: "img/animals/puppy.png", leftEmoji: "🐶", leftVi: "Cún con", leftEn: "Puppy", rightImg: "img/animals/bone.png", rightEmoji: "🦴", rightVi: "Khúc xương", rightEn: "Bone", border: "#a855f7", desc: "Cún con gặm khúc xương!" },
+    { id: "kitten_fish", leftImg: "img/animals/kitten.png", leftEmoji: "🐱", leftVi: "Mèo con", leftEn: "Kitten", rightImg: "img/animals/fish.png", rightEmoji: "🐟", rightVi: "Con cá", rightEn: "Fish", border: "#38bdf8", desc: "Mèo con thích ăn cá!" },
+    { id: "bee_flower", leftImg: "img/animals/bee.png", leftEmoji: "🐝", leftVi: "Chú ong", leftEn: "Bee", rightImg: "img/animals/flower.png", rightEmoji: "🌻", rightVi: "Bông hoa", rightEn: "Flower", border: "#22c55e", desc: "Chú ong chăm chỉ tìm mật hoa!" },
+    { id: "bear_honey", leftImg: "img/animals/bear.png", leftEmoji: "🐻", leftVi: "Gấu nâu", leftEn: "Bear", rightImg: "img/animals/honey.png", rightEmoji: "🍯", rightVi: "Hũ mật ong", rightEn: "Honey", border: "#eab308", desc: "Gấu nâu mê ăn mật ong ngọt ngào!" },
+    { id: "monkey_banana", leftImg: "img/vocab/count_banana.png", leftEmoji: "🐒", leftVi: "Khỉ con", leftEn: "Monkey", rightImg: "img/vocab/count_banana.png", rightEmoji: "🍌", rightVi: "Quả chuối", rightEn: "Banana", border: "#10b981", desc: "Khỉ con thích ăn quả chuối vàng!" }
   ];
 
   const ANIMAL_QUESTIONS = [
@@ -796,8 +797,8 @@
     const c = getContainer();
     if (!c) return;
 
-    // Độ khó +20%: 4 con vật & 4 hình bóng
-    const chosen = _shuf(PUZZLE_ANIMALS).slice(0, 4);
+    // Phù hợp cho bé 4 tuổi: 3 hình bóng to rõ, hình ảnh 3D trực quan
+    const chosen = _shuf(PUZZLE_ANIMALS).slice(0, 3);
     const trayItems = _shuf([...chosen]);
     let remaining = chosen.length;
     let selectedPiece = null;
@@ -813,15 +814,15 @@
       <div class="rv-game-wrap" id="rvShadowWrap">
         <div class="rv-top-bar">
           <h2 class="rv-prompt" onclick="say('Ai đang trốn trong bóng tối? Bé hãy đưa các bạn về đúng chiếc bóng của mình nhé!','Match each animal to its shadow!')">
-            🔊 ${_T("Ghép 4 con vật vào đúng hình bóng nhé!", "Match 4 animals to their shadows!")}
+            🔊 ${_T("Ghép 3 hình vào đúng hình bóng nhé!", "Match 3 items to their shadows!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
         </div>
 
-        <div class="rv-slots-row rv-slots-row-4">
+        <div class="rv-slots-row rv-slots-row-3">
           ${chosen.map(an => `
             <div class="rv-shadow-slot" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" tabindex="0" role="button" aria-label="${_T('Bóng của ' + an.nameVi, 'Shadow of ' + an.nameEn)}">
-              <span class="rv-shadow-emoji">${an.emoji}</span>
+              ${an.img ? `<img src="${an.img}" class="rv-shadow-real-img" alt="${an.nameVi}">` : `<span class="rv-shadow-emoji">${an.emoji}</span>`}
               <span class="rv-shadow-label">${_T(an.nameVi, an.nameEn)}</span>
             </div>
           `).join("")}
@@ -830,14 +831,14 @@
         <div class="rv-tray-box">
           ${trayItems.map(an => `
             <div class="rv-shadow-piece" data-id="${an.id}" data-vi="${an.nameVi}" data-en="${an.nameEn}" tabindex="0" role="button" aria-label="${an.nameVi}">
-              <span class="rv-piece-emoji">${an.emoji}</span>
+              ${an.img ? `<img src="${an.img}" class="rv-piece-real-img" alt="${an.nameVi}">` : `<span class="rv-piece-emoji">${an.emoji}</span>`}
             </div>
           `).join("")}
         </div>
       </div>
     `;
 
-    _say("Ai đang trốn trong bóng tối? Bé hãy đưa các bạn về đúng chiếc bóng của mình nhé!", "Match each animal with its shadow!");
+    _say("Ai đang trốn trong bóng tối? Bé hãy đưa các bạn về đúng chiếc bóng của mình nhé!", "Match each item with its shadow!");
     _catSet("thinking");
 
     const wrap = c.querySelector("#rvShadowWrap");
@@ -849,10 +850,15 @@
         pieceEl.classList.add("sorted");
         pieceEl.classList.remove("selected");
         slotEl.classList.add("completed");
+        const realImg = slotEl.querySelector(".rv-shadow-real-img");
+        if (realImg) {
+          realImg.style.filter = "none";
+          realImg.style.transform = "scale(1.12)";
+        }
         selectedPiece = null;
         _sfxTing();
         _fx();
-        _say(slotEl.dataset.vi, slotEl.dataset.en);
+        _say(`Hoan hô! ${slotEl.dataset.vi}!`, `Hooray! ${slotEl.dataset.en}!`);
 
         remaining--;
         if (remaining <= 0) {
@@ -918,12 +924,11 @@
     const promptVi = findBiggest ? `Tìm bạn ${animal.nameVi} TO NHẤT nào!` : `Tìm bạn ${animal.nameVi} NHỎ XÍU nào!`;
     const promptEn = findBiggest ? `Tap the BIGGEST ${animal.nameEn}` : `Tap the SMALLEST ${animal.nameEn}`;
 
-    // Độ khó +20%: Chênh lệch kích cỡ tinh tế hơn
+    // Trực quan cho bé 4 tuổi: 3 mức kích cỡ to - vừa - nhỏ rõ rệt, hình 3D sinh động
     const sizes = _shuf([
-      { id: "xs", px: 54, isTarget: !findBiggest },
-      { id: "sm", px: 68, isTarget: false },
-      { id: "md", px: 84, isTarget: false },
-      { id: "xl", px: 102, isTarget: findBiggest }
+      { id: "sm", px: 52, isTarget: !findBiggest },
+      { id: "md", px: 76, isTarget: false },
+      { id: "xl", px: 106, isTarget: findBiggest }
     ]);
 
     let answered = false;
@@ -944,11 +949,10 @@
           ${renderHeaderRightBadge(scState.round)}
         </div>
 
-        <div class="rv-quad-grid">
-          <div class="rv-center-qmark">?</div>
+        <div class="rv-quad-grid" style="grid-template-columns:repeat(3, minmax(0, 1fr));max-width:620px">
           ${sizes.map(sz => `
             <button type="button" class="rv-quad-card" data-target="${sz.isTarget ? '1' : '0'}" aria-label="${animal.nameVi}">
-              <span style="font-size:${sz.px}px;line-height:1;display:inline-block;transition:transform .2s">${animal.emoji}</span>
+              ${animal.img ? `<img src="${animal.img}" style="width:${sz.px}px;height:${sz.px}px;object-fit:contain;pointer-events:none;transition:transform .2s" alt="${animal.nameVi}">` : `<span style="font-size:${sz.px}px;line-height:1;display:inline-block;transition:transform .2s">${animal.emoji}</span>`}
             </button>
           `).join("")}
         </div>
@@ -1425,6 +1429,157 @@
   }
 
   // ============================================================================
+  // 8B. TRÒ CHƠI GHÉP ĐÔI QUEN THUỘC & CẶP ĐỐI LẬP (pairMatchGame)
+  //     Bé 4 tuổi chạm chọn 1 hình ở hàng trên, 1 hình ở hàng dưới
+  //     Đúng cặp (Thỏ - Cà rốt, Cún - Xương, Ngày - Đêm...) -> kết nối vui tươi!
+  // ============================================================================
+  let pmState = { round: 1 };
+
+  function pairMatchGame(isReplay) {
+    if (isReplay) pmState.round = 1;
+    const c = getContainer();
+    if (!c) return;
+
+    // Thay đổi chủ đề giữa: Đồ ăn/liên tưởng con vật (Assoc) & Cặp đôi thân thuộc (Opposites)
+    const isAssoc = pmState.round % 2 === 1;
+    const pool = isAssoc ? _shuf(ANIMAL_ASSOC_PAIRS) : _shuf(OPPOSITE_PAIRS);
+    const chosenPairs = pool.slice(0, 3);
+    const topCards = chosenPairs.map(p => ({
+      pairId: p.id,
+      side: "top",
+      vi: p.leftVi,
+      en: p.leftEn,
+      img: p.leftImg,
+      emoji: p.leftEmoji,
+      desc: p.desc
+    }));
+    const bottomCards = _shuf(chosenPairs.map(p => ({
+      pairId: p.id,
+      side: "bottom",
+      vi: p.rightVi,
+      en: p.rightEn,
+      img: p.rightImg,
+      emoji: p.rightEmoji,
+      desc: p.desc
+    })));
+
+    let remaining = chosenPairs.length;
+    let selectedTop = null;
+    let selectedBottom = null;
+
+    const promptVi = isAssoc ? "Bé hãy tìm món đồ hoặc thức ăn thích hợp cho từng bạn nhỏ nhé!" : "Bé hãy tìm cặp hình đi đôi cùng nhau nhé!";
+    const promptEn = isAssoc ? "Match each friend with their favorite thing!" : "Find the matching pairs!";
+
+    const bcHtml = _kbc([
+      { s: "home", t: _T("Trang chủ", "Home"), i: "🏠" },
+      { s: "games", t: _T("Trò chơi", "Games"), i: "🎮" },
+      { t: _T("Ghép đôi tương ứng", "Pair Matching"), i: "🧩" }
+    ]);
+
+    c.innerHTML = `
+      ${bcHtml}
+      <div class="rv-game-wrap" id="rvPairWrap">
+        <div class="rv-top-bar">
+          <div class="rv-ribbon-blue" onclick="say('${promptVi.replace(/'/g, "\\'")}','${promptEn.replace(/'/g, "\\'")}')">
+            🔊 ${_T(promptVi, promptEn)}
+          </div>
+          ${renderHeaderRightBadge(pmState.round)}
+        </div>
+
+        <div class="rv-pair-stage">
+          <div class="rv-pair-row" id="rvPairTopRow">
+            ${topCards.map(card => `
+              <div class="rv-pair-card" data-pair-id="${card.pairId}" data-side="top" data-vi="${card.vi}" data-en="${card.en}" data-desc="${card.desc || ''}" tabindex="0" role="button" aria-label="${card.vi}">
+                ${card.img ? `<img src="${card.img}" class="rv-pair-img" alt="${card.vi}">` : `<span style="font-size:48px">${card.emoji}</span>`}
+                <span class="rv-pair-label">${_T(card.vi, card.en)}</span>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="rv-pair-divider">
+            <span>✨ ${_T("Ghép với", "Match with")} ✨</span>
+          </div>
+
+          <div class="rv-pair-row" id="rvPairBottomRow">
+            ${bottomCards.map(card => `
+              <div class="rv-pair-card" data-pair-id="${card.pairId}" data-side="bottom" data-vi="${card.vi}" data-en="${card.en}" data-desc="${card.desc || ''}" tabindex="0" role="button" aria-label="${card.vi}">
+                ${card.img ? `<img src="${card.img}" class="rv-pair-img" alt="${card.vi}">` : `<span style="font-size:48px">${card.emoji}</span>`}
+                <span class="rv-pair-label">${_T(card.vi, card.en)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    `;
+
+    _say(promptVi, promptEn);
+    _catSet("thinking");
+
+    const wrap = c.querySelector("#rvPairWrap");
+    if (!wrap) return;
+
+    function checkPair() {
+      if (!selectedTop || !selectedBottom) return;
+      if (selectedTop.dataset.pairId === selectedBottom.dataset.pairId) {
+        selectedTop.classList.add("sorted");
+        selectedBottom.classList.add("sorted");
+        selectedTop.classList.remove("selected");
+        selectedBottom.classList.remove("selected");
+        const desc = selectedTop.dataset.desc || `${selectedTop.dataset.vi} và ${selectedBottom.dataset.vi}`;
+        _sfxTing();
+        _fx();
+        _say(`Đúng rồi! ${desc}`, `Correct!`);
+        selectedTop = null;
+        selectedBottom = null;
+
+        remaining--;
+        if (remaining <= 0) {
+          setTimeout(() => {
+            pmState.round++;
+            advanceEndlessOrNext(() => pairMatchGame(false), "vi.logic.pair");
+          }, 850);
+        }
+      } else {
+        selectedTop.classList.add("shake-bad");
+        selectedBottom.classList.add("shake-bad");
+        _sfxNo();
+        setTimeout(() => {
+          if (selectedTop) {
+            selectedTop.classList.remove("shake-bad", "selected");
+            selectedTop = null;
+          }
+          if (selectedBottom) {
+            selectedBottom.classList.remove("shake-bad", "selected");
+            selectedBottom = null;
+          }
+        }, 450);
+      }
+    }
+
+    wrap.querySelectorAll(".rv-pair-card").forEach(cardEl => {
+      cardEl.addEventListener("click", () => {
+        if (cardEl.classList.contains("sorted")) return;
+        _sfxTap();
+        const side = cardEl.dataset.side;
+        if (side === "top") {
+          wrap.querySelectorAll("#rvPairTopRow .rv-pair-card").forEach(el => el.classList.remove("selected"));
+          cardEl.classList.add("selected");
+          selectedTop = cardEl;
+          _say(cardEl.dataset.vi, cardEl.dataset.en);
+        } else {
+          wrap.querySelectorAll("#rvPairBottomRow .rv-pair-card").forEach(el => el.classList.remove("selected"));
+          cardEl.classList.add("selected");
+          selectedBottom = cardEl;
+          _say(cardEl.dataset.vi, cardEl.dataset.en);
+        }
+        if (selectedTop && selectedBottom) {
+          checkPair();
+        }
+      });
+    });
+  }
+
+  // ============================================================================
   // 9. CHẾ ĐỘ "HỘP QUÀ BẤT NGỜ" - CHẠY RANDOM LIÊN TỤC GIỮA TẤT CẢ 11 TRÒ TRONG HÌNH
   //    Bé chơi liên tục không giới hạn số câu cho tới khi bé bấm Quay lại / Trang chủ
   //    hoặc hết giờ chơi (15/30 phút) do phụ huynh cài đặt!
@@ -1438,11 +1593,11 @@
       "match",
       "mis",
       "mem",
-      "cmpS",
       "colorShapeGame",
       "puzzleGame",
       "sizeCompareGame",
       "oddSpotGame",
+      "pairMatchGame",
       "fruitSlash",
       "artStudioGame"
     ];
@@ -1571,6 +1726,7 @@
     sizeCompareGame,
     oddSpotGame,
     numberTrainGame,
+    pairMatchGame,
     randomMixGame
   };
 
@@ -1582,6 +1738,7 @@
     window.sizeCompareGame = sizeCompareGame;
     window.oddSpotGame = oddSpotGame;
     window.numberTrainGame = numberTrainGame;
+    window.pairMatchGame = pairMatchGame;
     window.randomMixGame = randomMixGame;
   }
   if (typeof globalThis !== "undefined") {
@@ -1592,6 +1749,7 @@
     globalThis.sizeCompareGame = sizeCompareGame;
     globalThis.oddSpotGame = oddSpotGame;
     globalThis.numberTrainGame = numberTrainGame;
+    globalThis.pairMatchGame = pairMatchGame;
     globalThis.randomMixGame = randomMixGame;
   }
   if (typeof module !== "undefined" && module.exports) {

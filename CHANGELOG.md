@@ -6,6 +6,20 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-11-03
+- **feat(P4-LOGIC: Montessori Logic Enhancement & Authentic 3D Asset Integration)**:
+  - **Kích hoạt Trò chơi Ghép đôi liên kết & Cặp đối lập (`pairMatchGame`)**:
+    - Thiết kế mobile-first, 2 hàng thẻ chạm trực quan (3 cặp/vòng), vùng chạm to rõ $\ge 96$px.
+    - Chế độ 1: *Đồ ăn & thói quen con vật* (Thỏ thích cà rốt, Cún gặm khúc xương, Mèo ăn cá, Ong tìm mật hoa, Gấu mê mật ong, Khỉ thích chuối).
+    - Chế độ 2: *Cặp đôi quen thuộc & Đối lập* (Mặt trời ban ngày / Trăng sao ban đêm, Gấu to lớn / Ong nhỏ bé, Thỏ chạy nhanh / Cún tung tăng...).
+    - Tích hợp vào menu Trò chơi mầm non (`games()`) qua thẻ `I.game_pair_link`, định tuyến Router `V.pairMatchGame` và `V.pairLinkGridGame`, bổ sung vào danh sách chọn ngẫu nhiên của *Hộp Quà Bất Ngờ* (`randomMixGame`).
+  - **Thay thế biểu tượng cảm xúc (Emoji) bằng ảnh đồ họa 3D chân thực**:
+    - Nâng cấp `PUZZLE_ANIMALS` và `OPPOSITE_PAIRS`, `ANIMAL_ASSOC_PAIRS` tích hợp ảnh PNG 3D từ `img/animals/` và `img/vocab/` (Thỏ, Cún, Mèo, Gấu, Ong, Quả táo, Quả chuối, Ô tô, Bóng bay, Bươm bướm...).
+    - Nâng cấp Ghép hình bóng (`renderShadowAnimalPuzzle`): hiển thị hình bóng đen thực tế (`.rv-shadow-real-img` qua CSS filter `brightness(0) opacity(0.38)`), khi ghép đúng sẽ biến thành hình 3D màu sắc rực rỡ phóng lớn vui mắt.
+    - Nâng cấp So sánh To & Nhỏ (`renderBigSmallRound`): chuyển sang 3 mức kích cỡ to - vừa - nhỏ rõ rệt (52px vs 76px vs 106px) hiển thị ảnh 3D, giúp bé 4 tuổi nhận diện ngay không bị nhầm lẫn.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v158` (precache 10 ảnh đồ họa con vật `img/animals/*.png`).
+  - **Kiểm thử**: Cập nhật `test-toddler-games.js`, 19/19 test suites tự động PASS 100%.
+
 ### 2026-10-28
 - **fix(Antigravity Design Expert UI/UX Refactor — Khắc Phục Toàn Diện 4 Lỗi Hiển Thị Cho Bé)**:
   - **Tối ưu triệt để menu Học Chữ (`lettersHome()`, Ảnh 1)**:

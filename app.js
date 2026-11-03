@@ -3120,11 +3120,11 @@ function games() {
           ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder grade1")}
           ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder grade1")}
           ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
-          ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
+          ${card("pairMatchGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Ghép đôi quen thuộc","Pair Match","logic","preschool")}
           ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
           ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic","preschool")}
           ${card("sizeCompareGame",`<img src="${I.game_size_compare}" class="g-ico">`,"To nhỏ & Đếm so sánh","Big/Small & Compare","math","preschool")}
-          ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder")}
+          ${card("oddSpotGame",`<img src="${I.game_odd_spot}" class="g-ico">`,"Tinh mắt Tìm khác biệt","Odd One Out & Patterns","logic","kinder preschool")}
           ${card("fruitSlash",`<img src="${I.game_fruit_slash}" class="g-ico">`,"Chém trái cây","Fruit Slash","game","kinder")}
           ${card("artStudioGame",`<img src="${I.game_art_studio}" class="g-ico">`,"Tô màu & Bút phát sáng","Coloring & Glow Pen","game","preschool")}
         </div>
@@ -6853,7 +6853,8 @@ const V={
   get connectDotsGame(){return()=>go("games");},
   get memoryStepDrawGame(){return()=>go("games");},
   get tenFrameGame(){return()=>go("games");},
-  get pairLinkGridGame(){return()=>go("games");},
+  get pairLinkGridGame(){return(typeof window!=="undefined"&&window.pairMatchGame)||(typeof globalThis!=="undefined"&&globalThis.pairMatchGame)||(()=>go("games"));},
+  get pairMatchGame(){return(typeof window!=="undefined"&&window.pairMatchGame)||(typeof globalThis!=="undefined"&&globalThis.pairMatchGame)||(()=>go("games"));},
   get mathSumGame(){return()=>go("games");},
   get animalPathGame(){return()=>go("games");},
   match,mem,trace,gate,parent,rec:recS,

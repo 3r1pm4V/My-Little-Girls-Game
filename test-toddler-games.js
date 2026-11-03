@@ -109,6 +109,10 @@ assert(currentHtml.includes("rv-game-wrap"), "sizeCompareGame phải kết xuấ
 ToddlerGames.oddSpotGame(true);
 assert(currentHtml.includes("rv-game-wrap"), "oddSpotGame phải kết xuất giao diện .rv-game-wrap");
 
+ToddlerGames.pairMatchGame(true);
+assert(currentHtml.includes("rv-game-wrap"), "pairMatchGame phải kết xuất giao diện .rv-game-wrap");
+assert(currentHtml.includes("rv-pair-stage"), "pairMatchGame phải kết xuất bảng ghép đôi .rv-pair-stage");
+
 ToddlerGames.numberTrainGame(true);
 assert(currentHtml.includes("rv-game-wrap"), "numberTrainGame phải kết xuất giao diện .rv-game-wrap");
 

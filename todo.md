@@ -112,6 +112,7 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 - [ ] **P4-04 (P2)** Chặng 3 — Số 11–20, cộng/trừ trong 10 bằng hình, hình học, vị trí, quy luật: ~14 hoạt động
 - [ ] **P4-05 (P2)** Chặng 4 — Đọc từ 2 tiếng, câu ngắn, tô nét/tô chữ, nghe hiểu truyện: ~14 hoạt động
 - [ ] **P4-06 (P2)** Chặng 5 — Ôn tổng hợp "Sẵn sàng vào lớp 1" + phiếu báo cáo
+- [x] **P4-LOGIC (P1)** Nâng cấp Bộ trò chơi tư duy Logic Montessori cho bé 4 tuổi: kích hoạt game Ghép đôi quen thuộc & Cặp đối lập (`pairMatchGame`), thay thế emoji bằng hình ảnh 3D chân thực (`img/animals/`, `img/vocab/`), nâng cấp Ghép hình bóng & So sánh to-nhỏ 3 mức to rõ, tích hợp vào menu và Hộp Quà Bất Ngờ; bump cache `sw.js` bhv-v158 (2026-11-03)
 - [x] **P4-COL (P1)** Xưởng nghệ thuật & Tranh tô màu line art (`coloring/`, `games/creative-games.js`): 6 tranh tô màu Elsa line art không lem màu, bảng 24 màu vẽ (bổ sung màu da người `#fed7aa`), cục tẩy chuyên dụng, bút phát sáng Glow Pen, lưu IndexedDB `bhv_drawings` (2026-10-28)
 - [x] **P4-FN (P1)** Module Chém trái cây (Ninja Fruit Clone, `games/fruit-ninja.js`): Canvas 2D 60 FPS, multi-touch 5 ngón, 25 WebP sprites, 3 chế độ (Classic, Zen, Arcade với chuối Freeze/Frenzy/Double & quả lựu cuối màn), Web Audio Synth (2026-10-26)
 - [x] **P4-TAB (P2)** Tối ưu giao diện Tablet 11-inch & Single-Screen: hỗ trợ màn hình lớn (Huawei MatePad 11 / iPad), nút phân trang bên hông (Side Pagination) cho trò chơi, truyện, huy hiệu; fit trọn vẹn 100dvh không bị cuộn dọc (2026-10-29)
@@ -188,3 +189,4 @@ Luật làm việc: xem `AGENTS.md`. Lộ trình: xem `PLAN.md`.
 | 2026-10-28 | Antigravity Design Expert UI Refactor & Khay đếm 0–20 | Thẻ học chữ đứng Glassmorphism, nút Back đồng bộ tròn 52px; khay đếm cố định kính mờ 0–20 với 21 vật đếm độc nhất; bump sw `bhv-v136`; 19/19 test PASS |
 | 2026-10-29 | Tablet 11-inch & Side Pagination Navigation | Tối ưu hiển thị cho tablet 11-inch (Huawei MatePad 11); nút phân trang cạnh màn hình cho Trò chơi, Truyện, Huy hiệu; bump sw `bhv-v144`; 19/19 test PASS |
 | 2026-11-03 | Responsive Layout & Đồng bộ hiện trạng SW bhv-v157 | Tối ưu bố cục xoay ngang điện thoại, co giãn thanh điều hướng, dọn template tô màu phức tạp; sw.js đạt `bhv-v157` (13.89 MB ≤ 16 MB); 19/19 test PASS |
+| 2026-11-03 | P4-LOGIC (Montessori Logic & Pair Match) | Kích hoạt game Ghép đôi tương ứng (pairMatchGame), dùng ảnh 3D chân thực thay emoji, nâng cấp Ghép hình bóng & So sánh to-nhỏ 3 mức to rõ; bump sw bhv-v158; 19/19 test PASS |
