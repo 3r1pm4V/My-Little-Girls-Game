@@ -7,6 +7,18 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-11-03
+- **feat(P4-MUTE-GAME: Tắt Giọng Đọc & Hướng Dẫn Âm Thanh AI Trong Trò Chơi)**:
+  - **Tắt hoàn toàn giọng đọc AI tự động khi chơi game**:
+    - Vô hiệu hóa hàm `_say` trong `games/toddler-games.js`, `games/count-game.js`, `games/creative-games.js` và `app.js` (không còn phát âm thanh hướng dẫn mở đầu, câu thoại khen ngợi gượng gạo hay đọc mô tả khi nhặt/ghép thẻ).
+    - Gỡ bỏ `sayPrompt("games", ...)` khi bé mở danh mục trò chơi ôn tập (`Góc vui chơi ôn tập`).
+  - **Chuẩn hóa thanh tiêu đề hướng dẫn trực quan cho Ba/Mẹ**:
+    - Gỡ bỏ biểu tượng loa 🔊 và sự kiện `onclick="say(...)"` trên thanh tiêu đề `.rv-prompt`, `.rv-ribbon-blue` của 12 mini-game mầm non.
+    - Cập nhật CSS `.rv-prompt, .rv-ribbon-blue`: chuyển `cursor: default; user-select: none;` để hiển thị như một thanh nhiệm vụ trực quan, rõ ràng, giúp ba mẹ dễ dàng đọc to và tương tác tự nhiên với bé.
+  - **Bảo toàn trọn vẹn hiệu ứng âm thanh SFX**:
+    - Giữ lại các âm thanh tương tác xúc giác ngắn gọn, trong trẻo như `_sfxTap()`, `_sfxTing()`, `_sfxOk()`, `_sfxFanfare()` tạo cảm giác hào hứng và khích lệ bé khi làm đúng.
+  - **Đồng bộ Service Worker Cache**: Nâng cấp cache lên `bhv-v161` (asset-hash `1585221ac5796b7e`).
+  - **Kiểm thử**: Tất cả 19/19 test suites tự động PASS 100%.
+
 - **fix(P4-PUZ: Mở Rộng Kho Tranh Khuyết Hình 3D & Cơ Chế Deck Chống Lặp Hình Ảnh)**:
   - **Mở rộng kho tranh khuyết hình lên 18 vật thể & bạn nhỏ 3D chân thực**:
     - Thay thế emoji quả chuông, quả cam, quả dưa hấu bằng kho 18 tranh đồ họa 3D sắc nét (`apple`, `watermelon`, `orange`, `strawberry`, `grape`, `banana`, `donut`, `car`, `balloon`, `rocket`, `bunny`, `puppy`, `kitten`, `bear`, `carrot`, `flower`, `sun`, `butterfly`).

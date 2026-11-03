@@ -3120,6 +3120,7 @@ function games() {
           ${card("match",`<img src="${I.game_match}" class="g-ico">`,"Ghép chữ","Match","vietnamese","kinder grade1")}
           ${card("mis",`<img src="${I.game_missing}" class="g-ico">`,"Thiếu số","Missing","math","kinder grade1")}
           ${card("mem",`<img src="${I.game_memory}" class="g-ico">`,"Lật thẻ","Memory","game","kinder")}
+          ${card("cmpS",`<img src="${I.game_compare}" class="g-ico">`,"So sánh","Compare","math","grade1")}
           ${card("pairMatchGame",`<img src="${I.game_pair_link}" class="g-ico">`,"Ghép đôi quen thuộc","Pair Match","logic","preschool")}
           ${card("colorShapeGame",`<img src="${I.game_color_shape}" class="g-ico">`,"Giỏ màu & Hình dạng","Colors & Shapes","game","preschool")}
           ${card("puzzleGame",`<img src="${I.game_puzzle}" class="g-ico">`,"Ghép tranh & Hình bóng","Picture & Shadow Puzzle","logic","preschool")}
@@ -3134,7 +3135,6 @@ function games() {
     </div>
   `;
   updateGamesView();
-  sayPrompt("games","Bé muốn chơi trò gì nào? Chọn một món quà vui nhộn nhé!","Pick a game to play",180000);
 }
 
 /* ========================================================

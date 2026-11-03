@@ -13,7 +13,8 @@
   const _pick = (arr) => (typeof window !== "undefined" && window.pick ? window.pick(arr) : arr[Math.floor(Math.random() * arr.length)]);
   const _R = (a, b) => (typeof window !== "undefined" && window.R ? window.R(a, b) : Math.floor(Math.random() * (b - a + 1)) + a);
   const _kbc = (crumbs) => (typeof window !== "undefined" && window.kbc ? window.kbc(crumbs) : "");
-  const _say = (vi, en) => { if (typeof window !== "undefined" && window.say) window.say(vi, en); };
+  // Ba mẹ trực tiếp hướng dẫn bé chơi; tắt giọng đọc AI tự động trong trò chơi
+  const _say = () => {};
   const _catSet = (st) => { if (typeof window !== "undefined" && window.catSet) window.catSet(st); };
   const _sfxTap = () => { if (typeof window !== "undefined" && window.sfxTap) window.sfxTap(); };
   const _sfxOk = () => { if (typeof window !== "undefined" && window.sfxOk) window.sfxOk(); };
@@ -333,8 +334,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvColorWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Bé hãy giúp các hình khối tìm về đúng ngôi nhà màu sắc của chúng nhé!','Put each item into the matching color basket!')">
-            🔊 ${_T("Bỏ 5 hình vào đúng giỏ cùng màu nhé!", "Sort 5 items into the matching color basket!")}
+          <h2 class="rv-prompt">
+            ${_T("Bỏ 5 hình vào đúng giỏ cùng màu nhé!", "Sort 5 items into the matching color basket!")}
           </h2>
           ${renderHeaderRightBadge(csState.round)}
         </div>
@@ -349,7 +350,7 @@
         </div>
 
         <div class="rv-baskets-stage">
-          <div class="rv-mascot-buddy" onclick="say('Cố lên bé ơi! Kéo hình bỏ vào chiếc giỏ cùng màu nào!','Tap or drag items into the basket!')" title="${_T("Chạm để nghe cổ vũ", "Tap for cheer")}">
+          <div class="rv-mascot-buddy" title="${_T("Bạn Sư tử cổ vũ bé", "Cheering mascot")}">
             🦁
           </div>
           <div class="rv-baskets-row">
@@ -451,8 +452,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvShapeWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Hình khối nào đi với khuôn nào? Bé hãy đặt chúng vào đúng vị trí nhé!','Match each shape to its silhouette!')">
-            🔊 ${_T("Ghép 4 hình vào đúng khuôn hình dạng nhé!", "Match 4 shapes to their slots!")}
+          <h2 class="rv-prompt">
+            ${_T("Ghép 4 hình vào đúng khuôn hình dạng nhé!", "Match 4 shapes to their slots!")}
           </h2>
           ${renderHeaderRightBadge(csState.round)}
         </div>
@@ -613,8 +614,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvHalfWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Hoàn thành bức tranh nào! Bé hãy tìm đúng nửa còn thiếu để ghép vào bạn nhỏ nhé!','Complete the pictures!')">
-            🔊 ${_T("Ghép nửa còn thiếu để hoàn thành 3 bức tranh nhé!", "Match the missing half to complete 3 pictures!")}
+          <h2 class="rv-prompt">
+            ${_T("Ghép nửa còn thiếu để hoàn thành 3 bức tranh nhé!", "Match the missing half to complete 3 pictures!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
         </div>
@@ -761,8 +762,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvCutoutWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Tìm mảnh ghép bí ẩn! Bé hãy tìm miếng vừa khít với chỗ trống trên tranh nhé!','Fit the shape piece into the matching picture!')">
-            🔊 ${_T("Đặt miếng ghép vào đúng chỗ khuyết trên 3 bức tranh nhé!", "Fit the shape piece into 3 matching pictures!")}
+          <h2 class="rv-prompt">
+            ${_T("Đặt miếng ghép vào đúng chỗ khuyết trên 3 bức tranh nhé!", "Fit the shape piece into 3 matching pictures!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
         </div>
@@ -865,8 +866,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvShadowWrap">
         <div class="rv-top-bar">
-          <h2 class="rv-prompt" onclick="say('Ai đang trốn trong bóng tối? Bé hãy đưa các bạn về đúng chiếc bóng của mình nhé!','Match each animal to its shadow!')">
-            🔊 ${_T("Ghép 3 hình vào đúng hình bóng nhé!", "Match 3 items to their shadows!")}
+          <h2 class="rv-prompt">
+            ${_T("Ghép 3 hình vào đúng hình bóng nhé!", "Match 3 items to their shadows!")}
           </h2>
           ${renderHeaderRightBadge(pzState.round)}
         </div>
@@ -995,8 +996,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvBigSmallWrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('${promptVi}','${promptEn}')">
-            🔊 ${_T(promptVi, promptEn)}
+          <div class="rv-ribbon-blue">
+            ${_T(promptVi, promptEn)}
           </div>
           ${renderHeaderRightBadge(scState.round)}
         </div>
@@ -1075,8 +1076,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvMoreLessWrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('${promptVi}','${promptEn}')">
-            🔊 ${_T(promptVi, promptEn)}
+          <div class="rv-ribbon-blue">
+            ${_T(promptVi, promptEn)}
           </div>
           ${renderHeaderRightBadge(scState.round)}
         </div>
@@ -1183,8 +1184,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvOddWrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('Tìm điểm khác biệt! Bé hãy tìm ra hình duy nhất không giống các bạn còn lại nhé!','Tap the picture that is different!')">
-            🔊 ${_T("Tìm 1 hình KHÁC BIỆT trong 6 hình!", "Tap the odd one out among 6!")}
+          <div class="rv-ribbon-blue">
+            ${_T("Tìm 1 hình KHÁC BIỆT trong 6 hình!", "Tap the odd one out among 6!")}
           </div>
           ${renderHeaderRightBadge(osState.round)}
         </div>
@@ -1252,8 +1253,8 @@
       ${bcHtml}
       <div class="rv-game-wrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('Đoán hình tiếp theo! Bé xem quy luật và điền hình còn thiếu vào dấu chấm hỏi nhé!','Which shape comes next?')">
-            🔊 ${_T("Hình nào tiếp theo ở ô dấu hỏi [?] nhỉ?", "Which shape completes the pattern?")}
+          <div class="rv-ribbon-blue">
+            ${_T("Hình nào tiếp theo ở ô dấu hỏi [?] nhỉ?", "Which shape completes the pattern?")}
           </div>
           ${renderHeaderRightBadge(osState.round)}
         </div>
@@ -1327,8 +1328,8 @@
       ${bcHtml}
       <div class="rv-game-wrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('${q.qVi.replace(/'/g, "\\'")}','${q.qEn.replace(/'/g, "\\'")}')">
-            🔊 ${_T(q.qVi, q.qEn)}
+          <div class="rv-ribbon-blue">
+            ${_T(q.qVi, q.qEn)}
           </div>
           ${renderHeaderRightBadge(osState.round)}
         </div>
@@ -1428,8 +1429,8 @@
       ${bcHtml}
       <div class="rv-game-wrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('${promptVi}','${promptEn}')">
-            🔊 ${_T(promptVi, promptEn)}
+          <div class="rv-ribbon-blue">
+            ${_T(promptVi, promptEn)}
           </div>
           ${renderHeaderRightBadge(trainState.round)}
         </div>
@@ -1532,8 +1533,8 @@
       ${bcHtml}
       <div class="rv-game-wrap" id="rvPairWrap">
         <div class="rv-top-bar">
-          <div class="rv-ribbon-blue" onclick="say('${promptVi.replace(/'/g, "\\'")}','${promptEn.replace(/'/g, "\\'")}')">
-            🔊 ${_T(promptVi, promptEn)}
+          <div class="rv-ribbon-blue">
+            ${_T(promptVi, promptEn)}
           </div>
           ${renderHeaderRightBadge(pmState.round)}
         </div>

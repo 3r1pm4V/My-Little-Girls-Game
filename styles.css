@@ -1709,7 +1709,8 @@ html.rm .confetti-cv, html.rm .fx {
   border-radius: 22px;
   padding: 6px 18px;
   box-shadow: 0 6px 14px rgba(29, 78, 216, 0.35);
-  cursor: pointer;
+  cursor: default;
+  user-select: none;
   flex: 1;
   text-align: center;
   font-weight: 900;
@@ -1727,7 +1728,8 @@ html.rm .confetti-cv, html.rm .fx {
   border-radius: 22px;
   border: 3px solid #fff;
   box-shadow: 0 6px 14px rgba(29, 78, 216, 0.3);
-  cursor: pointer;
+  cursor: default;
+  user-select: none;
   flex: 1;
   text-align: center;
 }

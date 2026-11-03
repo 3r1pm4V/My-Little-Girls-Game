@@ -45,7 +45,7 @@ const _shuf = (arr) => (typeof window !== "undefined" && window.shuf ? window.sh
 const _pick = (arr) => (typeof window !== "undefined" && window.pick ? window.pick(arr) : arr[Math.floor(Math.random() * arr.length)]);
 const _R = (a, b) => (typeof window !== "undefined" && window.R ? window.R(a, b) : Math.floor(Math.random() * (b - a + 1)) + a);
 const _kbc = (crumbs) => (typeof window !== "undefined" && window.kbc ? window.kbc(crumbs) : "");
-const _say = (vi, en) => { if (typeof window !== "undefined" && window.say) window.say(vi, en); };
+const _say = () => {};
 const _sayN = (n) => { if (typeof window !== "undefined" && window.sayN) window.sayN(n); };
 const _catSet = (st) => { if (typeof window !== "undefined" && window.catSet) window.catSet(st); };
 const _sfxTap = () => { if (typeof window !== "undefined" && window.sfxTap) window.sfxTap(); };
