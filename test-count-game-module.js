@@ -37,4 +37,13 @@ assert(renderedHtml.includes('cg-prompt'), 'Phải có phần tử câu hỏi cg
 assert(renderedHtml.includes('cg-items-box'), 'Phải có hộp chứa các hình ảnh đếm');
 assert(renderedHtml.includes('cg-opts'), 'Phải có các nút lựa chọn số');
 
-console.log('✔ games/count-game.js export đúng init() & render() và render HTML hoàn hảo!');
+// Test phạm vi 1–100 (chế độ đếm nhóm chục + lẻ)
+global.getNumberRangeMax = () => 100;
+let sawBundle = false;
+for (let r = 0; r < 4; r++) {
+  mod.render(true);
+  if (renderedHtml.includes('cg-bundle-ten')) sawBundle = true;
+}
+assert(sawBundle, 'Khi phạm vi 100 phải hỗ trợ chế độ đếm nhóm chục (.cg-bundle-ten)');
+
+console.log('✔ games/count-game.js export đúng init() & render(), hỗ trợ đếm nhóm chục tới 100!');

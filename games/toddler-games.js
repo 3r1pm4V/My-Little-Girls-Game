@@ -1372,8 +1372,8 @@
   }
 
   // ============================================================================
-  // 8. ĐOÀN TÀU SÂU RÓM & BÓNG BAY SỐ (numberTrainGame - Độ khó +20%)
-  //    Dãy 5 toa tàu / 5 quả bóng bay, phạm vi tới 20, có bước nhảy 1 hoặc 2, 4 đáp án
+  // 8. ĐOÀN TÀU SÂU RÓM & BÓNG BAY SỐ (numberTrainGame - Hỗ trợ phạm vi tới 100)
+  //    Dãy 5 toa tàu / 5 quả bóng bay theo khoảng số phụ huynh chọn (mặc định 100), bước nhảy 1, 2, 5, 10
   // ============================================================================
   let trainState = { round: 1 };
 
@@ -1382,17 +1382,36 @@
     const c = getContainer();
     if (!c) return;
 
+    const maxRange = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 100;
+    const mx = Math.max(5, maxRange);
     const isCaterpillar = Math.random() < 0.55;
-    const step = Math.random() < 0.25 ? 2 : 1;
-    const startNum = _R(1, 12);
+    let step = 1;
+    if (mx >= 50) step = _pick([1, 1, 2, 5, 10]);
+    else if (mx >= 10 && Math.random() < 0.25) step = 2;
+
+    let startNum;
+    if (step === 5 || step === 10) {
+      const maxMult = Math.max(1, Math.floor((mx - 4 * step) / step));
+      startNum = _R(1, maxMult) * step;
+    } else {
+      startNum = _R(1, Math.max(1, mx - 4 * step));
+    }
+
     const missingIdx = _R(1, 4);
     const seq = Array.from({ length: 5 }, (_, i) => startNum + i * step);
     const targetNum = seq[missingIdx];
 
     const choicesSet = new Set([targetNum]);
+    const offsets = [-step, step, -1, 1, -2, 2, -10, 10];
+    let guard = 0;
+    while (choicesSet.size < 4 && guard < 30) {
+      guard++;
+      const cand = guard < 15 ? (targetNum + _pick(offsets)) : _R(1, mx);
+      if (cand >= 1 && cand <= mx && cand !== targetNum) choicesSet.add(cand);
+    }
     while (choicesSet.size < 4) {
-      const cand = Math.max(1, targetNum + _pick([-3, -2, -1, 1, 2, 3]));
-      if (cand !== targetNum) choicesSet.add(cand);
+      const fallback = _R(1, mx);
+      if (fallback !== targetNum) choicesSet.add(fallback);
     }
     const choices = _shuf([...choicesSet]);
     let answered = false;

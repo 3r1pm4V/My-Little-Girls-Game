@@ -131,14 +131,14 @@ const T=(vi,en)=>`<span>${vi}</span><small>${en}</small>`;
 const ls={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let ql=null;const qL=()=>lang==="both"?pick(["vi","en"]):lang;
 let RATE=+ls.get("rate2",.85),lang=ls.get("lang","vi"),stars=+ls.get("stars",0),cur="home",done=false,rd={n:0,f:0,st:0};const ROUND=5,RL={mem:2,trace:3,match:3,bubbleGame:1},GM=/P$|^(cmp|cmpS|mis|match|mem|trace|math10|countGame|playActivity|bubbleGame)$/;let lvl=+ls.get("lvl",1);
-function getNumberRangeMax(){const v=parseInt(ls.get("number_range_max","10"),10);return(v===5||v===10||v===20)?v:10}
-function setNumberRangeMax(v){if(v===5||v===10||v===20){ls.set("number_range_max",String(v));if(cur==="parent")parent()}}
+function getNumberRangeMax(){const v=parseInt(ls.get("number_range_max","100"),10);return(v===5||v===10||v===20||v===50||v===100)?v:100}
+function setNumberRangeMax(v){if(v===5||v===10||v===20||v===50||v===100){ls.set("number_range_max",String(v));if(cur==="parent")parent()}}
 window.getNumberRangeMax=getNumberRangeMax;window.setNumberRangeMax=setNumberRangeMax;
 function getSeasonTheme(){return ls.get("season_theme","default")}
 function applySeasonTheme(){const t=getSeasonTheme();if(typeof document!=="undefined"&&document.documentElement&&document.documentElement.classList){document.documentElement.classList.toggle("theme-autumn",t==="autumn");document.documentElement.classList.toggle("theme-spring",t==="spring")}}
 function setSeasonTheme(t){ls.set("season_theme",t||"default");applySeasonTheme();if(cur==="parent")parent()}
 window.getSeasonTheme=getSeasonTheme;window.setSeasonTheme=setSeasonTheme;applySeasonTheme();
-const MX=()=>Math.min(getNumberRangeMax(),[5,10,20][(lvl||1)-1]||10);
+const MX=()=>getNumberRangeMax();
 const SOUND_ON=()=>ls.get("sound_master","1")!=="0";
 const BGM_ON=()=>SOUND_ON()&&ls.get("bgm_on","1")!=="0";
 let bgmTimer=null,bgmNoteIdx=0;
@@ -6412,7 +6412,7 @@ function parent(){
         <div class="settings-group">
           <div class="settings-group-title">🔢 ${T("Khoảng số tối đa cho các trò chơi Số:","Number Range Limit:")}</div>
           <div class="chips" style="margin-top:4px">
-            ${[[5,"1 – 5 ("+T("Mới làm quen","Beginner")+")"],[10,"1 – 10 ("+T("Cơ bản","Standard")+")"],[20,"1 – 20 ("+T("Nâng cao","Advanced")+")"]].map(([v,lbl])=>`<button class="pill${getNumberRangeMax()===v?" on":""}" onclick="setNumberRangeMax(${v})">${lbl}</button>`).join("")}
+            ${[[5,"1 – 5 ("+T("Mới làm quen","Beginner")+")"],[10,"1 – 10 ("+T("Cơ bản","Standard")+")"],[20,"1 – 20 ("+T("Nâng cao","Advanced")+")"],[50,"1 – 50 ("+T("Mở rộng","Extended")+")"],[100,"1 – 100 ("+T("Thử thách 100","Up to 100")+")"]].map(([v,lbl])=>`<button class="pill${getNumberRangeMax()===v?" on":""}" onclick="setNumberRangeMax(${v})">${lbl}</button>`).join("")}
           </div>
         </div>
 
@@ -6935,7 +6935,7 @@ const LSV = {
   blg_unlock_all: /^[01]$/,
   blg_unlocked_stages: /^\[[\d,\s]*\]$/,
   season_theme: /^(default|autumn|spring)$/,
-  number_range_max: /^(5|10|20)$/,
+  number_range_max: /^(5|10|20|50|100)$/,
   stickers_unlocked: /^\[[\s\S]*\]$/
 };
 const okSt = v => {

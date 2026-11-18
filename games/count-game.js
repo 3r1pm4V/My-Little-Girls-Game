@@ -60,23 +60,45 @@ const _getNE = (idx) => (typeof window !== "undefined" && window.NE && window.NE
 function generateSingleCountQuestion(index = 0) {
   const pool = _shuf([...COUNT_ITEMS_POOL]);
   const item = pool[index % pool.length];
-  const maxRange = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 10;
-  const cap = Math.min(12, Math.max(5, maxRange));
-  const target = _R(1, cap);
-  const c = new Set([target]);
+  const maxRange = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 100;
 
+  // Khi phạm vi >= 50: xen kẽ câu hỏi đếm theo nhóm chục (bó 10 + lẻ) để bé luyện đếm tới 100
+  const useBundleMode = maxRange >= 50 && (index % 2 === 0);
+  let target, tens = 0, ones = 0;
+
+  if (useBundleMode) {
+    const maxTens = Math.min(9, Math.floor((maxRange - 1) / 10));
+    tens = _R(1, Math.max(1, maxTens));
+    ones = _R(0, Math.min(9, maxRange - tens * 10));
+    target = tens * 10 + ones;
+    if (target < 10) { tens = 1; ones = 2; target = 12; }
+  } else {
+    const cap = Math.min(15, Math.max(5, maxRange));
+    target = _R(1, cap);
+  }
+
+  const c = new Set([target]);
+  const optionMin = useBundleMode ? 10 : 1;
+  const optionMax = useBundleMode ? maxRange : Math.min(15, Math.max(5, maxRange));
+  const offsets = useBundleMode ? [-10, 10, -1, 1, -2, 2] : [-2, -1, 1, 2, 3];
+  let guard = 0;
+
+  while (c.size < 4 && guard < 30) {
+    guard++;
+    const cand = guard < 15 ? (target + _pick(offsets)) : _R(optionMin, optionMax);
+    if (cand >= optionMin && cand <= optionMax && cand !== target) c.add(cand);
+  }
   while (c.size < 4) {
-    const offset = _pick([-2, -1, 1, 2, 3]);
-    let cand = target + offset;
-    if (cand < 1) cand = target + _R(1, 3);
-    if (cand > cap) cand = Math.max(1, target - _R(1, 3));
-    if (cand >= 1 && cand <= cap && cand !== target) c.add(cand);
-    else c.add(_R(1, cap));
+    const fallback = _R(optionMin, optionMax);
+    if (fallback !== target) c.add(fallback);
   }
 
   return {
     item,
     target,
+    useBundleMode,
+    tens,
+    ones,
     options: _shuf([...c]),
     attempted: false
   };
@@ -135,12 +157,28 @@ function renderCountQuestion() {
     return `<span class="cg-dot ${cls}"></span>`;
   }).join("");
 
-  const itemsHtml = Array.from({ length: count }, (_, i) => {
-    return `<button class="cg-item-btn" data-i="${i + 1}" onclick="window.__cgCountTap(this)" aria-label="${item.nameVi}">
-      ${item.img ? `<img src="${item.img}" class="cg-item-img" alt="${item.nameVi}">` : item.emoji}
-      <span class="cg-badge"></span>
-    </button>`;
-  }).join("");
+  const iconHtml = item.img ? `<img src="${item.img}" class="cg-item-img" alt="${item.nameVi}">` : item.emoji;
+  const miniIconHtml = item.img ? `<img src="${item.img}" class="cg-bundle-mini-img" alt="${item.nameVi}">` : `<span class="cg-bundle-mini-emoji">${item.emoji}</span>`;
+  const itemsHtml = q.useBundleMode
+    ? [
+        ...Array.from({ length: q.tens }, () => `
+          <button class="cg-item-btn cg-bundle-ten" data-step="10" onclick="window.__cgCountTap(this)" aria-label="10 ${item.nameVi}">
+            <div class="cg-bundle-grid">${Array.from({ length: 10 }, () => miniIconHtml).join("")}</div>
+            <span class="cg-bundle-tag">10</span>
+            <span class="cg-badge"></span>
+          </button>`),
+        ...Array.from({ length: q.ones }, () => `
+          <button class="cg-item-btn" data-step="1" onclick="window.__cgCountTap(this)" aria-label="${item.nameVi}">
+            ${iconHtml}
+            <span class="cg-badge"></span>
+          </button>`)
+      ].join("")
+    : Array.from({ length: count }, (_, i) => {
+        return `<button class="cg-item-btn" data-step="1" data-i="${i + 1}" onclick="window.__cgCountTap(this)" aria-label="${item.nameVi}">
+          ${iconHtml}
+          <span class="cg-badge"></span>
+        </button>`;
+      }).join("");
 
   const optsHtml = q.options.map(num => {
     return `<button class="cg-opt-btn" data-n="${num}" onclick="window.__cgChoose(${num}, this)">
@@ -305,7 +343,8 @@ if (typeof window !== "undefined") {
     }
 
     // Nếu hình này chưa được đếm: bắt đầu từ 1 và đếm tới (+1 cho mỗi hình mới)
-    cgState.countedCount = (cgState.countedCount || 0) + 1;
+    const step = parseInt(btn.dataset.step, 10) || 1;
+    cgState.countedCount = (cgState.countedCount || 0) + step;
     const currentNum = cgState.countedCount;
     btn.classList.add("counted");
     btn.dataset.countedNum = currentNum;

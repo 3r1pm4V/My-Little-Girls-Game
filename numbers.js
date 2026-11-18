@@ -6,6 +6,17 @@
 // 1. TÊN ĐỌC SỐ TIẾNG VIỆT & TIẾNG ANH (0–20)
 var NV = "không,một,hai,ba,bốn,năm,sáu,bảy,tám,chín,mười,mười một,mười hai,mười ba,mười bốn,mười lăm,mười sáu,mười bảy,mười tám,mười chín,hai mươi".split(",");
 var NE = "zero,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen,twenty".split(",");
+(function() {
+  var viTens = ["", "", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi"];
+  var enTens = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+  for (var i = 21; i <= 99; i++) {
+    var t = Math.floor(i / 10), u = i % 10;
+    NV[i] = u === 0 ? viTens[t] : viTens[t] + " " + (u === 1 ? "mốt" : (u === 5 ? "lăm" : NV[u]));
+    NE[i] = u === 0 ? enTens[t] : enTens[t] + "-" + NE[u];
+  }
+  NV[100] = "một trăm";
+  NE[100] = "one hundred";
+})();
 
 // 2. DANH SÁCH ĐỒ VẬT ĐẾM HÌNH CHO BÉ (21 MẪU ĐỘC NHẤT CHO SỐ 0–20)
 var COUNT = [
@@ -76,8 +87,8 @@ function numL(n) {
 // 5. TRÒ CHƠI ĐỐ ĐẾM SỐ: CÓ BAO NHIÊU? (numP)
 function numP() {
   if (!R(0, 2)) return numF();
-  var n = R(1, MX()), o = pick(COUNT), c = new Set([n]);
-  while (c.size < 3) c.add(R(1, MX()));
+  var maxObj = Math.min(MX(), 20); var n = R(1, maxObj), o = pick(COUNT), c = new Set([n]); while (c.size < 3) c.add(R(1, maxObj)); // Giới hạn hình ảnh <= 20 để màn hình gọn rõ
+
   quiz(
     T("Có bao nhiêu?", "How many?"),
     "Có bao nhiêu?",
@@ -148,10 +159,29 @@ function cmp() {
 
 // 8. TRÒ CHƠI CHỌN DẤU SO SÁNH > = < (cmpS)
 function cmpS() {
-  var a = R(1, Math.min(MX(), 10)), b = R(1, Math.min(MX(), 10));
-  if (!R(0, 3)) b = a;
+  var mx = MX();
+  var numericMode = (mx > 20 && R(0, 3) > 0);
+  var a, b;
+  if (numericMode) {
+    a = R(11, mx);
+    if (!R(0, 4)) {
+      b = a;
+    } else if (!R(0, 3) && a >= 12 && a <= 99 && (a % 10) !== Math.floor(a / 10)) {
+      var swapped = (a % 10) * 10 + Math.floor(a / 10);
+      b = swapped <= mx ? swapped : R(11, mx);
+    } else {
+      b = R(11, mx);
+    }
+  } else {
+    a = R(1, Math.min(mx, 10));
+    b = R(1, Math.min(mx, 10));
+    if (!R(0, 3)) b = a;
+  }
   var o1 = pick(COUNT), o2 = pick(COUNT);
   var g = function(n, o) {
+    if (numericMode) {
+      return '<div style="flex:0 1 auto;min-width:96px;padding:12px 24px;background:#fff;border:3px solid #cbd5e1;border-radius:22px;font-size:clamp(46px,10vw,74px);font-weight:900;color:#1e293b;text-align:center;box-shadow:0 6px 14px rgba(15,23,42,0.08)">' + n + '</div>';
+    }
     return '<div class="grp" style="flex:1">' + Array.from({ length: n }, function() { return im(o); }).join("") + '</div>';
   };
   var s = (a > b ? ">" : (a < b ? "<" : "="));
@@ -160,17 +190,19 @@ function cmpS() {
     T("Chọn chiếc cầu đúng nối hai bên nhé!", "Pick the right sign"),
     "Chọn chiếc cầu đúng nối hai bên nhé!",
     "Pick the right sign",
-    '<div class="stage" style="gap:6px">' + g(a, o1) + '<span style="font-size:70px;font-weight:800;color:var(--acc)">?</span>' + g(b, o2) + '</div>',
+    '<div class="stage" style="gap:10px">' + g(a, o1) + '<span style="font-size:64px;font-weight:800;color:var(--acc)">?</span>' + g(b, o2) + '</div>',
     [">", "=", "<"].map(function(v) {
       return { k: v, h: '<span class="ans">' + (v === ">" ? "&gt;" : (v === "<" ? "&lt;" : "=")) + '</span>' };
     }),
     s,
     cmpS,
     function() {
+      var nvA = NV[a] || String(a), nvB = NV[b] || String(b);
+      var neA = NE[a] || String(a), neB = NE[b] || String(b);
       return [
         '<div class="eq">' + a + ' ' + s + ' ' + b + '</div>',
-        (a === b) ? (NV[a] + ' bằng ' + NV[b] + '. Hai bên cân bằng nhau thật đẹp!') : (a > b ? (NV[a] + ' đông vui hơn!') : (NV[a] + ' ít hơn một chút!')),
-        (a === b) ? (NE[a] + ' equals ' + NE[b]) : (NE[a] + ' is ' + (a > b ? "more" : "fewer") + ' than ' + NE[b])
+        (a === b) ? (nvA + ' bằng ' + nvB + '. Hai bên cân bằng nhau thật đẹp!') : (a > b ? (nvA + ' lớn hơn ' + nvB + '!') : (nvA + ' bé hơn ' + nvB + '!')),
+        (a === b) ? (neA + ' equals ' + neB) : (neA + ' is ' + (a > b ? "greater" : "less") + ' than ' + neB)
       ];
     }
   );
@@ -178,11 +210,27 @@ function cmpS() {
 
 // 9. TRÒ CHƠI SỐ CÒN THIẾU TRONG DÃY: ĐOÀN TÀU SÂU RÓM & BÓNG BAY SỐ (mis)
 function mis() {
-  // Nâng phạm vi số còn thiếu lên tới 20 (+20% độ khó: 4 lựa chọn đáp án, bước nhảy 1 hoặc 2), chạy random giao diện Sâu róm hoặc Bóng bay
-  var rangeMax = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 20;
+  // Hỗ trợ dãy số tới 100 theo cài đặt phụ huynh; bước nhảy 1, 2, 5 hoặc 10
+  var rangeMax = (typeof window !== "undefined" && typeof window.getNumberRangeMax === "function") ? window.getNumberRangeMax() : 100;
   var mx = Math.max(5, rangeMax);
-  var step = (mx >= 10 && R(0, 3) === 0) ? 2 : 1;
-  var s = R(1, Math.max(1, mx - 4 * step)), h = R(1, 3), n = s + h * step, c = new Set([n]);
+  var step = 1;
+  if (mx >= 50) step = pick([1, 1, 2, 5, 10]);
+  else if (mx >= 10 && R(0, 3) === 0) step = 2;
+  var s;
+  if (step === 5 || step === 10) {
+    var maxMult = Math.max(1, Math.floor((mx - 4 * step) / step));
+    s = R(1, maxMult) * step;
+  } else {
+    s = R(1, Math.max(1, mx - 4 * step));
+  }
+  var h = R(1, 3), n = s + h * step, c = new Set([n]);
+  var offsets = [-step, step, -1, 1, -2, 2, -10, 10];
+  var guard = 0;
+  while (c.size < 4 && guard < 30) {
+    guard++;
+    var cand = guard < 15 ? (n + pick(offsets)) : R(1, mx);
+    if (cand >= 1 && cand <= mx && cand !== n) c.add(cand);
+  }
   while (c.size < 4) c.add(R(1, mx));
   var isCaterpillar = R(0, 1) === 0;
   var objsHtml = isCaterpillar

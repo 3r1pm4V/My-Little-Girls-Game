@@ -32,11 +32,11 @@
     if (typeof window !== "undefined") {
       if (typeof window.getNumberRangeMax === "function") return window.getNumberRangeMax();
       if (window.ls) {
-        const v = parseInt(window.ls.get("number_range_max", "10"), 10);
-        if (v === 5 || v === 10 || v === 20) return v;
+        const v = parseInt(window.ls.get("number_range_max", "100"), 10);
+        if (v === 5 || v === 10 || v === 20 || v === 50 || v === 100) return v;
       }
     }
-    return 10;
+    return 100;
   }
 
   function finishRoundAndContinue(defaultNextFn, skillKey) {

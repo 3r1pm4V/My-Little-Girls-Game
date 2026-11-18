@@ -6,6 +6,19 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 
 ## [Unreleased]
 
+### 2026-11-18
+- **feat(P4-NUM100: Mở Rộng Phạm Vi Số Học & Trò Chơi Lên 1–50 / 1–100)**:
+  - **Cấu hình phạm vi số (`app.js`, `games/creative-games.js`)**:
+    - Bổ sung 2 mốc **1 – 50** và **1 – 100** vào `getNumberRangeMax()` / `setNumberRangeMax()` (đặt mặc định `100` theo tiến độ bé đã đếm gần 100; tương thích ngược với dữ liệu cũ `5 / 10 / 20`).
+    - Cập nhật `MX()` sử dụng trực tiếp `getNumberRangeMax()`, mở khóa hiển thị trong Cài đặt phụ huynh và cập nhật validator `LSV.number_range_max`.
+  - **Dãy số & Từ điển số `0–100` (`numbers.js`, `games/toddler-games.js`)**:
+    - Bổ sung tên đọc tiếng Việt & tiếng Anh chuẩn cho `NV[21..100]` và `NE[21..100]`.
+    - Nâng cấp `numberTrainGame` (*Đoàn tàu sâu róm & Bóng bay số*) và `mis` (*Ô số còn thiếu*) lên phạm vi tối đa `100`, hỗ trợ bước nhảy **1, 2, 5, 10** kèm phương án nhiễu sát với đáp án đúng.
+    - Nâng cấp `cmpS` (*Chọn dấu so sánh > = <*): khi phạm vi > 20 tự động xen kẽ chế độ **so sánh chữ số lớn** (ví dụ `47 ? 74`, `60 ? 60`), giữ `numP` giới hạn ≤ 20 hình để tránh rối mắt.
+  - **Đếm hình gộp nhóm chục tới 100 (`games/count-game.js`, `styles.css`)**:
+    - Khi phạm vi `>= 50`, xen kẽ chế độ **đếm theo nhóm chục (khay 10 + hình lẻ)** (`.cg-bundle-ten`), chạm vào khay chục cộng `+10`, chạm hình lẻ cộng `+1`, giúp bé luyện đếm nhanh tới 100 mà màn hình vẫn gọn, dễ chạm.
+  - **Đồng bộ Service Worker Cache & Kiểm thử**: Nâng cấp cache lên `bhv-v162` (asset-hash `977fb25e25ea4215`), bổ sung kiểm thử chế độ nhóm chục tới 100 trong `test-count-game-module.js`.
+
 ### 2026-11-03
 - **feat(P4-MUTE-GAME: Tắt Giọng Đọc & Hướng Dẫn Âm Thanh AI Trong Trò Chơi)**:
   - **Tắt hoàn toàn giọng đọc AI tự động khi chơi game**:
