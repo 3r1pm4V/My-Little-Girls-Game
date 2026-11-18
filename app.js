@@ -2916,8 +2916,8 @@ window.__nextAct = function(){
 function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(h).replace(/<img[^>]*>/g,"¤"),sig=qv+"|"+right+"|"+strip(body)+(cls==="cmp"?"|"+opts.map(o=>strip(o.h)).join("¦"):"");if(sig===lastSig&&dupN++<8)return next();dupN=0;lastSig=sig;done=false;let wr=0;catSet("thinking");
  const QBC={numP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"numL",t:T("Học số","Numbers"),i:"🔢"},{t:T("Đố đếm số","Quiz"),i:"❓"}],letP:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"letL",t:T("Chữ cái","Letters"),i:"🔤"},{t:T("Đố chữ cái","Quiz"),i:"❓"}],mis:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Số còn thiếu","Missing"),i:"🔢"}],cmpS:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{s:"games",t:T("Trò chơi","Games"),i:"🎮"},{t:T("Dấu so sánh","Signs"),i:"⚖️"}],math10:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Toán 10","Math 10"),i:"➕"}],cmp:[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("So sánh","Compare"),i:"⚖️"}]};
  const bcHtml=kbc(QBC[cur]||[{s:"home",t:T("Trang chủ","Home"),i:"🏠"},{t:T("Câu đố","Quiz"),i:"❓"}]);
- m.innerHTML=`${bcHtml}<h2 id="q">🔊 ${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
- document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);
+ m.innerHTML=`${bcHtml}<h2 id="q">${qh}</h2><div>${body}</div><div class="opts ${cls}">${opts.map(o=>`<button class="opt" data-k="${o.k}">${o.h}</button>`).join("")}</div><div id="res"></div>`;
+ 
  m.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(done)return;
   if(b.dataset.k==String(right)){
    done=true;b.classList.add("good");sfxOk();fx();
@@ -2928,9 +2928,9 @@ function quiz(qh,qv,qe,body,opts,right,next,extra,cls=""){const strip=h=>String(
    if(cur==="math10")ST.mathCount=(ST.mathCount||0)+1;
    rd.n++;sta(wr==0);catSet(rd.st>=3?"celebrate":"happy");
    stars++;ls.set("stars",stars);head();checkBadges();
-   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;say(p[0]+" "+v,p[1]+" "+e);const isEndless=(cur==="mis"||cur==="cmpS"||cur==="cmp");adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
+   const[h,v,e]=extra(),p=pick(PR);document.getElementById("res").innerHTML=h;const isEndless=(cur==="mis"||cur==="cmpS"||cur==="cmp");adv((typeof window!=="undefined"&&typeof window.__endlessNext==="function")?window.__endlessNext:(isEndless?next:(rd.n>=(RL[cur]||ROUND)?result:next)));
   }
-  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");say("Bé nhìn kỹ chỗ này xem nào...","Look here")}else{const w=pick(ER);say(w[0],w[1])}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
+  else{wr++;rd.st=0;stw(right);b.classList.add("bad");sfxNo();catSet("sad");if(wr>=2){const g=m.querySelector('.opt[data-k="'+right+'"]');if(g)g.classList.add("hint");}else{}setTimeout(()=>{b.classList.remove("bad");if(!done)catSet(wr>=2?"pointing":"thinking")},900)}})}
 function result(){
   const g=cur,f=rd.f,N=RL[cur]||ROUND,lv=adapt(f/N);
   const starCount = (f === N) ? 3 : (f >= Math.ceil(N * 0.6) ? 2 : 1);
@@ -3569,7 +3569,7 @@ function fruitSlash(isReplay) {
   const ctx = canvasEl ? canvasEl.getContext("2d") : null;
 
   function announceIntro() {
-    say("Trò chơi Chém trái cây! Bé hãy lướt ngón tay thật nhanh qua những quả trái cây ngon lành nhé!", "Fruit Slash game! Swipe or tap to slice delicious fruits!");
+    
     catSet("thinking");
   }
 
@@ -3959,7 +3959,7 @@ function renderFruitWin(score, total) {
   sfxFanfare();
   fx();
   catSet("celebrate");
-  say("Hoan hô bé yêu! Bé là cao thủ chém trái cây siêu đẳng! Tặng bé ba ngôi sao lấp lánh!", "Hooray! You are a fruit slashing champion! You earned three stars!");
+  
 }
 window.renderFruitWin = renderFruitWin;
 
@@ -4069,9 +4069,7 @@ function match(){
         <button class="pill" onclick="match()" style="font-size:13.5px;padding:4px 12px;min-height:38px">
           🎲 ${T("Đổi chủ đề nối", "Random Theme")}
         </button>
-        <button class="pill" onclick="say('${introVi}','${introEn}')" style="font-size:14px;padding:4px 12px;min-height:38px">
-          🔊 ${T("Hướng dẫn", "Help")}
-        </button>
+        
       </div>
     </div>
     <div style="text-align:center;font-size:15px;color:#64748b;font-weight:700;margin-bottom:12px">
@@ -4164,7 +4162,7 @@ function match(){
 
       sfxTingTing();
       fx();
-      say("Đúng rồi! Hai bạn kết đôi thật hoàn hảo!", rightEl.dataset.t);
+      
 
       redrawFixedWires();
 
@@ -4173,7 +4171,7 @@ function match(){
         window.removeEventListener("resize", redrawFixedWires);
         cleanupEvents();
         setTimeout(() => {
-          win(wr, match, "Hoan hô! Bé đã ghép nối thành công tất cả các cặp rồi!", "All pairs matched!");
+          win(wr, match, "", "");
         }, 800);
       }
     } else {
@@ -4183,7 +4181,7 @@ function match(){
       leftEl.classList.add("bad");
       rightEl.classList.add("bad");
 
-      say("Hai bạn này chưa phải là một đôi đâu, bé thử chọn lại xem nào.", "Try again, sweetheart!");
+      
 
       setTimeout(() => {
         activePath.style.display = "none";
@@ -4368,7 +4366,7 @@ function match(){
   document.addEventListener("touchend", handleEnd, { passive: false });
   document.addEventListener("touchcancel", handleEnd, { passive: false });
   document.addEventListener("mouseup", handleEnd);
-  say("Ghép chữ với hình nhé. Bé có thể chạm vào chữ rồi chạm vào hình, hoặc kéo dây để nối nhé!", "Match letter and picture. Tap to connect or drag a line!");
+  
   catSet("thinking");
 }
 
@@ -4403,21 +4401,20 @@ function mem(){
     {s:"home", t:T("Trang chủ","Home"), i:"🏠"},
     {s:"games", t:T("Trò chơi","Games"), i:"🎮"},
     {t:T("Lật thẻ trí nhớ","Memory"), i:"🃏"}
-  ]) + `<h2 id="memQ" role="button" tabindex="0" onclick="say('Tìm hai hình giống nhau','Find two that are the same')" style="cursor:pointer" title="${T("Bấm để nghe đọc lại","Tap to listen again")}">🔊 ${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" data-n="${cs.length}">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
-  say("Trò chơi Thử thách trí nhớ! Hãy tìm hai tấm thẻ giống hệt nhau nhé!","Find two that are the same");
+  ]) + `<h2 id="memQ">${T("Tìm hai hình giống nhau","Find the pairs")}</h2><div class="opts mem" data-n="${cs.length}">${cs.map(k=>`<button class="opt" data-c="${k}">${im("gstar")}</button>`).join("")}</div>`;
+  
   catSet("thinking");
   m.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{
     if(lock||b.disabled||b===a) return;
     const k = b.dataset.c;
     b.innerHTML = im(EXA[k].img);
-    const cardName = getVisualCardName(k);
-    say(cardName, cardName);
+    
     if(!a){ a = b; return; }
     if(a.dataset.c === k){
       [a, b].forEach(x => { x.disabled = true; x.classList.add("good"); });
       a = null;
       sfxOk();
-      say("Tìm thấy rồi! Hai hình giống nhau y đúc!", "Found a pair!");
+      
       if(!--left) setTimeout(() => win(miss > Math.floor(ks.length * 0.7) ? 1 : 0, mem, "", ""), 900);
     } else {
       miss++;

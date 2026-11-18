@@ -7,6 +7,14 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-11-18
+- **fix(P4-AUDIT-FIX: Sửa Lỗi Câu Hỏi `letP`, Chặn `empty` & Tắt Giọng AI Còn Sót Trong `app.js`)**:
+  - **Sửa câu hỏi sai nghĩa (`alphabet.js`)**: Trong `letP()`, sửa câu *"Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?"* thành *"Tên hình này bắt đầu bằng chữ cái gì nhỉ?"* để khớp với hình minh họa bất kỳ.
+  - **Chặn bốc trúng `"empty"` (`numbers.js`)**: Đổi `pick(COUNT)` thành `pick(COUNT.slice(1))` trong `cmp()`, `cmpS()`, `math10()` để không bao giờ vẽ ô trống khi đếm/cộng/so sánh.
+  - **Tắt nốt giọng đọc AI & icon `🔊` trong các game ở `app.js`**:
+    - Vô hiệu hóa đọc hướng dẫn/khen AI trong `quiz()`, `fruitSlash`, `match`, `mem` (giữ trọn vẹn SFX vui nhộn); gỡ nút `🔊 Hướng dẫn` ở `match` và biểu tượng `🔊` ở `#q`, `#memQ`.
+    - Cập nhật các assertion tương ứng trong `test-p1-streak-audio.js` theo đúng quyết định tắt giọng AI trong game để ba mẹ hướng dẫn bé.
+  - Nâng cấp Service Worker cache lên `bhv-v164` (asset-hash `7c3137d3933a4eba`).
+
 - **fix(P4-PROMPT-CLARITY: Làm Rõ Câu Hỏi & Hướng Dẫn Trong Các Trò Chơi Toán `numbers.js`)**:
   - Bổ sung từ điển `COUNT_LABELS` ánh xạ 20 vật đếm sang tên gọi thân thiện (ví dụ: *quả dâu tây*, *quả táo đỏ*, *chú mèo*...) và loại bỏ `"empty"` khỏi danh sách chọn hình trong `numP()`.
   - Thay thế các câu hỏi cụt ngủn bằng hướng dẫn đầy đủ, dễ hiểu cho bé & ba mẹ:

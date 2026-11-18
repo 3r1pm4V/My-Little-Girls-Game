@@ -150,7 +150,7 @@ function numF() {
 function cmp() {
   var a = R(1, Math.min(MX(), 10)), b = R(1, Math.min(MX(), 10));
   if (!R(0, 3)) b = a;
-  var more = (R(0, 1) === 0), o1 = pick(COUNT), o2 = pick(COUNT);
+  var more = (R(0, 1) === 0), o1 = pick(COUNT.slice(1)), o2 = pick(COUNT.slice(1));
   var right = (a === b) ? "eq" : (more ? (a > b ? "a" : "b") : (a < b ? "a" : "b"));
   var grp = function(n, o) {
     return '<div class="grp">' + Array.from({ length: n }, function() { return im(o); }).join("") + '</div>';
@@ -206,7 +206,7 @@ function cmpS() {
     b = R(1, Math.min(mx, 10));
     if (!R(0, 3)) b = a;
   }
-  var o1 = pick(COUNT), o2 = pick(COUNT);
+  var o1 = pick(COUNT.slice(1)), o2 = pick(COUNT.slice(1));
   var g = function(n, o) {
     if (numericMode) {
       return '<div style="flex:0 1 auto;min-width:96px;padding:12px 24px;background:#fff;border:3px solid #cbd5e1;border-radius:22px;font-size:clamp(46px,10vw,74px);font-weight:900;color:#1e293b;text-align:center;box-shadow:0 6px 14px rgba(15,23,42,0.08)">' + n + '</div>';
@@ -308,7 +308,7 @@ function math10() {
     b = R(1, a - 1);
     res = a - b;
   }
-  var op = isAdd ? "+" : "-", o = pick(COUNT);
+  var op = isAdd ? "+" : "-", o = pick(COUNT.slice(1));
   var c = new Set([res]);
   while (c.size < 3) { c.add(R(1, 10)); }
 

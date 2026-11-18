@@ -182,8 +182,8 @@ function letP() {
   var k = pick(exP(l)), L = EXA[k].L, c = new Set([L]);
   while (c.size < 3) c.add(pick(exPL(l)));
   quiz(
-    T("Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?", "What letter does it start with?"),
-    "Chữ cái đầu tiên của bảng chữ cái là chữ gì nhỉ?",
+    T("Tên hình này bắt đầu bằng chữ cái gì nhỉ?", "What letter does it start with?"),
+    "Tên hình này bắt đầu bằng chữ cái gì nhỉ?",
     "What letter does it start with?",
     im(EXA[k].img, "big"),
     shuf(Array.from(c)).map(function(v) { return { k: v, h: imL(v) }; }),

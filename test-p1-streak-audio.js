@@ -44,11 +44,11 @@ assert(appJs.includes('id="traceQ"'), 'trace phải có #traceQ kèm 🔊 nghe l
 assert(appJs.includes('md.say(it)'), 'trace phải tự đọc chữ/nét khi vào');
 
 // 1.6 Kiểm tra quiz (mis, cmpS, cmp, numF, letO)
-assert(appJs.includes('<h2 id="q">🔊'), 'quiz phải có tiêu đề kèm biểu tượng 🔊');
-assert(appJs.includes('document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);'), 'quiz phải tự đọc và cho phép bấm nghe lại');
+assert(appJs.includes('<h2 id="q">${qh}</h2>'), 'quiz phải có tiêu đề #q rõ ràng (đã tắt giọng AI & 🔊 theo P4-AUDIT-FIX)');
+assert(!appJs.includes('document.getElementById("q").onclick=()=>say(qv,qe);say(qv,qe);'), 'quiz không còn tự đọc AI');
 
 // 1.7 Kiểm tra match & mem
-assert(appJs.includes('say("Ghép chữ với hình nhé'), 'match phải tự đọc hướng dẫn khi vào');
+assert(!appJs.includes('say("Ghép chữ với hình nhé'), 'match không còn tự đọc AI');
 assert(appJs.includes('id="memQ"'), 'mem phải có #memQ kèm 🔊 nghe lại');
 
 // 1.8 Kiểm tra letL, numL, readL
