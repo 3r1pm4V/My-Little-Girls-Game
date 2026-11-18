@@ -43,6 +43,29 @@ var COUNT = [
   "count_heart"       // 20: Trái tim
 ];
 
+var COUNT_LABELS = {
+  count_sun: ["mặt trời", "suns"],
+  count_cat: ["chú mèo", "cats"],
+  count_apple: ["quả táo đỏ", "red apples"],
+  count_flower: ["bông hoa", "flowers"],
+  count_star: ["ngôi sao", "stars"],
+  count_donut: ["bánh donut", "donuts"],
+  count_grape: ["chùm nho", "grapes"],
+  count_orange: ["quả cam", "oranges"],
+  count_strawberry: ["quả dâu tây", "strawberries"],
+  count_puppy: ["chú cún", "puppies"],
+  count_balloon: ["bóng bay", "balloons"],
+  count_icecream: ["cây kem", "ice creams"],
+  count_banana: ["quả chuối", "bananas"],
+  count_bunny: ["chú thỏ", "bunnies"],
+  count_car: ["chiếc ô tô", "cars"],
+  count_kite: ["con diều", "kites"],
+  count_watermelon: ["miếng dưa hấu", "watermelons"],
+  count_butterfly: ["chú bướm", "butterflies"],
+  count_rocket: ["tên lửa", "rockets"],
+  count_heart: ["trái tim", "hearts"]
+};
+
 // 3. TIỆN ÍCH PHÁT ÂM & HIỆU ỨNG CHẠM ĐẾM
 var sayN = function(n) {
   say(NV[n], NE[n]);
@@ -87,12 +110,16 @@ function numL(n) {
 // 5. TRÒ CHƠI ĐỐ ĐẾM SỐ: CÓ BAO NHIÊU? (numP)
 function numP() {
   if (!R(0, 2)) return numF();
-  var maxObj = Math.min(MX(), 20); var n = R(1, maxObj), o = pick(COUNT), c = new Set([n]); while (c.size < 3) c.add(R(1, maxObj)); // Giới hạn hình ảnh <= 20 để màn hình gọn rõ
-
+  var maxObj = Math.min(MX(), 20);
+  var n = R(1, maxObj), o = pick(COUNT.slice(1)), c = new Set([n]);
+  while (c.size < 3) c.add(R(1, maxObj)); // Giới hạn hình ảnh <= 20 để màn hình gọn rõ
+  var lbl = COUNT_LABELS[o] || ["hình", "items"];
+  var qVi = "Bé hãy đếm xem có bao nhiêu " + lbl[0] + " rồi chọn số đúng bên dưới nhé!";
+  var qEn = "Count the " + lbl[1] + " and tap the right number below!";
   quiz(
-    T("Có bao nhiêu?", "How many?"),
-    "Có bao nhiêu?",
-    "How many?",
+    T(qVi, qEn),
+    qVi,
+    qEn,
     '<div class="objs">' + Array.from({ length: n }, function() { return im(o, ""); }).join("").replace(/<img/g, '<img style="width:clamp(48px,11vw,72px)"') + '</div>',
     shuf(Array.from(c)).map(function(v) { return { k: v, h: '<span class="ans">' + v + '</span>' }; }),
     n,
@@ -105,15 +132,17 @@ function numP() {
 function numF() {
   var n = R(0, MX()), c = new Set([n]);
   while (c.size < 3) c.add(R(0, MX()));
+  var qVi = "Bé hãy tìm và chạm vào số " + (NV[n] || n) + " nhé!";
+  var qEn = "Find and tap the number " + (NE[n] || n) + "!";
   quiz(
-    T("Tìm số " + NV[n], "Find the number " + NE[n]),
-    "Tìm số " + NV[n],
-    "Find the number " + NE[n],
+    T(qVi, qEn),
+    qVi,
+    qEn,
     "",
     shuf(Array.from(c)).map(function(v) { return { k: v, h: '<span class="ans">' + v + '</span>' }; }),
     n,
     numP,
-    function() { return ["", NV[n], NE[n]]; }
+    function() { return ["", NV[n] || String(n), NE[n] || String(n)]; }
   );
 }
 
@@ -127,8 +156,8 @@ function cmp() {
     return '<div class="grp">' + Array.from({ length: n }, function() { return im(o); }).join("") + '</div>';
   };
   var q = more
-    ? ["Bên nào nhiều hơn nhỉ?", "Which has MORE?"]
-    : ["Bên nào ít hơn ta?", "Which has FEWER?"];
+    ? ["Bé hãy đếm và chọn bên có NHIỀU hình hơn nhé!", "Count and tap the side with MORE!"]
+    : ["Bé hãy đếm và chọn bên có ÍT hình hơn nhé!", "Count and tap the side with FEWER!"];
 
   quiz(
     T(q[0], q[1]),
@@ -187,7 +216,7 @@ function cmpS() {
   var s = (a > b ? ">" : (a < b ? "<" : "="));
 
   quiz(
-    T("Chọn chiếc cầu đúng nối hai bên nhé!", "Pick the right sign"),
+    T("Bé hãy so sánh hai bên rồi chọn dấu (> , = , <) đúng nhé!", "Compare both sides and tap the right sign (> , = , <)!"),
     "Chọn chiếc cầu đúng nối hai bên nhé!",
     "Pick the right sign",
     '<div class="stage" style="gap:10px">' + g(a, o1) + '<span style="font-size:64px;font-weight:800;color:var(--acc)">?</span>' + g(b, o2) + '</div>',
@@ -253,7 +282,7 @@ function mis() {
     : "Quả bóng bay nào đang vắng mặt? Bé đoán xem đó là số mấy?";
 
   quiz(
-    T("Ô số nào đang trốn mất nhỉ?", "Which number is missing?"),
+    T("Bé hãy tìm số còn thiếu để điền vào dấu hỏi (?) nhé!", "Find the missing number for the (?) spot!"),
     misQVi,
     "Which number is missing?",
     objsHtml,

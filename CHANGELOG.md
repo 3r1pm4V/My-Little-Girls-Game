@@ -7,6 +7,16 @@ Mọi thay đổi trong dự án được ghi nhận tại đây theo nguyên t�
 ## [Unreleased]
 
 ### 2026-11-18
+- **fix(P4-PROMPT-CLARITY: Làm Rõ Câu Hỏi & Hướng Dẫn Trong Các Trò Chơi Toán `numbers.js`)**:
+  - Bổ sung từ điển `COUNT_LABELS` ánh xạ 20 vật đếm sang tên gọi thân thiện (ví dụ: *quả dâu tây*, *quả táo đỏ*, *chú mèo*...) và loại bỏ `"empty"` khỏi danh sách chọn hình trong `numP()`.
+  - Thay thế các câu hỏi cụt ngủn bằng hướng dẫn đầy đủ, dễ hiểu cho bé & ba mẹ:
+    - `numP`: *"Bé hãy đếm xem có bao nhiêu [tên vật] rồi chọn số đúng bên dưới nhé!"*
+    - `numF`: *"Bé hãy tìm và chạm vào số [tên số] nhé!"*
+    - `cmp`: *"Bé hãy đếm và chọn bên có NHIỀU / ÍT hình hơn nhé!"*
+    - `cmpS`: *"Bé hãy so sánh hai bên rồi chọn dấu (> , = , <) đúng nhé!"*
+    - `mis`: *"Bé hãy tìm số còn thiếu để điền vào dấu hỏi (?) nhé!"*
+  - Nâng cấp Service Worker cache lên `bhv-v163` (asset-hash `e72ec36d3dfdf5bd`).
+
 - **feat(P4-NUM100: Mở Rộng Phạm Vi Số Học & Trò Chơi Lên 1–50 / 1–100)**:
   - **Cấu hình phạm vi số (`app.js`, `games/creative-games.js`)**:
     - Bổ sung 2 mốc **1 – 50** và **1 – 100** vào `getNumberRangeMax()` / `setNumberRangeMax()` (đặt mặc định `100` theo tiến độ bé đã đếm gần 100; tương thích ngược với dữ liệu cũ `5 / 10 / 20`).
